@@ -251,14 +251,30 @@ final class SiteController
             $site = SiteRegistry::forCurrentRequest();
             $asset = PageDiscovery::publicAsset($site, $path);
             if ($asset !== null) {
+                $modifiedAt = filemtime($asset['file']);
+                $size = filesize($asset['file']);
+                $inode = fileinode($asset['file']);
+                if (! is_int($modifiedAt) || ! is_int($size) || ! is_int($inode)) {
+                    return new Response('', 404, ['Content-Type' => 'text/html; charset=UTF-8']);
+                }
+                $etag = 'W/"'.hash('sha256', $modifiedAt.':'.$size.':'.$inode).'"';
+                $headers = [
+                    'Content-Type' => $asset['mime_type'],
+                    'X-Content-Type-Options' => 'nosniff',
+                    'Cache-Control' => 'public, max-age=86400, stale-while-revalidate=604800',
+                    'ETag' => $etag,
+                    'Last-Modified' => gmdate('D, d M Y H:i:s', $modifiedAt).' GMT',
+                ];
+                $ifNoneMatch = trim((string) ($_SERVER['HTTP_IF_NONE_MATCH'] ?? ''));
+                $notModified = $ifNoneMatch !== ''
+                    ? ($ifNoneMatch === '*' || in_array($etag, array_map('trim', explode(',', $ifNoneMatch)), true))
+                    : (strtotime((string) ($_SERVER['HTTP_IF_MODIFIED_SINCE'] ?? '')) >= $modifiedAt);
+                if ($notModified) {
+                    return new Response('', 304, $headers);
+                }
                 $contents = file_get_contents($asset['file']);
                 if (is_string($contents)) {
-                    $headers = [
-                        'Content-Type' => $asset['mime_type'],
-                        'Content-Length' => (string) strlen($contents),
-                        'X-Content-Type-Options' => 'nosniff',
-                        'Cache-Control' => 'public, max-age=0, must-revalidate',
-                    ];
+                    $headers['Content-Length'] = (string) strlen($contents);
                     if ($asset['mime_type'] === 'image/svg+xml') {
                         $headers['Content-Security-Policy'] = "default-src 'none'; style-src 'unsafe-inline'; sandbox";
                     }

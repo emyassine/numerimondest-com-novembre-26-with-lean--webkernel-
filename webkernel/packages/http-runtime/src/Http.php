@@ -96,6 +96,14 @@ final class Http
         $site_configuration = self::siteConfiguration($root_path);
         $mark_phase('preflight');
 
+        // Keep package config directories in the same inputs set used when the
+        // deployment config artifact was compiled.
+        foreach (($site_configuration['configs'] ?? []) as $config_file) {
+            if (is_string($config_file) && is_file($config_file)) {
+                Config::addDirectory(dirname($config_file));
+            }
+        }
+
         Config::boot($root_path, $vendor_path, $root_path . '/runtime/cache');
         $mark_phase('config');
 
@@ -185,10 +193,22 @@ final class Http
     }
 
     /** @return array<string, mixed> */
-    private static function siteConfiguration(string $root_path): array
+    public static function siteConfiguration(string $root_path): array
     {
         if (self::$site_configuration_cache !== null && self::$site_configuration_root === $root_path) {
             return self::$site_configuration_cache;
+        }
+
+        $deployed_config = \Webkernel\ServiceProvider\Deployment\DeploymentLock::artifactDirectory($root_path, 'config');
+        $site_manifest = is_string($deployed_config) ? $deployed_config.'/site_configuration.php' : '';
+        if ($site_manifest !== '' && is_file($site_manifest)) {
+            $configuration = require $site_manifest;
+            if (is_array($configuration)) {
+                self::$site_configuration_root = $root_path;
+                self::$site_configuration_cache = $configuration;
+
+                return $configuration;
+            }
         }
 
         $root_file = $root_path.'/config/site.php';
@@ -246,6 +266,38 @@ final class Http
         self::$site_configuration_cache = $configuration;
 
         return $configuration;
+    }
+
+    /** Persist the merged package and application declarations in the deployment config artifact. */
+    public static function publishSiteConfiguration(string $root_path, string $directory): void
+    {
+        $configuration = self::siteConfiguration($root_path);
+        if (self::containsClosure($configuration)) {
+            return;
+        }
+        $export = var_export($configuration, true);
+        $path = rtrim($directory, '/\\').'/site_configuration.php';
+        $contents = "<?php declare(strict_types=1);\nreturn ".$export.";\n";
+        if (file_put_contents($path, $contents, LOCK_EX) === false) {
+            throw new RuntimeException('Unable to publish the merged site configuration artifact.');
+        }
+    }
+
+    private static function containsClosure(mixed $value): bool
+    {
+        if ($value instanceof \Closure) {
+            return true;
+        }
+        if (! is_array($value)) {
+            return false;
+        }
+        foreach ($value as $item) {
+            if (self::containsClosure($item)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /** @param array<string, mixed> $target @param array<string, mixed> $source */

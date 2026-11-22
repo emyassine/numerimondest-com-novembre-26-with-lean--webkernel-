@@ -716,9 +716,6 @@ final class Engine
         $compiled = $this->compiled_file($view);
         if ($compiled === '' || ! is_file($compiled)) {
             unset($this->compiled_files[$view]);
-            if (DeploymentLock::read(base_path()) !== null) {
-                throw new \RuntimeException(sprintf('The deployed view "%s" has no compiled artifact. Run ./platform deploy.', $view));
-            }
             $this->compile_view($view, true);
             $compiled = $this->compiled_file($view);
         }
@@ -1003,6 +1000,15 @@ final class Engine
             return (isset($this->compiled_map[$short]) && $this->compiled_map[$short] !== '')
                 ? $this->compiled_map[$short]
                 : '';
+        }
+        // Component files use the `name/name.view.php` convention.
+        $separator = strpos($template_name, '::');
+        if ($separator !== false) {
+            $name = substr($template_name, $separator + 2);
+            $component = $template_name.'.'.basename(str_replace('.', '/', $name));
+            if (isset($this->compiled_map[$component]) && $this->compiled_map[$component] !== '') {
+                return $this->compiled_map[$component];
+            }
         }
         $index = $template_name.'.index';
 

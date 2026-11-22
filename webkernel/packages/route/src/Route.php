@@ -484,6 +484,11 @@ final class Route
     public static function compile_for_deployment(): array
     {
         $route = self::app();
+        $runtime_bootstrappers_file = base_path('runtime/cache/declarations/webkernel_runtime_bootstrappers.php');
+        $runtime_bootstrappers = is_file($runtime_bootstrappers_file) ? require $runtime_bootstrappers_file : [];
+        $runtime_bootstrappers = is_array($runtime_bootstrappers)
+            ? array_values(array_filter($runtime_bootstrappers, static fn (mixed $bootstrapper): bool => is_callable($bootstrapper)))
+            : [];
         $domains = [];
         foreach ($route->bindings as $binding) {
             $pattern = $binding->domain_pattern();
@@ -511,7 +516,7 @@ final class Route
                 'parameter_binders' => self::$parameter_binders,
                 'named_routes' => $route->named_routes(),
                 'listed_routes' => $route->listed(),
-                'runtime_bootstrappers' => require base_path('runtime/cache/declarations/webkernel_runtime_bootstrappers.php'),
+                'runtime_bootstrappers' => $runtime_bootstrappers,
             ],
         ];
     }
@@ -1177,11 +1182,11 @@ final class Route
         if (is_file($bootstrappers_file)) {
             $bootstrappers = require $bootstrappers_file;
             if (is_array($bootstrappers)) {
-                self::$route_bootstrappers = $bootstrappers;
-                foreach ($bootstrappers as $bootstrapper) {
-                    if (! is_callable($bootstrapper)) {
-                        throw new \RuntimeException('Invalid route bootstrapper declaration.');
-                    }
+                self::$route_bootstrappers = array_values(array_filter(
+                    $bootstrappers,
+                    static fn (mixed $bootstrapper): bool => is_callable($bootstrapper),
+                ));
+                foreach (self::$route_bootstrappers as $bootstrapper) {
                     $bootstrapper();
                 }
             }

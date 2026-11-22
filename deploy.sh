@@ -139,7 +139,7 @@ fi
 
 PRODUCTION_DEST="$(jq -er '.deploys.Production.dest' "$CONFIG")"
 printf '\n== Remote production actions ==\n'
-REMOTE_COMMAND="cd '$PRODUCTION_DEST' && composer install --no-dev --optimize-autoloader --no-interaction --no-progress && find runtime/cache/views -type f -delete && find runtime/cache/views -depth -type d -empty -delete && mkdir -p runtime/cache/views && php -r 'if (is_file(\"runtime/cache/compiled_routes.php\")) { unlink(\"runtime/cache/compiled_routes.php\"); }' && ./platform route:list >/dev/null"
+REMOTE_COMMAND="cd '$PRODUCTION_DEST' && composer install --no-dev --optimize-autoloader --no-interaction --no-progress && ./platform deploy"
 ssh_remote "$REMOTE_COMMAND"
 touch "$STATE_FILE"
-printf 'Composer installed with --no-dev; compiled views and routes refreshed.\n'
+printf 'Composer installed with --no-dev; deployment artifacts rebuilt and activated.\n'

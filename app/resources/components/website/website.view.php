@@ -48,27 +48,11 @@
     $headerContrast = ($site_ui['header']['contrast'] ?? 'sections') === 'sections';
     $requestPath = parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH) ?: '/';
     $studioPage = trim(substr($requestPath, strlen($sitePrefix)), '/');
-    $preloadImages = [
-        'brand/numerimondes-logo-lightmode.png',
-        'brand/numerimondes-logo-darkmode.png',
-        'brand/numerimondes-logo-alone-lightmode.png',
-        'brand/numerimondes-logo-alone-darkmode.png',
-    ];
-    if ($studioPage === '' || $studioPage === 'services') {
-        foreach (\App\Studio\ServiceCatalog::all() as $service) {
-            $preloadImages[] = $service['image_source'];
-        }
-    } elseif ($studioPage === 'about') {
-        $preloadImages = [...$preloadImages, 'about/hero.jpg', 'about/founder.jpeg'];
-    } elseif ($studioPage === 'projects') {
-        foreach (\App\Studio\ProjectCatalog::initiatives() as $project) {
-            $preloadImages[] = $project['card_image'];
-        }
+    $preloadImages = [];
+    if ($studioPage === 'about') {
+        $preloadImages[] = 'about/hero.jpg';
     } elseif (str_starts_with($studioPage, 'projects/')) {
         $allProjects = \App\Studio\ProjectCatalog::initiatives();
-        foreach ($allProjects as $project) {
-            $preloadImages[] = $project['card_image'];
-        }
         $projectSlug = substr($studioPage, strlen('projects/'));
         if (isset($allProjects[$projectSlug])) {
             $preloadImages[] = $allProjects[$projectSlug]['cover'];
@@ -149,44 +133,35 @@
         <a href="{{ $sitePrefix }}/contact">contact</a>
     </nav>
     <div class="nm-nav--compact">
-        <x-webkernel-platform::dropdown placement="bottom-end" width="xs">
-            <x-slot name="trigger">
-                <x-webkernel-platform::icon-button
-                    color="gray"
-                    :icon="\Webkernel\Platform\Support\Icons\Heroicon::OutlinedBars3"
-                    size="sm"
-                    label="Open site menu"
-                    class="nm-nav-menu-trigger"
-                />
-            </x-slot>
+        <details class="nm-mobile-menu">
+            <summary class="nm-nav-menu-trigger" aria-label="Open site menu" title="Open site menu">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
+            </summary>
+            <div class="nm-mobile-menu-panel">
+                <nav aria-label="Main navigation">
+                    <a href="{{ $sitePrefix }}/services">Services</a>
+                    <a href="{{ $sitePrefix }}/projects">Projects</a>
+                    <a href="{{ $sitePrefix }}/about">About</a>
+                    <a href="{{ $sitePrefix }}/shortlist" data-shortlist-link>Shortlist @if ($shortlistCount > 0)<span data-shortlist-count>{{ $shortlistCount }}</span>@endif</a>
+                    <a href="{{ $sitePrefix }}/contact">Contact</a>
+                </nav>
 
-            <x-webkernel-platform::dropdown.list>
-                <x-webkernel-platform::dropdown.list.item tag="a" :href="$sitePrefix.'/services'">Services</x-webkernel-platform::dropdown.list.item>
-                <x-webkernel-platform::dropdown.list.item tag="a" :href="$sitePrefix.'/projects'">Projects</x-webkernel-platform::dropdown.list.item>
-                <x-webkernel-platform::dropdown.list.item tag="a" :href="$sitePrefix.'/about'">About</x-webkernel-platform::dropdown.list.item>
-                <x-webkernel-platform::dropdown.list.item tag="a" :href="$sitePrefix.'/shortlist'" :badge="$shortlistCount > 0 ? $shortlistCount : null" data-shortlist-link>Shortlist</x-webkernel-platform::dropdown.list.item>
-                <x-webkernel-platform::dropdown.list.item tag="a" :href="$sitePrefix.'/contact'">Contact</x-webkernel-platform::dropdown.list.item>
-            </x-webkernel-platform::dropdown.list>
-
-            @if (count($currencyOptions) > 1)
-                <x-webkernel-platform::dropdown.header>Currency · {{ $currency }}</x-webkernel-platform::dropdown.header>
-                <form action="{{ rtrim($sitePrefix, '/') }}/currency" method="post">
-                    @csrf
-                    <input type="hidden" name="return_to" value="{{ $requestPath }}">
-                    <x-webkernel-platform::dropdown.list>
+                @if (count($currencyOptions) > 1)
+                    <div class="nm-mobile-menu-heading">Currency · {{ $currency }}</div>
+                    <form action="{{ rtrim($sitePrefix, '/') }}/currency" method="post">
+                        @csrf
+                        <input type="hidden" name="return_to" value="{{ $requestPath }}">
                         @foreach ($currencyOptions as $currencyCode => $option)
-                            <x-webkernel-platform::dropdown.list.item tag="button" type="submit" name="currency" :value="$currencyCode" :aria-current="$currency === $currencyCode ? 'true' : null">
-                                <span class="nm-menu-currency-option">
-                                    <span aria-hidden="true">{!! flag_markup($option['flag'] ?? '') !!}</span>
-                                    <span>{{ $option['label'] ?? $currencyCode }}</span>
-                                    <small>{{ $currencyCode }}</small>
-                                </span>
-                            </x-webkernel-platform::dropdown.list.item>
+                            <button class="nm-mobile-menu-currency" type="submit" name="currency" value="{{ $currencyCode }}" @if ($currency === $currencyCode) aria-current="true" @endif>
+                                <span aria-hidden="true">{!! flag_markup($option['flag'] ?? '') !!}</span>
+                                <span>{{ $option['label'] ?? $currencyCode }}</span>
+                                <small>{{ $currencyCode }}</small>
+                            </button>
                         @endforeach
-                    </x-webkernel-platform::dropdown.list>
-                </form>
-            @endif
-        </x-webkernel-platform::dropdown>
+                    </form>
+                @endif
+            </div>
+        </details>
     </div>
 </header>
 <div id="main">{{ $slot }}</div>

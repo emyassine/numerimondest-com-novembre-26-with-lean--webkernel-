@@ -173,6 +173,17 @@ final class Config
         $deployment_locked = $deployment_directory !== null;
         if ($deployment_locked) {
             $cache_dir = $deployment_directory;
+            $site_manifest_path = $deployment_directory.'/site_configuration.php';
+            if (is_file($site_manifest_path)) {
+                $site_manifest = require $site_manifest_path;
+                if (is_array($site_manifest)) {
+                    foreach (($site_manifest['configs'] ?? []) as $config_file) {
+                        if (is_string($config_file) && is_file($config_file)) {
+                            self::addDirectory(dirname($config_file));
+                        }
+                    }
+                }
+            }
         }
 
         if (self::bootedForPaths($root_path, $vendor_path, $cache_dir)) {
@@ -253,7 +264,21 @@ final class Config
         }
 
         if ($deployment_locked) {
-            throw new RuntimeException('The deployed configuration artifact is invalid. Run ./platform deploy.');
+            // A stale config generation may also have stale routes. Drop the
+            // receipt so this request falls back to the current route sources.
+            DeploymentLock::invalidate($effective_root);
+            $paths = self::paths();
+            self::configurePaths(new ConfigPaths(
+                $effective_root,
+                $paths->vendor_path,
+                $paths->config_directory,
+                $effective_root.'/runtime/cache',
+                $paths->cache_filename,
+                $paths->runtime_config_file,
+            ));
+            self::recompile();
+
+            return;
         }
 
         self::recompile();

@@ -25,6 +25,19 @@ final class DeploymentLock
         self::$build_mode = false;
     }
 
+    /** Drops a stale deployment receipt so the current request can use source routes. */
+    public static function invalidate(string $root_path): void
+    {
+        $path = rtrim($root_path, '/\\').'/platform-cache.lock';
+        if (is_file($path)) {
+            @unlink($path);
+            if (function_exists('opcache_invalidate')) {
+                @opcache_invalidate($path, true);
+            }
+        }
+        self::requestSilentRecoveryDeployment($root_path);
+    }
+
     /** @return array{format: int, generation: string, artifacts: array<string, string>}|null */
     public static function read(string $root_path): ?array
     {

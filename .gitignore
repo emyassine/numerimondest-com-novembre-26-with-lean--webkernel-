@@ -1,6 +1,7 @@
 node_modules/
 internal/dependencies/
 runtime/cache/*
+platform-cache.lock
 /modules/webkernel/system-panel
 /modules/webkernel/system-installer
 /storage/private/*

@@ -102,8 +102,10 @@ final class View
         self::$added_locations = [];
         self::$engine = null;
         foreach ($directives as $name => $handler) {
+            // Old declaration manifests may contain callbacks from a package
+            // that was removed. Ignore those entries instead of failing every SSR request.
             if (! is_string($name) || ! is_callable($handler)) {
-                throw new InvalidArgumentException('View directive declarations must map names to callable handlers.');
+                continue;
             }
             self::directive($name, $handler);
         }
@@ -469,9 +471,19 @@ final class View
 
         $deployed_directory = DeploymentLock::artifactDirectory(base_path(), 'views');
         $mode = $deployed_directory !== null ? Mode::Fast : Mode::Auto;
-        $cache_directory = self::$cache_directory ?? $deployed_directory ?? base_path('runtime/cache/views');
+        // Deployed files come from the map; keep a writable overlay for missing templates.
+        $cache_directory = self::$cache_directory ?? base_path('runtime/cache/views');
         $engine = new Engine([], $cache_directory, $mode);
         $engine->set_echo_format('\\' . self::class . '::echo(%s)');
+        if ($deployed_directory !== null) {
+            $compiled_map_path = $deployed_directory.'/compiled-map.php';
+            if (is_file($compiled_map_path)) {
+                $compiled_map = require $compiled_map_path;
+                if (is_array($compiled_map)) {
+                    $engine->set_compiled_map($compiled_map);
+                }
+            }
+        }
         foreach (self::$directories as $namespace => $directories) {
             foreach ($directories as $directory) {
                 $engine->add_view_namespace($namespace, $directory);

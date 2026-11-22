@@ -9,6 +9,7 @@ namespace Webkernel\Config\Deployment;
 
 use RuntimeException;
 use Webkernel\Config\Config;
+use Webkernel\Http;
 use Webkernel\ServiceProvider\Deployment\ArtifactBuildContext;
 use Webkernel\ServiceProvider\Deployment\ArtifactBuilder;
 
@@ -29,7 +30,9 @@ final class ConfigArtifactBuilder implements ArtifactBuilder
     {
         $directory = $context->artifactPath($this->artifactKey());
         Config::setPaths($context->rootPath, vendor_path(), $directory);
+        Http::siteConfiguration($context->rootPath);
         Config::recompile();
+        Http::publishSiteConfiguration($context->rootPath, $directory);
         if (! is_file($directory.'/config_compiled.php')) {
             throw new RuntimeException('Configuration compilation did not produce its cache file.');
         }

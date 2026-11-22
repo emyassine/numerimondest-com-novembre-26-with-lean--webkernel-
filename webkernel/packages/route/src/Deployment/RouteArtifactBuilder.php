@@ -8,6 +8,7 @@
 namespace Webkernel\Route\Deployment;
 
 use RuntimeException;
+use Webkernel\Http;
 use Webkernel\Route\Compile\Cache;
 use Webkernel\Route\Route;
 use Webkernel\ServiceProvider\Deployment\ArtifactBuildContext;
@@ -29,6 +30,8 @@ final class RouteArtifactBuilder implements ArtifactBuilder
     public function build(ArtifactBuildContext $context): void
     {
         $directory = $context->artifactPath($this->artifactKey());
+        $site = Http::siteConfiguration($context->rootPath);
+        Route::useDeclaredRouteFiles($site['routes'] ?? [], $site['route_dependencies'] ?? []);
         $compiled = Route::compile_for_deployment();
         $path = $directory.'/compiled_routes.php';
         Cache::write($path, $compiled['default'], [
