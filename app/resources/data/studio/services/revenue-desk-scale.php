@@ -3,7 +3,7 @@
 return [
     'slug' => 'revenue-desk-scale',
     'project_slug' => 'virtual-assistant-asia',
-    'brand' => 'Virtual Assistant Asia',
+    'brand' => 'Numerimondes',
     'name' => 'Revenue Desk · Scale',
     'category' => 'Sales development',
     'engagement_type' => 'Monthly',

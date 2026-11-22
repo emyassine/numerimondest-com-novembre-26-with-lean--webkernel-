@@ -3,7 +3,7 @@
 return [
     'slug' => 'website-build',
     'project_slug' => 'virtual-assistant-asia',
-    'brand' => 'Virtual Assistant Asia',
+    'brand' => 'Numerimondes',
     'featured' => true,
     'name' => 'Business website',
     'category' => 'Digital presence',

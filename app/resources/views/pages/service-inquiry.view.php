@@ -69,7 +69,7 @@
     $whatsappMessage = match (count($contextNames)) {
         0 => "Hi Numerimondes, I have a project I'd like to discuss. Could we talk?",
         1 => "Hi Numerimondes, I'm interested in {$contextLabel}. Could we talk about whether it's a good fit?",
-        default => "Hi Numerimondes, I'm considering {$contextLabel}. Could you help me work out which options fit best?",
+        default => "Hi Numerimondes, I'm considering {$contextLabel}. Which one would you recommend starting with for my goals?",
     };
     $whatsappHref = 'https://wa.me/'.$whatsappNumber.'?text='.rawurlencode($whatsappMessage);
 @endphp

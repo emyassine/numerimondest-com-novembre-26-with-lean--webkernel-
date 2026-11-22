@@ -3,7 +3,7 @@
 return [
     'slug' => 'crm-client-portal',
     'project_slug' => 'virtual-assistant-asia',
-    'brand' => 'Virtual Assistant Asia',
+    'brand' => 'Numerimondes',
     'name' => 'CRM & client portal setup',
     'category' => 'Business systems',
     'engagement_type' => 'Project',

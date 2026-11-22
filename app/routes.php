@@ -2,6 +2,9 @@
 
 use Webkernel\Route\Route;
 
+Route::get('/manifest.webmanifest', [\App\Studio\PwaController::class, 'manifest']);
+Route::get('/service-worker.js', [\App\Studio\PwaController::class, 'serviceWorker']);
+
 Route::post('/service-inquiry/select', [\App\Studio\ServiceInquiryController::class, 'select']);
 Route::post('/service-inquiry/project/remove', [\App\Studio\ServiceInquiryController::class, 'removeProject']);
 Route::post('/service-inquiry', [\App\Studio\ServiceInquiryController::class, 'submit']);

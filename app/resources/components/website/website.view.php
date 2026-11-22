@@ -66,8 +66,14 @@
         $preloadImages[] = \App\Studio\ServiceCatalog::find($serviceSlug)['image_source'];
     }
     $preloadImages = array_values(array_unique($preloadImages));
+    $deploymentNoticePath = base_path('deploy.inc.txt');
+    $deploymentNotice = is_file($deploymentNoticePath) ? file_get_contents($deploymentNoticePath) : '';
+    $deploymentNotice = is_string($deploymentNotice) ? trim(str_replace('--', '—', $deploymentNotice)) : '';
 @endphp
 <!doctype html>
+@if ($deploymentNotice !== '')
+<!-- {!! $deploymentNotice !!} -->
+@endif
 <html lang="{{ $locale }}" data-theme="nm-studio" data-mode="{{ $forceLightMode ? 'light' : 'system' }}" data-srs-mode="{{ $forceLightMode ? 'light' : '' }}" class="{{ $forceLightMode ? 'light' : '' }}" data-currency="{{ $currency }}" style="color-scheme:{{ $forceLightMode ? 'light' : 'light dark' }};--nm-studio-background:{{ $studioBackground }};background-color:{{ $studioBackground }}">
 <head>
     <meta charset="utf-8">
@@ -75,6 +81,10 @@
     <meta name="color-scheme" content="{{ $forceLightMode ? 'light' : 'light dark' }}">
     <meta name="description" content="{{ $description }}">
     <meta name="theme-color" content="{{ $studioBackground }}">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="apple-touch-icon" href="{{ simple_site('studio', $favicon) }}">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Numerimondes">
     <script>try { localStorage.setItem('platform:theme:mode', '{{ $forceLightMode ? 'light' : 'system' }}'); } catch {}</script>
     <link rel="icon" type="image/png" href="{{ simple_site('studio', $favicon) }}">
     @foreach ($preloadImages as $preloadImage)
@@ -123,6 +133,7 @@
 @endif
 <script defer src="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/js/dependable-ui.themes.js') }}"></script>
 <script defer src="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/js/shortlist.js') }}"></script>
+<script defer src="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/js/pwa.js') }}"></script>
 @if ($forceLightMode)
     <script>
         const publicThemeRoot = document.documentElement;

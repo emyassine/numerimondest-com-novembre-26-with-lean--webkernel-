@@ -3,7 +3,7 @@
 return [
     'slug' => 'brand-kit-complete',
     'project_slug' => 'virtual-assistant-asia',
-    'brand' => 'Virtual Assistant Asia',
+    'brand' => 'Numerimondes',
     'name' => 'Brand Kit · Complete',
     'category' => 'Brand identity',
     'engagement_type' => 'Project',

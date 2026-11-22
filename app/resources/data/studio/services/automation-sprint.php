@@ -3,7 +3,7 @@
 return [
     'slug' => 'automation-sprint',
     'project_slug' => 'virtual-assistant-asia',
-    'brand' => 'Virtual Assistant Asia',
+    'brand' => 'Numerimondes',
     'name' => 'Workflow automation sprint',
     'category' => 'Business systems',
     'engagement_type' => 'Project',

@@ -45,7 +45,7 @@
                 <p class="nm-marketplace-card-modal-price">{{ $service['price_display'] }}</p>
             @endif
             @if (! empty($service['brand']))
-                <p class="nm-marketplace-card-modal-brand">{{ $service['brand'] }} · operated by Numerimondes</p>
+                <p class="nm-marketplace-card-modal-brand">{{ $service['brand'] }}</p>
             @endif
             <a href="{{ $service['href'] }}">View full offer <x-webkernel::icon icon="arrow-up-right" set="lucide" width="14" height="14" aria-hidden="true" /></a>
         </div>

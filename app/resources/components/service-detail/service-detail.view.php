@@ -36,7 +36,7 @@
                 <p class="nm-service-detail-price">{{ $service['price_display'] }} <span>· final scope confirmed in writing</span></p>
             @endif
             @if (! empty($service['brand']))
-                <p class="nm-service-detail-brand">{{ $service['brand'] }} · operated by Numerimondes</p>
+                <p class="nm-service-detail-brand">{{ $service['brand'] }}</p>
             @endif
             <div class="nm-service-detail-actions">
                 <x-studio::shortlist-button :service="$service" />

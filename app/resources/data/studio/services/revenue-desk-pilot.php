@@ -3,7 +3,7 @@
 return [
     'slug' => 'revenue-desk-pilot',
     'project_slug' => 'virtual-assistant-asia',
-    'brand' => 'Virtual Assistant Asia',
+    'brand' => 'Numerimondes',
     'featured' => true,
     'name' => 'Revenue Desk · 30-day pilot',
     'category' => 'Sales development',

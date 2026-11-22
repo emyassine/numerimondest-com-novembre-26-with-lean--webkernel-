@@ -3,7 +3,7 @@
 return [
     'slug' => 'ops-audit',
     'project_slug' => 'virtual-assistant-asia',
-    'brand' => 'Virtual Assistant Asia',
+    'brand' => 'Numerimondes',
     'featured' => true,
     'name' => 'Operations audit',
     'category' => 'Operations advisory',
@@ -27,7 +27,7 @@ return [
             'A clear next step for an Executive, Revenue or Brand & Digital service, if relevant.',
         ]],
         ['title' => 'A practical first step', 'paragraphs' => [
-            'The audit fee is credited toward a Desk you start within 30 days, as stated in the Virtual Assistant Asia pricing offer.',
+            'The audit fee is credited toward a dedicated team you start within 30 days.',
         ]],
     ],
 ];

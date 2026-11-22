@@ -3,7 +3,7 @@
 return [
     'slug' => 'brand-book',
     'project_slug' => 'virtual-assistant-asia',
-    'brand' => 'Virtual Assistant Asia',
+    'brand' => 'Numerimondes',
     'name' => 'Brand Book',
     'category' => 'Brand identity',
     'engagement_type' => 'Project',
