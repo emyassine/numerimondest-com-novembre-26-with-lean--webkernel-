@@ -9,6 +9,7 @@ namespace Webkernel\Route\Compile;
 
 use RuntimeException;
 use Webkernel\Route\Binding;
+use Webkernel\Route\Route;
 use Webkernel\ServiceProvider\Deployment\DeploymentLock;
 
 /**
@@ -103,7 +104,13 @@ final class Cache
     public static function source_files(): array
     {
         $files = [];
-        $routes_dump = \function_exists('base_path') ? \base_path('runtime/cache/declarations/webkernel_routes.php') : '';
+        $configured_routes = Route::configuredRouteFiles();
+        if ($configured_routes !== null) {
+            $files = [...$files, ...$configured_routes, ...(Route::configuredRouteDependencies() ?? [])];
+        }
+        $routes_dump = $configured_routes === null && \function_exists('base_path')
+            ? \base_path('runtime/cache/declarations/webkernel_routes.php')
+            : '';
         $panel_dump = \function_exists('base_path') ? \base_path('runtime/cache/declarations/webkernel_panels.php') : '';
         foreach ([$routes_dump, $panel_dump] as $dump) {
             if ($dump !== '' && \is_file($dump)) {

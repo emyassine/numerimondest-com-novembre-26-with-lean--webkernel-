@@ -103,7 +103,7 @@
         <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/Romie-Medium.woff2">
     @endif
     <link rel="canonical" href="{{ $canonical }}">
-    <link rel="stylesheet" href="{{ \Webkernel\Getters\GetAsset::url('dependable-ui/dependable-ui', 'dist/browser/dependable-ui.css') }}">
+    <link rel="stylesheet" href="/assets/dependable-ui/dependable-ui.css">
     <link rel="stylesheet" href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/css/dependable-ui.themes.css') }}">
     <link rel="stylesheet" href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/css/numerimondes-silky.css') }}">
     @foreach ($studioStylesheets as $studioStylesheet)
@@ -207,7 +207,7 @@
     <a class="nm-footer-privacy" href="{{ $sitePrefix }}/privacy">Privacy policy</a>
     <a class="nm-footer-privacy" href="{{ $sitePrefix }}/pricing-policy">Pricing &amp; engagement</a>
 </footer>
-<script defer src="{{ \Webkernel\Getters\GetAsset::url('dependable-ui/dependable-ui', 'dist/browser/dependable-ui.js') }}"></script>
+<script defer src="/assets/dependable-ui/dependable-ui.js"></script>
 @if ($loadWebkernelPlatformTheme)
     <script defer src="{{ \Webkernel\Getters\GetAsset::url('webkernel/platform-support', 'dist/index.js') }}"></script>
 @endif

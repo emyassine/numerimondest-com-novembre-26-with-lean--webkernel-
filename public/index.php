@@ -29,5 +29,4 @@ if ($route === '/healthz' || $route === '/ready') {
 }
 
 require $base_path.'/internal/fast-boot.php';
-\App\Providers\AppServiceProvider::registerPlatformAttributeBagMacros();
 Http::run();

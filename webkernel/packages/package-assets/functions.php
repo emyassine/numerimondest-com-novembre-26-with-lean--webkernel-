@@ -4,6 +4,10 @@ if (! function_exists('webkernel_packages')) {
     /** Returns package metadata compiled by the development/build toolchain. */
     function webkernel_packages(): array
     {
+        if (is_array($GLOBALS['webkernel_packages'] ?? null)) {
+            return $GLOBALS['webkernel_packages'];
+        }
+
         static $packages;
         static $snapshot;
         $manifest_path = base_path('runtime/cache/declarations/webkernel_packages.php');

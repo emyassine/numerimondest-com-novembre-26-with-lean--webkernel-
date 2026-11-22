@@ -1,5 +1,0 @@
-<?php
-
-namespace Webkernel\Platform\Tables\Filters\QueryBuilder\Constraints\DateConstraint\Operators;
-
-class IsMonthOperator extends \Webkernel\Platform\QueryBuilder\Constraints\DateConstraint\Operators\IsMonthOperator {}

@@ -22,11 +22,15 @@ use Webkernel\View\View;
 use Webkernel\HttpErrorPages\ErrorPages;
 use Webkernel\HttpFoundation\Exceptions\HttpResponseException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Webkernel\Liveview\Mechanisms\HandleComponents\CorruptComponentPayloadException;
 
 /** Initializes the compiled HTTP resources and dispatches one request. */
 final class Http
 {
+    /** @var array<string, mixed>|null */
+    private static ?array $site_configuration_cache = null;
+
+    private static ?string $site_configuration_root = null;
+
     private function __construct() {}
 
     public static function run(): void
@@ -75,20 +79,6 @@ final class Http
                     }
                 }
             }
-            if ((\getenv('WEBKERNEL_PROFILE_COMPONENTS') ?: '') === '1') {
-                $component_metrics = $GLOBALS['webkernel_liveview_component_exclusive_metrics'] ?? [];
-                if (\is_array($component_metrics)) {
-                    \arsort($component_metrics, SORT_NUMERIC);
-                    foreach (\array_slice($component_metrics, 0, 12, true) as $component => $duration) {
-                        if (\is_string($component) && \is_numeric($duration)) {
-                            $component_name = \preg_replace('/[^a-zA-Z0-9_-]+/', '_', $component) ?? 'unknown';
-                            $component_name = \trim(\substr($component_name, 0, 36), '_');
-                            $entries[] = 'component_'.$component_name.'_'.\substr(\hash('sha256', $component), 0, 6).';dur='.
-                                \number_format((float) $duration, 3, '.', '');
-                        }
-                    }
-                }
-            }
             \header('Server-Timing: '.\implode(', ', $entries));
         };
 
@@ -98,15 +88,12 @@ final class Http
         if ((\getenv('WEBKERNEL_PROFILE_VIEWS') ?: '') === '1') {
             $GLOBALS['webkernel_view_exclusive_metrics'] = [];
         }
-        if ((\getenv('WEBKERNEL_PROFILE_COMPONENTS') ?: '') === '1') {
-            $GLOBALS['webkernel_liveview_component_exclusive_metrics'] = [];
-        }
 
         PackageAssetRegistry::beginRequest();
         GetAsset::beginRequest();
         $root_path = base_path();
         $vendor_path = vendor_path();
-        $manifest_path = $root_path . '/runtime/cache/declarations/';
+        $site_configuration = self::siteConfiguration($root_path);
         $mark_phase('preflight');
 
         Config::boot($root_path, $vendor_path, $root_path . '/runtime/cache');
@@ -122,11 +109,21 @@ final class Http
             && strtolower($_SERVER['HTTPS']) !== 'off';
         $csp_nonce = ResponseHeaders::apply($header_configuration, $secure_request);
 
-        Container::boot(self::manifest($manifest_path . 'webkernel_bindings.php'))->beginScope();
-        $views = self::manifest($manifest_path . 'webkernel_views.php');
-        $components = self::manifest($manifest_path . 'webkernel_components.php');
-        $view_directives = self::manifest($manifest_path . 'webkernel_view_directives.php');
-        $lang_paths = self::manifest($manifest_path . 'webkernel_lang.php');
+        Container::boot($site_configuration['bindings'] ?? [])->beginScope();
+        foreach (($site_configuration['boot'] ?? []) as $callback) {
+            if (! is_callable($callback)) {
+                throw new RuntimeException('Site boot declarations must be callable.');
+            }
+            $callback();
+        }
+        $views = $site_configuration['views'] ?? [];
+        $components = $site_configuration['components'] ?? [];
+        $view_directives = $site_configuration['view_directives'] ?? [];
+        $lang_paths = $site_configuration['lang'] ?? [];
+        PackageAssetRegistry::boot(self::assetRoots($root_path, $site_configuration));
+        $GLOBALS['webkernel_packages'] = self::packageMetadata($site_configuration);
+        GetAsset::boot($site_configuration['vite'] ?? []);
+        Route::useDeclaredRouteFiles($site_configuration['routes'] ?? [], $site_configuration['route_dependencies'] ?? []);
         View::boot($views, $components, $view_directives);
         View::share('csp_nonce', $csp_nonce);
 
@@ -165,11 +162,6 @@ final class Http
             while (ob_get_level() > 0) { ob_end_clean(); }
             $publish_timings();
             $exception->getResponse()->send();
-        } catch (CorruptComponentPayloadException $exception) {
-            while (ob_get_level() > 0) { ob_end_clean(); }
-            http_response_code(419);
-            $publish_timings();
-            echo ErrorPages::render(419);
         } catch (HttpExceptionInterface $exception) {
             while (ob_get_level() > 0) { ob_end_clean(); }
             $status = $exception->getStatusCode();
@@ -192,14 +184,185 @@ final class Http
         }
     }
 
-    /** @return array<mixed> */
-    private static function manifest(string $path): array
+    /** @return array<string, mixed> */
+    private static function siteConfiguration(string $root_path): array
     {
-        if (! is_file($path)) {
-            return [];
+        if (self::$site_configuration_cache !== null && self::$site_configuration_root === $root_path) {
+            return self::$site_configuration_cache;
         }
 
-        $manifest = require $path;
-        return is_array($manifest) ? $manifest : [];
+        $root_file = $root_path.'/config/site.php';
+        $root_configuration = is_file($root_file) ? require $root_file : [];
+        if (! is_array($root_configuration)) {
+            throw new RuntimeException('config/site.php must return an array.');
+        }
+
+        $configuration = [
+            'routes' => [], 'views' => [], 'components' => [], 'view_directives' => [],
+            'bindings' => [], 'boot' => [], 'lang' => [], 'public_assets' => [], 'configs' => [], 'route_dependencies' => [$root_file, ...glob($root_path.'/config/*.php') ?: []],
+        ];
+        foreach (\Composer\InstalledVersions::getInstalledPackages() as $package_name) {
+            if (! is_string($package_name) || ! \Composer\InstalledVersions::isInstalled($package_name)) {
+                continue;
+            }
+            $package_root = \Composer\InstalledVersions::getInstallPath($package_name);
+            if (! is_string($package_root)) {
+                continue;
+            }
+            $package_site_file = rtrim($package_root, '/\\').'/config/site.php';
+            if (! is_file($package_site_file)) {
+                continue;
+            }
+            $configuration['route_dependencies'][] = $package_site_file;
+            $package_configuration = require $package_site_file;
+            if (! is_array($package_configuration)) {
+                throw new RuntimeException(sprintf('Composer package %s config/site.php must return an array.', $package_name));
+            }
+            self::mergeSiteConfiguration($configuration, $package_configuration, $package_name);
+            foreach (($package_configuration['configs'] ?? []) as $config_file) {
+                if (is_string($config_file) && is_file($config_file)) {
+                    Config::addDirectory(dirname($config_file));
+                    $configuration['route_dependencies'][] = $config_file;
+                }
+            }
+        }
+
+        unset($root_configuration['packages']);
+        self::mergeSiteConfiguration($configuration, $root_configuration, null);
+        $configuration['packages'] = array_values(array_unique($configuration['packages'] ?? []));
+
+        foreach (['routes', 'configs', 'route_dependencies'] as $key) {
+            $configuration[$key] = self::resolvePaths($root_path, $configuration[$key] ?? []);
+        }
+        foreach (['views', 'components', 'lang', 'public_assets'] as $key) {
+            foreach (($configuration[$key] ?? []) as $namespace => $directories) {
+                if (is_array($directories)) {
+                    $configuration[$key][$namespace] = self::resolvePaths($root_path, $directories);
+                }
+            }
+        }
+
+        self::$site_configuration_root = $root_path;
+        self::$site_configuration_cache = $configuration;
+
+        return $configuration;
+    }
+
+    /** @param array<string, mixed> $target @param array<string, mixed> $source */
+    private static function mergeSiteConfiguration(array &$target, array $source, ?string $package_name): void
+    {
+        if ($package_name !== null) {
+            $target['packages'][] = $package_name;
+        }
+        foreach (['routes', 'configs', 'route_dependencies'] as $key) {
+            if (is_array($source[$key] ?? null)) {
+                $target[$key] = array_values(array_unique([...($target[$key] ?? []), ...$source[$key]]));
+            }
+        }
+        foreach (['views', 'components', 'lang'] as $key) {
+            if (! is_array($source[$key] ?? null)) {
+                continue;
+            }
+            $definitions = $source[$key];
+            if ($key === 'lang' && array_is_list($definitions)) {
+                $definitions = ['package-'.str_replace('/', '-', $package_name ?? 'site') => $definitions];
+            }
+            foreach ($definitions as $namespace => $directories) {
+                if (is_array($directories)) {
+                    $target[$key][$namespace] = array_values(array_unique([
+                        ...($target[$key][$namespace] ?? []),
+                        ...$directories,
+                    ]));
+                }
+            }
+        }
+        if (is_array($source['public_assets'] ?? null)) {
+            $assets = $source['public_assets'];
+            if (array_is_list($assets) && $package_name !== null) {
+                $assets = [$package_name => $assets];
+            }
+            foreach ($assets as $name => $directories) {
+                if (is_string($name) && is_array($directories)) {
+                    $target['public_assets'][$name] = array_values(array_unique([
+                        ...($target['public_assets'][$name] ?? []),
+                        ...$directories,
+                    ]));
+                }
+            }
+        }
+        foreach (['bindings', 'view_directives', 'boot'] as $key) {
+            if (is_array($source[$key] ?? null)) {
+                $target[$key] = array_replace_recursive($target[$key] ?? [], $source[$key]);
+            }
+        }
+    }
+
+    /** @param list<mixed> $paths @return list<string> */
+    private static function resolvePaths(string $root_path, array $paths): array
+    {
+        $resolved = [];
+        foreach ($paths as $path) {
+            if (! is_string($path) || $path === '') {
+                continue;
+            }
+            $candidate = str_starts_with($path, '/') ? $path : $root_path.'/'.$path;
+            $resolved[] = realpath($candidate) ?: $candidate;
+        }
+
+        return array_values(array_unique($resolved));
+    }
+
+    /** @return array<string, array{package_root: string, roots: list<string>}> */
+    private static function assetRoots(string $root_path, array $configuration): array
+    {
+        $assets = [];
+        foreach (($configuration['public_assets'] ?? []) as $package_name => $directories) {
+            if (! is_string($package_name) || ! is_array($directories)) {
+                continue;
+            }
+            $package_root = $package_name === (\Composer\InstalledVersions::getRootPackage()['name'] ?? null)
+                ? $root_path
+                : (\Composer\InstalledVersions::isInstalled($package_name)
+                    ? \Composer\InstalledVersions::getInstallPath($package_name)
+                    : null);
+            if (! is_string($package_root)) {
+                continue;
+            }
+            $package_root = realpath($package_root) ?: $package_root;
+            $roots = [];
+            foreach ($directories as $directory) {
+                if (is_string($directory)) {
+                    $candidate = str_starts_with($directory, '/') ? $directory : $root_path.'/'.$directory;
+                    if (is_dir($candidate)) {
+                        $roots[] = realpath($candidate) ?: $candidate;
+                    }
+                }
+            }
+            $assets[$package_name] = ['package_root' => $package_root, 'roots' => $roots];
+        }
+
+        return $assets;
+    }
+
+    /** @return array<string, array{name: string, version: string, catalog: array}> */
+    private static function packageMetadata(array $configuration): array
+    {
+        $packages = [];
+        foreach (($configuration['packages'] ?? []) as $package_name) {
+            if (! is_string($package_name) || ! \Composer\InstalledVersions::isInstalled($package_name)) {
+                continue;
+            }
+            $packages[$package_name] = [
+                'name' => $package_name,
+                'version' => (string) (\Composer\InstalledVersions::getPrettyVersion($package_name) ?? ''),
+                'catalog' => [],
+            ];
+        }
+        $root_name = \Composer\InstalledVersions::getRootPackage()['name'] ?? null;
+        if (is_string($root_name)) {
+            $packages[$root_name] = ['name' => $root_name, 'version' => '', 'catalog' => []];
+        }
+
+        return $packages;
     }
 }

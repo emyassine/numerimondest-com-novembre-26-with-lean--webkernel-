@@ -20,13 +20,6 @@
   "repositories": [
     {
       "type": "path",
-      "url": "../dependable-ui/dist/php-webkernel",
-      "options": {
-        "symlink": true
-      }
-    },
-    {
-      "type": "path",
       "url": "webkernel/packages/*",
       "options": {
         "symlink": false
@@ -34,8 +27,11 @@
     }
   ],
   "require": {
-    "dependable-ui/dependable-ui": "^0.1.9",
     "php": ">=8.5.12",
+    "webkernel/commands": "^0.12.0",
+    "webkernel/console": "^0.12.0",
+    "webkernel/platform-notifications": "^5.9.0",
+    "webkernel/platform-support": "^5.9.0",
     "webkernel/simple-site": "^0.12.0"
   },
   "autoload": {
@@ -49,7 +45,6 @@
   "extra": {
     "webkernel": {
       "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
-      "package-declaration": "App\\Providers\\AppPDeclaration",
       "lifecycle": {}
     }
   }

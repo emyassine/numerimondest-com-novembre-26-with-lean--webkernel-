@@ -37,25 +37,31 @@ final class CommandsDiscovery
     public function classesFromDump(?string $file = null): array
     {
         $file ??= \base_path('runtime/cache/declarations/webkernel_commands.php');
-        if ($file === '' || ! \is_file($file)) {
-            return [];
-        }
-        $loaded = require $file;
-        if (! \is_array($loaded)) {
-            return [];
-        }
+        $loaded = $file !== '' && \is_file($file) ? require $file : [];
         $out = [];
-        foreach ($loaded as $class) {
-            if (! \is_string($class) || $class === '') {
-                continue;
+        foreach (\is_array($loaded) ? $loaded : [] as $class) {
+            if (\is_string($class) && $class !== '' && \class_exists($class)) {
+                $out[] = $class;
             }
-            if (! \class_exists($class)) {
-                continue;
-            }
-            $out[] = $class;
         }
 
-        return $out;
+        foreach (\Composer\InstalledVersions::getInstalledPackages() as $package) {
+            $package_root = \Composer\InstalledVersions::getInstallPath($package);
+            $configuration_file = \is_string($package_root)
+                ? \rtrim($package_root, '/\\').'/config/site.php'
+                : null;
+            if (! \is_string($configuration_file) || ! \is_file($configuration_file)) {
+                continue;
+            }
+            $configuration = require $configuration_file;
+            foreach (\is_array($configuration) ? ($configuration['commands'] ?? []) : [] as $class) {
+                if (\is_string($class) && $class !== '' && \class_exists($class)) {
+                    $out[] = $class;
+                }
+            }
+        }
+
+        return \array_values(\array_unique($out));
     }
 
     /**

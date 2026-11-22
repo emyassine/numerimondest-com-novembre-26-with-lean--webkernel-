@@ -1,8 +1,0 @@
-<?php
-
-use Webkernel\Liveview\Livewire;
-
-it('renders successfully', function () {
-    Livewire::test('[component-name]')
-        ->assertStatus(200);
-});

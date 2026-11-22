@@ -18,12 +18,5 @@
         "psr-4": {
             "Webkernel\\HttpErrorPages\\": "src/"
         }
-    },
-    "extra": {
-        "webkernel": {
-            "package-declaration": "Webkernel\\HttpErrorPages\\Providers\\HttpErrorPagesPDeclaration",
-            "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
-            "provider": "Webkernel\\HttpErrorPages\\Providers\\HttpErrorPagesProvider"
-        }
     }
 }

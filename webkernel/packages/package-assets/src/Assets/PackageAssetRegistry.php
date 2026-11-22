@@ -19,12 +19,21 @@ final class PackageAssetRegistry
     private static ?array $manifest_snapshot = null;
 
     private static bool $checked_this_request = false;
+    private static bool $configured = false;
 
     private function __construct() {}
 
     public static function beginRequest(): void
     {
         self::$checked_this_request = false;
+    }
+
+    /** Seed asset roots directly from the site's Composer package config. */
+    public static function boot(array $packages): void
+    {
+        self::$packages = $packages;
+        self::$configured = true;
+        self::$checked_this_request = true;
     }
 
     public static function isDeclared(string $package_name, string $package_relative_path): bool
@@ -75,6 +84,9 @@ final class PackageAssetRegistry
 
     private static function packages(): array
     {
+        if (self::$configured) {
+            return self::$packages ?? [];
+        }
         if (self::$checked_this_request && self::$packages !== null) {
             return self::$packages;
         }

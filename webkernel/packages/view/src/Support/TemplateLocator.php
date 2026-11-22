@@ -45,7 +45,14 @@ final class TemplateLocator
         if (isset($this->aliases[$template])) { return $this->aliases[$template]; }
         if (isset($this->resolved[$template])) { return $this->resolved[$template]; }
         [$namespace, $name] = $this->split($template);
-        $relative = str_contains($name, '/') ? [$name] : [str_replace('.', '/', $name).'.view.php', str_replace('.', '/', $name).'/index.view.php'];
+        $name_path = str_replace('.', '/', $name);
+        $relative = str_contains($name, '/')
+            ? [$name]
+            : [
+                $name_path.'.view.php',
+                $name_path.'/'.basename($name_path).'.view.php',
+                $name_path.'/index.view.php',
+            ];
         foreach ($relative as $candidate) {
             foreach ($this->directories($namespace) as $directory) {
                 $path = $directory.'/'.$candidate;
@@ -58,7 +65,14 @@ final class TemplateLocator
     public function explain(string $template): string
     {
         [$namespace, $name] = $this->split($template);
-        $relative = str_contains($name, '/') ? [$name] : [str_replace('.', '/', $name).'.view.php', str_replace('.', '/', $name).'/index.view.php'];
+        $name_path = str_replace('.', '/', $name);
+        $relative = str_contains($name, '/')
+            ? [$name]
+            : [
+                $name_path.'.view.php',
+                $name_path.'/'.basename($name_path).'.view.php',
+                $name_path.'/index.view.php',
+            ];
         $paths = [];
         foreach ($relative as $candidate) {
             foreach ($this->directories($namespace) as $directory) { $paths[] = $directory.'/'.$candidate; }

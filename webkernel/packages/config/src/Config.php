@@ -964,11 +964,13 @@ final class Config
         self::initPaths();
 
         $dirs = [
-            self::paths()->configDirectory(),
             ...self::$custom_directories,
+            self::paths()->configDirectory(),
         ];
 
-        $discovery = new ConfigDiscovery($dirs, self::paths()->root_path.'/runtime/cache/declarations');
+        // Site runtime configuration is declared explicitly through its config directories.
+        // Do not merge stale Composer provider manifests from an older deployment.
+        $discovery = new ConfigDiscovery($dirs);
 
         foreach (self::$providers as $provider_class) {
             $discovery->addProvider($provider_class);
@@ -993,9 +995,9 @@ final class Config
         $paths = self::paths();
 
         return self::$cache_inputs = [
-            'directories' => [$paths->configDirectory(), ...self::$custom_directories],
+            'directories' => [...self::$custom_directories, $paths->configDirectory()],
             'providers' => self::$providers,
-            'declarations_path' => $paths->root_path.'/runtime/cache/declarations',
+            'declarations_path' => '',
             'runtime_file' => $paths->runtimeConfigFile(),
         ];
     }

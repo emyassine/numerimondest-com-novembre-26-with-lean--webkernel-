@@ -1,5 +1,0 @@
-<x-webkernel-widgets::widget>
-    <x-webkernel-platform::section>
-        {{-- Widget content --}}
-    </x-webkernel-platform::section>
-</x-webkernel-widgets::widget>

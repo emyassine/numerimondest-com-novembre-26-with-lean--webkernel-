@@ -71,6 +71,11 @@ final class Route
     /** @var list<callable(): void> */
     private static array $route_bootstrappers = [];
 
+    /** @var list<string>|null */
+    private static ?array $configured_route_files = null;
+    /** @var list<string>|null */
+    private static ?array $configured_route_dependencies = null;
+
     /** @var array<string, class-string> */
     private static array $middleware_aliases = [];
 
@@ -133,6 +138,7 @@ final class Route
         self::$deployment_generation = null;
         self::$deployed_list = null;
         self::$route_bootstrappers = [];
+        self::$configured_route_files = null;
         self::$current_route = null;
         self::$active_request = null;
         self::$parameter_binders = [];
@@ -781,7 +787,9 @@ final class Route
         }
         $active_request = self::$active_request;
         $current_route = self::$current_route;
+        $configured_route_files = self::$configured_route_files;
         self::flush();
+        self::$configured_route_files = $configured_route_files;
         self::$active_request = $active_request;
         self::$current_route = $current_route;
         return self::app()->build_and_cache($host);
@@ -1157,6 +1165,14 @@ final class Route
         if (! \function_exists('base_path')) {
             return;
         }
+        if (self::$configured_route_files !== null) {
+            foreach (self::$configured_route_files as $path) {
+                if (is_string($path) && is_file($path)) {
+                    require $path;
+                }
+            }
+            return;
+        }
         $bootstrappers_file = base_path('runtime/cache/declarations/webkernel_route_bootstrappers.php');
         if (is_file($bootstrappers_file)) {
             $bootstrappers = require $bootstrappers_file;
@@ -1183,5 +1199,25 @@ final class Route
                 require $path;
             }
         }
+    }
+
+    /** Use route files declared by the site's config/site.php. */
+    public static function useDeclaredRouteFiles(array $files, array $dependencies = []): void
+    {
+        self::flush();
+        self::$configured_route_files = array_values(array_filter($files, 'is_string'));
+        self::$configured_route_dependencies = array_values(array_filter($dependencies, 'is_string'));
+    }
+
+    /** @return list<string>|null */
+    public static function configuredRouteFiles(): ?array
+    {
+        return self::$configured_route_files;
+    }
+
+    /** @return list<string>|null */
+    public static function configuredRouteDependencies(): ?array
+    {
+        return self::$configured_route_dependencies;
     }
 }

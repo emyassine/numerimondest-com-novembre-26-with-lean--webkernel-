@@ -607,7 +607,9 @@ final class Dispatcher
       */
      private function frameworkVersion(): string
      {
-     	return InstalledVersions::getPrettyVersion('webkernel/codebase') ?? '';
+     	return InstalledVersions::isInstalled('webkernel/codebase')
+            ? (InstalledVersions::getPrettyVersion('webkernel/codebase') ?? '')
+            : (InstalledVersions::getPrettyVersion('webkernel/console') ?? '');
      }
 
     /**
