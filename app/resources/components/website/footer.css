@@ -1,12 +1,13 @@
 .nm-footer {
   padding: 25px 50px;
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr;
   align-items: center;
+  justify-items: center;
   gap: 30px;
 }
 
-.nm-footer-links { display: flex; gap: 25px; align-items: center; }
+.nm-footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; align-items: center; }
 
 .nm-footer-links a,
 .nm-footer-email,
@@ -23,11 +24,10 @@
 .nm-footer-email:hover,
 .nm-footer-privacy:hover { opacity: .56; }
 
-.nm-footer-copy { grid-column: 1 / -1; text-align: center; }
+.nm-footer-copy { text-align: center; }
+.nm-footer-email, .nm-footer-privacy { justify-self: center; text-align: center; }
 
 @media (max-width: 700px) {
-  .nm-footer { padding: 25px 20px; grid-template-columns: 1fr; justify-items: center; gap: 20px; }
-  .nm-footer-links { flex-wrap: wrap; justify-content: center; gap: 15px; }
-  .nm-footer-email, .nm-footer-privacy { justify-self: center; }
-  .nm-footer-copy { grid-column: 1; }
+  .nm-footer { padding: 25px 20px; gap: 20px; }
+  .nm-footer-links { gap: 15px; }
 }
