@@ -85,9 +85,55 @@ final class PageDiscovery
     public static function find(array $site, string $requestedPath): ?array
     {
         $requestedPath = trim(rawurldecode($requestedPath), '/');
-        if ($requestedPath !== '' && preg_match('#(?:^|/)\.\.?($|/)#', $requestedPath)) {
+        if (str_contains($requestedPath, "\0") || str_contains($requestedPath, '\\')
+            || ($requestedPath !== '' && preg_match('#(?:^|/)\.\.?($|/)#', $requestedPath))
+        ) {
             return null;
         }
+
+        $root = $site['pages'] ?? null;
+        if (! is_string($root) || ! is_dir($root)) {
+            throw new RuntimeException('A simple site must configure an existing pages directory.');
+        }
+        $file = rtrim($root, '/\\').'/'.($requestedPath === '' ? 'index.view.php' : $requestedPath.'.view.php');
+        if (! is_file($file) && $requestedPath !== '') {
+            $file = rtrim($root, '/\\').'/'.$requestedPath.'/index.view.php';
+        }
+        if (is_file($file)) {
+            $relative = substr($file, strlen(rtrim($root, '/\\')) + 1);
+            $viewPath = substr($relative, 0, -strlen('.view.php'));
+            $props = [];
+            $template = file_get_contents($file);
+            if (is_string($template)) {
+                if (preg_match('/(?:^|\s):status\s*=\s*["\']([1-5][0-9]{2})["\']/', $template, $matches) === 1) {
+                    $props['status'] = (int) $matches[1];
+                }
+                if (preg_match('/(?:^|\s):robots\s*=\s*["\']([^"\']+)["\']/', $template, $matches) === 1) {
+                    $props['robots'] = $matches[1];
+                }
+            }
+            $metaFile = substr($file, 0, -strlen('.view.php')).'.meta.php';
+            if (is_file($metaFile)) {
+                $metadata = require $metaFile;
+                if (! is_array($metadata)) {
+                    throw new RuntimeException(sprintf('Page metadata must return an array: %s', $metaFile));
+                }
+                $props = array_replace($props, $metadata);
+            }
+            $viewName = rtrim((string) ($site['view_namespace'] ?? ''), ':');
+            if ($viewName !== '') {
+                $viewName .= '::';
+            }
+            $viewPrefix = trim((string) ($site['view_prefix'] ?? 'pages'), '.');
+            if ($viewPrefix !== '') {
+                $viewName .= $viewPrefix.'.';
+            }
+            $viewName .= str_replace('/', '.', $viewPath);
+
+            return ['path' => $requestedPath, 'view' => $viewName, 'props' => $props, 'file' => $file];
+        }
+
+        // Keep the full lookup for URLs generated from order-prefixed directories.
         foreach (self::pages($site) as $page) {
             if ($page['path'] === $requestedPath) {
                 return $page;
