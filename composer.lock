@@ -2643,7 +2643,7 @@
             "dist": {
                 "type": "path",
                 "url": "webkernel/packages/simple-site",
-                "reference": "4754dff1dcbf6f80b26dae23fd540836404737ee"
+                "reference": "4c8f10e1392463888e29d7f2d825ef7a95fb098b"
             },
             "require": {
                 "php": ">=8.5.12",
@@ -2656,6 +2656,16 @@
                 "webkernel/view": "self.version"
             },
             "type": "library",
+            "extra": {
+                "webkernel": {
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "lifecycle": {
+                        "actions": [
+                            "Webkernel\\SimpleSite\\Actions\\GenerateSiteFeedsAction"
+                        ]
+                    }
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Webkernel\\SimpleSite\\": "src/"

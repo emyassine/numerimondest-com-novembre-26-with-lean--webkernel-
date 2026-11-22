@@ -82,6 +82,8 @@
     <meta name="description" content="{{ $description }}">
     <meta name="theme-color" content="{{ $studioBackground }}">
     <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+    <link rel="alternate" type="application/rss+xml" title="Numerimondes updates" href="/rss.xml">
     <link rel="apple-touch-icon" href="{{ simple_site('studio', $favicon) }}">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Numerimondes">

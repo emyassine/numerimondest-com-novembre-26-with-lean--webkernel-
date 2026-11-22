@@ -11,5 +11,7 @@ platform-cache.lock
 web-sync.config.json
 
 /runtime/sessions/
+/public/sitemap.xml
+/public/rss.xml
 
 .yas-deploy-once.json

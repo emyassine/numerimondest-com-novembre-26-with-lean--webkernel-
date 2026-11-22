@@ -7,6 +7,7 @@ use Webkernel\Config\Config;
 use Webkernel\HttpFoundation\RedirectResponse;
 use Webkernel\HttpFoundation\Response;
 use Webkernel\SimpleSite\Site\PageDiscovery;
+use Webkernel\SimpleSite\Site\SiteFeedGenerator;
 use Webkernel\SimpleSite\Site\SiteRegistry;
 use Webkernel\I18n\I18nContext;
 use Webkernel\Route\Request;
@@ -141,28 +142,50 @@ final class SiteController
 
     private static function sitemapForSites(array $sites): Response
     {
-        $urls = [];
+        return new Response(
+            SiteFeedGenerator::sitemap($sites, (string) Config::get('app.url', '')),
+            200,
+            ['Content-Type' => 'application/xml; charset=UTF-8'],
+        );
+    }
+
+    public static function rss(): Response
+    {
+        $site = SiteRegistry::forCurrentRequest();
+
+        return self::rssForSites([$site]);
+    }
+
+    public static function rootRss(): Response
+    {
+        $sites = Config::get('simple-site.sites', []);
+        if (! is_array($sites)) {
+            $sites = [];
+        }
+        $sites = array_filter($sites, 'is_array');
         foreach ($sites as $site) {
-            foreach (PageDiscovery::pages($site) as $page) {
-                if ((int) ($page['props']['status'] ?? 200) >= 400) {
-                    continue;
-                }
-                if (str_contains(strtolower((string) ($page['props']['robots'] ?? '')), 'noindex')) {
-                    continue;
-                }
-                $canonical = $page['props']['canonical'] ?? self::pageUrl($site, $page['path']);
-                if (! is_string($canonical) || $canonical === '') {
-                    $canonical = self::pageUrl($site, $page['path']);
-                } elseif (str_starts_with($canonical, '/')) {
-                    $canonical = rtrim((string) Config::get('app.url', ''), '/').$canonical;
-                }
-                $lastmod = $page['props']['updated_at'] ?? null;
-                $urls[] = '<url><loc>'.htmlspecialchars($canonical, ENT_XML1 | ENT_QUOTES, 'UTF-8').'</loc>'.(is_string($lastmod) && $lastmod !== '' ? '<lastmod>'.htmlspecialchars($lastmod, ENT_XML1 | ENT_QUOTES, 'UTF-8').'</lastmod>' : '').'</url>';
+            if (trim((string) ($site['prefix'] ?? ''), '/') === '') {
+                return self::rssForSites([$site]);
             }
         }
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n".'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'.implode('', $urls).'</urlset>';
+        foreach ($sites as $site) {
+            if (($site['default_feed'] ?? false) === true) {
+                return self::rssForSites([$site]);
+            }
+        }
 
-        return new Response($xml, 200, ['Content-Type' => 'application/xml; charset=UTF-8']);
+        $firstSite = reset($sites);
+
+        return self::rssForSites(is_array($firstSite) ? [$firstSite] : []);
+    }
+
+    private static function rssForSites(array $sites): Response
+    {
+        return new Response(
+            SiteFeedGenerator::rss($sites, (string) Config::get('app.url', '')),
+            200,
+            ['Content-Type' => 'application/rss+xml; charset=UTF-8'],
+        );
     }
 
     public static function robots(): Response
@@ -298,7 +321,7 @@ final class SiteController
         $prefix = rtrim((string) ($site['prefix'] ?? ''), '/');
         $canonical = $page['props']['canonical'] ?? self::pageUrl($site, $page['path']);
         if (is_string($canonical) && str_starts_with($canonical, '/')) {
-            $canonical = rtrim((string) Config::get('app.url', ''), '/').$canonical;
+            $canonical = rtrim(self::siteUrl($site), '/').$canonical;
         }
         $props = array_replace([
             'title' => 'Untitled page',
@@ -364,7 +387,10 @@ final class SiteController
 
     private static function siteUrl(array $site): string
     {
-        $appUrl = rtrim((string) Config::get('app.url', ''), '/');
+        $configuredUrl = $site['canonical_url'] ?? null;
+        $appUrl = rtrim(is_string($configuredUrl) && filter_var($configuredUrl, FILTER_VALIDATE_URL) !== false
+            ? $configuredUrl
+            : (string) Config::get('app.url', ''), '/');
         $prefix = trim((string) ($site['prefix'] ?? ''), '/');
         return $appUrl.($prefix === '' ? '' : '/'.$prefix);
     }

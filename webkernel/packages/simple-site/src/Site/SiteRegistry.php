@@ -29,6 +29,12 @@ final class SiteRegistry
         $path = is_string($uri) ? $uri : '/';
         $sites = Config::get('simple-site.sites', []);
         if (is_array($sites)) {
+            uasort($sites, static function (mixed $left, mixed $right): int {
+                $leftPrefix = is_array($left) && is_string($left['prefix'] ?? null) ? rtrim($left['prefix'], '/') : '';
+                $rightPrefix = is_array($right) && is_string($right['prefix'] ?? null) ? rtrim($right['prefix'], '/') : '';
+
+                return strlen($rightPrefix) <=> strlen($leftPrefix);
+            });
             foreach ($sites as $site) {
                 $prefix = is_array($site) ? ($site['prefix'] ?? null) : null;
                 if (is_string($prefix) && ($path === rtrim($prefix, '/') || str_starts_with($path, rtrim($prefix, '/').'/'))) {

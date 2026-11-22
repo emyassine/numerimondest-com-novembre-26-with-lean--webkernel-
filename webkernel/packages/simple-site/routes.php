@@ -11,6 +11,7 @@ if (! is_array($sites)) {
 
 Route::get('/robots.txt', [SiteController::class, 'robots']);
 Route::get('/sitemap.xml', [SiteController::class, 'rootSitemap']);
+Route::get('/rss.xml', [SiteController::class, 'rootRss']);
 Route::get('/.well-known/tdmrep.json', [SiteController::class, 'tdmrep']);
 
 $hasTermsPage = false;
@@ -47,6 +48,7 @@ foreach ($sites as $siteKey => $site) {
     Route::post($routePath('currency'), [SiteController::class, 'setCurrency']);
     if ($routeBase !== '') {
         Route::get($routePath('sitemap.xml'), [SiteController::class, 'sitemap']);
+        Route::get($routePath('rss.xml'), [SiteController::class, 'rss']);
     }
     Route::get($routePath('llms.txt'), [SiteController::class, 'llms']);
     Route::get($routePath('{path:.*}'), [SiteController::class, 'page']);

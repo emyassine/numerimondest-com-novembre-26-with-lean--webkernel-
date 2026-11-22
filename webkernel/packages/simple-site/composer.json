@@ -18,5 +18,13 @@
   "autoload": {
     "psr-4": { "Webkernel\\SimpleSite\\": "src/" },
     "files": ["src/helpers.php"]
+  },
+  "extra": {
+    "webkernel": {
+      "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+      "lifecycle": {
+        "actions": ["Webkernel\\SimpleSite\\Actions\\GenerateSiteFeedsAction"]
+      }
+    }
   }
 }

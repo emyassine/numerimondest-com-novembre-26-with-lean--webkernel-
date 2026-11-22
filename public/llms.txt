@@ -3,6 +3,8 @@
 > Numerimondes helps organizations move ideas into execution through strategy, business services, and dedicated teams.
 
 ## Pages
+- [Sitemap](https://numerimondes.com/sitemap.xml)
+- [RSS feed](https://numerimondes.com/rss.xml)
 - [Home](https://numerimondes.com/)
 - [Services](https://numerimondes.com/services)
 - [Projects](https://numerimondes.com/projects)
