@@ -3,17 +3,14 @@ set -Eeuo pipefail
 
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 CONFIG="${WEB_SYNC_CONFIG:-$ROOT/web-sync.config.json}"
-VERIFY_CONTENT=false
 
 usage() {
-    printf 'Usage: %s [--verify-content]\n' "${0##*/}"
-    printf '  Default: fast incremental rsync based on file timestamps.\n'
-    printf '  --verify-content: compare file contents with checksums.\n'
+    printf 'Usage: %s\n' "${0##*/}"
+    printf '  Sync source contents, then rebuild production runtime artifacts.\n'
 }
 
 case "${1:-}" in
     "") ;;
-    --verify-content) VERIFY_CONTENT=true ;;
     -h|--help) usage; exit 0 ;;
     *) usage >&2; exit 2 ;;
 esac
@@ -40,23 +37,19 @@ HOST="$USER@$SERVER"
 if [[ -n "$SSH_PASSWORD" ]]; then
     command -v sshpass >/dev/null 2>&1 || { printf 'Missing required command: sshpass\n' >&2; exit 1; }
     export SSHPASS="$SSH_PASSWORD"
-    SSH_REMOTE="sshpass -e ssh -p $SSH_PORT -o StrictHostKeyChecking=yes -o ConnectTimeout=15"
-    ssh_remote() { sshpass -e ssh -p "$SSH_PORT" -o StrictHostKeyChecking=yes -o ConnectTimeout=15 "$HOST" "$1"; }
+    SSH_REMOTE="sshpass -e ssh -F /dev/null -p $SSH_PORT -o StrictHostKeyChecking=yes -o ConnectTimeout=15"
+    ssh_remote() { sshpass -e ssh -F /dev/null -p "$SSH_PORT" -o StrictHostKeyChecking=yes -o ConnectTimeout=15 "$HOST" "$1"; }
 else
-    SSH_REMOTE="ssh -p $SSH_PORT -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=15"
-    ssh_remote() { ssh -p "$SSH_PORT" -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=15 "$HOST" "$1"; }
+    SSH_REMOTE="ssh -F /dev/null -p $SSH_PORT -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=15"
+    ssh_remote() { ssh -F /dev/null -p "$SSH_PORT" -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=15 "$HOST" "$1"; }
 fi
 unset SSH_PASSWORD
 
-RSYNC_OPTIONS=(-az --no-owner --no-group --partial --info=progress2 --stats --timeout=30 --out-format='%i %n%L' -e "$SSH_REMOTE")
-if [[ "$VERIFY_CONTENT" == true ]]; then
-    RSYNC_OPTIONS+=(--checksum)
-fi
+RSYNC_OPTIONS=(-azc --no-owner --no-group --partial --info=progress2 --stats --timeout=30 --out-format='%i %n%L' -e "$SSH_REMOTE")
 
 CHANGED=false
+COMPOSER_CHANGED=false
 LOG_DIR="$(mktemp -d "${TMPDIR:-/tmp}/numerimondes-deploy.XXXXXX")"
-STATE_FILE="$ROOT/runtime/cache/deploy/.deploy-last-success"
-mkdir -p "$(dirname -- "$STATE_FILE")"
 cleanup() {
     find "$LOG_DIR" -type f -delete 2>/dev/null || true
     find "$LOG_DIR" -depth -type d -empty -delete 2>/dev/null || true
@@ -96,31 +89,6 @@ while IFS=$'\t' read -r NAME SOURCE DESTINATION TYPE; do
         )
     fi
 
-    FILE_LIST="$LOG_DIR/$(printf '%s' "$NAME" | tr -cs '[:alnum:]_.-' '_').files"
-    if [[ -f "$STATE_FILE" && "$VERIFY_CONTENT" == false ]]; then
-        if [[ "$TYPE" == webkernel ]]; then
-            (cd -- "$SOURCE_DIR" && find . \
-                -type d \( -name .git -o -name node_modules -o -name cache -path './runtime/cache' \
-                    -o -path './runtime/sessions' -o -path './storage/private' \
-                    -o -path './storage/databases' -o -path './storage/backups' \
-                    -o -path './modules/webkernel/system-panel' -o -path './modules/webkernel/system-installer' \
-                    -o -name account \) -prune -o \
-                \( -type f -o -type l \) -newer "$STATE_FILE" \
-                ! -name '.env' ! -name '.env.*' ! -name 'web-sync.config.json' \
-                ! -name 'deploy.sh' ! -name '.yas-deploy-once.json' -print0) > "$FILE_LIST"
-        else
-            (cd -- "$SOURCE_DIR" && find . -type d -name .git -prune -o \
-                \( -type f -o -type l \) -newer "$STATE_FILE" -print0) > "$FILE_LIST"
-        fi
-        if [[ ! -s "$FILE_LIST" ]]; then
-            printf 'No changed source files; skipped.\n'
-            continue
-        fi
-        ARGS+=(--from0 "--files-from=$FILE_LIST" --ignore-times)
-    else
-        ARGS+=(--checksum)
-    fi
-
     LOG="$LOG_DIR/$(printf '%s' "$NAME" | tr -cs '[:alnum:]_.-' '_').log"
     if ! "${ARGS[@]}" "$SOURCE_DIR/" "$HOST:$DESTINATION/" 2>&1 | tee "$LOG"; then
         printf 'rsync failed for %s\n' "$NAME" >&2
@@ -128,18 +96,24 @@ while IFS=$'\t' read -r NAME SOURCE DESTINATION TYPE; do
     fi
     if grep -qE '^[<>ch*]' "$LOG"; then
         CHANGED=true
+        if [[ "$TYPE" == webkernel ]] && grep -qE '^[<>ch*].*(/|[[:space:]])composer\.(json|lock)([[:space:]]|$)' "$LOG"; then
+            COMPOSER_CHANGED=true
+        fi
     fi
 done < <(jq -r '.deploys | to_entries[] | select((.value.enable // true) == true or (.value.enable // true) == 1) | [.key, .value.source, .value.dest, .value.type] | @tsv' "$CONFIG")
 
-if [[ "$CHANGED" == false ]]; then
-    printf '\nNo files changed; remote Composer install and cache refresh skipped.\n'
-    touch "$STATE_FILE"
-    exit 0
-fi
-
 PRODUCTION_DEST="$(jq -er '.deploys.Production.dest' "$CONFIG")"
 printf '\n== Remote production actions ==\n'
-REMOTE_COMMAND="cd '$PRODUCTION_DEST' && composer install --no-dev --optimize-autoloader --no-interaction --no-progress && ./platform deploy"
+REMOTE_COMMAND="cd '$PRODUCTION_DEST' && mkdir -p runtime/cache/deploy && VERSION=\$(date -u +%Y%m%dT%H%M%S)-\$(od -An -N6 -tx1 /dev/urandom | tr -d ' \\n') && printf '%s\\n' \"\$VERSION\" > runtime/cache/deploy/site-version.tmp && mv runtime/cache/deploy/site-version.tmp runtime/cache/deploy/site-version && printf 'Deploy version: %s\\n' \"\$VERSION\""
+if [[ "$COMPOSER_CHANGED" == true ]]; then
+    REMOTE_COMMAND+=" && composer install --no-dev --optimize-autoloader --no-interaction --no-progress"
+fi
+REMOTE_COMMAND+=" && ./platform deploy"
 ssh_remote "$REMOTE_COMMAND"
-touch "$STATE_FILE"
-printf 'Composer installed with --no-dev; deployment artifacts rebuilt and activated.\n'
+if [[ "$COMPOSER_CHANGED" == true ]]; then
+    printf 'Composer installed with --no-dev; deployment artifacts rebuilt and activated.\n'
+elif [[ "$CHANGED" == true ]]; then
+    printf 'Changed files synced; deployment artifacts rebuilt and activated.\n'
+else
+    printf 'No source files changed; production deployment artifacts were rebuilt and activated.\n'
+fi
