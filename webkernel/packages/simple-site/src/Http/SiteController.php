@@ -258,10 +258,13 @@ final class SiteController
                     return new Response('', 404, ['Content-Type' => 'text/html; charset=UTF-8']);
                 }
                 $etag = 'W/"'.hash('sha256', $modifiedAt.':'.$size.':'.$inode).'"';
+                $cacheControl = str_starts_with($asset['mime_type'], 'image/') || str_starts_with($asset['mime_type'], 'video/')
+                    ? 'public, max-age=86400, stale-while-revalidate=604800'
+                    : 'public, max-age=0, must-revalidate';
                 $headers = [
                     'Content-Type' => $asset['mime_type'],
                     'X-Content-Type-Options' => 'nosniff',
-                    'Cache-Control' => 'public, max-age=86400, stale-while-revalidate=604800',
+                    'Cache-Control' => $cacheControl,
                     'ETag' => $etag,
                     'Last-Modified' => gmdate('D, d M Y H:i:s', $modifiedAt).' GMT',
                 ];
