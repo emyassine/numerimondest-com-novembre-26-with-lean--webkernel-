@@ -3,6 +3,7 @@
     'description' => '',
     'canonical' => '',
     'locale' => 'en',
+    'favicon' => 'brand/pwa-icon-192.png',
     'site_ui' => [],
 ])
 @php
@@ -67,7 +68,7 @@
     $preloadImages = array_values(array_unique($preloadImages));
 @endphp
 <!doctype html>
-<html lang="{{ $locale }}" data-theme="nm-studio" data-currency="{{ $currency }}" style="color-scheme:{{ $forceLightMode ? 'light' : 'light dark' }};--nm-studio-background:{{ $studioBackground }};background-color:{{ $studioBackground }}">
+<html lang="{{ $locale }}" data-theme="nm-studio" data-mode="{{ $forceLightMode ? 'light' : 'system' }}" data-srs-mode="{{ $forceLightMode ? 'light' : '' }}" class="{{ $forceLightMode ? 'light' : '' }}" data-currency="{{ $currency }}" style="color-scheme:{{ $forceLightMode ? 'light' : 'light dark' }};--nm-studio-background:{{ $studioBackground }};background-color:{{ $studioBackground }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="{{ $viewportContent }}">
@@ -75,7 +76,7 @@
     <meta name="description" content="{{ $description }}">
     <meta name="theme-color" content="{{ $studioBackground }}">
     <script>try { localStorage.setItem('platform:theme:mode', '{{ $forceLightMode ? 'light' : 'system' }}'); } catch {}</script>
-    <link rel="icon" type="image/png" href="{{ simple_site('studio', 'brand/pwa-icon-192.png') }}">
+    <link rel="icon" type="image/png" href="{{ simple_site('studio', $favicon) }}">
     @foreach ($preloadImages as $preloadImage)
         <link rel="preload" as="image" href="{{ simple_site('studio', $preloadImage) }}">
     @endforeach
@@ -126,10 +127,13 @@
     <script>
         const publicThemeRoot = document.documentElement;
         const enforcePublicLightTheme = () => {
-            publicThemeRoot.classList.remove('dark');
+            if (publicThemeRoot.classList.contains('dark')) publicThemeRoot.classList.remove('dark');
+            if (!publicThemeRoot.classList.contains('light')) publicThemeRoot.classList.add('light');
+            if (publicThemeRoot.dataset.mode !== 'light') publicThemeRoot.dataset.mode = 'light';
+            if (publicThemeRoot.dataset.srsMode !== 'light') publicThemeRoot.dataset.srsMode = 'light';
             if (publicThemeRoot.dataset.theme !== 'nm-studio') publicThemeRoot.dataset.theme = 'nm-studio';
         };
-        new MutationObserver(enforcePublicLightTheme).observe(publicThemeRoot, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+        new MutationObserver(enforcePublicLightTheme).observe(publicThemeRoot, { attributes: true, attributeFilter: ['class', 'data-theme', 'data-mode', 'data-srs-mode'] });
         enforcePublicLightTheme();
     </script>
 @endif
