@@ -1,0 +1,41 @@
+{
+    "name": "webkernel/utilities-json-schema",
+    "description": "JSON Schema validation utilities for Webkernel.",
+    "type": "library",
+    "license": "proprietary",
+    "version": "0.12.0",
+    "authors": [
+        {
+            "name": "El Moumen Yassine",
+            "email": "yassine@numerimondes.com",
+            "role": "Author"
+        }
+    ],
+    "require": {
+        "php": ">=8.5.12",
+        "ext-filter": "*",
+        "ext-json": "*",
+        "webkernel/service-provider": "^0.12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webkernel\\Utilities\\JsonSchema\\": "src/JsonSchema/",
+            "Webkernel\\Utilities\\JsonSchema\\Providers\\": "src/Providers/"
+        },
+        "classmap": [
+            "src/JsonSchemaValidator.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Webkernel\\Utilities\\JsonSchema\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "webkernel": {
+            "package-declaration": "Webkernel\\Utilities\\JsonSchema\\Providers\\UtilitiesJsonSchemaPDeclaration",
+            "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+            "lifecycle": []
+        }
+    }
+}

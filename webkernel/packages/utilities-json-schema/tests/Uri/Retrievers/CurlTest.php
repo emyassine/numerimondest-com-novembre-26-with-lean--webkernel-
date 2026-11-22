@@ -1,0 +1,91 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Webkernel\Utilities\JsonSchema\Tests\Uri\Retrievers
+{
+    use Webkernel\Utilities\JsonSchema\Uri\Retrievers\Curl;
+    use PHPUnit\Framework\TestCase;
+
+    class CurlTest extends TestCase
+    {
+        public function testRetrieveFile(): void
+        {
+            $c = new Curl();
+            $result = $c->retrieve(realpath(__DIR__ . '/../../fixtures/foobar.json'));
+
+            self::assertStringEqualsFileCanonicalizing(realpath(__DIR__ . '/../../fixtures/foobar.json'), $result);
+        }
+
+        public function testRetrieveNonexistantFile(): void
+        {
+            $c = new Curl();
+
+            $this->expectException(\Webkernel\Utilities\JsonSchema\Exception\ResourceNotFoundException::class);
+            $this->expectExceptionMessage('JSON schema not found');
+
+            $c->retrieve(__DIR__ . '/notARealFile');
+        }
+
+        public function testNoContentType(): void
+        {
+            $c = new Curl();
+            $result = $c->retrieve(realpath(__DIR__ . '/../../fixtures') . '/foobar-noheader.json');
+
+            self::assertStringEqualsFileCanonicalizing(realpath(__DIR__ . '/../../fixtures/foobar.json'), $result);
+        }
+
+        /**
+         * @dataProvider contentTypeProvider
+         */
+        public function testFetchContentType(string $response, ?string $expected, bool $matches): void
+        {
+            $c = new Curl();
+
+            $reflector = new \ReflectionObject($c);
+            $fetchContentType = $reflector->getMethod('fetchContentType');
+            if (PHP_VERSION_ID < 80100) {
+                $fetchContentType->setAccessible(true);
+            }
+
+            $this->assertSame($matches, $fetchContentType->invoke($c, $response));
+            $this->assertSame($expected, $c->getContentType());
+        }
+
+        public function contentTypeProvider(): array
+        {
+            return [
+                'json without parameters' => ["Content-Type: application/json\r\n\r\n{}", 'application/json', true],
+                'json with charset' => ["Content-Type: application/json; charset=utf-8\r\n\r\n{}", 'application/json', true],
+                'schema media type with charset' => ["Content-Type: application/schema+json; charset=utf-8\r\n\r\n{}", 'application/schema+json', true],
+                'multiple parameters' => ["Content-Type: application/json; charset=utf-8; profile=schema\r\n\r\n{}", 'application/json', true],
+                'X-Content-Type is not a content type' => ["HTTP/1.1 200 OK\r\nX-Content-Type: text/plain\r\n\r\n{}", null, false],
+            ];
+        }
+    }
+}
+
+namespace Webkernel\Utilities\JsonSchema\Uri\Retrievers
+{
+    function curl_exec($curl)
+    {
+        $uri = curl_getinfo($curl, \CURLINFO_EFFECTIVE_URL);
+
+        if ($uri === realpath(__DIR__ . '/../../fixtures/foobar.json')) {
+            // return file with headers
+            $headers = implode("\n", [
+                'Content-Type: application/json'
+            ]);
+
+            return sprintf("%s\r\n\r\n%s", $headers, file_get_contents($uri));
+        } elseif ($uri === realpath(__DIR__ . '/../../fixtures') . '/foobar-noheader.json') {
+            // return file without headers
+            $uri = realpath(__DIR__ . '/../../fixtures/foobar.json');
+
+            return "\r\n\r\n" . file_get_contents($uri);
+        }
+
+        // fallback to real curl_exec
+        return \curl_exec($curl);
+    }
+}

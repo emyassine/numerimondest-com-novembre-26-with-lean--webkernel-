@@ -1,0 +1,16 @@
+@import 'tailwindcss';
+{{ platformCssImports }}
+
+@source '../../storage/framework/views/*.php';
+@source '../**/*.view.php';
+@source '../**/*.js';
+@source '../**/*.vue';
+
+@theme {
+    --font-sans:
+        'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji';
+}
+
+@variant dark (&:where(.dark, .dark *));

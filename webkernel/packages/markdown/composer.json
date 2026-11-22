@@ -1,0 +1,21 @@
+{
+    "name": "webkernel/markdown",
+    "description": "CommonMark parsing and rendering for Webkernel.",
+    "type": "library",
+    "version": "0.12.0",
+    "license": "BSD-3-Clause",
+    "require": {
+        "php": ">=8.5.12",
+        "psr/event-dispatcher": "^1.0",
+        "symfony/deprecation-contracts": "^3.0",
+        "webkernel/http-security-csrf": "^0.12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webkernel\\Markdown\\": "src/"
+        },
+        "classmap": [
+            "src/"
+        ]
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "name": "webkernel/identifiers",
+    "description": "UUID generation and binary representation for Webkernel.",
+    "type": "library",
+    "version": "0.12.0",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.5.12",
+        "webkernel/math": "self.version"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webkernel\\Identifiers\\": "src/"
+        },
+        "classmap": [
+            "src/"
+        ]
+    }
+}

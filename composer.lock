@@ -1,0 +1,4373 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "a366d0ec4d846832de392bbf77775018",
+    "packages": [
+        {
+            "name": "composer/class-map-generator",
+            "version": "1.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/class-map-generator.git",
+                "reference": "5fa48e0e1992ea8a786df3ceca80625c9a643b75"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/class-map-generator/zipball/5fa48e0e1992ea8a786df3ceca80625c9a643b75",
+                "reference": "5fa48e0e1992ea8a786df3ceca80625c9a643b75",
+                "shasum": ""
+            },
+            "require": {
+                "composer/pcre": "^2.1 || ^3.1",
+                "php": "^7.2 || ^8.0",
+                "symfony/finder": "^4.4 || ^5.3 || ^6 || ^7 || ^8"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.12 || ^2",
+                "phpstan/phpstan-deprecation-rules": "^1 || ^2",
+                "phpstan/phpstan-phpunit": "^1 || ^2",
+                "phpstan/phpstan-strict-rules": "^1.1 || ^2",
+                "phpunit/phpunit": "^8",
+                "symfony/filesystem": "^5.4 || ^6 || ^7 || ^8"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\ClassMapGenerator\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "https://seld.be"
+                }
+            ],
+            "description": "Utilities to scan PHP code and generate class maps.",
+            "keywords": [
+                "classmap"
+            ],
+            "support": {
+                "issues": "https://github.com/composer/class-map-generator/issues",
+                "source": "https://github.com/composer/class-map-generator/tree/1.9.0"
+            },
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-11-03T10:10:19+00:00"
+        },
+        {
+            "name": "composer/pcre",
+            "version": "3.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/pcre.git",
+                "reference": "d5a341b3fb61f3001970940afb1d332968a183ed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/pcre/zipball/d5a341b3fb61f3001970940afb1d332968a183ed",
+                "reference": "d5a341b3fb61f3001970940afb1d332968a183ed",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4 || ^8.0"
+            },
+            "conflict": {
+                "phpstan/phpstan": "<2.2.2"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^2",
+                "phpstan/phpstan-deprecation-rules": "^2",
+                "phpstan/phpstan-strict-rules": "^2",
+                "phpunit/phpunit": "^9"
+            },
+            "type": "library",
+            "extra": {
+                "phpstan": {
+                    "includes": [
+                        "extension.neon"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\Pcre\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                }
+            ],
+            "description": "PCRE wrapping library that offers type-safe preg_* replacements.",
+            "keywords": [
+                "PCRE",
+                "preg",
+                "regex",
+                "regular expression"
+            ],
+            "support": {
+                "issues": "https://github.com/composer/pcre/issues",
+                "source": "https://github.com/composer/pcre/tree/3.4.0"
+            },
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-06-07T11:47:49+00:00"
+        },
+        {
+            "name": "dependable-ui/dependable-ui",
+            "version": "0.1.9",
+            "dist": {
+                "type": "path",
+                "url": "../dependable-ui/dist/php-webkernel",
+                "reference": "c06af1e15f26d999e1011bf65104fd8dbd6cf683"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/commands": "^0.12.0",
+                "webkernel/platform-support": "^5.9.0"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "provider": "DependableUI\\Webkernel\\DependableUIServiceProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "DependableUI\\Components\\DUIButton\\": "components/srs-button/adapters/php-webkernel/src/",
+                    "DependableUI\\Webkernel\\": "src/Webkernel/"
+                }
+            },
+            "description": "Contract-driven reusable UI components with browser and Webkernel adapters.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "league/uri",
+            "version": "7.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/uri.git",
+                "reference": "be89e2382e37acdef232259071ade5180821397b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/uri/zipball/be89e2382e37acdef232259071ade5180821397b",
+                "reference": "be89e2382e37acdef232259071ade5180821397b",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "league/uri-interfaces": "^7.10.0",
+                "php": "^8.1",
+                "psr/http-factory": "^1"
+            },
+            "conflict": {
+                "league/uri-schemes": "^1.0"
+            },
+            "suggest": {
+                "ext-bcmath": "to improve IPV4 host parsing",
+                "ext-dom": "to convert the URI into an HTML anchor tag",
+                "ext-fileinfo": "to create Data URI from file contennts",
+                "ext-gmp": "to improve IPV4 host parsing",
+                "ext-intl": "to handle IDN host with the best performance",
+                "ext-uri": "to use the PHP native URI class",
+                "jeremykendall/php-domain-parser": "to further parse the URI host and resolve its Public Suffix and Top Level Domain",
+                "league/uri-components": "to provide additional tools to manipulate URI objects components",
+                "league/uri-polyfill": "to backport the PHP URI extension for older versions of PHP",
+                "php-64bit": "to improve IPV4 host parsing",
+                "rowbot/url": "to handle URLs using the WHATWG URL Living Standard specification",
+                "symfony/polyfill-intl-idn": "to handle IDN host via the Symfony polyfill if ext-intl is not present"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "7.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\Uri\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ignace Nyamagana Butera",
+                    "email": "nyamsprod@gmail.com",
+                    "homepage": "https://nyamsprod.com"
+                }
+            ],
+            "description": "URI manipulation library",
+            "homepage": "https://uri.thephpleague.com",
+            "keywords": [
+                "URN",
+                "data-uri",
+                "file-uri",
+                "ftp",
+                "hostname",
+                "http",
+                "https",
+                "middleware",
+                "parse_str",
+                "parse_url",
+                "psr-7",
+                "query-string",
+                "querystring",
+                "rfc2141",
+                "rfc3986",
+                "rfc3987",
+                "rfc6570",
+                "rfc8141",
+                "uri",
+                "uri-template",
+                "url",
+                "ws"
+            ],
+            "support": {
+                "docs": "https://uri.thephpleague.com",
+                "forum": "https://thephpleague.slack.com",
+                "issues": "https://github.com/thephpleague/uri-src/issues",
+                "source": "https://github.com/thephpleague/uri/tree/7.10.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/nyamsprod",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-11-04T12:45:07+00:00"
+        },
+        {
+            "name": "league/uri-components",
+            "version": "7.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/uri-components.git",
+                "reference": "2a790e66948d3504a2f2cd42b80d4b8874601540"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/uri-components/zipball/2a790e66948d3504a2f2cd42b80d4b8874601540",
+                "reference": "2a790e66948d3504a2f2cd42b80d4b8874601540",
+                "shasum": ""
+            },
+            "require": {
+                "league/uri": "^7.10.0",
+                "php": "^8.1"
+            },
+            "suggest": {
+                "ext-bcmath": "to improve IPV4 host parsing",
+                "ext-fileinfo": "to create Data URI from file contennts",
+                "ext-gmp": "to improve IPV4 host parsing",
+                "ext-intl": "to handle IDN host with the best performance",
+                "ext-mbstring": "to use the sorting algorithm for Query parameter",
+                "jeremykendall/php-domain-parser": "to further parse the URI host and resolve its Public Suffix and Top Level Domain",
+                "league/uri-polyfill": "to backport the PHP URI extension for older versions of PHP",
+                "php-64bit": "to improve IPV4 host parsing",
+                "rowbot/url": "to handle URLs using the WHATWG URL Living Standard specification",
+                "symfony/polyfill-intl-idn": "to handle IDN host via the Symfony polyfill if ext-intl is not present",
+                "symfony/polyfill-mbstring": "to handle query sorting if ext-mbstring is not present"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "7.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\Uri\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ignace Nyamagana Butera",
+                    "email": "nyamsprod@gmail.com",
+                    "homepage": "https://nyamsprod.com"
+                }
+            ],
+            "description": "URI components manipulation library",
+            "homepage": "http://uri.thephpleague.com",
+            "keywords": [
+                "authority",
+                "components",
+                "fragment",
+                "host",
+                "middleware",
+                "modifier",
+                "path",
+                "port",
+                "query",
+                "rfc3986",
+                "scheme",
+                "uri",
+                "url",
+                "userinfo"
+            ],
+            "support": {
+                "docs": "https://uri.thephpleague.com",
+                "forum": "https://thephpleague.slack.com",
+                "issues": "https://github.com/thephpleague/uri-src/issues",
+                "source": "https://github.com/thephpleague/uri-components/tree/7.10.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/nyamsprod",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-11-04T12:45:07+00:00"
+        },
+        {
+            "name": "league/uri-interfaces",
+            "version": "7.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/uri-interfaces.git",
+                "reference": "ea66240cff4ae9a56ce85d577a04d038b771e51c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/uri-interfaces/zipball/ea66240cff4ae9a56ce85d577a04d038b771e51c",
+                "reference": "ea66240cff4ae9a56ce85d577a04d038b771e51c",
+                "shasum": ""
+            },
+            "require": {
+                "ext-filter": "*",
+                "php": "^8.1",
+                "psr/http-message": "^1.1 || ^2.0"
+            },
+            "suggest": {
+                "ext-bcmath": "to improve IPV4 host parsing",
+                "ext-gmp": "to improve IPV4 host parsing",
+                "ext-intl": "to handle IDN host with the best performance",
+                "php-64bit": "to improve IPV4 host parsing",
+                "rowbot/url": "to handle URLs using the WHATWG URL Living Standard specification",
+                "symfony/polyfill-intl-idn": "to handle IDN host via the Symfony polyfill if ext-intl is not present"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "7.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\Uri\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ignace Nyamagana Butera",
+                    "email": "nyamsprod@gmail.com",
+                    "homepage": "https://nyamsprod.com"
+                }
+            ],
+            "description": "Common tools for parsing and resolving RFC3987/RFC3986 URI",
+            "homepage": "https://uri.thephpleague.com",
+            "keywords": [
+                "data-uri",
+                "file-uri",
+                "ftp",
+                "hostname",
+                "http",
+                "https",
+                "parse_str",
+                "parse_url",
+                "psr-7",
+                "query-string",
+                "querystring",
+                "rfc3986",
+                "rfc3987",
+                "rfc6570",
+                "uri",
+                "url",
+                "ws"
+            ],
+            "support": {
+                "docs": "https://uri.thephpleague.com",
+                "forum": "https://thephpleague.slack.com",
+                "issues": "https://github.com/thephpleague/uri-src/issues",
+                "source": "https://github.com/thephpleague/uri-interfaces/tree/7.10.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/nyamsprod",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-11-04T12:45:07+00:00"
+        },
+        {
+            "name": "psr/clock",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/clock.git",
+                "reference": "e41a24703d4560fd0acb709162f73b8adfc3aa0d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/clock/zipball/e41a24703d4560fd0acb709162f73b8adfc3aa0d",
+                "reference": "e41a24703d4560fd0acb709162f73b8adfc3aa0d",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0 || ^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Clock\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "https://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for reading the clock.",
+            "homepage": "https://github.com/php-fig/clock",
+            "keywords": [
+                "clock",
+                "now",
+                "psr",
+                "psr-20",
+                "time"
+            ],
+            "support": {
+                "issues": "https://github.com/php-fig/clock/issues",
+                "source": "https://github.com/php-fig/clock/tree/1.0.0"
+            },
+            "time": "2022-11-25T14:36:26+00:00"
+        },
+        {
+            "name": "psr/container",
+            "version": "2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/container.git",
+                "reference": "c71ecc56dfe541dbd90c5360474fbc405f8d5963"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/c71ecc56dfe541dbd90c5360474fbc405f8d5963",
+                "reference": "c71ecc56dfe541dbd90c5360474fbc405f8d5963",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Container\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "https://www.php-fig.org/"
+                }
+            ],
+            "description": "Common Container Interface (PHP FIG PSR-11)",
+            "homepage": "https://github.com/php-fig/container",
+            "keywords": [
+                "PSR-11",
+                "container",
+                "container-interface",
+                "container-interop",
+                "psr"
+            ],
+            "support": {
+                "issues": "https://github.com/php-fig/container/issues",
+                "source": "https://github.com/php-fig/container/tree/2.0.2"
+            },
+            "time": "2021-11-05T16:47:00+00:00"
+        },
+        {
+            "name": "psr/event-dispatcher",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/event-dispatcher.git",
+                "reference": "dbefd12671e8a14ec7f180cab83036ed26714bb0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/event-dispatcher/zipball/dbefd12671e8a14ec7f180cab83036ed26714bb0",
+                "reference": "dbefd12671e8a14ec7f180cab83036ed26714bb0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\EventDispatcher\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Standard interfaces for event handling.",
+            "keywords": [
+                "events",
+                "psr",
+                "psr-14"
+            ],
+            "support": {
+                "issues": "https://github.com/php-fig/event-dispatcher/issues",
+                "source": "https://github.com/php-fig/event-dispatcher/tree/1.0.0"
+            },
+            "time": "2019-01-08T18:20:26+00:00"
+        },
+        {
+            "name": "psr/http-factory",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-factory.git",
+                "reference": "2b4765fddfe3b508ac62f829e852b1501d3f6e8a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-factory/zipball/2b4765fddfe3b508ac62f829e852b1501d3f6e8a",
+                "reference": "2b4765fddfe3b508ac62f829e852b1501d3f6e8a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1",
+                "psr/http-message": "^1.0 || ^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "https://www.php-fig.org/"
+                }
+            ],
+            "description": "PSR-17: Common interfaces for PSR-7 HTTP message factories",
+            "keywords": [
+                "factory",
+                "http",
+                "message",
+                "psr",
+                "psr-17",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/http-factory"
+            },
+            "time": "2024-04-15T12:06:14+00:00"
+        },
+        {
+            "name": "psr/http-message",
+            "version": "2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-message.git",
+                "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/402d35bcb92c70c026d1a6a9883f06b2ead23d71",
+                "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2 || ^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "https://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP messages",
+            "homepage": "https://github.com/php-fig/http-message",
+            "keywords": [
+                "http",
+                "http-message",
+                "psr",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/http-message/tree/2.0"
+            },
+            "time": "2023-04-04T09:54:51+00:00"
+        },
+        {
+            "name": "psr/log",
+            "version": "3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
+                "reference": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Log\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "https://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "homepage": "https://github.com/php-fig/log",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/log/tree/3.0.2"
+            },
+            "time": "2024-09-11T13:17:53+00:00"
+        },
+        {
+            "name": "psr/simple-cache",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/simple-cache.git",
+                "reference": "764e0b3939f5ca87cb904f570ef9be2d78a07865"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/764e0b3939f5ca87cb904f570ef9be2d78a07865",
+                "reference": "764e0b3939f5ca87cb904f570ef9be2d78a07865",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\SimpleCache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "https://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interfaces for simple caching",
+            "keywords": [
+                "cache",
+                "caching",
+                "psr",
+                "psr-16",
+                "simple-cache"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/simple-cache/tree/3.0.0"
+            },
+            "time": "2021-10-29T13:26:27+00:00"
+        },
+        {
+            "name": "symfony/clock",
+            "version": "v8.1.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/clock.git",
+                "reference": "945ea3b64d6da9c1c2c354fe5c07b27455df6442"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/clock/zipball/945ea3b64d6da9c1c2c354fe5c07b27455df6442",
+                "reference": "945ea3b64d6da9c1c2c354fe5c07b27455df6442",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4.1",
+                "psr/clock": "^1.0"
+            },
+            "provide": {
+                "psr/clock-implementation": "1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "Resources/now.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Component\\Clock\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Decouples applications from the system clock",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "clock",
+                "psr20",
+                "time"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/clock/tree/v8.1.9"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-10-12T14:32:04+00:00"
+        },
+        {
+            "name": "symfony/console",
+            "version": "v8.1.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/console.git",
+                "reference": "5a315b092b81f3e920e9daea1a2ae4c66ed298b9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/console/zipball/5a315b092b81f3e920e9daea1a2ae4c66ed298b9",
+                "reference": "5a315b092b81f3e920e9daea1a2ae4c66ed298b9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4.1",
+                "symfony/deprecation-contracts": "^2.5|^3",
+                "symfony/polyfill-mbstring": "^1.0",
+                "symfony/polyfill-php85": "^1.32",
+                "symfony/service-contracts": "^2.5|^3",
+                "symfony/string": "^7.4.6|^8.0.6"
+            },
+            "conflict": {
+                "symfony/dependency-injection": "<8.1",
+                "symfony/event-dispatcher": "<8.1"
+            },
+            "provide": {
+                "psr/log-implementation": "1.0|2.0|3.0"
+            },
+            "require-dev": {
+                "psr/log": "^1|^2|^3",
+                "symfony/config": "^7.4|^8.0",
+                "symfony/dependency-injection": "^8.1",
+                "symfony/event-dispatcher": "^8.1",
+                "symfony/filesystem": "^7.4|^8.0",
+                "symfony/http-foundation": "^7.4|^8.0",
+                "symfony/http-kernel": "^7.4|^8.0",
+                "symfony/lock": "^7.4|^8.0",
+                "symfony/messenger": "^7.4|^8.0",
+                "symfony/mime": "^7.4|^8.0",
+                "symfony/process": "^7.4|^8.0",
+                "symfony/stopwatch": "^7.4|^8.0",
+                "symfony/uid": "^7.4|^8.0",
+                "symfony/validator": "^7.4|^8.0",
+                "symfony/var-dumper": "^7.4|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Console\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Eases the creation of beautiful and testable command line interfaces",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "cli",
+                "command-line",
+                "console",
+                "terminal"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/console/tree/v8.1.11"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-11-04T07:07:11+00:00"
+        },
+        {
+            "name": "symfony/deprecation-contracts",
+            "version": "v3.8.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/deprecation-contracts.git",
+                "reference": "feb1edf4e546af3b85c5caebe8359a20db230ca3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/feb1edf4e546af3b85c5caebe8359a20db230ca3",
+                "reference": "feb1edf4e546af3b85c5caebe8359a20db230ca3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/contracts",
+                    "name": "symfony/contracts"
+                },
+                "branch-alias": {
+                    "dev-main": "3.8-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "function.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "A generic function and convention to trigger deprecation notices",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.8.1"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-09-16T14:15:10+00:00"
+        },
+        {
+            "name": "symfony/filesystem",
+            "version": "v8.1.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/filesystem.git",
+                "reference": "58f57b6a33e3495f7f41e01258f1ae5ef76cccd2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/58f57b6a33e3495f7f41e01258f1ae5ef76cccd2",
+                "reference": "58f57b6a33e3495f7f41e01258f1ae5ef76cccd2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4.1",
+                "symfony/deprecation-contracts": "^2.5|^3",
+                "symfony/polyfill-ctype": "~1.8",
+                "symfony/polyfill-mbstring": "~1.8"
+            },
+            "require-dev": {
+                "symfony/process": "^7.4|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Filesystem\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides basic utilities for the filesystem",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/filesystem/tree/v8.1.11"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-11-04T08:39:20+00:00"
+        },
+        {
+            "name": "symfony/finder",
+            "version": "v8.1.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/finder.git",
+                "reference": "a2902e479ba5691d20d51d100a715ea19ad2c837"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/a2902e479ba5691d20d51d100a715ea19ad2c837",
+                "reference": "a2902e479ba5691d20d51d100a715ea19ad2c837",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4.1"
+            },
+            "require-dev": {
+                "symfony/filesystem": "^7.4|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Finder\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Finds files and directories via an intuitive fluent interface",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/finder/tree/v8.1.11"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-11-02T10:58:30+00:00"
+        },
+        {
+            "name": "symfony/html-sanitizer",
+            "version": "v8.1.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/html-sanitizer.git",
+                "reference": "1ecf13d98b75f5d8a2dcc1ffecde7184d29506ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/html-sanitizer/zipball/1ecf13d98b75f5d8a2dcc1ffecde7184d29506ef",
+                "reference": "1ecf13d98b75f5d8a2dcc1ffecde7184d29506ef",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "league/uri": "^6.5|^7.0",
+                "php": ">=8.4.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\HtmlSanitizer\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Titouan Galopin",
+                    "email": "galopintitouan@gmail.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides an object-oriented API to sanitize untrusted HTML input for safe insertion into a document's DOM.",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "Purifier",
+                "html",
+                "sanitizer"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/html-sanitizer/tree/v8.1.11"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-11-04T08:39:20+00:00"
+        },
+        {
+            "name": "symfony/http-foundation",
+            "version": "v8.1.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/http-foundation.git",
+                "reference": "30fa3efe6e736b0d06f5331cc6abe813582c0a26"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/30fa3efe6e736b0d06f5331cc6abe813582c0a26",
+                "reference": "30fa3efe6e736b0d06f5331cc6abe813582c0a26",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4.1",
+                "symfony/deprecation-contracts": "^2.5|^3",
+                "symfony/polyfill-mbstring": "^1.1"
+            },
+            "conflict": {
+                "doctrine/dbal": "<4.3"
+            },
+            "require-dev": {
+                "doctrine/dbal": "^4.3",
+                "predis/predis": "^1.1|^2.0",
+                "symfony/cache": "^7.4|^8.0",
+                "symfony/clock": "^7.4|^8.0",
+                "symfony/dependency-injection": "^7.4|^8.0",
+                "symfony/expression-language": "^7.4|^8.0",
+                "symfony/http-kernel": "^7.4|^8.0",
+                "symfony/mime": "^7.4|^8.0",
+                "symfony/rate-limiter": "^7.4|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\HttpFoundation\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Defines an object-oriented layer for the HTTP specification",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/http-foundation/tree/v8.1.11"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-11-04T08:39:20+00:00"
+        },
+        {
+            "name": "symfony/mime",
+            "version": "v8.1.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/mime.git",
+                "reference": "8d1232052c9cdef170ed9608b3147bca4f61ff69"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/mime/zipball/8d1232052c9cdef170ed9608b3147bca4f61ff69",
+                "reference": "8d1232052c9cdef170ed9608b3147bca4f61ff69",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4.1",
+                "symfony/polyfill-intl-idn": "^1.10",
+                "symfony/polyfill-mbstring": "^1.0"
+            },
+            "conflict": {
+                "egulias/email-validator": "~3.0.0",
+                "phpdocumentor/reflection-docblock": "<5.2|>=7",
+                "phpdocumentor/type-resolver": "<1.5.1"
+            },
+            "require-dev": {
+                "egulias/email-validator": "^2.1.10|^3.1|^4",
+                "league/html-to-markdown": "^5.0",
+                "phpdocumentor/reflection-docblock": "^5.2|^6.0",
+                "symfony/dependency-injection": "^7.4|^8.0",
+                "symfony/process": "^7.4|^8.0",
+                "symfony/property-access": "^7.4|^8.0",
+                "symfony/property-info": "^7.4|^8.0",
+                "symfony/serializer": "^7.4.17|^8.1.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Mime\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Allows manipulating MIME messages",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "mime",
+                "mime-type"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/mime/tree/v8.1.10"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-10-28T17:58:38+00:00"
+        },
+        {
+            "name": "symfony/polyfill-ctype",
+            "version": "v1.37.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-ctype.git",
+                "reference": "141046a8f9477948ff284fa65be2095baafb94f2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/141046a8f9477948ff284fa65be2095baafb94f2",
+                "reference": "141046a8f9477948ff284fa65be2095baafb94f2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
+            },
+            "provide": {
+                "ext-ctype": "*"
+            },
+            "suggest": {
+                "ext-ctype": "For best performance"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Ctype\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Gert de Pagter",
+                    "email": "BackEndTea@gmail.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill for ctype functions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "ctype",
+                "polyfill",
+                "portable"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.37.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-04-10T16:19:22+00:00"
+        },
+        {
+            "name": "symfony/polyfill-intl-grapheme",
+            "version": "v1.43.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-intl-grapheme.git",
+                "reference": "5a8f33c87aeecffce24e721b5064fab05f4becf8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-grapheme/zipball/5a8f33c87aeecffce24e721b5064fab05f4becf8",
+                "reference": "5a8f33c87aeecffce24e721b5064fab05f4becf8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
+            },
+            "suggest": {
+                "ext-intl": "For best performance"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Intl\\Grapheme\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill for intl's grapheme_* functions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "grapheme",
+                "intl",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/polyfill-intl-grapheme/tree/v1.43.3"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-10-15T09:18:53+00:00"
+        },
+        {
+            "name": "symfony/polyfill-intl-idn",
+            "version": "v1.43.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-intl-idn.git",
+                "reference": "533d68cf99c8f8ee2e8893c59ed59192e92cfd74"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/533d68cf99c8f8ee2e8893c59ed59192e92cfd74",
+                "reference": "533d68cf99c8f8ee2e8893c59ed59192e92cfd74",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2",
+                "symfony/polyfill-intl-normalizer": "^1.10"
+            },
+            "suggest": {
+                "ext-intl": "For best performance"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Intl\\Idn\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Laurent Bassin",
+                    "email": "laurent@bassin.info"
+                },
+                {
+                    "name": "Trevor Rowbotham",
+                    "email": "trevor.rowbotham@pm.me"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill for intl's idn_to_ascii and idn_to_utf8 functions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "idn",
+                "intl",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/polyfill-intl-idn/tree/v1.43.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-09-23T14:40:04+00:00"
+        },
+        {
+            "name": "symfony/polyfill-intl-normalizer",
+            "version": "v1.43.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-intl-normalizer.git",
+                "reference": "ebd57ccc7edb93d632e184efbe7693d2517bab3b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-normalizer/zipball/ebd57ccc7edb93d632e184efbe7693d2517bab3b",
+                "reference": "ebd57ccc7edb93d632e184efbe7693d2517bab3b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
+            },
+            "suggest": {
+                "ext-intl": "For best performance"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Intl\\Normalizer\\": ""
+                },
+                "classmap": [
+                    "Resources/stubs"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill for intl's Normalizer class and related functions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "intl",
+                "normalizer",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.43.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-09-23T22:02:09+00:00"
+        },
+        {
+            "name": "symfony/polyfill-mbstring",
+            "version": "v1.43.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-mbstring.git",
+                "reference": "122889ed24dc000165bcbfd77ec412f15cbdfc6a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/122889ed24dc000165bcbfd77ec412f15cbdfc6a",
+                "reference": "122889ed24dc000165bcbfd77ec412f15cbdfc6a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-iconv": "*",
+                "php": ">=7.2"
+            },
+            "provide": {
+                "ext-mbstring": "*"
+            },
+            "suggest": {
+                "ext-mbstring": "For best performance"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Mbstring\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill for the Mbstring extension",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "mbstring",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.43.3"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-10-28T09:35:49+00:00"
+        },
+        {
+            "name": "symfony/polyfill-php85",
+            "version": "v1.44.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-php85.git",
+                "reference": "94c794cb5ba51784bc259f11e9f128593297d8dc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php85/zipball/94c794cb5ba51784bc259f11e9f128593297d8dc",
+                "reference": "94c794cb5ba51784bc259f11e9f128593297d8dc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Php85\\": ""
+                },
+                "classmap": [
+                    "Resources/stubs"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill backporting some PHP 8.5+ features to lower PHP versions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/polyfill-php85/tree/v1.44.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-10-30T15:20:09+00:00"
+        },
+        {
+            "name": "symfony/polyfill-php86",
+            "version": "v1.43.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-php86.git",
+                "reference": "8840df45b24f33a49dc419fa18dc0057231ae1d8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php86/zipball/8840df45b24f33a49dc419fa18dc0057231ae1d8",
+                "reference": "8840df45b24f33a49dc419fa18dc0057231ae1d8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Php86\\": ""
+                },
+                "classmap": [
+                    "Resources/stubs"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill backporting some PHP 8.6+ features to lower PHP versions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/polyfill-php86/tree/v1.43.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-09-25T15:46:47+00:00"
+        },
+        {
+            "name": "symfony/polyfill-uuid",
+            "version": "v1.43.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-uuid.git",
+                "reference": "b23ff8245cc5c4479ea2be3d0132d2e6dd433993"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-uuid/zipball/b23ff8245cc5c4479ea2be3d0132d2e6dd433993",
+                "reference": "b23ff8245cc5c4479ea2be3d0132d2e6dd433993",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
+            },
+            "provide": {
+                "ext-uuid": "*"
+            },
+            "suggest": {
+                "ext-uuid": "For best performance"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Uuid\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégoire Pineau",
+                    "email": "lyrixx@lyrixx.info"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill for uuid functions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "polyfill",
+                "portable",
+                "uuid"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/polyfill-uuid/tree/v1.43.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-09-24T05:20:52+00:00"
+        },
+        {
+            "name": "symfony/service-contracts",
+            "version": "v3.8.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/service-contracts.git",
+                "reference": "052852a96fd5e5ebdb617dba22031e41a3300fb5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/052852a96fd5e5ebdb617dba22031e41a3300fb5",
+                "reference": "052852a96fd5e5ebdb617dba22031e41a3300fb5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "psr/container": "^1.1|^2.0",
+                "symfony/deprecation-contracts": "^2.5|^3"
+            },
+            "conflict": {
+                "ext-psr": "<1.1|>=2"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/contracts",
+                    "name": "symfony/contracts"
+                },
+                "branch-alias": {
+                    "dev-main": "3.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Contracts\\Service\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Test/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Generic abstractions related to writing services",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "abstractions",
+                "contracts",
+                "decoupling",
+                "interfaces",
+                "interoperability",
+                "standards"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/service-contracts/tree/v3.8.1"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-10-20T17:38:25+00:00"
+        },
+        {
+            "name": "symfony/string",
+            "version": "v8.1.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/string.git",
+                "reference": "6c6110979c0150393bbb336170e286d51ab4d76c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/string/zipball/6c6110979c0150393bbb336170e286d51ab4d76c",
+                "reference": "6c6110979c0150393bbb336170e286d51ab4d76c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4.1",
+                "symfony/polyfill-ctype": "^1.8",
+                "symfony/polyfill-intl-grapheme": "^1.33",
+                "symfony/polyfill-intl-normalizer": "^1.0",
+                "symfony/polyfill-mbstring": "^1.0"
+            },
+            "conflict": {
+                "symfony/translation-contracts": "<2.5"
+            },
+            "require-dev": {
+                "symfony/emoji": "^7.4|^8.0",
+                "symfony/http-client": "^7.4|^8.0",
+                "symfony/intl": "^7.4|^8.0",
+                "symfony/translation-contracts": "^2.5|^3.0",
+                "symfony/var-exporter": "^7.4|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "Resources/functions.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Component\\String\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides an object-oriented API to strings and deals with bytes, UTF-8 code points and grapheme clusters in a unified way",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "grapheme",
+                "i18n",
+                "string",
+                "unicode",
+                "utf-8",
+                "utf8"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/string/tree/v8.1.10"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-10-23T17:06:53+00:00"
+        },
+        {
+            "name": "symfony/translation",
+            "version": "v8.1.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/translation.git",
+                "reference": "d065adf56e5508293e80d7c140b0a9e043b63e9c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/d065adf56e5508293e80d7c140b0a9e043b63e9c",
+                "reference": "d065adf56e5508293e80d7c140b0a9e043b63e9c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4.1",
+                "symfony/polyfill-mbstring": "^1.0",
+                "symfony/translation-contracts": "^3.6.1"
+            },
+            "conflict": {
+                "nikic/php-parser": "<5.0",
+                "symfony/http-client-contracts": "<2.5",
+                "symfony/service-contracts": "<2.5"
+            },
+            "provide": {
+                "symfony/translation-implementation": "2.3|3.0"
+            },
+            "require-dev": {
+                "nikic/php-parser": "^5.0",
+                "psr/log": "^1|^2|^3",
+                "symfony/config": "^7.4|^8.0",
+                "symfony/console": "^7.4|^8.0",
+                "symfony/dependency-injection": "^7.4|^8.0",
+                "symfony/finder": "^7.4|^8.0",
+                "symfony/http-client-contracts": "^2.5|^3.0",
+                "symfony/http-kernel": "^7.4|^8.0",
+                "symfony/intl": "^7.4|^8.0",
+                "symfony/polyfill-intl-icu": "^1.21",
+                "symfony/routing": "^7.4|^8.0",
+                "symfony/service-contracts": "^2.5|^3",
+                "symfony/yaml": "^7.4|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "Resources/functions.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Component\\Translation\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides tools to internationalize your application",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/translation/tree/v8.1.11"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-11-01T22:27:46+00:00"
+        },
+        {
+            "name": "symfony/translation-contracts",
+            "version": "v3.8.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/translation-contracts.git",
+                "reference": "0a3ae917402632fcba2aeddae9c98332f3d7dd05"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/0a3ae917402632fcba2aeddae9c98332f3d7dd05",
+                "reference": "0a3ae917402632fcba2aeddae9c98332f3d7dd05",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/contracts",
+                    "name": "symfony/contracts"
+                },
+                "branch-alias": {
+                    "dev-main": "3.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Contracts\\Translation\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Test/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Generic abstractions related to translation",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "abstractions",
+                "contracts",
+                "decoupling",
+                "interfaces",
+                "interoperability",
+                "standards"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/translation-contracts/tree/v3.8.1"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-10-03T08:17:19+00:00"
+        },
+        {
+            "name": "symfony/uid",
+            "version": "v8.1.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/uid.git",
+                "reference": "cb487cf30380f0b0b090973bb9c0588193c06685"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/uid/zipball/cb487cf30380f0b0b090973bb9c0588193c06685",
+                "reference": "cb487cf30380f0b0b090973bb9c0588193c06685",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4.1",
+                "symfony/polyfill-uuid": "^1.15"
+            },
+            "require-dev": {
+                "symfony/console": "^7.4|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Uid\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégoire Pineau",
+                    "email": "lyrixx@lyrixx.info"
+                },
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides an object-oriented API to generate and represent UIDs",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "UID",
+                "ulid",
+                "uuid"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/uid/tree/v8.1.9"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-10-12T14:32:04+00:00"
+        },
+        {
+            "name": "symfony/var-dumper",
+            "version": "v8.1.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/var-dumper.git",
+                "reference": "3412a5af7d34a19515a77890fc804fe8e50d1a4f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/3412a5af7d34a19515a77890fc804fe8e50d1a4f",
+                "reference": "3412a5af7d34a19515a77890fc804fe8e50d1a4f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4.1",
+                "symfony/polyfill-mbstring": "^1.0"
+            },
+            "conflict": {
+                "symfony/console": "<7.4",
+                "symfony/error-handler": "<7.4"
+            },
+            "require-dev": {
+                "symfony/console": "^7.4|^8.0",
+                "symfony/http-kernel": "^7.4|^8.0",
+                "symfony/process": "^7.4|^8.0",
+                "symfony/uid": "^7.4|^8.0",
+                "twig/twig": "^3.12|^4.0"
+            },
+            "bin": [
+                "Resources/bin/var-dump-server"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "Resources/functions/dump.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Component\\VarDumper\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides mechanisms for walking through any arbitrary PHP variable",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "debug",
+                "dump"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/var-dumper/tree/v8.1.10"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-10-26T21:55:04+00:00"
+        },
+        {
+            "name": "webkernel/accounts",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/accounts",
+                "reference": "4bf3dd1ec480f5eb68b54210a43f676835cc996b"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/config": "^0.12.0",
+                "webkernel/container": "^0.12.0",
+                "webkernel/cookie": "^0.12.0",
+                "webkernel/cryptography": "^0.12.0",
+                "webkernel/database": "self.version",
+                "webkernel/events": "^0.12.0",
+                "webkernel/http-foundation": "^0.12.0",
+                "webkernel/http-security-csrf": "^0.12.0",
+                "webkernel/i18n": "^0.12.0",
+                "webkernel/mail": "^0.12.0",
+                "webkernel/notifications": "^0.12.0",
+                "webkernel/orm": "^0.12.0",
+                "webkernel/queue": "^0.12.0",
+                "webkernel/route": "^0.12.0",
+                "webkernel/service-provider": "self.version",
+                "webkernel/session": "self.version",
+                "webkernel/utilities": "^0.12.0",
+                "webkernel/validation": "^0.12.0"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\Accounts\\Providers\\AccountsPDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "provider": "Webkernel\\Accounts\\Providers\\AccountsProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Accounts\\": "src/"
+                },
+                "files": [
+                    "functions.php"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Shared user accounts and authorization for Webkernel applications.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/broadcasting",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/broadcasting",
+                "reference": "d94913d65e712fab6460978de8bf10d7630031ac"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/events": "^0.12.0",
+                "webkernel/queue": "^0.12.0",
+                "webkernel/utilities": "^0.12.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Broadcasting\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Broadcasting services for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/cache",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/cache",
+                "reference": "3970a2a3ef82f7f8aaa7c654b2555d79b30943d6"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "psr/simple-cache": "^3.0",
+                "webkernel/config": "^0.12.0",
+                "webkernel/container": "^0.12.0",
+                "webkernel/events": "^0.12.0",
+                "webkernel/filesystem": "^0.12.0",
+                "webkernel/utilities": "^0.12.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Cache\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Cache services for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/change-watcher",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/change-watcher",
+                "reference": "08438176fd05567b9f3a5782bdd49a04e0cd1324"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/service-provider": "^0.12.0"
+            },
+            "bin": [
+                "bin/change-watcher"
+            ],
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\ChangeWatcher\\Providers\\ChangeWatcherPDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "lifecycle": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\ChangeWatcher\\": "src/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "El Moumen Yassine",
+                    "email": "yassine@numerimondes.com",
+                    "role": "Author"
+                }
+            ],
+            "description": "Portable filesystem dependency tracking and atomic publication of compiled caches.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/code-generator",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/code-generator",
+                "reference": "d6901f85faf2113eb4e0547629a05d26733cb604"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/http-security-csrf": "^0.12.0",
+                "webkernel/markdown": "^0.12.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\CodeGenerator\\": "src/",
+                    "Webkernel\\GenerateCode\\": "src/"
+                },
+                "classmap": [
+                    "src/GenerateCode.php"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "El Moumen Yassine",
+                    "email": "yassine@numerimondes.com",
+                    "role": "Author"
+                }
+            ],
+            "description": "Stub-based PHP source generation for Webkernel packages.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/commands",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/commands",
+                "reference": "bf111e73403e34b1d72f69a15b623daa209a50d4"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/config": "^0.12.0",
+                "webkernel/console": "self.version",
+                "webkernel/http-security-csrf": "^0.12.0",
+                "webkernel/route": "self.version",
+                "webkernel/service-provider": "self.version"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\Commands\\Providers\\CommandsPDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "provider": "Webkernel\\Commands\\Providers\\CommandsProvider",
+                    "lifecycle": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Commands\\": "src/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Built-in Webkernel console commands.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/config",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/config",
+                "reference": "8d29621fdce0e9503754f4c5ad84d499296438d9"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/change-watcher": "self.version",
+                "webkernel/http-security-csrf": "^0.12.0",
+                "webkernel/lifecycle": "self.version",
+                "webkernel/service-provider": "self.version",
+                "webkernel/utilities": "^0.12.0"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\Config\\Providers\\ConfigPDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "lifecycle": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Config\\": "src/"
+                },
+                "files": [
+                    "load.config.function.php"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "El Moumen Yassine",
+                    "email": "yassine@numerimondes.com",
+                    "role": "Author"
+                }
+            ],
+            "description": "Compiled application configuration for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/console",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/console",
+                "reference": "bd18d382fb2f82536e4c20d60ac78e6b87866cee"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/config": "self.version",
+                "webkernel/container": "self.version",
+                "webkernel/filesystem": "^0.12.0",
+                "webkernel/http-security-csrf": "^0.12.0",
+                "webkernel/service-provider": "self.version",
+                "webkernel/utilities": "^0.12.0"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\Console\\Providers\\ConsolePDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "provider": "Webkernel\\Console\\Providers\\ConsoleProvider",
+                    "lifecycle": []
+                }
+            },
+            "autoload": {
+                "files": [
+                    "load.console.function.php"
+                ],
+                "psr-4": {
+                    "Webkernel\\Console\\": "src/"
+                },
+                "classmap": [
+                    "classmap/Console.php"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Command line input, command dispatch, and terminal output for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/container",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/container",
+                "reference": "c58d4f141d45f910ba50b8a74afe027203b547a2"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "psr/container": "^2.0",
+                "webkernel/config": "^0.12.0",
+                "webkernel/http-security-csrf": "^0.12.0",
+                "webkernel/service-provider": "^0.12.0",
+                "webkernel/utilities": "^0.12.0"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\Container\\Providers\\ContainerPDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "lifecycle": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Container\\": "src/"
+                },
+                "files": [
+                    "functions.php"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "PSR-11 dependency container for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/cookie",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/cookie",
+                "reference": "00238c471ff2675457ef8810f06290b0f167c049"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/cryptography": "^0.12.0",
+                "webkernel/http-foundation": "^0.12.0",
+                "webkernel/utilities": "^0.12.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Cookie\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Cookie services for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/cryptography",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/cryptography",
+                "reference": "aaa352253ae7069e80c6b64cb978b093300781f6"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/config": "^0.12.0",
+                "webkernel/container": "^0.12.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Cryptography\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Cryptography services for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/database",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/database",
+                "reference": "ea72d9d0f2b9a5da3ddf34a3fa5b5f9986f9f441"
+            },
+            "require": {
+                "ext-pdo": "*",
+                "php": ">=8.5.12",
+                "webkernel/config": "self.version",
+                "webkernel/console": "self.version",
+                "webkernel/container": "^0.12.0",
+                "webkernel/http-security-csrf": "^0.12.0",
+                "webkernel/service-provider": "self.version",
+                "webkernel/utilities": "self.version"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\Database\\Providers\\DatabasePDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "provider": "Webkernel\\Database\\Providers\\DatabaseProvider",
+                    "lifecycle": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Database\\": "src/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "El Moumen Yassine",
+                    "email": "yassine@numerimondes.com",
+                    "role": "Author"
+                }
+            ],
+            "description": "SQL connections, ClickHouse analytics access, and database migrations for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/datetime",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/datetime",
+                "reference": "06d2eaae1085724be289b5cfa773985724f0b70a"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "psr/clock": "^1.0",
+                "symfony/clock": "^8.1",
+                "symfony/translation": "^8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\DateTime\\": "src/"
+                },
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Localized date and time operations for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/events",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/events",
+                "reference": "339dc39207972bef1e6aff931370e5f14cf90a79"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/broadcasting": "^0.12.0",
+                "webkernel/cache": "^0.12.0",
+                "webkernel/container": "^0.12.0",
+                "webkernel/database": "^0.12.0",
+                "webkernel/queue": "^0.12.0",
+                "webkernel/serialization": "^0.12.0",
+                "webkernel/utilities": "^0.12.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Events\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Events services for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/filesystem",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/filesystem",
+                "reference": "7474623b1bb466fc1679cf9e76a466629c761c7f"
+            },
+            "require": {
+                "ext-fileinfo": "*",
+                "php": ">=8.5.12",
+                "psr/http-message": "^2.0",
+                "psr/log": "^3.0",
+                "symfony/filesystem": "^7.4.0 || ^8.0.0",
+                "symfony/finder": "^7.4.0 || ^8.0.0",
+                "symfony/http-foundation": "^7.4.0 || ^8.0.0",
+                "symfony/mime": "^7.4.0 || ^8.0.0",
+                "symfony/string": "^7.4.0 || ^8.0.0",
+                "webkernel/config": "^0.12.0",
+                "webkernel/container": "^0.12.0",
+                "webkernel/utilities": "^0.12.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Filesystem\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Webkernel",
+                    "email": "platform@webkernelphp.com"
+                }
+            ],
+            "description": "Filesystem APIs and the internal Webkernel storage engine.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/http-error-pages",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "../webkernel/packages/http-error-pages",
+                "reference": "b305e32916ce01a50bfc7b64f0787ce62427e252"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/config": "self.version",
+                "webkernel/http-security-csrf": "^0.12.0",
+                "webkernel/i18n": "self.version",
+                "webkernel/route": "self.version",
+                "webkernel/service-provider": "self.version",
+                "webkernel/view": "self.version"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\HttpErrorPages\\Providers\\HttpErrorPagesPDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "provider": "Webkernel\\HttpErrorPages\\Providers\\HttpErrorPagesProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\HttpErrorPages\\": "src/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Configurable, localized HTTP error pages for Webkernel applications.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/http-foundation",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/http-foundation",
+                "reference": "29fba6de0ab118ac105ec4a3ce31edb350d59bce"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "symfony/http-foundation": "^8.1",
+                "webkernel/accounts": "^0.12.0",
+                "webkernel/container": "^0.12.0",
+                "webkernel/database": "^0.12.0",
+                "webkernel/filesystem": "^0.12.0",
+                "webkernel/orm": "^0.12.0",
+                "webkernel/route": "^0.12.0",
+                "webkernel/service-provider": "^0.12.0",
+                "webkernel/session": "^0.12.0",
+                "webkernel/utilities": "^0.12.0",
+                "webkernel/validation": "^0.12.0"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\HttpFoundation\\Providers\\HttpFoundationPDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "lifecycle": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\HttpFoundation\\": "src/"
+                },
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "El Moumen Yassine",
+                    "email": "yassine@numerimondes.com",
+                    "role": "Author"
+                }
+            ],
+            "description": "Symfony HttpFoundation dependency for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/http-runtime",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "../webkernel/packages/http-runtime",
+                "reference": "d885e7fba33a455dde296c60fdc31468a1f9c26c"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/config": "self.version",
+                "webkernel/container": "self.version",
+                "webkernel/http-error-pages": "self.version",
+                "webkernel/http-foundation": "self.version",
+                "webkernel/http-security-csrf": "self.version",
+                "webkernel/i18n": "self.version",
+                "webkernel/package-assets": "self.version",
+                "webkernel/route": "self.version",
+                "webkernel/view": "self.version"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\Runtime\\Providers\\HttpRuntimePDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/Http.php"
+                ],
+                "psr-4": {
+                    "Webkernel\\Codebase\\Http\\": "src/",
+                    "Webkernel\\Runtime\\Providers\\": "src/Providers/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Lightweight SSR request bootstrap and dispatch runtime for Webkernel sites.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/http-security-csrf",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/http-security-csrf",
+                "reference": "48b6471e59d3c43f49c6ad8666dd67c77cf30d3e"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/config": "self.version",
+                "webkernel/service-provider": "^0.12.0",
+                "webkernel/session": "self.version",
+                "webkernel/view": "self.version"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\HttpSecurity\\Csrf\\Providers\\HttpSecurityCsrfPDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "lifecycle": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\HttpSecurity\\Csrf\\": "src/",
+                    "Webkernel\\": "src/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "El Moumen Yassine",
+                    "email": "yassine@numerimondes.com",
+                    "role": "Author"
+                }
+            ],
+            "description": "Session-backed CSRF token generation and verification for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/i18n",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/i18n",
+                "reference": "63c476401268b277c042e1baad90b3b61be63b74"
+            },
+            "require": {
+                "ext-intl": "*",
+                "php": ">=8.5.12",
+                "webkernel/config": "self.version",
+                "webkernel/filesystem": "^0.12.0",
+                "webkernel/http-security-csrf": "^0.12.0",
+                "webkernel/route": "^0.12.0",
+                "webkernel/service-provider": "self.version",
+                "webkernel/utilities": "^0.12.0"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\I18n\\Providers\\I18nPDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "provider": "Webkernel\\I18n\\Providers\\I18nProvider",
+                    "lifecycle": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\I18n\\": "src/"
+                },
+                "files": [
+                    "functions.php"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Locale and translation loading for Webkernel applications and modules.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/identifiers",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/identifiers",
+                "reference": "7d42f7ea3dbfcdc23c803ad7d6fdb19b097c9762"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/math": "self.version"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Identifiers\\": "src/"
+                },
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "UUID generation and binary representation for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/imagery",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/imagery",
+                "reference": "3beb7ea0f471593947627bc9de543ac934c3300b"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/http-security-csrf": "^0.12.0",
+                "webkernel/route": "^0.12.0",
+                "webkernel/service-provider": "^0.12.0",
+                "webkernel/view": "self.version"
+            },
+            "type": "webkernel-stdlib",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\Imagery\\Providers\\ImageryPDeclaration",
+                    "provider": "Webkernel\\Imagery\\Providers\\ImageryProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Imagery\\": "src/"
+                },
+                "files": [
+                    "functions/branding.php",
+                    "functions/icon.php"
+                ]
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Webkernel\\Imagery\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "EPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "El Moumen Yassine",
+                    "email": "yassine@numerimondes.com"
+                }
+            ],
+            "description": "Webkernel imagery: icons, brands, pixmaps.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/lifecycle",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/lifecycle",
+                "reference": "042ee71f2c2fe43e60cb67a295aa35e6f5fe0948"
+            },
+            "require": {
+                "composer-plugin-api": "^2.9",
+                "php": ">=8.5.12",
+                "webkernel/service-provider": "^0.12.0",
+                "webkernel/utilities": "^0.12.0",
+                "webkernel/utilities-json-schema": "^0.12.0"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Webkernel\\Lifecycle\\Plugin\\LCPlugin",
+                "webkernel": {
+                    "package-declaration": "Webkernel\\Lifecycle\\Providers\\LifecyclePDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "lifecycle": {
+                        "checks": [
+                            {
+                                "check": "PHP_VERSION_ID < 80500",
+                                "on-fail": {
+                                    "type": "danger",
+                                    "message": "PHP >= 8.5 is required."
+                                },
+                                "fix": "sudo apt install php8.5"
+                            }
+                        ],
+                        "events": {
+                            "post-autoload-dump": [
+                                "Webkernel\\Lifecycle\\Workers\\EventSetBasePath",
+                                "Webkernel\\Lifecycle\\Workers\\EventPostAutoloadDump"
+                            ],
+                            "pre-install-cmd": "Webkernel\\Lifecycle\\Workers\\EventDependencyCheck",
+                            "pre-update-cmd": "Webkernel\\Lifecycle\\Workers\\EventDependencyCheck"
+                        },
+                        "actions": []
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Lifecycle\\": "src/"
+                },
+                "files": [
+                    "load.lifecycle.functions.php"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "El Moumen Yassine",
+                    "email": "yassine@numerimondes.com",
+                    "role": "Author"
+                }
+            ],
+            "description": "Webkernel Lifecycle Composer plugin, API, and execution engine.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/mail",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/mail",
+                "reference": "202fad9f77b683cd39199c59c786e9fa5603dde4"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/config": "^0.12.0",
+                "webkernel/container": "^0.12.0",
+                "webkernel/filesystem": "^0.12.0",
+                "webkernel/http-foundation": "^0.12.0",
+                "webkernel/i18n": "^0.12.0",
+                "webkernel/markdown": "^0.12.0",
+                "webkernel/notifications": "^0.12.0",
+                "webkernel/queue": "^0.12.0",
+                "webkernel/testing": "^0.12.0",
+                "webkernel/utilities": "^0.12.0",
+                "webkernel/view": "^0.12.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Mail\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Mail services for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/markdown",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/markdown",
+                "reference": "18af3183169ba68f80208dce5684dc1485895663"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "psr/event-dispatcher": "^1.0",
+                "symfony/deprecation-contracts": "^3.0",
+                "webkernel/http-security-csrf": "^0.12.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Markdown\\": "src/"
+                },
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "CommonMark parsing and rendering for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/math",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/math",
+                "reference": "4e8cadfafc7050e0220fe145b2cfba3be5f52421"
+            },
+            "require": {
+                "php": ">=8.5.12"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Math\\": "src/"
+                },
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Arbitrary precision arithmetic for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/models",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/models",
+                "reference": "816b183a80284459393d66a0781f8244f8b64b15"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/database": "self.version",
+                "webkernel/service-provider": "^0.12.0"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\Models\\Providers\\ModelsPDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "lifecycle": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Models\\": "src/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "El Moumen Yassine",
+                    "email": "yassine@numerimondes.com",
+                    "role": "Author"
+                }
+            ],
+            "description": "Explicit active-record models for Webkernel applications.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/notifications",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/notifications",
+                "reference": "917e08a3cb7282164b2a96f889fd05184ae598e6"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/broadcasting": "^0.12.0",
+                "webkernel/container": "^0.12.0",
+                "webkernel/mail": "^0.12.0",
+                "webkernel/orm": "^0.12.0",
+                "webkernel/queue": "^0.12.0",
+                "webkernel/utilities": "^0.12.0",
+                "webkernel/view": "^0.12.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Notifications\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Notifications services for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/orm",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/orm",
+                "reference": "a01fcfe6e1e29a4728c63fc1cb99a62086aeb11f"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/accounts": "^0.12.0",
+                "webkernel/broadcasting": "^0.12.0",
+                "webkernel/console": "^0.12.0",
+                "webkernel/container": "^0.12.0",
+                "webkernel/cryptography": "^0.12.0",
+                "webkernel/database": "self.version",
+                "webkernel/datetime": "^0.12.0",
+                "webkernel/events": "^0.12.0",
+                "webkernel/http-foundation": "^0.12.0",
+                "webkernel/math": "^0.12.0",
+                "webkernel/queue": "^0.12.0",
+                "webkernel/route": "^0.12.0",
+                "webkernel/utilities": "^0.12.0",
+                "webkernel/view": "^0.12.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\ORM\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Webkernel",
+                    "email": "platform@webkernelphp.com"
+                }
+            ],
+            "description": "Eloquent object relational mapper and database subsystem for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/package-assets",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/package-assets",
+                "reference": "b3f93e2df7cdeaed1471ee7383c1fe016eab8e55"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/lifecycle": "^0.12.0",
+                "webkernel/route": "^0.12.0",
+                "webkernel/service-provider": "^0.12.0"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\PackageAssets\\Providers\\PackageAssetsPDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "provider": "Webkernel\\PackageAssets\\Providers\\PackageAssetsProvider"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "functions.php"
+                ],
+                "psr-4": {
+                    "Webkernel\\Codebase\\Assets\\": "src/Assets/",
+                    "Webkernel\\Codebase\\Http\\Controllers\\": "src/Http/Controllers/",
+                    "Webkernel\\Getters\\": "src/",
+                    "Webkernel\\PackageAssets\\Providers\\": "src/Providers/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Declared package asset URLs and secure package asset serving for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/platform-support",
+            "version": "5.9.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/platform-support",
+                "reference": "9a483d6fe2735abf8c16260548531db681732064"
+            },
+            "require": {
+                "composer-runtime-api": "^2.1",
+                "composer/class-map-generator": "^1.6",
+                "ext-intl": "*",
+                "league/uri-components": "^7.0",
+                "php": ">=8.5.12",
+                "symfony/console": "^7.0|^8.0",
+                "symfony/html-sanitizer": "^7.0|^8.0",
+                "webkernel/accounts": "^0.12.0",
+                "webkernel/code-generator": "^0.12.0",
+                "webkernel/console": "^0.12.0",
+                "webkernel/container": "^0.12.0",
+                "webkernel/database": "^0.12.0",
+                "webkernel/events": "^0.12.0",
+                "webkernel/filesystem": "^0.12.0",
+                "webkernel/http-foundation": "^0.12.0",
+                "webkernel/http-security-csrf": "^0.12.0",
+                "webkernel/i18n": "^0.12.0",
+                "webkernel/imagery": "^0.12.0",
+                "webkernel/markdown": "^0.12.0",
+                "webkernel/orm": "^0.12.0",
+                "webkernel/service-provider": "^0.12.0",
+                "webkernel/utilities": "^0.12.0",
+                "webkernel/view": "^0.12.0"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "provider": "Webkernel\\Platform\\Support\\Providers\\SupportWebkernelProvider"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Webkernel\\Platform\\Support\\": "src"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Core support services and UI primitives for the Webkernel Platform packages.",
+            "homepage": "https://www.webkernelphp.com",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/queue",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/queue",
+                "reference": "0455fb6faf8e7be6a18b5c90efeb69b35e9dc595"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/cache": "^0.12.0",
+                "webkernel/container": "^0.12.0",
+                "webkernel/cryptography": "^0.12.0",
+                "webkernel/datetime": "^0.12.0",
+                "webkernel/events": "^0.12.0",
+                "webkernel/orm": "^0.12.0",
+                "webkernel/serialization": "^0.12.0",
+                "webkernel/testing": "^0.12.0",
+                "webkernel/utilities": "^0.12.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Queue\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Queue services for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/route",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/route",
+                "reference": "18ee28e4785faef2bc519599ab658af2a1ce038c"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "psr/http-message": "^2.0",
+                "webkernel/accounts": "^0.12.0",
+                "webkernel/container": "self.version",
+                "webkernel/http-foundation": "^0.12.0",
+                "webkernel/models": "^0.12.0",
+                "webkernel/orm": "^0.12.0",
+                "webkernel/service-provider": "^0.12.0",
+                "webkernel/session": "^0.12.0",
+                "webkernel/utilities": "self.version",
+                "webkernel/view": "self.version"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\Route\\Providers\\RoutePDeclaration"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Route\\": "src/"
+                },
+                "files": [
+                    "load.route.function.php"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Webkernel routing.",
+            "homepage": "https://www.webkernelphp.com",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/serialization",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/serialization",
+                "reference": "5907db8439b0118623f68eb3449ed06b297a2d39"
+            },
+            "require": {
+                "php": ">=8.5.12"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Serialization\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Serialization services for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/service-provider",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/service-provider",
+                "reference": "172f43042d543a86b089972637a82db2b6c32c61"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/view": "^0.12.0"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\ServiceProvider\\Providers\\ServiceProviderPDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "lifecycle": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\ServiceProvider\\": "src/"
+                },
+                "classmap": [
+                    "src/ServiceProvider.php"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Shared declarative service provider contract for Webkernel packages.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/session",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/session",
+                "reference": "7d8e8363f3ab1451ab44be4e38e1e4c66b3e11d1"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/accounts": "^0.12.0",
+                "webkernel/cache": "^0.12.0",
+                "webkernel/config": "self.version",
+                "webkernel/container": "^0.12.0",
+                "webkernel/cookie": "^0.12.0",
+                "webkernel/cryptography": "^0.12.0",
+                "webkernel/database": "^0.12.0",
+                "webkernel/filesystem": "^0.12.0",
+                "webkernel/http-foundation": "^0.12.0",
+                "webkernel/route": "^0.12.0",
+                "webkernel/service-provider": "^0.12.0",
+                "webkernel/utilities": "^0.12.0"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\Session\\Providers\\SessionPDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "lifecycle": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Session\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Webkernel\\Session\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Secure native PHP session lifecycle and data management for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/simple-site",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "../webkernel/packages/simple-site",
+                "reference": "d53a115d711521980c32d96ee08b0a57e8417f3e"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/config": "self.version",
+                "webkernel/http-runtime": "self.version",
+                "webkernel/lifecycle": "self.version",
+                "webkernel/package-assets": "self.version",
+                "webkernel/route": "self.version",
+                "webkernel/service-provider": "self.version",
+                "webkernel/view": "self.version"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\SimpleSite\\Providers\\SimpleSitePDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "provider": "Webkernel\\SimpleSite\\Providers\\SimpleSiteProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\SimpleSite\\": "src/"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "File-based websites with automatic page routes and SEO discovery endpoints for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/testing",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/testing",
+                "reference": "42c8d4dfd28b95f19079fc770169716b5f0fcf63"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/cookie": "^0.12.0",
+                "webkernel/http-foundation": "^0.12.0",
+                "webkernel/orm": "^0.12.0",
+                "webkernel/session": "^0.12.0",
+                "webkernel/utilities": "^0.12.0",
+                "webkernel/validation": "^0.12.0",
+                "webkernel/view": "^0.12.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Testing\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Testing services for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/utilities",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/utilities",
+                "reference": "3a02ddd35505feda3e935a214978d052c6fa00be"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "symfony/polyfill-php86": "^1.43",
+                "symfony/uid": "^8.1",
+                "symfony/var-dumper": "^8.1",
+                "webkernel/container": "^0.12.0",
+                "webkernel/datetime": "self.version",
+                "webkernel/http-foundation": "^0.12.0",
+                "webkernel/identifiers": "self.version",
+                "webkernel/markdown": "self.version",
+                "webkernel/queue": "^0.12.0",
+                "webkernel/route": "^0.12.0",
+                "webkernel/serialization": "^0.12.0",
+                "webkernel/service-provider": "^0.12.0",
+                "webkernel/view": "^0.12.0"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\Utilities\\Providers\\UtilitiesPDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "lifecycle": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Utilities\\": "src/"
+                },
+                "files": [
+                    "src/helpers.php",
+                    "src/functions.php"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "El Moumen Yassine",
+                    "email": "yassine@numerimondes.com",
+                    "role": "Author"
+                }
+            ],
+            "description": "Shared utilities for Webkernel packages.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/utilities-json-schema",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/utilities-json-schema",
+                "reference": "19872e8fd5cf0340bb03c449c9f7b206595e50d8"
+            },
+            "require": {
+                "ext-filter": "*",
+                "ext-json": "*",
+                "php": ">=8.5.12",
+                "webkernel/service-provider": "^0.12.0"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\Utilities\\JsonSchema\\Providers\\UtilitiesJsonSchemaPDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "lifecycle": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Utilities\\JsonSchema\\": "src/JsonSchema/",
+                    "Webkernel\\Utilities\\JsonSchema\\Providers\\": "src/Providers/"
+                },
+                "classmap": [
+                    "src/JsonSchemaValidator.php"
+                ]
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Webkernel\\Utilities\\JsonSchema\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "El Moumen Yassine",
+                    "email": "yassine@numerimondes.com",
+                    "role": "Author"
+                }
+            ],
+            "description": "JSON Schema validation utilities for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/validation",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/validation",
+                "reference": "69f4ad289a6d4b69a56c84ff6469c26a89bd9348"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/accounts": "^0.12.0",
+                "webkernel/config": "^0.12.0",
+                "webkernel/container": "^0.12.0",
+                "webkernel/database": "^0.12.0",
+                "webkernel/filesystem": "^0.12.0",
+                "webkernel/http-foundation": "^0.12.0",
+                "webkernel/i18n": "^0.12.0",
+                "webkernel/math": "^0.12.0",
+                "webkernel/orm": "^0.12.0",
+                "webkernel/utilities": "^0.12.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\Validation\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Validation services for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
+        {
+            "name": "webkernel/view",
+            "version": "0.12.0",
+            "dist": {
+                "type": "path",
+                "url": "webkernel/packages/view",
+                "reference": "bcda92431ae6cd017170432ca69b447355328ca6"
+            },
+            "require": {
+                "php": ">=8.5.12",
+                "webkernel/change-watcher": "self.version",
+                "webkernel/container": "^0.12.0",
+                "webkernel/filesystem": "^0.12.0",
+                "webkernel/http-foundation": "^0.12.0",
+                "webkernel/lifecycle": "^0.12.0",
+                "webkernel/package-assets": "^0.12.0",
+                "webkernel/service-provider": "self.version",
+                "webkernel/utilities": "self.version"
+            },
+            "type": "library",
+            "extra": {
+                "webkernel": {
+                    "package-declaration": "Webkernel\\View\\Providers\\ViewPDeclaration",
+                    "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+                    "lifecycle": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkernel\\View\\": "src/"
+                },
+                "files": [
+                    "functions.php"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "PHP view resolution and rendering for Webkernel.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {},
+    "prefer-stable": true,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=8.5.12"
+    },
+    "platform-dev": {},
+    "platform-overrides": {
+        "php": "8.5.12"
+    },
+    "plugin-api-version": "2.9.0"
+}

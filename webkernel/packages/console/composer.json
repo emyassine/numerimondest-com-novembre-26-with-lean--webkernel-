@@ -1,0 +1,36 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "webkernel/console",
+    "description": "Command line input, command dispatch, and terminal output for Webkernel.",
+    "type": "library",
+    "license": "proprietary",
+    "version": "0.12.0",
+    "require": {
+        "php": ">=8.5.12",
+        "webkernel/config": "self.version",
+        "webkernel/container": "self.version",
+        "webkernel/filesystem": "^0.12.0",
+        "webkernel/http-security-csrf": "^0.12.0",
+        "webkernel/service-provider": "self.version",
+        "webkernel/utilities": "^0.12.0"
+    },
+    "autoload": {
+        "files": [
+            "load.console.function.php"
+        ],
+        "psr-4": {
+            "Webkernel\\Console\\": "src/"
+        },
+        "classmap": [
+            "classmap/Console.php"
+        ]
+    },
+    "extra": {
+        "webkernel": {
+            "package-declaration": "Webkernel\\Console\\Providers\\ConsolePDeclaration",
+            "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+            "provider": "Webkernel\\Console\\Providers\\ConsoleProvider",
+            "lifecycle": []
+        }
+    }
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://getcomposer.org/schema.json",
+  "name": "webkernel/http-runtime",
+  "description": "Lightweight SSR request bootstrap and dispatch runtime for Webkernel sites.",
+  "version": "0.12.0",
+  "type": "library",
+  "license": "proprietary",
+  "require": {
+    "php": ">=8.5.12",
+    "webkernel/config": "self.version",
+    "webkernel/container": "self.version",
+    "webkernel/http-error-pages": "self.version",
+    "webkernel/http-foundation": "self.version",
+    "webkernel/http-security-csrf": "self.version",
+    "webkernel/i18n": "self.version",
+    "webkernel/package-assets": "self.version",
+    "webkernel/route": "self.version",
+    "webkernel/view": "self.version"
+  },
+  "autoload": {
+    "classmap": ["src/Http.php"],
+    "psr-4": {
+      "Webkernel\\Codebase\\Http\\": "src/",
+      "Webkernel\\Runtime\\Providers\\": "src/Providers/"
+    }
+  },
+  "extra": {
+    "webkernel": {
+      "package-declaration": "Webkernel\\Runtime\\Providers\\HttpRuntimePDeclaration",
+      "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json"
+    }
+  }
+}

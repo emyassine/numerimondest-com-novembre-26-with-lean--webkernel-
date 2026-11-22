@@ -1,0 +1,8 @@
+<?php declare(strict_types=1);
+//> This file is part of Webkernel.
+//> (c) 2025 - 2027 Numerimondes, El Moumen Yassine
+//> Yassine El Moumen <yassine@numerimondes.com> | <platform@webkernelphp.com>
+//> For the full copyright and license information, please view the LICENSE
+//> file that was distributed with this source code.
+
+return ['A', 'a', 'A', 'a', 'E', 'e', 'E', 'e', 'I', 'i', 'I', 'i', 'O', 'o', 'O', 'o', 'R', 'r', 'R', 'r', 'U', 'u', 'U', 'u', 'S', 's', 'T', 't', 'Y', 'y', 'H', 'h', 'N', 'd', 'OU', 'ou', 'Z', 'z', 'A', 'a', 'E', 'e', 'O', 'o', 'O', 'o', 'O', 'o', 'O', 'o', 'Y', 'y', 'l', 'n', 't', 'j', 'db', 'qp', 'A', 'C', 'c', 'L', 'T', 's', 'z', '[?]', '[?]', 'B', 'U', '^', 'E', 'e', 'J', 'j', 'q', 'q', 'R', 'r', 'Y', 'y', 'a', 'a', 'a', 'b', 'o', 'c', 'd', 'd', 'e', '@', '@', 'e', 'e', 'e', 'e', 'j', 'g', 'g', 'g', 'g', 'u', 'Y', 'h', 'h', 'i', 'i', 'I', 'l', 'l', 'l', 'lZ', 'W', 'W', 'm', 'n', 'n', 'n', 'o', 'OE', 'O', 'F', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'R', 'R', 's', 'S', 'j', 'S', 'S', 't', 't', 'u', 'U', 'v', '^', 'w', 'y', 'Y', 'z', 'z', 'Z', 'Z', '?', '?', '?', 'C', '@', 'B', 'E', 'G', 'H', 'j', 'k', 'L', 'q', '?', '?', 'dz', 'dZ', 'dz', 'ts', 'tS', 'tC', 'fN', 'ls', 'lz', 'WW', ']]', 'h', 'h', 'h', 'h', 'j', 'r', 'r', 'r', 'r', 'w', 'y', '\'', '"', '`', '\'', '`', '`', '\'', '?', '?', '<', '>', '^', 'V', '^', 'V', '\'', '-', '/', '\\', ',', '_', '\\', '/', ':', '.', '`', '\'', '^', 'V', '+', '-', 'V', '.', '@', ',', '~', '"', 'R', 'X', 'G', 'l', 's', 'x', '?', '', '', '', '', '', '', '', 'V', '=', '"', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]'];

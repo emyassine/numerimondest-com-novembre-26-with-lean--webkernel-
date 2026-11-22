@@ -1,0 +1,43 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "webkernel/database",
+    "description": "SQL connections, ClickHouse analytics access, and database migrations for Webkernel.",
+    "type": "library",
+    "license": "proprietary",
+    "version": "0.12.0",
+    "authors": [
+        {
+            "name": "El Moumen Yassine",
+            "email": "yassine@numerimondes.com",
+            "role": "Author"
+        }
+    ],
+    "require": {
+        "php": ">=8.5.12",
+        "ext-pdo": "*",
+        "webkernel/config": "self.version",
+        "webkernel/console": "self.version",
+        "webkernel/container": "^0.12.0",
+        "webkernel/http-security-csrf": "^0.12.0",
+        "webkernel/service-provider": "self.version",
+        "webkernel/utilities": "self.version"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webkernel\\Database\\": "src/"
+        }
+    },
+    "extra": {
+        "webkernel": {
+            "package-declaration": "Webkernel\\Database\\Providers\\DatabasePDeclaration",
+            "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+            "provider": "Webkernel\\Database\\Providers\\DatabaseProvider",
+            "lifecycle": []
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

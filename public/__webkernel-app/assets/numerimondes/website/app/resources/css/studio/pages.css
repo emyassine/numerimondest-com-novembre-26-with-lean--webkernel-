@@ -1,0 +1,94 @@
+.nm-page { width: 100%; margin: 0; padding: 0 50px; }
+.nm-page [x-cloak] { display: none !important; }
+.nm-founder-section.fi-collapsed > .fi-section-content-ctn { display: none; }
+.nm-page h1,
+.nm-page h2,
+.nm-page h3 {
+  font-family: var(--nm-title);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: .19em;
+}
+
+.nm-page-heading {
+  margin: 0;
+  min-height: 60vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.nm-page-heading h1 {
+  margin: 0;
+  font: 400 16px/1.63 var(--nm-title);
+  letter-spacing: .19em;
+  text-transform: uppercase;
+}
+
+.nm-page-heading h1.silky-ri {
+  font: 400 18px/1.63 Romie, Georgia, serif;
+  font-style: italic;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.nm-about-story,
+.nm-expertise {
+  padding: 70px 50px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 30px;
+  align-items: start;
+}
+
+.nm-about-story h2,
+.nm-expertise h2 {
+  margin: 0;
+  font: 400 16px/1.19 var(--nm-title);
+  letter-spacing: .19em;
+  text-transform: uppercase;
+}
+
+.nm-about-story p {
+  max-width: 780px;
+  margin: 0;
+  font: 400 18px/1.22 var(--nm-body);
+  white-space: pre-line;
+}
+
+.nm-expertise { align-items: start; }
+.nm-expertise-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 50px 30px; }
+.nm-expertise-grid article { display: flex; flex-direction: column; gap: 30px; }
+
+.nm-expertise-grid h3 {
+  margin: 0;
+  font: 400 16px/1.19 var(--nm-title);
+  letter-spacing: .19em;
+  text-transform: uppercase;
+}
+
+.nm-expertise-grid ul { margin: 0; padding: 0; list-style: none; }
+
+.nm-expertise-grid li {
+  margin: 0;
+  color: var(--nm-ink);
+  font: 400 18px/1.22 var(--nm-body);
+}
+
+@media (max-width: 700px) {
+  .nm-page { padding: 0 20px; }
+  .nm-page-heading { min-height: 55vh; }
+  .nm-about-story h2,
+  .nm-expertise h2,
+  .nm-expertise-grid h3 { font-size: 12px; }
+
+  .nm-about-story p,
+  .nm-expertise-grid li { font-size: 15px; }
+  .nm-about-story, .nm-expertise { grid-template-columns: 1fr; gap: 30px; padding: 50px 0; }
+  .nm-expertise-grid { grid-template-columns: 1fr 1fr; gap: 35px 20px; }
+  .nm-expertise-grid article { gap: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

@@ -1,0 +1,54 @@
+.nm-projects--grid {
+  padding: 0 50px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: 12px;
+}
+
+.nm-projects--grid .nm-project {
+  height: 70vh;
+  min-height: 480px;
+}
+
+.nm-projects--grid .nm-project-link { padding: 35px; }
+
+.nm-projects--grid.nm-projects--listing {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.nm-projects--grid.nm-projects--listing .nm-project {
+  height: 55vh;
+  min-height: 380px;
+}
+
+@media (max-width: 1100px) and (min-width: 701px) {
+  .nm-projects--grid.nm-projects--listing {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .nm-projects--grid.nm-projects--listing .nm-project {
+    height: 52vh;
+    min-height: 400px;
+  }
+
+  .nm-projects--grid.nm-projects--listing .nm-project-link {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 700px) {
+  .nm-projects--grid,
+  .nm-projects--grid.nm-projects--listing {
+    padding: 0;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .nm-projects--grid .nm-project { height: 78vh; min-height: 480px; }
+  .nm-projects--grid.nm-projects--listing .nm-project {
+    height: 72svh;
+    min-height: 360px;
+  }
+
+  .nm-projects--grid .nm-project-link { padding: 25px 20px; }
+}

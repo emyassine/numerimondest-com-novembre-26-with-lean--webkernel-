@@ -1,0 +1,46 @@
+<?php declare(strict_types=1);
+//> This file is part of Webkernel.
+//> (c) 2025 - 2027 Numerimondes, El Moumen Yassine
+//> Yassine El Moumen <yassine@numerimondes.com> | <platform@webkernelphp.com>
+//> For the full copyright and license information, please view the LICENSE
+//> file that was distributed with this source code.
+// Adapted from Laravel; see LICENSE-LARAVEL.md.
+
+namespace Webkernel\Utilities;
+
+/**
+ * @template TTarget
+ */
+class HigherOrderTapProxy
+{
+    /**
+     * The target being tapped.
+     *
+     * @var TTarget
+     */
+    public $target;
+
+    /**
+     * Create a new tap proxy instance.
+     *
+     * @param  TTarget  $target
+     */
+    public function __construct($target)
+    {
+        $this->target = $target;
+    }
+
+    /**
+     * Dynamically pass method calls to the target.
+     *
+     * @param  string  $method
+     * @param  array  $parameters
+     * @return TTarget
+     */
+    public function __call($method, $parameters)
+    {
+        $this->target->{$method}(...$parameters);
+
+        return $this->target;
+    }
+}

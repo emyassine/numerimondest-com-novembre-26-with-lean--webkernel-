@@ -1,0 +1,29 @@
+{
+  "$schema": "https://getcomposer.org/schema.json",
+  "name": "webkernel/simple-site",
+  "description": "File-based websites with automatic page routes and SEO discovery endpoints for Webkernel.",
+  "version": "0.12.0",
+  "type": "library",
+  "license": "proprietary",
+  "require": {
+    "php": ">=8.5.12",
+    "webkernel/config": "self.version",
+    "webkernel/http-runtime": "self.version",
+    "webkernel/lifecycle": "self.version",
+    "webkernel/package-assets": "self.version",
+    "webkernel/route": "self.version",
+    "webkernel/service-provider": "self.version",
+    "webkernel/view": "self.version"
+  },
+  "autoload": {
+    "psr-4": { "Webkernel\\SimpleSite\\": "src/" },
+    "files": ["src/helpers.php"]
+  },
+  "extra": {
+    "webkernel": {
+      "package-declaration": "Webkernel\\SimpleSite\\Providers\\SimpleSitePDeclaration",
+      "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+      "provider": "Webkernel\\SimpleSite\\Providers\\SimpleSiteProvider"
+    }
+  }
+}

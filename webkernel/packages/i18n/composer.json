@@ -1,0 +1,34 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "webkernel/i18n",
+    "description": "Locale and translation loading for Webkernel applications and modules.",
+    "type": "library",
+    "license": "proprietary",
+    "version": "0.12.0",
+    "require": {
+        "php": ">=8.5.12",
+        "ext-intl": "*",
+        "webkernel/config": "self.version",
+        "webkernel/filesystem": "^0.12.0",
+        "webkernel/http-security-csrf": "^0.12.0",
+        "webkernel/route": "^0.12.0",
+        "webkernel/service-provider": "self.version",
+        "webkernel/utilities": "^0.12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webkernel\\I18n\\": "src/"
+        },
+        "files": [
+            "functions.php"
+        ]
+    },
+    "extra": {
+        "webkernel": {
+            "package-declaration": "Webkernel\\I18n\\Providers\\I18nPDeclaration",
+            "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+            "provider": "Webkernel\\I18n\\Providers\\I18nProvider",
+            "lifecycle": []
+        }
+    }
+}

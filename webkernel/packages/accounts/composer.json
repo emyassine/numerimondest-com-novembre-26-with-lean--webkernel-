@@ -1,0 +1,43 @@
+{
+    "name": "webkernel/accounts",
+    "description": "Shared user accounts and authorization for Webkernel applications.",
+    "type": "library",
+    "license": "proprietary",
+    "version": "0.12.0",
+    "require": {
+        "php": ">=8.5.12",
+        "webkernel/config": "^0.12.0",
+        "webkernel/container": "^0.12.0",
+        "webkernel/cookie": "^0.12.0",
+        "webkernel/cryptography": "^0.12.0",
+        "webkernel/database": "self.version",
+        "webkernel/events": "^0.12.0",
+        "webkernel/http-foundation": "^0.12.0",
+        "webkernel/http-security-csrf": "^0.12.0",
+        "webkernel/i18n": "^0.12.0",
+        "webkernel/mail": "^0.12.0",
+        "webkernel/notifications": "^0.12.0",
+        "webkernel/orm": "^0.12.0",
+        "webkernel/queue": "^0.12.0",
+        "webkernel/route": "^0.12.0",
+        "webkernel/service-provider": "self.version",
+        "webkernel/session": "self.version",
+        "webkernel/utilities": "^0.12.0",
+        "webkernel/validation": "^0.12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webkernel\\Accounts\\": "src/"
+        },
+        "files": [
+            "functions.php"
+        ]
+    },
+    "extra": {
+        "webkernel": {
+            "package-declaration": "Webkernel\\Accounts\\Providers\\AccountsPDeclaration",
+            "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+            "provider": "Webkernel\\Accounts\\Providers\\AccountsProvider"
+        }
+    }
+}

@@ -1,0 +1,14 @@
+node_modules/
+internal/dependencies/
+runtime/cache/*
+/modules/webkernel/system-panel
+/modules/webkernel/system-installer
+/storage/private/*
+/storage/databases/*
+/storage/backups/*
+
+web-sync.config.json
+
+/runtime/sessions/
+
+.yas-deploy-once.json

@@ -1,0 +1,31 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "webkernel/container",
+    "description": "PSR-11 dependency container for Webkernel.",
+    "type": "library",
+    "license": "proprietary",
+    "version": "0.12.0",
+    "require": {
+        "php": ">=8.5.12",
+        "psr/container": "^2.0",
+        "webkernel/config": "^0.12.0",
+        "webkernel/http-security-csrf": "^0.12.0",
+        "webkernel/service-provider": "^0.12.0",
+        "webkernel/utilities": "^0.12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webkernel\\Container\\": "src/"
+        },
+        "files": [
+            "functions.php"
+        ]
+    },
+    "extra": {
+        "webkernel": {
+            "package-declaration": "Webkernel\\Container\\Providers\\ContainerPDeclaration",
+            "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+            "lifecycle": []
+        }
+    }
+}

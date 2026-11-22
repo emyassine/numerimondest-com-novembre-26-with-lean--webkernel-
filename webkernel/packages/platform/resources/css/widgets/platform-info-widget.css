@@ -1,0 +1,21 @@
+.webkernel-platform-info-widget {
+    & .fi-section-content {
+        @apply flex items-center gap-x-3;
+    }
+}
+
+.webkernel-platform-info-widget-main {
+    @apply flex-1;
+}
+
+.webkernel-platform-info-widget-brand {
+    @apply text-lg font-semibold text-gray-950 dark:text-white;
+}
+
+.webkernel-platform-info-widget-version {
+    @apply mt-2 text-xs text-gray-500 dark:text-gray-400;
+}
+
+.webkernel-platform-info-widget-links {
+    @apply flex flex-col items-end gap-y-1;
+}

@@ -1,0 +1,81 @@
+<?php
+
+namespace Webkernel\Platform\Support\Commands\Concerns;
+
+
+use function console;
+use Webkernel\Utilities\Arr;
+
+use function Webkernel\Platform\Support\is_path_within_vendor_directory;
+trait HasResourcesLocation
+{
+    protected string $resourcesNamespace;
+
+    protected string $resourcesDirectory;
+
+    protected function configureResourcesLocation(string $question): void
+    {
+        if (filled($this->clusterFqn)) {
+            return;
+        }
+
+        [
+            $this->resourcesNamespace,
+            $this->resourcesDirectory,
+        ] = $this->getResourcesLocation($question);
+    }
+
+    /**
+     * @return array{
+     *     0: string,
+     *     1: string,
+     * }
+     */
+    public function getResourcesLocation(string $question): array
+    {
+        $directories = $this->panel->getResourceDirectories();
+        $namespaces = $this->panel->getResourceNamespaces();
+
+        foreach ($directories as $index => $directory) {
+            if (is_path_within_vendor_directory($directory, base_path())) {
+                unset($directories[$index]);
+                unset($namespaces[$index]);
+            }
+        }
+
+        if (count($namespaces) < 2) {
+            return [
+                (Arr::first($namespaces) ?? app()->getNamespace() . 'Webkernel\Platform\\Resources'),
+                (Arr::first($directories) ?? app_path('Platform/Resources/')),
+            ];
+        }
+
+        if ($this->option('resource-namespace')) {
+            return [
+                (string) $this->option('resource-namespace'),
+                $directories[array_search($this->option('resource-namespace'), $namespaces)],
+            ];
+        }
+
+        $keyedNamespaces = array_combine(
+            $namespaces,
+            $namespaces,
+        );
+
+        return [
+            $namespace = console()->search(
+                label: $question,
+                options: function (?string $search) use ($keyedNamespaces): array {
+                    if (blank($search)) {
+                        return $keyedNamespaces;
+                    }
+
+                    $search = str($search)->trim()->replace(['\\', '/'], '');
+
+                    return array_filter($keyedNamespaces, fn (string $namespace): bool => str($namespace)->replace(['\\', '/'], '')->contains($search, ignoreCase: true));
+                },
+            ),
+            $directories[array_search($namespace, $namespaces)],
+        ];
+    }
+}

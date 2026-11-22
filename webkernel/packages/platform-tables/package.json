@@ -1,0 +1,21 @@
+{
+  "name": "webkernel-platform-tables-browser",
+  "version": "5.9.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "build": "node scripts/build.js" },
+  "devDependencies": {
+    "@floating-ui/dom": "^1.7.0",
+    "esbuild": "^0.28.1",
+    "sortablejs": "^1.15.0"
+  },
+  "webkernelBuild": {
+    "entries": [
+      "resources/js/index.js",
+      "resources/js/components/columns/checkbox.js",
+      "resources/js/components/columns/select.js",
+      "resources/js/components/columns/text-input.js",
+      "resources/js/components/columns/toggle.js"
+    ]
+  }
+}

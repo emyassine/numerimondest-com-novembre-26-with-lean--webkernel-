@@ -1,0 +1,12 @@
+{
+  "name": "webkernel-platform-notifications-browser",
+  "version": "5.9.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "build": "node scripts/build.js" },
+  "devDependencies": {
+    "alpinejs": "^3.10.4",
+    "esbuild": "^0.28.1"
+  },
+  "webkernelBuild": { "entries": ["resources/js/index.js"] }
+}

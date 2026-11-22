@@ -1,0 +1,30 @@
+{
+  "$schema": "https://getcomposer.org/schema.json",
+  "name": "webkernel/package-assets",
+  "description": "Declared package asset URLs and secure package asset serving for Webkernel.",
+  "version": "0.12.0",
+  "type": "library",
+  "license": "proprietary",
+  "require": {
+    "php": ">=8.5.12",
+    "webkernel/lifecycle": "^0.12.0",
+    "webkernel/route": "^0.12.0",
+    "webkernel/service-provider": "^0.12.0"
+  },
+  "autoload": {
+    "files": ["functions.php"],
+    "psr-4": {
+      "Webkernel\\Codebase\\Assets\\": "src/Assets/",
+      "Webkernel\\Codebase\\Http\\Controllers\\": "src/Http/Controllers/",
+      "Webkernel\\Getters\\": "src/",
+      "Webkernel\\PackageAssets\\Providers\\": "src/Providers/"
+    }
+  },
+  "extra": {
+    "webkernel": {
+      "package-declaration": "Webkernel\\PackageAssets\\Providers\\PackageAssetsPDeclaration",
+      "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+      "provider": "Webkernel\\PackageAssets\\Providers\\PackageAssetsProvider"
+    }
+  }
+}

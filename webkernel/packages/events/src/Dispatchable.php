@@ -1,0 +1,61 @@
+<?php declare(strict_types=1);
+//> This file is part of Webkernel.
+//> (c) 2025 - 2027 Numerimondes, El Moumen Yassine
+//> Yassine El Moumen <yassine@numerimondes.com> | <platform@webkernelphp.com>
+//> For the full copyright and license information, please view the LICENSE
+//> file that was distributed with this source code.
+
+namespace Webkernel\Events;
+
+trait Dispatchable
+{
+    /**
+     * Dispatch the event with the given arguments.
+     *
+     * @param  mixed  ...$arguments
+     * @return mixed
+     */
+    public static function dispatch(...$arguments)
+    {
+        return event(new static(...$arguments));
+    }
+
+    /**
+     * Dispatch the event with the given arguments if the given truth test passes.
+     *
+     * @param  bool  $boolean
+     * @param  mixed  ...$arguments
+     * @return mixed
+     */
+    public static function dispatchIf($boolean, ...$arguments)
+    {
+        if ($boolean) {
+            return event(new static(...$arguments));
+        }
+    }
+
+    /**
+     * Dispatch the event with the given arguments unless the given truth test passes.
+     *
+     * @param  bool  $boolean
+     * @param  mixed  ...$arguments
+     * @return mixed
+     */
+    public static function dispatchUnless($boolean, ...$arguments)
+    {
+        if (! $boolean) {
+            return event(new static(...$arguments));
+        }
+    }
+
+    /**
+     * Broadcast the event with the given arguments.
+     *
+     * @param  mixed  ...$arguments
+     * @return \Webkernel\Broadcasting\PendingBroadcast
+     */
+    public static function broadcast(...$arguments)
+    {
+        return broadcast(new static(...$arguments));
+    }
+}

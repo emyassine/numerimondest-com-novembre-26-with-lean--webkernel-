@@ -1,0 +1,53 @@
+<?php declare(strict_types=1);
+//> This file is part of Webkernel.
+//> (c) 2025 - 2027 Numerimondes, El Moumen Yassine
+//> Yassine El Moumen <yassine@numerimondes.com> | <platform@webkernelphp.com>
+//> For the full copyright and license information, please view the LICENSE
+//> file that was distributed with this source code.
+
+namespace Webkernel\Validation\Rules;
+
+use \Webkernel\Utilities\Contracts\Arrayable;
+use Stringable;
+
+use function \Webkernel\Utilities\enum_value;
+
+class DoesntContain implements Stringable
+{
+    /**
+     * The values that should not be contained in the attribute.
+     *
+     * @var array
+     */
+    protected $values;
+
+    /**
+     * Create a new doesntContain rule instance.
+     *
+     * @param  \Webkernel\Utilities\Contracts\Arrayable|\UnitEnum|array|string  $values
+     */
+    public function __construct($values)
+    {
+        if ($values instanceof Arrayable) {
+            $values = $values->toArray();
+        }
+
+        $this->values = is_array($values) ? $values : func_get_args();
+    }
+
+    /**
+     * Convert the rule to a validation string.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        $values = array_map(function ($value) {
+            $value = enum_value($value);
+
+            return '"'.str_replace('"', '""', (string) $value).'"';
+        }, $this->values);
+
+        return 'doesnt_contain:'.implode(',', $values);
+    }
+}

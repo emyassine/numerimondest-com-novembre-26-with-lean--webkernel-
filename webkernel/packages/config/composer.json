@@ -1,0 +1,43 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "webkernel/config",
+    "description": "Compiled application configuration for Webkernel.",
+    "type": "library",
+    "license": "proprietary",
+    "version": "0.12.0",
+    "authors": [
+        {
+            "name": "El Moumen Yassine",
+            "email": "yassine@numerimondes.com",
+            "role": "Author"
+        }
+    ],
+    "require": {
+        "php": ">=8.5.12",
+        "webkernel/change-watcher": "self.version",
+        "webkernel/http-security-csrf": "^0.12.0",
+        "webkernel/lifecycle": "self.version",
+        "webkernel/service-provider": "self.version",
+        "webkernel/utilities": "^0.12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webkernel\\Config\\": "src/"
+        },
+        "files": [
+            "load.config.function.php"
+        ]
+    },
+    "extra": {
+        "webkernel": {
+            "package-declaration": "Webkernel\\Config\\Providers\\ConfigPDeclaration",
+            "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+            "lifecycle": []
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

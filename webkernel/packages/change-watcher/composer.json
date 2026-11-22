@@ -1,0 +1,34 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "webkernel/change-watcher",
+    "description": "Portable filesystem dependency tracking and atomic publication of compiled caches.",
+    "type": "library",
+    "license": "proprietary",
+    "version": "0.12.0",
+    "authors": [
+        {
+            "name": "El Moumen Yassine",
+            "email": "yassine@numerimondes.com",
+            "role": "Author"
+        }
+    ],
+    "require": {
+        "php": ">=8.5.12",
+        "webkernel/service-provider": "^0.12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webkernel\\ChangeWatcher\\": "src/"
+        }
+    },
+    "extra": {
+        "webkernel": {
+            "package-declaration": "Webkernel\\ChangeWatcher\\Providers\\ChangeWatcherPDeclaration",
+            "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+            "lifecycle": []
+        }
+    },
+    "bin": [
+        "bin/change-watcher"
+    ]
+}

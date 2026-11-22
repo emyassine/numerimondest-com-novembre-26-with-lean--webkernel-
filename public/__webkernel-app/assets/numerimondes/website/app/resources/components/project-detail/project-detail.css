@@ -1,0 +1,117 @@
+.nm-page.nm-project-detail { padding: 0; }
+
+.nm-project-detail-intro {
+  width: min(100%, 1200px);
+  margin: 0 auto;
+  padding: 155px 50px 70px;
+  display: grid;
+  grid-template-columns: minmax(220px, .8fr) minmax(0, 1.4fr);
+  gap: 50px;
+  align-items: center;
+}
+
+.nm-project-detail-identity { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; }
+.nm-project-detail-logo { display: block; width: min(100%, 260px); max-height: 130px; object-fit: contain; object-position: left center; }
+.nm-project-detail-wordmark { margin: 0; color: var(--nm-ink); font: 500 clamp(24px, 3vw, 40px)/1.1 Romie, Georgia, serif; }
+
+.nm-project-detail-meta {
+  margin: 0;
+  color: var(--nm-muted);
+  font: 400 10px/1.5 var(--nm-title);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.nm-project-detail-summary h1 {
+  max-width: 800px;
+  margin: 0 0 24px;
+  font: 400 clamp(22px, 3vw, 42px)/1.35 var(--nm-title);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.nm-project-detail-summary > p { max-width: 760px; margin: 0; font: 400 18px/1.45 var(--nm-body); }
+.nm-project-detail-cover { margin: 0; }
+.nm-project-detail-cover img { display: block; width: 100%; height: auto; max-height: 72vh; object-fit: cover; }
+
+.nm-project-detail-cover figcaption {
+  padding: 10px 50px 0;
+  color: var(--nm-muted);
+  font: 400 10px/1.4 var(--nm-body);
+}
+
+.nm-project-detail-sections { width: min(100%, 1200px); margin: 0 auto; padding: 40px 50px 0; }
+
+.nm-project-detail-section {
+  padding: 45px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 50px;
+  border-bottom: 1px solid var(--nm-line);
+}
+
+.nm-project-detail-section h2,
+.nm-project-detail-cta h2 {
+  margin: 0;
+  font: 400 16px/1.4 var(--nm-title);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.nm-project-detail-copy { max-width: 760px; }
+
+.nm-project-detail-copy p { margin: 0 0 18px; font: 400 17px/1.5 var(--nm-body); }
+.nm-project-detail-copy li { margin: 0 0 18px; font: 400 17px/1.5 var(--nm-title); }
+
+.nm-project-detail-copy p:last-child { margin-bottom: 0; }
+.nm-project-detail-copy ul { margin: 0; padding: 0; list-style: none; }
+.nm-project-detail-copy li { padding-left: 18px; position: relative; }
+.nm-project-detail-copy li::before { content: '—'; position: absolute; left: 0; }
+.nm-project-detail-copy .nm-project-detail-note { margin-top: 22px; color: var(--nm-muted); font-size: 14px; }
+
+.nm-project-detail-cta {
+  padding: 65px 50px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.nm-project-detail-cta a {
+  color: var(--primary-600);
+  padding: 14px 18px;
+  border: 1px solid var(--nm-line);
+  border-radius: var(--radius-md);
+  font: 400 11px/1.3 var(--nm-title);
+  letter-spacing: .1em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.nm-project-detail-cta-button {
+  color: var(--primary-600);
+  padding: 14px 18px;
+  border: 1px solid var(--nm-line);
+  border-radius: var(--radius-md);
+  font: 400 11px/1.3 var(--nm-title);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.nm-project-detail-cta a:hover { color: var(--nm-paper); background: var(--nm-ink); }
+.nm-project-detail-cta-button:hover { color: var(--nm-paper); background: var(--nm-ink); }
+
+@media (max-width: 700px) {
+  .nm-project-detail-intro { padding: 110px 20px 45px; grid-template-columns: 1fr; gap: 32px; }
+  .nm-project-detail-logo { max-width: 180px; max-height: 90px; }
+  .nm-project-detail-summary h1 { font-size: 22px; }
+  .nm-project-detail-summary > p { font-size: 15px; }
+  .nm-project-detail-cover img { max-height: 55vh; }
+  .nm-project-detail-cover figcaption { padding: 8px 20px 0; }
+  .nm-project-detail-sections { padding: 25px 20px 0; }
+  .nm-project-detail-section { padding: 32px 0; grid-template-columns: 1fr; gap: 18px; }
+  .nm-project-detail-section h2, .nm-project-detail-cta h2 { font-size: 12px; }
+  .nm-project-detail-copy p, .nm-project-detail-copy li { font-size: 15px; }
+  .nm-project-detail-cta { padding: 45px 20px 0; align-items: flex-start; flex-direction: column; gap: 20px; }
+}

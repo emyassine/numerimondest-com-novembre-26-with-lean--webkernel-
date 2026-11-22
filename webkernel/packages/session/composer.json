@@ -1,0 +1,40 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "webkernel/session",
+    "description": "Secure native PHP session lifecycle and data management for Webkernel.",
+    "type": "library",
+    "license": "proprietary",
+    "version": "0.12.0",
+    "require": {
+        "php": ">=8.5.12",
+        "webkernel/accounts": "^0.12.0",
+        "webkernel/cache": "^0.12.0",
+        "webkernel/config": "self.version",
+        "webkernel/container": "^0.12.0",
+        "webkernel/cookie": "^0.12.0",
+        "webkernel/cryptography": "^0.12.0",
+        "webkernel/database": "^0.12.0",
+        "webkernel/filesystem": "^0.12.0",
+        "webkernel/http-foundation": "^0.12.0",
+        "webkernel/route": "^0.12.0",
+        "webkernel/service-provider": "^0.12.0",
+        "webkernel/utilities": "^0.12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webkernel\\Session\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Webkernel\\Session\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "webkernel": {
+            "package-declaration": "Webkernel\\Session\\Providers\\SessionPDeclaration",
+            "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+            "lifecycle": []
+        }
+    }
+}

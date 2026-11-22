@@ -1,0 +1,27 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "webkernel/service-provider",
+    "description": "Shared declarative service provider contract for Webkernel packages.",
+    "type": "library",
+    "license": "proprietary",
+    "version": "0.12.0",
+    "require": {
+        "php": ">=8.5.12",
+        "webkernel/view": "^0.12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webkernel\\ServiceProvider\\": "src/"
+        },
+        "classmap": [
+            "src/ServiceProvider.php"
+        ]
+    },
+    "extra": {
+        "webkernel": {
+            "package-declaration": "Webkernel\\ServiceProvider\\Providers\\ServiceProviderPDeclaration",
+            "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+            "lifecycle": []
+        }
+    }
+}

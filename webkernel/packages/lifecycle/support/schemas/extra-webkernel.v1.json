@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+  "title": "Webkernel Package Schema v1",
+  "description": "Schema for extra.webkernel in composer.json — Webkernel lifecycle plugin.",
+  "type": "object",
+  "definitions": {
+    "localizedText": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^[a-z]{2,3}(?:-[A-Z]{2})?$" },
+      "additionalProperties": { "type": "string" }
+    },
+    "packageAsset": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$",
+      "description": "Package-relative path to a distributable visual asset."
+    },
+    "eventTarget": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*(\\\\[A-Za-z_][A-Za-z0-9_]*)*(::[A-Za-z_][A-Za-z0-9_]*)?$"
+    },
+    "eventTargets": {
+      "oneOf": [
+        { "$ref": "#/definitions/eventTarget" },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/eventTarget" }
+        }
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string", "minLength": 1 },
+    "provider": {
+      "type": "string",
+      "minLength": 1,
+      "description": "FQCN of the Webkernel ServiceProvider for this package."
+    },
+    "package-declaration": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*(\\\\[A-Za-z_][A-Za-z0-9_]*)*$",
+      "description": "Autoloadable PHP class extending Webkernel\\Packages\\PackagesMetadatas."
+    },
+    "module": {
+      "type": "string",
+      "description": "Parent module reference (vendor/name) — required for feature package types.",
+      "pattern": "^[a-z0-9_-]+/[a-z0-9_-]+$"
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["check", "on-fail"],
+            "additionalProperties": false,
+            "properties": {
+              "check": { "type": "string", "pattern": "^\\s*PHP_VERSION_ID\\s*(===|==|!==|!=|<=|>=|<|>)\\s*[0-9]+\\s*$", "description": "PHP_VERSION_ID comparison to an integer, for example PHP_VERSION_ID < 80500. True means the check failed." },
+              "on-fail": {
+                "type": "object",
+                "required": ["type", "message"],
+                "additionalProperties": false,
+                "properties": {
+                  "type": { "type": "string", "enum": ["info", "warning", "danger"] },
+                  "message": { "type": "string", "minLength": 1 }
+                }
+              },
+              "fix": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "events": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "pre-install-cmd":           { "$ref": "#/definitions/eventTargets" },
+            "post-install-cmd":          { "$ref": "#/definitions/eventTargets" },
+            "pre-update-cmd":            { "$ref": "#/definitions/eventTargets" },
+            "post-update-cmd":           { "$ref": "#/definitions/eventTargets" },
+            "pre-autoload-dump":         { "$ref": "#/definitions/eventTargets" },
+            "post-autoload-dump":        { "$ref": "#/definitions/eventTargets" },
+            "post-root-package-install": { "$ref": "#/definitions/eventTargets" },
+            "post-create-project-cmd":   { "$ref": "#/definitions/eventTargets" }
+          }
+        },
+        "actions": {
+          "type": "array",
+          "description": "Ordered class names implementing LifecycleActionContract. Names may be package-local when the package has one PSR-4 namespace. One action = one responsibility.",
+          "items": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*(\\\\[A-Za-z_][A-Za-z0-9_]*)*$" }
+        }
+      }
+    },
+    "x-monorepo": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "package-repos": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

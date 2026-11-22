@@ -1,0 +1,57 @@
+{
+    "name": "webkernel/lifecycle",
+    "description": "Webkernel Lifecycle Composer plugin, API, and execution engine.",
+    "type": "composer-plugin",
+    "license": "proprietary",
+    "version": "0.12.0",
+    "authors": [
+        {
+            "name": "El Moumen Yassine",
+            "email": "yassine@numerimondes.com",
+            "role": "Author"
+        }
+    ],
+    "require": {
+        "php": ">=8.5.12",
+        "composer-plugin-api": "^2.9",
+        "webkernel/service-provider": "^0.12.0",
+        "webkernel/utilities": "^0.12.0",
+        "webkernel/utilities-json-schema": "^0.12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webkernel\\Lifecycle\\": "src/"
+        },
+        "files": [
+            "load.lifecycle.functions.php"
+        ]
+    },
+    "extra": {
+        "class": "Webkernel\\Lifecycle\\Plugin\\LCPlugin",
+        "webkernel": {
+            "package-declaration": "Webkernel\\Lifecycle\\Providers\\LifecyclePDeclaration",
+            "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+            "lifecycle": {
+                "checks": [
+                    {
+                        "check": "PHP_VERSION_ID < 80500",
+                        "on-fail": {
+                            "type": "danger",
+                            "message": "PHP >= 8.5 is required."
+                        },
+                        "fix": "sudo apt install php8.5"
+                    }
+                ],
+                "events": {
+                    "post-autoload-dump": [
+                        "Webkernel\\Lifecycle\\Workers\\EventSetBasePath",
+                        "Webkernel\\Lifecycle\\Workers\\EventPostAutoloadDump"
+                    ],
+                    "pre-install-cmd": "Webkernel\\Lifecycle\\Workers\\EventDependencyCheck",
+                    "pre-update-cmd": "Webkernel\\Lifecycle\\Workers\\EventDependencyCheck"
+                },
+                "actions": []
+            }
+        }
+    }
+}

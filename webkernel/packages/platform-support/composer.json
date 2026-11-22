@@ -1,0 +1,50 @@
+{
+    "name": "webkernel/platform-support",
+    "description": "Core support services and UI primitives for the Webkernel Platform packages.",
+    "version": "5.9.0",
+    "license": "proprietary",
+    "homepage": "https://www.webkernelphp.com",
+    "require": {
+        "php": ">=8.5.12",
+        "composer-runtime-api": "^2.1",
+        "composer/class-map-generator": "^1.6",
+        "ext-intl": "*",
+        "league/uri-components": "^7.0",
+        "symfony/console": "^7.0|^8.0",
+        "symfony/html-sanitizer": "^7.0|^8.0",
+        "webkernel/accounts": "^0.12.0",
+        "webkernel/service-provider": "^0.12.0",
+        "webkernel/code-generator": "^0.12.0",
+        "webkernel/console": "^0.12.0",
+        "webkernel/container": "^0.12.0",
+        "webkernel/database": "^0.12.0",
+        "webkernel/events": "^0.12.0",
+        "webkernel/filesystem": "^0.12.0",
+        "webkernel/http-foundation": "^0.12.0",
+        "webkernel/http-security-csrf": "^0.12.0",
+        "webkernel/i18n": "^0.12.0",
+        "webkernel/imagery": "^0.12.0",
+        "webkernel/markdown": "^0.12.0",
+        "webkernel/orm": "^0.12.0",
+        "webkernel/utilities": "^0.12.0",
+        "webkernel/view": "^0.12.0"
+    },
+    "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
+        "psr-4": {
+            "Webkernel\\Platform\\Support\\": "src"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "webkernel": {
+            "provider": "Webkernel\\Platform\\Support\\Providers\\SupportWebkernelProvider"
+        }
+    }
+}

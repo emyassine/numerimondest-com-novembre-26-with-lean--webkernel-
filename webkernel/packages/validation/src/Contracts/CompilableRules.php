@@ -1,0 +1,22 @@
+<?php declare(strict_types=1);
+//> This file is part of Webkernel.
+//> (c) 2025 - 2027 Numerimondes, El Moumen Yassine
+//> Yassine El Moumen <yassine@numerimondes.com> | <platform@webkernelphp.com>
+//> For the full copyright and license information, please view the LICENSE
+//> file that was distributed with this source code.
+
+namespace Webkernel\Validation\Contracts;
+
+interface CompilableRules
+{
+    /**
+     * Compile the object into usable rules.
+     *
+     * @param  string  $attribute
+     * @param  mixed  $value
+     * @param  mixed  $data
+     * @param  mixed  $context
+     * @return \stdClass
+     */
+    public function compile($attribute, $value, $data = null, $context = null);
+}

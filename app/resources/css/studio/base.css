@@ -1,0 +1,70 @@
+:root {
+  --nm-ink: #111;
+  --nm-muted: rgba(17, 17, 17, .56);
+  --nm-line: rgba(17, 17, 17, .2);
+  --nm-body: Simon, Arial, sans-serif;
+  --nm-title: BrownLLMain, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+  background: var(--nm-paper);
+}
+
+body {
+  margin: 0;
+  color: var(--nm-ink);
+  background: var(--nm-paper);
+  font-family: var(--nm-title);
+  font-size: 18px;
+  line-height: 1.22;
+  letter-spacing: .02em;
+}
+
+a { color: var(--primary-600); }
+a:hover { color: inherit; }
+a:focus-visible {
+  outline: 2px solid var(--primary-600);
+  outline-offset: 3px;
+}
+
+/* Keep inline content links visibly distinct from surrounding copy. */
+.nm-page p a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .2em;
+}
+
+.nm-icon-arrow {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  vertical-align: -.12em;
+}
+
+.nm-icon-arrow--large {
+  align-self: flex-end;
+  width: 18px;
+  height: 18px;
+  vertical-align: initial;
+}
+
+::-webkit-scrollbar {
+  transition: all 1s ease;
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  transition: all 1s ease;
+  background: var(--nm-paper);
+}
+
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb:hover {
+  transition: all 1s ease;
+  background: rgba(17, 17, 17, 1);
+}

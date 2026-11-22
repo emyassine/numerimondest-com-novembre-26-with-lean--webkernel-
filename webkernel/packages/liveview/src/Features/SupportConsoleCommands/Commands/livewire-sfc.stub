@@ -1,0 +1,13 @@
+<?php
+
+use Webkernel\Liveview\Component;
+
+new class extends Component
+{
+    //
+};
+?>
+
+<div>
+    {{-- [quote] --}}
+</div>

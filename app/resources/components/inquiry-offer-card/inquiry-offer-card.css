@@ -1,0 +1,33 @@
+.nm-inquiry-offer-card {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  transition: opacity .18s ease, transform .18s ease;
+}
+.nm-inquiry-offer-card.is-removing { opacity: 0; }
+.nm-inquiry-offer-card > .fi-section-content-ctn > .fi-section-content { padding: 13px 48px 13px 15px; }
+.nm-inquiry-offer-card article { position: static; }
+
+.nm-inquiry-offer-card-link { display: block; color: var(--nm-ink); text-decoration: none; }
+.nm-inquiry-offer-card-category { margin: 0 0 5px; color: #77746e; font: 400 8px/1.3 var(--nm-title); letter-spacing: .13em; text-transform: uppercase; }
+.nm-inquiry-offer-card h3 { margin: 0 0 5px; font: 400 11px/1.35 var(--nm-title); letter-spacing: .055em; text-transform: uppercase; }
+.nm-inquiry-offer-card-meta { margin: 0; display: -webkit-box; overflow: hidden; color: #77746e; font: 400 10px/1.4 var(--nm-body); -webkit-box-orient: vertical; -webkit-line-clamp: 1; }
+.nm-inquiry-offer-card .nm-shortlist-button--compact { position: absolute; top: 50%; right: 12px; transform: translateY(-50%); }
+.nm-inquiry-offer-card .nm-shortlist-button--compact button { min-height: 25px; padding: 5px 0 5px 8px; border: 0; border-radius: 0; color: #77746e; background: transparent; font-size: 8px; box-shadow: none; }
+.nm-inquiry-offer-card .nm-shortlist-button--compact button:hover,
+.nm-inquiry-offer-card .nm-shortlist-button--compact button[aria-pressed="true"] { color: var(--primary-600); background: transparent; }
+.nm-inquiry-offer-card:hover h3,.nm-inquiry-offer-card:focus-within h3 { color: var(--primary-600); }
+
+.nm-shortlist-page .nm-inquiry-offer-grid,
+.nm-service-inquiry .nm-inquiry-offer-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+
+@media (max-width: 700px) {
+  .nm-shortlist-page .nm-inquiry-offer-grid,
+  .nm-service-inquiry .nm-inquiry-offer-grid { grid-template-columns: 1fr; gap: 8px; }
+  .nm-inquiry-offer-card > .fi-section-content-ctn > .fi-section-content { padding: 12px 45px 12px 13px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nm-inquiry-offer-card { transition: none; }
+}

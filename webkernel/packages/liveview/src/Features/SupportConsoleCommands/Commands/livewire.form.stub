@@ -1,0 +1,11 @@
+<?php
+
+namespace DummyNamespace;
+
+use Webkernel\Liveview\Attributes\Validate;
+use Webkernel\Liveview\Form;
+
+class DummyClass extends Form
+{
+    //
+}

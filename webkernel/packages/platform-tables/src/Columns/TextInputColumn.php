@@ -1,0 +1,363 @@
+<?php
+
+namespace Webkernel\Platform\Tables\Columns;
+
+use BackedEnum;
+use Closure;
+use Webkernel\Platform\Forms\Components\Concerns\HasExtraInputAttributes;
+use Webkernel\Platform\Forms\Components\Concerns\HasInputMode;
+use Webkernel\Platform\Forms\Components\Concerns\HasStep;
+use Webkernel\Platform\Support\Components\Contracts\HasEmbeddedView;
+use Webkernel\Platform\Support\Enums\Alignment;
+use Webkernel\Platform\Support\Facades\PlatformAsset;
+use Webkernel\Platform\Support\RawJs;
+use Webkernel\Platform\Support\View\ComponentAttributeBag;
+use Webkernel\Platform\Support\View\ComponentAttributeBag as PlatformComponentAttributeBag;
+use Webkernel\Platform\Support\View\Components\InputComponent\WrapperComponent\IconComponent;
+use Webkernel\Platform\Tables\Columns\Contracts\Editable;
+use Webkernel\Platform\Tables\Table;
+use Webkernel\View\Htmlable;
+use Webkernel\View\Js;
+
+use function Webkernel\Platform\Support\generate_icon_html;
+
+class TextInputColumn extends Column implements Editable, HasEmbeddedView
+{
+    // Security: This column saves directly without checking Laravel
+    // Model Policies. Use `disabled()` to restrict editing
+    // based on your own authorization logic.
+
+    use Concerns\CanBeValidated;
+    use Concerns\CanUpdateState;
+    use HasExtraInputAttributes;
+    use HasInputMode;
+    use HasStep;
+
+    protected string | RawJs | Closure | null $mask = null;
+
+    protected string | Closure | null $type = null;
+
+    protected string | Htmlable | Closure | null $suffixLabel = null;
+
+    protected string | Htmlable | Closure | null $prefixLabel = null;
+
+    protected string | BackedEnum | Htmlable | Closure | null $prefixIcon = null;
+
+    /**
+     * @var string | array<string> | Closure | null
+     */
+    protected string | array | Closure | null $prefixIconColor = null;
+
+    protected string | BackedEnum | Htmlable | Closure | null $suffixIcon = null;
+
+    /**
+     * @var string | array<string> | Closure | null
+     */
+    protected string | array | Closure | null $suffixIconColor = null;
+
+    protected bool | Closure $isPrefixInline = false;
+
+    protected bool | Closure $isSuffixInline = false;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->disabledClick();
+    }
+
+    public function type(string | Closure | null $type): static
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getType(): string
+    {
+        return $this->evaluate($this->type) ?? 'text';
+    }
+
+    public function mask(string | RawJs | Closure | null $mask): static
+    {
+        $this->mask = $mask;
+
+        return $this;
+    }
+
+    public function getMask(): string | RawJs | null
+    {
+        return $this->evaluate($this->mask);
+    }
+
+    public function prefix(string | Htmlable | Closure | null $label, bool | Closure $isInline = false): static
+    {
+        $this->prefixLabel = $label;
+        $this->inlinePrefix($isInline);
+
+        return $this;
+    }
+
+    public function suffix(string | Htmlable | Closure | null $label, bool | Closure $isInline = false): static
+    {
+        $this->suffixLabel = $label;
+        $this->inlineSuffix($isInline);
+
+        return $this;
+    }
+
+    public function inlinePrefix(bool | Closure $isInline = true): static
+    {
+        $this->isPrefixInline = $isInline;
+
+        return $this;
+    }
+
+    public function inlineSuffix(bool | Closure $isInline = true): static
+    {
+        $this->isSuffixInline = $isInline;
+
+        return $this;
+    }
+
+    public function prefixIcon(string | BackedEnum | Htmlable | Closure | null $icon, bool | Closure $isInline = false): static
+    {
+        $this->prefixIcon = $icon;
+        $this->inlinePrefix($isInline);
+
+        return $this;
+    }
+
+    /**
+     * @param  string | array<string> | Closure | null  $color
+     */
+    public function prefixIconColor(string | array | Closure | null $color = null): static
+    {
+        $this->prefixIconColor = $color;
+
+        return $this;
+    }
+
+    public function suffixIcon(string | BackedEnum | Htmlable | Closure | null $icon, bool | Closure $isInline = false): static
+    {
+        $this->suffixIcon = $icon;
+        $this->inlineSuffix($isInline);
+
+        return $this;
+    }
+
+    /**
+     * @param  string | array<string> | Closure | null  $color
+     */
+    public function suffixIconColor(string | array | Closure | null $color = null): static
+    {
+        $this->suffixIconColor = $color;
+
+        return $this;
+    }
+
+    public function getPrefixLabel(): string | Htmlable | null
+    {
+        return $this->evaluate($this->prefixLabel);
+    }
+
+    public function getSuffixLabel(): string | Htmlable | null
+    {
+        return $this->evaluate($this->suffixLabel);
+    }
+
+    public function getPrefixIcon(): string | BackedEnum | Htmlable | null
+    {
+        return $this->evaluate($this->prefixIcon);
+    }
+
+    public function getSuffixIcon(): string | BackedEnum | Htmlable | null
+    {
+        return $this->evaluate($this->suffixIcon);
+    }
+
+    /**
+     * @return string | array<string> | null
+     */
+    public function getPrefixIconColor(): string | array | null
+    {
+        return $this->evaluate($this->prefixIconColor);
+    }
+
+    /**
+     * @return string | array<string> | null
+     */
+    public function getSuffixIconColor(): string | array | null
+    {
+        return $this->evaluate($this->suffixIconColor);
+    }
+
+    public function isPrefixInline(): bool
+    {
+        return (bool) $this->evaluate($this->isPrefixInline);
+    }
+
+    public function isSuffixInline(): bool
+    {
+        return (bool) $this->evaluate($this->isSuffixInline);
+    }
+
+    public function toEmbeddedHtml(): string
+    {
+        $isDisabled = $this->isDisabled();
+        $state = $this->getState();
+        $relatedRecord = $this->getRelatedRecord();
+        $mask = $this->getMask();
+
+        $alignment = $this->getAlignment() ?? Alignment::Start;
+
+        if (! $alignment instanceof Alignment) {
+            $alignment = filled($alignment) ? (Alignment::tryFrom($alignment) ?? $alignment) : null;
+        }
+
+        $type = filled($mask) ? 'text' : $this->getType();
+
+        $prefixIcon = $this->getPrefixIcon();
+        $prefixIconColor = $this->getPrefixIconColor();
+        $prefixLabel = $this->getPrefixLabel();
+        $suffixIcon = $this->getSuffixIcon();
+        $suffixIconColor = $this->getSuffixIconColor();
+        $suffixLabel = $this->getSuffixLabel();
+        $isPrefixInline = $this->isPrefixInline();
+        $isSuffixInline = $this->isSuffixInline();
+
+        $hasPrefix = $prefixIcon || filled($prefixLabel);
+        $hasSuffix = $suffixIcon || filled($suffixLabel);
+
+        $attributes = $this->getExtraAttributeBag()
+            ->merge([
+                'x-load' => true,
+                'x-load-src' => PlatformAsset::getAlpineComponentSrc('columns/text-input', 'webkernel/platform-tables'),
+                'x-data' => 'textInputTableColumn({
+                    messages: ' . Js::from($this->getUpdateStateMessages()) . ',
+                    name: ' . Js::from($this->getName()) . ',
+                    recordKey: ' . Js::from($this->getRecordKey()) . ',
+                    state: ' . Js::from($state) . ',
+                })',
+                'x-id' => "['table-column-error']",
+                'x-on:click.capture' => 'blockEdit($event)',
+                'x-on:keydown.capture' => 'blockEdit($event)',
+            ], escape: false)
+            ->class([
+                'fi-ta-text-input',
+                'fi-inline' => $this->isInline(),
+            ]);
+
+        $inputAttributes = $this->getExtraInputAttributeBag()
+            ->merge([
+                'aria-label' => e(trim(strip_tags(($ariaLabel = $this->getLabel()) instanceof Htmlable ? $ariaLabel->toHtml() : $ariaLabel)), doubleEncode: false),
+                'disabled' => $isDisabled,
+                'wire:loading.attr' => 'disabled',
+                'wire:target' => implode(',', Table::LOADING_TARGETS),
+                'x-bind:aria-invalid' => "error ? 'true' : " . Js::from($this->getExtraInputAttributeBag()->get('aria-invalid')),
+                'x-bind:aria-busy' => "isLoading ? 'true' : " . Js::from($this->getExtraInputAttributeBag()->get('aria-busy')),
+                'x-bind:aria-describedby' => 'getAccessibilityAttributes(' . Js::from($this->getExtraInputAttributeBag()->only('aria-describedby')->getAttributes()) . ")[ 'aria-describedby' ]",
+                'x-bind:disabled' => $isDisabled ? null : 'isLoading',
+                'x-on:input' => 'clearError()',
+                'inputmode' => $this->getInputMode(),
+                'placeholder' => filled($placeholder = $this->getPlaceholder()) ? e($placeholder) : null,
+                'step' => $this->getStep(),
+                'type' => $type,
+                'x-mask' . ($mask instanceof RawJs ? ':dynamic' : '') => filled($mask) ? $mask : null,
+                'x-tooltip' => 'error === undefined ? ' . (filled($tooltip = $this->getTooltip($state, $relatedRecord))
+                    ? '{
+                        content: ' . Js::from($tooltip) . ',
+                        theme: $store.theme,
+                        allowHTML: ' . Js::from($tooltip instanceof Htmlable) . ',
+                        aria: { content: \'auto\' },
+                    }'
+                    : 'false') . ' : {
+                        content: error,
+                        theme: $store.theme,
+                        allowHTML: false,
+                        aria: { content: null },
+                    }',
+            ], escape: false)
+            ->class([
+                'fi-input',
+                ($alignment instanceof Alignment) ? "fi-align-{$alignment->value}" : (is_string($alignment) ? $alignment : ''),
+            ]);
+
+        ob_start(); ?>
+
+        <div
+            wire:ignore.self
+            <?= $attributes->toHtml() ?>
+        >
+            <input type="hidden" value="<?= e($state) ?>" x-ref="serverState" />
+
+            <div
+                x-bind:class="{
+                    'fi-disabled': isLoading || <?= Js::from($isDisabled) ?>,
+                    'fi-invalid': error !== undefined,
+                }"
+                x-on:click.prevent.stop
+                class="fi-input-wrp"
+            >
+                <?php if ($hasPrefix) { ?>
+                    <div
+                        class="fi-input-wrp-prefix fi-input-wrp-prefix-has-content <?= $isPrefixInline ? 'fi-inline' : '' ?> <?= filled($prefixLabel) ? 'fi-input-wrp-prefix-has-label' : '' ?>"
+                    >
+                        <?= generate_icon_html($prefixIcon, null, (new PlatformComponentAttributeBag)
+                            ->color(IconComponent::class, $prefixIconColor))?->toHtml() ?>
+
+                        <?php if (filled($prefixLabel)) { ?>
+                            <span class="fi-input-wrp-label">
+                                <?= e($prefixLabel) ?>
+                            </span>
+                        <?php } ?>
+                    </div>
+                <?php } ?>
+
+                <div class="fi-input-wrp-content-ctn">
+                    <input
+                        <?php if (in_array($type, ['color'])) { ?>
+                            onclick="if (typeof this.showPicker === 'function') { this.showPicker() }"
+                        <?php } ?>
+                        x-model.lazy="state"
+                        <?= $inputAttributes->toHtml() ?>
+                    />
+                </div>
+
+                <?php if ($hasSuffix) { ?>
+                    <div
+                        class="fi-input-wrp-suffix <?= $isSuffixInline ? 'fi-inline' : '' ?> <?= filled($suffixLabel) ? 'fi-input-wrp-suffix-has-label' : '' ?>"
+                    >
+                        <?php if (filled($suffixLabel)) { ?>
+                            <span class="fi-input-wrp-label">
+                                <?= e($suffixLabel) ?>
+                            </span>
+                        <?php } ?>
+
+                        <?= generate_icon_html($suffixIcon, null, (new PlatformComponentAttributeBag)
+                            ->color(IconComponent::class, $suffixIconColor))?->toHtml() ?>
+                    </div>
+                <?php } ?>
+            </div>
+
+            <p
+                x-cloak
+                x-show="error"
+                x-bind:id="$id('table-column-error')"
+                x-ref="error"
+                x-text="error"
+                class="fi-sr-only"
+            ></p>
+
+            <p
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+                x-text="status"
+                class="fi-sr-only"
+            ></p>
+        </div>
+
+        <?php return ob_get_clean();
+    }
+}

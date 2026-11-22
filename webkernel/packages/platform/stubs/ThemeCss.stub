@@ -1,0 +1,4 @@
+@import '{{ platformThemeCssPath }}';
+
+@source '../../../../app/Platform/{{ classDirectory }}**/*';
+@source '../../../../resources/views/platform/{{ viewDirectory }}**/*';

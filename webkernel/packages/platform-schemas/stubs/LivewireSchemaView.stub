@@ -1,0 +1,5 @@
+<div>
+    {{ $this->content }}
+
+    <x-webkernel-actions::modals />
+</div>

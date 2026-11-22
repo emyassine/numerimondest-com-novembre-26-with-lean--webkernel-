@@ -1,0 +1,46 @@
+{
+    "name": "webkernel/utilities",
+    "description": "Shared utilities for Webkernel packages.",
+    "type": "library",
+    "license": "proprietary",
+    "version": "0.12.0",
+    "authors": [
+        {
+            "name": "El Moumen Yassine",
+            "email": "yassine@numerimondes.com",
+            "role": "Author"
+        }
+    ],
+    "require": {
+        "php": ">=8.5.12",
+        "symfony/polyfill-php86": "^1.43",
+        "symfony/uid": "^8.1",
+        "symfony/var-dumper": "^8.1",
+        "webkernel/container": "^0.12.0",
+        "webkernel/datetime": "self.version",
+        "webkernel/http-foundation": "^0.12.0",
+        "webkernel/identifiers": "self.version",
+        "webkernel/markdown": "self.version",
+        "webkernel/queue": "^0.12.0",
+        "webkernel/route": "^0.12.0",
+        "webkernel/serialization": "^0.12.0",
+        "webkernel/service-provider": "^0.12.0",
+        "webkernel/view": "^0.12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webkernel\\Utilities\\": "src/"
+        },
+        "files": [
+            "src/helpers.php",
+            "src/functions.php"
+        ]
+    },
+    "extra": {
+        "webkernel": {
+            "package-declaration": "Webkernel\\Utilities\\Providers\\UtilitiesPDeclaration",
+            "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+            "lifecycle": []
+        }
+    }
+}

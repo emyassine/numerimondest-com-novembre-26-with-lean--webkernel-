@@ -1,0 +1,21 @@
+{
+    "name": "webkernel/datetime",
+    "description": "Localized date and time operations for Webkernel.",
+    "type": "library",
+    "version": "0.12.0",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.5.12",
+        "psr/clock": "^1.0",
+        "symfony/clock": "^8.1",
+        "symfony/translation": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webkernel\\DateTime\\": "src/"
+        },
+        "classmap": [
+            "src/"
+        ]
+    }
+}

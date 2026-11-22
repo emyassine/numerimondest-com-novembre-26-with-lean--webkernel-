@@ -1,0 +1,26 @@
+{
+    "name": "webkernel/mail",
+    "description": "Mail services for Webkernel.",
+    "type": "library",
+    "version": "0.12.0",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.5.12",
+        "webkernel/config": "^0.12.0",
+        "webkernel/container": "^0.12.0",
+        "webkernel/filesystem": "^0.12.0",
+        "webkernel/http-foundation": "^0.12.0",
+        "webkernel/i18n": "^0.12.0",
+        "webkernel/markdown": "^0.12.0",
+        "webkernel/notifications": "^0.12.0",
+        "webkernel/queue": "^0.12.0",
+        "webkernel/testing": "^0.12.0",
+        "webkernel/utilities": "^0.12.0",
+        "webkernel/view": "^0.12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webkernel\\Mail\\": "src/"
+        }
+    }
+}

@@ -1,0 +1,10 @@
+@srs-theme nm-studio {
+  primary: blue;
+  --nm-paper: var(--nm-studio-background, #f1f5f9);
+  --surface-canvas: var(--nm-paper);
+  --surface-panel: #ffffff;
+  --text-primary: #111111;
+  --text-secondary: rgba(17, 17, 17, 0.56);
+  --border-default: rgba(17, 17, 17, 0.2);
+  --font-display: Romie, Georgia, serif;
+}

@@ -1,0 +1,194 @@
+@props([
+    'badge' => null,
+    'badgeColor' => 'primary',
+    'badgeSize' => null,
+    'color' => 'primary',
+    'disabled' => false,
+    'form' => null,
+    'formId' => null,
+    'href' => null,
+    'icon' => null,
+    'iconAlias' => null,
+    'iconPosition' => null,
+    'iconSize' => null,
+    'keyBindings' => null,
+    'labelSrOnly' => false,
+    'loadingIndicator' => true,
+    'size' => null,
+    'spaMode' => null,
+    'tag' => 'a',
+    'target' => null,
+    'tooltip' => null,
+    'type' => 'button',
+    'weight' => null,
+])
+
+@php
+    use Webkernel\Platform\Support\Enums\FontWeight;
+    use Webkernel\Platform\Support\Enums\IconPosition;
+    use Webkernel\Platform\Support\Enums\IconSize;
+    use Webkernel\Platform\Support\Enums\Size;
+    use Webkernel\Platform\Support\View\ComponentAttributeBag;
+use Webkernel\Platform\Support\View\ComponentAttributeBag as PlatformComponentAttributeBag;
+    use Webkernel\Platform\Support\View\Components\BadgeComponent;
+    use Webkernel\Platform\Support\View\Components\LinkComponent;
+    use Webkernel\View\Htmlable;
+    use Webkernel\View\AttributeBag;
+    use \Webkernel\View\ComponentSlot;
+
+    $attributes = new PlatformComponentAttributeBag($attributes->getAttributes());
+
+    $badgeSize ??= Size::ExtraSmall;
+    $iconPosition ??= IconPosition::Before;
+    $size ??= Size::Medium;
+
+    if (! $iconPosition instanceof IconPosition) {
+        $iconPosition = filled($iconPosition) ? (IconPosition::tryFrom($iconPosition) ?? $iconPosition) : null;
+    }
+
+    if (! $badgeSize instanceof Size) {
+        $badgeSize = filled($badgeSize) ? (Size::tryFrom($badgeSize) ?? $badgeSize) : null;
+    }
+
+    if (! $size instanceof Size) {
+        $size = filled($size) ? (Size::tryFrom($size) ?? $size) : null;
+    }
+
+    if (filled($iconSize) && (! $iconSize instanceof IconSize)) {
+        $iconSize = IconSize::tryFrom($iconSize) ?? $iconSize;
+    }
+
+    $iconSize ??= match ($size) {
+        Size::ExtraSmall, Size::Small => IconSize::Small,
+        default => null,
+    };
+
+    if (! $weight instanceof FontWeight) {
+        $weight = filled($weight) ? (FontWeight::tryFrom($weight) ?? $weight) : null;
+    }
+
+    $wireTarget = $loadingIndicator ? $attributes->whereStartsWith(['wire:target', 'wire:click'])->filter(fn ($value): bool => filled($value))->first() : null;
+
+    $hasLoadingIndicator = filled($wireTarget) || ($type === 'submit' && filled($form));
+
+    if ($hasLoadingIndicator) {
+        $loadingIndicatorTarget = html_entity_decode($wireTarget ?: $form, ENT_QUOTES);
+    }
+
+    $hasTooltip = filled($tooltip);
+
+    $loadingDelay = ($icon || $hasLoadingIndicator)
+        ? config('platform.liveview_loading_delay', 'default')
+        : null;
+@endphp
+
+<{{ $tag }}
+    @if (($tag === 'a') && (! ($disabled && $hasTooltip)))
+        {{ \Webkernel\Platform\Support\generate_href_html($href, $target === '_blank', $spaMode) }}
+    @endif
+    @if ($keyBindings)
+        x-bind:id="$id('key-bindings')"
+        x-mousetrap.global.{{ collect($keyBindings)->map(fn (string $keyBinding): string => str_replace('+', '-', $keyBinding))->implode('.') }}="document.getElementById($el.id)?.click()"
+    @endif
+    @if ($hasTooltip)
+        x-tooltip="{
+            content: @js($tooltip),
+            theme: $store.theme,
+            allowHTML: @js($tooltip instanceof Htmlable),
+        }"
+    @endif
+    {{
+        $attributes
+            ->merge([
+                'aria-disabled' => $disabled ? 'true' : null,
+                // Security: These attributes are rendered without escaping, so the `aria-label` must be escaped here, otherwise an `Htmlable` label could break out of the attribute. `doubleEncode: false` preserves entities that Blade has already escaped in the slot.
+                'aria-label' => $labelSrOnly
+                ? e(trim(strip_tags($slot->toHtml())), doubleEncode: false)
+                : null,
+                'disabled' => $disabled && blank($tooltip),
+                'form' => $formId,
+                'type' => $tag === 'button' ? $type : null,
+                'wire:loading.attr' => $tag === 'button' ? 'aria-disabled' : null,
+                'wire:loading.class' => $tag === 'button' ? $attributes->prepends('fi-disabled') : null,
+                'wire:target' => ($hasLoadingIndicator && $loadingIndicatorTarget) ? $loadingIndicatorTarget : null,
+            ], escape: false)
+            ->when(
+                $disabled && $hasTooltip,
+                fn (ComponentAttributeBag $attributes) => $attributes->filter(
+                    fn (mixed $value, string $key): bool => ! str($key)->startsWith(['href', 'x-on:', 'wire:click']),
+                ),
+            )
+            ->class([
+                'fi-link',
+                'fi-disabled' => $disabled,
+                ($size instanceof Size) ? "fi-size-{$size->value}" : (is_string($size) ? $size : ''),
+                ($weight instanceof FontWeight) ? "fi-font-{$weight->value}" : (is_string($weight) ? $weight : ''),
+            ])
+            ->color(LinkComponent::class, $color)
+    }}
+>
+    @if ($iconPosition === IconPosition::Before)
+        @if ($icon || $iconAlias)
+            {{
+                \Webkernel\Platform\Support\generate_icon_html($icon, $iconAlias, (new Webkernel\Platform\Support\View\ComponentAttributeBag([
+                    'wire:loading.remove.delay.' . $loadingDelay => $hasLoadingIndicator,
+                    'wire:target' => $hasLoadingIndicator ? $loadingIndicatorTarget : false,
+                ])), size: $iconSize)
+            }}
+        @endif
+
+        @if ($hasLoadingIndicator)
+            {{
+                \Webkernel\Platform\Support\generate_loading_indicator_html((new Webkernel\Platform\Support\View\ComponentAttributeBag([
+                    'wire:loading.delay.' . $loadingDelay => '',
+                    'wire:target' => $loadingIndicatorTarget,
+                ])), size: $iconSize)
+            }}
+        @endif
+    @endif
+
+    @if (! $labelSrOnly)
+        <span class="fi-link-label">
+            {{ $slot }}
+        </span>
+    @endif
+
+    @if ($iconPosition === IconPosition::After)
+        @if ($icon || $iconAlias)
+            {{
+                \Webkernel\Platform\Support\generate_icon_html($icon, $iconAlias, (new Webkernel\Platform\Support\View\ComponentAttributeBag([
+                    'wire:loading.remove.delay.' . $loadingDelay => $hasLoadingIndicator,
+                    'wire:target' => $hasLoadingIndicator ? $loadingIndicatorTarget : false,
+                ])), size: $iconSize)
+            }}
+        @endif
+
+        @if ($hasLoadingIndicator)
+            {{
+                \Webkernel\Platform\Support\generate_loading_indicator_html((new Webkernel\Platform\Support\View\ComponentAttributeBag([
+                    'wire:loading.delay.' . $loadingDelay => '',
+                    'wire:target' => $loadingIndicatorTarget,
+                ])), size: $iconSize)
+            }}
+        @endif
+    @endif
+
+    @if (filled($badge))
+        <div class="fi-link-badge-ctn">
+            @if ($badge instanceof ComponentSlot)
+                {{ $badge }}
+            @else
+                <span
+                    {{
+                        (new PlatformComponentAttributeBag)->color(BadgeComponent::class, $badgeColor)->class([
+                            'fi-badge',
+                            ($badgeSize instanceof Size) ? "fi-size-{$badgeSize->value}" : (is_string($badgeSize) ? $badgeSize : ''),
+                        ])
+                    }}
+                >
+                    {{ $badge }}
+                </span>
+            @endif
+        </div>
+    @endif
+</{{ $tag }}>

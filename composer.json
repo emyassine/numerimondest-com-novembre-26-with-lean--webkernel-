@@ -1,0 +1,56 @@
+{
+  "$schema": "https://getcomposer.org/schema.json",
+  "name": "numerimondes/website",
+  "description": "Numerimondes website, built with Webkernel.",
+  "type": "project",
+  "license": "proprietary",
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "config": {
+    "vendor-dir": "internal/dependencies",
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "allow-plugins": {
+      "webkernel/lifecycle": true
+    },
+    "platform": {
+      "php": "8.5.12"
+    }
+  },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../dependable-ui/dist/php-webkernel",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
+      "url": "webkernel/packages/*",
+      "options": {
+        "symlink": false
+      }
+    }
+  ],
+  "require": {
+    "dependable-ui/dependable-ui": "^0.1.9",
+    "php": ">=8.5.12",
+    "webkernel/simple-site": "^0.12.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/src/"
+    },
+    "files": [
+      "app/helpers.php"
+    ]
+  },
+  "extra": {
+    "webkernel": {
+      "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+      "package-declaration": "App\\Providers\\AppPDeclaration",
+      "lifecycle": {}
+    }
+  }
+}

@@ -1,0 +1,47 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Webkernel\Utilities\JsonSchema\Constraints\Drafts\Draft07;
+
+use Webkernel\Utilities\JsonSchema\ConstraintError;
+use Webkernel\Utilities\JsonSchema\Constraints\ConstraintInterface;
+use Webkernel\Utilities\JsonSchema\Entity\ErrorBagProxy;
+use Webkernel\Utilities\JsonSchema\Entity\JsonPointer;
+
+class ContainsConstraint implements ConstraintInterface
+{
+    use ErrorBagProxy;
+
+    /** @var Factory */
+    private $factory;
+
+    public function __construct(?Factory $factory = null)
+    {
+        $this->factory = $factory ?: new Factory();
+        $this->initialiseErrorBag($this->factory);
+    }
+
+    public function check(&$value, $schema = null, ?JsonPointer $path = null, $i = null): void
+    {
+        if (!property_exists($schema, 'contains')) {
+            return;
+        }
+
+        $properties = [];
+        if (!is_array($value)) {
+            return;
+        }
+
+        foreach ($value as $propertyName => $propertyValue) {
+            $schemaConstraint = $this->factory->createInstanceFor('schema');
+
+            $schemaConstraint->check($propertyValue, $schema->contains, $path, $i);
+            if ($schemaConstraint->isValid()) {
+                return;
+            }
+        }
+
+        $this->addError(ConstraintError::Contains, $path, ['contains' => $schema->contains]);
+    }
+}

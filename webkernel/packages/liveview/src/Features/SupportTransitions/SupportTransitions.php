@@ -1,0 +1,21 @@
+<?php
+
+namespace Webkernel\Liveview\Features\SupportTransitions;
+
+use Webkernel\Liveview\ComponentHook;
+
+class SupportTransitions extends ComponentHook
+{
+    function dehydrate($context)
+    {
+        $type = $this->storeGet('transitionType');
+        $skip = $this->storeGet('transitionSkip');
+
+        if ($type || $skip) {
+            $context->addEffect('transition', array_filter([
+                'type' => $type,
+                'skip' => $skip,
+            ]));
+        }
+    }
+}

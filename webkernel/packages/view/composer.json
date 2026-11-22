@@ -1,0 +1,34 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "webkernel/view",
+    "description": "PHP view resolution and rendering for Webkernel.",
+    "type": "library",
+    "license": "proprietary",
+    "version": "0.12.0",
+    "require": {
+        "php": ">=8.5.12",
+        "webkernel/change-watcher": "self.version",
+        "webkernel/lifecycle": "^0.12.0",
+        "webkernel/package-assets": "^0.12.0",
+        "webkernel/container": "^0.12.0",
+        "webkernel/filesystem": "^0.12.0",
+        "webkernel/http-foundation": "^0.12.0",
+        "webkernel/service-provider": "self.version",
+        "webkernel/utilities": "self.version"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webkernel\\View\\": "src/"
+        },
+        "files": [
+            "functions.php"
+        ]
+    },
+    "extra": {
+        "webkernel": {
+            "package-declaration": "Webkernel\\View\\Providers\\ViewPDeclaration",
+            "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+            "lifecycle": []
+        }
+    }
+}

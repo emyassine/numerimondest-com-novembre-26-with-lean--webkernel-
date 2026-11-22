@@ -1,0 +1,92 @@
+<?php
+
+namespace Webkernel\Platform\Forms\Components;
+
+use Closure;
+use Webkernel\Platform\Forms\Components\CodeEditor\Enums\Language;
+use Webkernel\Platform\Support\Components\Contracts\HasEmbeddedView;
+use Webkernel\Platform\Support\Concerns\CanWrap;
+use Webkernel\Platform\Support\Concerns\HasExtraAlpineAttributes;
+use Webkernel\Platform\Support\Facades\PlatformAsset;
+use Webkernel\View\Js;
+
+class CodeEditor extends Field implements HasEmbeddedView
+{
+    use CanWrap;
+    use HasExtraAlpineAttributes;
+
+    protected ?string $publishedViewOverrideCheckPath = 'webkernel-forms::components.code-editor';
+
+    protected Language | Closure | null $language = null;
+
+    public function language(Language | Closure | null $language): static
+    {
+        $this->language = $language;
+
+        return $this;
+    }
+
+    public function getLanguage(): ?Language
+    {
+        return $this->evaluate($this->language);
+    }
+
+    public function toEmbeddedHtml(): string
+    {
+        $id = $this->getId();
+        $isDisabled = $this->isDisabled();
+        $isLive = $this->isLive();
+        $isLiveOnBlur = $this->isLiveOnBlur();
+        $isLiveDebounced = $this->isLiveDebounced();
+        $label = $this->getLabel();
+        $liveDebounce = $this->getLiveDebounce();
+        $language = $this->getLanguage();
+        $statePath = $this->getStatePath();
+        $livewireKey = $this->getLivewireKey();
+
+        $wrapperAttributes = $this->getExtraAttributeBag()
+            ->class(['fi-fo-code-editor']);
+        $extraAlpineAttributeBag = $this->getExtraAlpineAttributeBag();
+        $accessibilityAttributes = $extraAlpineAttributeBag
+            ->merge($wrapperAttributes->getAttributes(), escape: false)
+            ->merge($this->getAccessibilityAttributes(), escape: false)
+            ->only(['aria-describedby', 'aria-invalid']);
+
+        ob_start(); ?>
+
+        <div hidden data-field-accessibility <?= $accessibilityAttributes->toHtml() ?>></div>
+        <div
+            aria-labelledby="<?= e($id) ?>-label"
+            id="<?= e($id) ?>"
+            role="group"
+            x-load
+            x-load-src="<?= e(PlatformAsset::getAlpineComponentSrc('code-editor', 'webkernel/platform-forms')) ?>"
+            x-data="codeEditorFormComponent({
+                        canWrap: <?= Js::from($this->canWrap()) ?>,
+                        isDisabled: <?= Js::from($isDisabled) ?>,
+                        isLive: <?= Js::from($isLive) ?>,
+                        isLiveDebounced: <?= Js::from($isLiveDebounced) ?>,
+                        isLiveOnBlur: <?= Js::from($isLiveOnBlur) ?>,
+                        label: <?= Js::from($label) ?>,
+                        liveDebounce: <?= Js::from($liveDebounce) ?>,
+                        language: <?= Js::from($language?->value) ?>,
+                        state: $wire.<?= $this->applyStateBindingModifiers("\$entangle('{$statePath}')", isOptimisticallyLive: false) ?>,
+                    })"
+            wire:ignore
+            wire:key="<?= e($livewireKey) ?>.<?= substr(md5(serialize([$isDisabled, $language?->value])), 0, 64) ?>"
+            <?= $extraAlpineAttributeBag->toHtml() ?>
+        >
+            <div x-ref="editor" x-cloak></div>
+        </div>
+
+        <?php $slotHtml = ob_get_clean();
+
+        return $this->wrapEmbeddedHtml(
+            $this->wrapInputHtml(
+                $slotHtml,
+                attributes: $wrapperAttributes,
+            ),
+            labelTag: 'div',
+        );
+    }
+}

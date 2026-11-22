@@ -1,0 +1,47 @@
+<?php declare(strict_types=1);
+//> This file is part of Webkernel.
+//> (c) 2025 - 2027 Numerimondes, El Moumen Yassine
+//> Yassine El Moumen <yassine@numerimondes.com> | <platform@webkernelphp.com>
+//> For the full copyright and license information, please view the LICENSE
+//> file that was distributed with this source code.
+
+/*
+ * This file is part of the league/commonmark package.
+ *
+ * (c) Colin O'Dell <colinodell@gmail.com>
+ *
+ * Original code based on the CommonMark JS reference parser (https://bitly.com/commonmark-js)
+ *  - (c) John MacFarlane
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Webkernel\Markdown\Extension\CommonMark\Parser\Inline;
+
+use \Webkernel\Markdown\Node\Inline\Text;
+use \Webkernel\Markdown\Parser\Inline\InlineParserInterface;
+use \Webkernel\Markdown\Parser\Inline\InlineParserMatch;
+use \Webkernel\Markdown\Parser\InlineParserContext;
+
+final class BangParser implements InlineParserInterface
+{
+    public function getMatchDefinition(): InlineParserMatch
+    {
+        return InlineParserMatch::string('![');
+    }
+
+    public function parse(InlineParserContext $inlineContext): bool
+    {
+        $cursor = $inlineContext->getCursor();
+        $cursor->advanceBy(2);
+
+        $node = new Text('![', ['delim' => true]);
+        $inlineContext->getContainer()->appendChild($node);
+
+        // Add entry to stack for this opener
+        $inlineContext->getDelimiterStack()->addBracket($node, $cursor->getPosition(), true);
+
+        return true;
+    }
+}

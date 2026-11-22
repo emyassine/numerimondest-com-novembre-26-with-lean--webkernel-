@@ -1,0 +1,123 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+//> This file is part of Webkernel.
+//> (c) 2025 - 2027 Numerimondes, El Moumen Yassine
+//> Yassine El Moumen <yassine@numerimondes.com> | <platform@webkernelphp.com>
+//> For the full copyright and license information, please view the LICENSE
+//> file that was distributed with this source code.
+use Webkernel\ChangeWatcher\CacheStore;
+use Webkernel\ChangeWatcher\SourceSnapshot;
+use Webkernel\ChangeWatcher\Watcher;
+use Webkernel\ChangeWatcher\WatchStatus;
+
+$options = getopt('', ['autoload:', 'definitions:', 'cache:', 'interval:', 'once', 'help'], $argument_index);
+
+if (isset($options['help'])) {
+    fwrite(STDOUT, <<<'HELP'
+Usage: change-watcher --definitions=/absolute/watches.php --cache=/absolute/runtime/cache/watcher
+       [--autoload=/absolute/vendor/autoload.php] [--interval=250] [--once]
+
+The definitions file returns a callable accepting a Watcher. It is reloaded when
+its content changes. Paths are explicit; interval is in milliseconds (1..60000).
+Composer's binary proxy supplies the autoloader unless --autoload is provided.
+--once performs one pass and exits with status 1 if any target is not ready.
+Stop continuous monitoring with Ctrl+C or your process supervisor.
+
+HELP);
+    exit(0);
+}
+
+try {
+    if ($options === false || $argument_index < count($argv)) {
+        throw new RuntimeException('Invalid arguments. See --help.');
+    }
+    $autoload = $options['autoload'] ?? ($_composer_autoload_path ?? null);
+    if (
+        !is_string($autoload)
+        || str_contains($autoload, "\0")
+        || preg_match('~^(?:[A-Za-z]:[/\\\\]|/)~', $autoload) !== 1
+        || !is_file($autoload)
+    ) {
+        throw new RuntimeException('Provide --autoload or use the installed Composer binary.');
+    }
+    require_once $autoload;
+
+    $definitions = $options['definitions'] ?? null;
+    $cache_directory = $options['cache'] ?? null;
+    $interval = $options['interval'] ?? '250';
+    if (!is_string($definitions) || !is_string($cache_directory)) {
+        throw new RuntimeException('--definitions and --cache are required absolute paths.');
+    }
+    if (!is_string($interval) || preg_match('/\A[0-9]+\z/', $interval) !== 1 || (int) $interval < 1 || (int) $interval > 60000) {
+        throw new RuntimeException('--interval must be an integer between 1 and 60000 milliseconds.');
+    }
+    $definitions = SourceSnapshot::absolutePath($definitions);
+    $store = new CacheStore($cache_directory);
+    $interval_ms = (int) $interval;
+} catch (Throwable $error) {
+    fwrite(STDERR, $error->getMessage() . "\n");
+    exit(1);
+}
+
+$watcher = null;
+$loaded_hash = null;
+$last_error = null;
+
+do {
+    $ready = false;
+    try {
+        clearstatcache(true);
+        $hash = @hash_file('sha256', $definitions);
+        if ($hash === false) {
+            throw new RuntimeException('Unable to read definitions: ' . $definitions);
+        }
+        if ($hash !== $loaded_hash) {
+            if (function_exists('opcache_invalidate')) {
+                opcache_invalidate($definitions, true);
+            }
+            $register = (static function (string $file): mixed {
+                return require $file;
+            })($definitions);
+            if (!is_callable($register)) {
+                throw new RuntimeException('The definitions file must return a callable accepting a Watcher.');
+            }
+            $candidate = new Watcher($store, revision: $hash);
+            $register($candidate);
+            if (@hash_file('sha256', $definitions) !== $hash) {
+                throw new RuntimeException('Definitions changed while loading; retrying on the next pass.');
+            }
+            $watcher = $candidate;
+            $loaded_hash = $hash;
+        }
+
+        foreach ($watcher->poll() as $id => $publication) {
+            fwrite(STDOUT, '[published] ' . $id . ' ' . $publication->version . "\n");
+        }
+        $messages = [];
+        foreach ($watcher->errors() as $id => $error) {
+            $messages[] = $id . ': ' . $error->getMessage();
+        }
+        if ($messages !== []) {
+            throw new RuntimeException(implode("\n", $messages));
+        }
+        $ready = !in_array(WatchStatus::Pending, $watcher->statuses(), true);
+        $last_error = null;
+        if (!$ready && isset($options['once'])) {
+            fwrite(STDERR, "Sources or registrations changed during compilation; another pass is required.\n");
+        }
+    } catch (Throwable $error) {
+        if ($last_error !== $error->getMessage()) {
+            fwrite(STDERR, $error->getMessage() . "\n");
+            $last_error = $error->getMessage();
+        }
+    }
+
+    if (isset($options['once'])) {
+        exit($ready ? 0 : 1);
+    }
+    $seconds = intdiv($interval_ms, 1000);
+    if ($seconds > 0) {
+        sleep($seconds);
+    }
+    usleep(($interval_ms % 1000) * 1000);
+} while (true);

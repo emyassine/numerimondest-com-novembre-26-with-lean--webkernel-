@@ -1,0 +1,78 @@
+.nm-capability-detail-head {
+  width: min(100%, 1200px);
+  min-height: 60vh;
+  margin: 0 auto;
+  padding: 145px 50px 55px;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 50px;
+  align-items: center;
+}
+
+.nm-capability-detail-kicker {
+  margin: 0 0 18px;
+  color: #77746e;
+  font: 400 10px/1.35 var(--nm-title);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+.nm-capability-detail-head h1 {
+  margin: 0;
+  font: 400 16px/1.5 var(--nm-title);
+  letter-spacing: .19em;
+  text-transform: uppercase;
+}
+
+.nm-capability-detail-summary {
+  max-width: 740px;
+  margin: 0;
+  font: 400 18px/1.35 var(--nm-body);
+}
+
+.nm-capability-detail-cover { margin: 0; }
+.nm-capability-detail-cover img,
+.nm-capability-detail-gallery img { display: block; width: 100%; height: auto; }
+
+.nm-capability-detail-gallery {
+  padding: 50px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+  align-items: start;
+}
+
+.nm-capability-detail-gallery figure { margin: 0; }
+
+.nm-capability-detail-related { padding-top: 45px; }
+
+.nm-capability-detail-related > h2 {
+  margin: 0;
+  padding: 0 50px 30px;
+  font: 400 16px/1.19 var(--nm-title);
+  letter-spacing: .19em;
+  text-transform: uppercase;
+}
+
+.nm-capability-detail-market-link {
+  margin: 35px 50px 0;
+  font: 400 15px/1.4 var(--nm-body);
+}
+
+.nm-capability-detail-market-link a { color: var(--primary-600); text-underline-offset: .2em; }
+
+@media (max-width: 700px) {
+  .nm-capability-detail-head {
+    min-height: 58vh;
+    padding: 120px 20px 40px;
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .nm-capability-detail-kicker { font-size: 8px; }
+  .nm-capability-detail-head h1 { font-size: 12px; }
+  .nm-capability-detail-summary { font-size: 15px; }
+  .nm-capability-detail-gallery { padding: 20px 7px 55px; grid-template-columns: 1fr; gap: 7px; }
+  .nm-capability-detail-related { padding-top: 25px; }
+  .nm-capability-detail-related > h2 { padding: 0 20px 24px; font-size: 12px; }
+  .nm-capability-detail-market-link { margin: 25px 20px 0; font-size: 13px; }
+}

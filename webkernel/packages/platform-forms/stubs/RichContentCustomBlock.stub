@@ -1,0 +1,42 @@
+<?php
+
+namespace {{ namespace }};
+
+use Webkernel\Platform\Actions\Action;
+use Webkernel\Platform\Forms\Components\RichEditor\RichContentCustomBlock;
+
+class {{ class }} extends RichContentCustomBlock
+{
+    public static function getId(): string
+    {
+        return '{{ id }}';
+    }
+
+    public static function getLabel(): string
+    {
+        return '{{ label }}';
+    }
+
+    public static function configureEditorAction(Action $action): Action
+    {
+        return $action
+            ->modalDescription('Configure the {{ modal_label }}')
+            ->schema([
+                //
+            ]);
+    }
+
+    public static function toPreviewHtml(array $config): string
+    {
+        return view('{{ preview_view }}', [
+            //
+        ])->render();
+    }
+
+    public static function toHtml(array $config, array $data): string
+    {
+        return view('{{ view }}', [
+            //
+        ])->render();
+    }
+}

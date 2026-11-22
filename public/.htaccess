@@ -1,0 +1,24 @@
+# ==========================================================
+# numerimondes.com  |  Numerimondes SARL AU
+# Apache document root: this public/ directory.
+# ==========================================================
+
+# Machine-readable reservation headers on every response.
+<IfModule mod_headers.c>
+    Header always set X-Robots-Tag "noai, noimageai"
+    Header always set TDM-Reservation "1"
+    Header always set TDM-Policy "https://numerimondes.com/privacy"
+</IfModule>
+
+# Hard block of known AI and scraping user agents (403).
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTP_USER_AGENT} (GPTBot|OAI-SearchBot|ChatGPT-User|ClaudeBot|Claude-User|Claude-SearchBot|Claude-Web|anthropic-ai|CCBot|Bytespider|Amazonbot|PerplexityBot|Perplexity-User|meta-externalagent|meta-externalfetcher|FacebookBot|cohere-ai|cohere-training-data-crawler|Diffbot|ImagesiftBot|Omgilibot|Omgili|YouBot|Timpibot|AI2Bot|Ai2Bot-Dolma|PetalBot|Scrapy|python-requests|Go-http-client|curl|wget|HTTrack|WebCopier|SiteSucker|libwww-perl) [NC]
+    RewriteRule ^ - [F,L]
+
+    # Serve real files and directories directly; send Webkernel routes to front controller.
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+    RewriteRule ^ index.php [QSA,L]
+</IfModule>

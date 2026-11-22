@@ -1,0 +1,40 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "webkernel/http-security-csrf",
+    "description": "Session-backed CSRF token generation and verification for Webkernel.",
+    "type": "library",
+    "license": "proprietary",
+    "version": "0.12.0",
+    "authors": [
+        {
+            "name": "El Moumen Yassine",
+            "email": "yassine@numerimondes.com",
+            "role": "Author"
+        }
+    ],
+    "require": {
+        "php": ">=8.5.12",
+        "webkernel/config": "self.version",
+        "webkernel/service-provider": "^0.12.0",
+        "webkernel/session": "self.version",
+        "webkernel/view": "self.version"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webkernel\\HttpSecurity\\Csrf\\": "src/",
+            "Webkernel\\": "src/"
+        }
+    },
+    "extra": {
+        "webkernel": {
+            "package-declaration": "Webkernel\\HttpSecurity\\Csrf\\Providers\\HttpSecurityCsrfPDeclaration",
+            "$schema": "https://webkernelphp.com/schemas/webkernel/lifecycle/extra-webkernel.v1.json",
+            "lifecycle": []
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

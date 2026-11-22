@@ -1,0 +1,34 @@
+<?php declare(strict_types=1);
+//> This file is part of Webkernel.
+//> (c) 2025 - 2027 Numerimondes, El Moumen Yassine
+//> Yassine El Moumen <yassine@numerimondes.com> | <platform@webkernelphp.com>
+//> For the full copyright and license information, please view the LICENSE
+//> file that was distributed with this source code.
+
+/**
+ * This file is part of the Carbon package.
+ *
+ * (c) Brian Nesbitt <brian@nesbot.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/*
+ * Authors:
+ * - xuri
+ * - sycuato
+ * - bokideckonja
+ * - Luo Ning
+ * - William Yang (williamyang233)
+ */
+return array_merge(require __DIR__.'/zh_Hans.php', [
+    'formats' => [
+        'LT' => 'HH:mm',
+        'LTS' => 'HH:mm:ss',
+        'L' => 'YYYY/MM/DD',
+        'LL' => 'YYYY年M月D日',
+        'LLL' => 'YYYY年M月D日 A h点mm分',
+        'LLLL' => 'YYYY年M月D日dddd A h点mm分',
+    ],
+]);
