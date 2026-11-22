@@ -97,7 +97,7 @@
         <link rel="stylesheet" href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/css/platform-theme.css') }}">
     @endif
     <title>{{ $title }}</title>
-    <style nonce="{{ $csp_nonce ?? '' }}">
+    <style>
         @font-face { font-family: Simon; src: url('{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/Simon-400-normal.woff') }}') format('woff'); font-style: normal; font-weight: 400; font-display: block; }
         @font-face { font-family: BrownLLMain; src: url('{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/BrownLLMain-400-normal.woff') }}') format('woff'); font-style: normal; font-weight: 400; font-display: block; }
     </style>
@@ -112,9 +112,10 @@
     :currency-options="$currencyOptions"
     :currency-config="$currencyConfig"
     :request-path="$requestPath"
-/>
-<div id="main">{{ $slot }}</div>
-<x-studio::website.footer :studio-config="$studioConfig" :site-prefix="$sitePrefix" />
+    :studio-config="$studioConfig"
+>
+    <div id="main">{{ $slot }}</div>
+</x-studio::website.navigation>
 <script defer src="/assets/dependable-ui/dependable-ui.js"></script>
 @if ($loadWebkernelPlatformTheme)
     <script defer src="{{ \Webkernel\Getters\GetAsset::url('webkernel/platform-support', 'dist/index.js') }}"></script>
