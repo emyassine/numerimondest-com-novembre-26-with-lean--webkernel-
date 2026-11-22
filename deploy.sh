@@ -108,7 +108,7 @@ REMOTE_COMMAND="cd '$PRODUCTION_DEST' && rm -f app/resources/components/website/
 if [[ "$COMPOSER_CHANGED" == true ]]; then
     REMOTE_COMMAND+=" && composer install --no-dev --optimize-autoloader --no-interaction --no-progress"
 fi
-REMOTE_COMMAND+=" && ./platform deploy"
+REMOTE_COMMAND+=" && APP_URL=https://numerimondes.com/ ./platform deploy"
 ssh_remote "$REMOTE_COMMAND"
 if [[ "$COMPOSER_CHANGED" == true ]]; then
     printf 'Composer installed with --no-dev; deployment artifacts rebuilt and activated.\n'
