@@ -132,7 +132,7 @@
     </div>
 </footer>
 
-<style nonce="{{ $csp_nonce ?? '' }}">
+<style>
 .nm-header {
   position: fixed;
   inset: 0 0 auto;
@@ -349,7 +349,7 @@
 }
 </style>
 
-<style nonce="{{ $csp_nonce ?? '' }}">
+<style>
 .nm-footer {
   padding: 25px 50px;
   display: grid;

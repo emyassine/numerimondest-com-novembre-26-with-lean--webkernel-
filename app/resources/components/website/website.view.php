@@ -74,7 +74,7 @@
     <meta name="color-scheme" content="{{ $forceLightMode ? 'light' : 'light dark' }}">
     <meta name="description" content="{{ $description }}">
     <meta name="theme-color" content="{{ $studioBackground }}">
-    <script nonce="{{ $csp_nonce ?? '' }}">try { localStorage.setItem('platform:theme:mode', '{{ $forceLightMode ? 'light' : 'system' }}'); } catch {}</script>
+    <script>try { localStorage.setItem('platform:theme:mode', '{{ $forceLightMode ? 'light' : 'system' }}'); } catch {}</script>
     <link rel="icon" type="image/png" href="{{ simple_site('studio', 'brand/pwa-icon-192.png') }}">
     @foreach ($preloadImages as $preloadImage)
         <link rel="preload" as="image" href="{{ simple_site('studio', $preloadImage) }}">
@@ -123,7 +123,7 @@
 <script defer src="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/js/dependable-ui.themes.js') }}"></script>
 <script defer src="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/js/shortlist.js') }}"></script>
 @if ($forceLightMode)
-    <script nonce="{{ $csp_nonce ?? '' }}">
+    <script>
         const publicThemeRoot = document.documentElement;
         const enforcePublicLightTheme = () => {
             publicThemeRoot.classList.remove('dark');

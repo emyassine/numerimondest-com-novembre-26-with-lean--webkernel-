@@ -104,7 +104,7 @@ done < <(jq -r '.deploys | to_entries[] | select((.value.enable // true) == true
 
 PRODUCTION_DEST="$(jq -er '.deploys.Production.dest' "$CONFIG")"
 printf '\n== Remote production actions ==\n'
-REMOTE_COMMAND="cd '$PRODUCTION_DEST' && mkdir -p runtime/cache/deploy && VERSION=\$(date -u +%Y%m%dT%H%M%S)-\$(od -An -N6 -tx1 /dev/urandom | tr -d ' \\n') && printf '%s\\n' \"\$VERSION\" > runtime/cache/deploy/site-version.tmp && mv runtime/cache/deploy/site-version.tmp runtime/cache/deploy/site-version && printf 'Deploy version: %s\\n' \"\$VERSION\""
+REMOTE_COMMAND="cd '$PRODUCTION_DEST' && rm -f app/resources/components/website/navigation.css app/resources/components/website/footer.css app/resources/css/studio/navigation.css && mkdir -p runtime/cache/deploy && VERSION=\$(date -u +%Y%m%dT%H%M%S)-\$(od -An -N6 -tx1 /dev/urandom | tr -d ' \\n') && printf '%s\\n' \"\$VERSION\" > runtime/cache/deploy/site-version.tmp && mv runtime/cache/deploy/site-version.tmp runtime/cache/deploy/site-version && printf 'Deploy version: %s\\n' \"\$VERSION\""
 if [[ "$COMPOSER_CHANGED" == true ]]; then
     REMOTE_COMMAND+=" && composer install --no-dev --optimize-autoloader --no-interaction --no-progress"
 fi

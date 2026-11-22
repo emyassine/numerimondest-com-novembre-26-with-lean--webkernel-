@@ -35,7 +35,7 @@
     <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/Romie-Medium.woff2') }}">
     <link rel="stylesheet" href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/css/dependable-ui.themes.css') }}">
     <title>{{ $status }} — Numerimondes</title>
-    <style nonce="{{ $csp_nonce ?? '' }}">
+    <style>
         @font-face { font-family: Simon; src: url('{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/Simon-400-normal.woff') }}') format('woff'); font-style:normal; font-weight:400; font-display:block; }
         @font-face { font-family: Romie; src: url('{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/Romie-Medium.woff2') }}') format('woff2'); font-style:normal; font-weight:500; font-display:block; }
         :root { --nm-studio-background:{{ $studioBackground }}; }
