@@ -104,84 +104,17 @@
 </head>
 <body>
 <a class="nm-skip" href="#main">Skip to content</a>
-<header class="nm-header" data-scroll-state="down" data-logo-tone="dark">
-    <nav class="nm-nav nm-nav--left" aria-label="Main navigation">
-        <a href="{{ $sitePrefix }}/services">services</a>
-        <a href="{{ $sitePrefix }}/projects">projects</a>
-    </nav>
-    <a class="nm-wordmark" href="{{ $home }}" aria-label="Numerimondes home">
-        <img class="logo-wordmark-dark" src="{{ simple_site('studio', 'brand/numerimondes-logo-lightmode.png') }}" alt="" aria-hidden="true">
-        <img class="logo-wordmark-light" src="{{ simple_site('studio', 'brand/numerimondes-logo-darkmode.png') }}" alt="" aria-hidden="true">
-        <img class="logo-mark-dark" src="{{ simple_site('studio', 'brand/numerimondes-logo-alone-lightmode.png') }}" alt="" aria-hidden="true">
-        <img class="logo-mark-light" src="{{ simple_site('studio', 'brand/numerimondes-logo-alone-darkmode.png') }}" alt="" aria-hidden="true">
-    </a>
-    <nav class="nm-nav nm-nav--right" aria-label="Site pages">
-        <a href="{{ $sitePrefix }}/about">about</a>
-        <a href="{{ $sitePrefix }}/shortlist" data-shortlist-link>shortlist
-            @if ($shortlistCount > 0)
-                <span data-shortlist-badge><x-webkernel-platform::badge color="gray" size="sm"><span data-shortlist-count>{{ $shortlistCount }}</span></x-webkernel-platform::badge></span>
-            @endif
-            <template data-shortlist-badge-template><span data-shortlist-badge><x-webkernel-platform::badge color="gray" size="sm"><span data-shortlist-count>0</span></x-webkernel-platform::badge></span></template>
-        </a>
-        <x-studio::currency-switcher
-            :currency="$currency"
-            :currency-options="$currencyOptions"
-            :show-symbol="($currencyConfig['show_symbol'] ?? false) === true"
-            :site-prefix="$sitePrefix"
-            :current-path="$requestPath"
-        />
-        <a href="{{ $sitePrefix }}/contact">contact</a>
-    </nav>
-    <div class="nm-nav--compact">
-        <details class="nm-mobile-menu">
-            <summary class="nm-nav-menu-trigger" aria-label="Open site menu" title="Open site menu">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
-            </summary>
-            <div class="nm-mobile-menu-panel">
-                <nav aria-label="Main navigation">
-                    <a href="{{ $sitePrefix }}/services">Services</a>
-                    <a href="{{ $sitePrefix }}/projects">Projects</a>
-                    <a href="{{ $sitePrefix }}/about">About</a>
-                    <a href="{{ $sitePrefix }}/shortlist" data-shortlist-link>Shortlist @if ($shortlistCount > 0)<span data-shortlist-count>{{ $shortlistCount }}</span>@endif</a>
-                    <a href="{{ $sitePrefix }}/contact">Contact</a>
-                </nav>
-
-                @if (count($currencyOptions) > 1)
-                    <div class="nm-mobile-menu-heading">Currency · {{ $currency }}</div>
-                    <form action="{{ rtrim($sitePrefix, '/') }}/currency" method="post">
-                        @csrf
-                        <input type="hidden" name="return_to" value="{{ $requestPath }}">
-                        @foreach ($currencyOptions as $currencyCode => $option)
-                            <button class="nm-mobile-menu-currency" type="submit" name="currency" value="{{ $currencyCode }}" @if ($currency === $currencyCode) aria-current="true" @endif>
-                                <span aria-hidden="true">{!! flag_markup($option['flag'] ?? '') !!}</span>
-                                <span>{{ $option['label'] ?? $currencyCode }}</span>
-                                <small>{{ $currencyCode }}</small>
-                            </button>
-                        @endforeach
-                    </form>
-                @endif
-            </div>
-        </details>
-    </div>
-</header>
+<x-studio::website.navigation
+    :site-prefix="$sitePrefix"
+    :home="$home"
+    :shortlist-count="$shortlistCount"
+    :currency="$currency"
+    :currency-options="$currencyOptions"
+    :currency-config="$currencyConfig"
+    :request-path="$requestPath"
+/>
 <div id="main">{{ $slot }}</div>
-<footer class="nm-footer" id="contact" style="margin-top:5rem;">
-    <span class="nm-footer-copy"  style="margin-top:3rem;margin-bottom:2rem;">
-    © {{ $studioConfig['company']['name'] }} · {{ $studioConfig['company']['location'] }} — Page Load took {{ number_format(request_time(), 2, ',', ' ') . ' ms' }}</span>
-    <div class="nm-footer-links">
-        @foreach (($studioConfig['social'] ?? []) as $network => $url)
-            <a href="{{ $url }}" target="_blank" rel="noreferrer">{{ $network }}</a>
-        @endforeach
-        <a href="{{ $studioConfig['crm']['client_space'] }}" target="_blank" rel="noreferrer">Client space</a>
-        <a href="{{ $studioConfig['crm']['client_registration'] }}" target="_blank" rel="noreferrer">Create account</a>
-        <a href="{{ $studioConfig['crm']['staff_login'] }}" target="_blank" rel="noreferrer">Staff login</a>
-    </div>
-    <a class="nm-footer-email" href="{{ $studioConfig['contact']['phone']['href'] }}">
-        {{ $studioConfig['contact']['phone']['display'] }}
-    </a>
-    <a class="nm-footer-privacy" href="{{ $sitePrefix }}/privacy">Privacy policy</a>
-    <a class="nm-footer-privacy" href="{{ $sitePrefix }}/pricing-policy">Pricing &amp; engagement</a>
-</footer>
+<x-studio::website.footer :studio-config="$studioConfig" :site-prefix="$sitePrefix" />
 <script defer src="/assets/dependable-ui/dependable-ui.js"></script>
 @if ($loadWebkernelPlatformTheme)
     <script defer src="{{ \Webkernel\Getters\GetAsset::url('webkernel/platform-support', 'dist/index.js') }}"></script>

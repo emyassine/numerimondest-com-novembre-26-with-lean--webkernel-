@@ -1,3 +1,75 @@
+@props([
+    'site_prefix' => '/',
+    'home' => '/',
+    'shortlist_count' => 0,
+    'currency' => 'MAD',
+    'currency_options' => [],
+    'currency_config' => [],
+    'request_path' => '/',
+])
+
+<header class="nm-header" data-scroll-state="down" data-logo-tone="dark">
+    <nav class="nm-nav nm-nav--left" aria-label="Main navigation">
+        <a href="{{ $site_prefix }}/services">services</a>
+        <a href="{{ $site_prefix }}/projects">projects</a>
+    </nav>
+    <a class="nm-wordmark" href="{{ $home }}" aria-label="Numerimondes home">
+        <img class="logo-wordmark-dark" src="{{ simple_site('studio', 'brand/numerimondes-logo-lightmode.png') }}" alt="" aria-hidden="true">
+        <img class="logo-wordmark-light" src="{{ simple_site('studio', 'brand/numerimondes-logo-darkmode.png') }}" alt="" aria-hidden="true">
+        <img class="logo-mark-dark" src="{{ simple_site('studio', 'brand/numerimondes-logo-alone-lightmode.png') }}" alt="" aria-hidden="true">
+        <img class="logo-mark-light" src="{{ simple_site('studio', 'brand/numerimondes-logo-alone-darkmode.png') }}" alt="" aria-hidden="true">
+    </a>
+    <nav class="nm-nav nm-nav--right" aria-label="Site pages">
+        <a href="{{ $site_prefix }}/about">about</a>
+        <a href="{{ $site_prefix }}/shortlist" data-shortlist-link>shortlist
+            @if ($shortlist_count > 0)
+                <span data-shortlist-badge><x-webkernel-platform::badge color="gray" size="sm"><span data-shortlist-count>{{ $shortlist_count }}</span></x-webkernel-platform::badge></span>
+            @endif
+            <template data-shortlist-badge-template><span data-shortlist-badge><x-webkernel-platform::badge color="gray" size="sm"><span data-shortlist-count>0</span></x-webkernel-platform::badge></span></template>
+        </a>
+        <x-studio::currency-switcher
+            :currency="$currency"
+            :currency-options="$currency_options"
+            :show-symbol="($currency_config['show_symbol'] ?? false) === true"
+            :site-prefix="$site_prefix"
+            :current-path="$request_path"
+        />
+        <a href="{{ $site_prefix }}/contact">contact</a>
+    </nav>
+    <div class="nm-nav--compact">
+        <details class="nm-mobile-menu">
+            <summary class="nm-nav-menu-trigger" aria-label="Open site menu" title="Open site menu">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
+            </summary>
+            <div class="nm-mobile-menu-panel">
+                <nav aria-label="Main navigation">
+                    <a href="{{ $site_prefix }}/services">Services</a>
+                    <a href="{{ $site_prefix }}/projects">Projects</a>
+                    <a href="{{ $site_prefix }}/about">About</a>
+                    <a href="{{ $site_prefix }}/shortlist" data-shortlist-link>Shortlist @if ($shortlist_count > 0)<span data-shortlist-count>{{ $shortlist_count }}</span>@endif</a>
+                    <a href="{{ $site_prefix }}/contact">Contact</a>
+                </nav>
+
+                @if (count($currency_options) > 1)
+                    <div class="nm-mobile-menu-heading">Currency · {{ $currency }}</div>
+                    <form action="{{ rtrim($site_prefix, '/') }}/currency" method="post">
+                        @csrf
+                        <input type="hidden" name="return_to" value="{{ $request_path }}">
+                        @foreach ($currency_options as $currencyCode => $option)
+                            <button class="nm-mobile-menu-currency" type="submit" name="currency" value="{{ $currencyCode }}" @if ($currency === $currencyCode) aria-current="true" @endif>
+                                <span aria-hidden="true">{!! flag_markup($option['flag'] ?? '') !!}</span>
+                                <span>{{ $option['label'] ?? $currencyCode }}</span>
+                                <small>{{ $currencyCode }}</small>
+                            </button>
+                        @endforeach
+                    </form>
+                @endif
+            </div>
+        </details>
+    </div>
+</header>
+
+<style nonce="{{ $csp_nonce ?? '' }}">
 .nm-header {
   position: fixed;
   inset: 0 0 auto;
@@ -129,32 +201,6 @@
 .nm-menu-currency-option svg { width: 18px; height: 13px; }
 .nm-menu-currency-option small { margin-left: auto; color: var(--text-secondary, #777); font-size: 10px; }
 
-.nm-footer {
-  padding: 25px 50px;
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  align-items: center;
-  gap: 30px;
-}
-
-.nm-footer-links { display: flex; gap: 25px; align-items: center; }
-
-.nm-footer-links a,
-.nm-footer-email,
-.nm-footer-privacy,
-.nm-footer-copy {
-  color: var(--nm-ink);
-  font: 400 10px/1.2 var(--nm-title);
-  letter-spacing: .12em;
-  text-decoration: none;
-  text-transform: uppercase;
-}
-
-.nm-footer-links a:hover,
-.nm-footer-email:hover,
-.nm-footer-privacy:hover { opacity: .56; }
-
-.nm-footer-copy { grid-column: 1 / -1; text-align: center; }
 
 .nm-skip { position: absolute; left: -10000px; top: auto; }
 
@@ -220,10 +266,6 @@
     opacity: 0;
     transform: none;
   }
-  .nm-footer { padding: 25px 20px; grid-template-columns: 1fr; justify-items: center; gap: 20px; }
-  .nm-footer-links { flex-wrap: wrap; justify-content: center; gap: 15px; }
-  .nm-footer-email, .nm-footer-privacy { justify-self: center; }
-  .nm-footer-copy { grid-column: 1; }
 }
 
 @media (max-width: 360px) {
@@ -242,3 +284,4 @@
   .nm-header,
   .nm-wordmark img { transition: none; }
 }
+</style>
