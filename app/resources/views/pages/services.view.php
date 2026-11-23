@@ -77,7 +77,6 @@
 <x-studio::page
     title="Services — Numerimondes"
     description="Explore Numerimondes services, save a private shortlist and request a personal discussion with the founder and account manager."
-    :page-width="null"
 >
     <style>
         .nm-services-marketplace .nm-page-heading {
@@ -86,7 +85,7 @@
         .nm-services-kicker { margin:0; color:#77746e; font:400 10px/1.35 var(--nm-title); letter-spacing:.15em; text-transform:uppercase; }
         .nm-services-marketplace .nm-page-heading h1 { margin:0; }
         .nm-services-intro { max-width:730px; margin:0; font:400 18px/1.4 var(--nm-body); }
-        .nm-marketplace-layout { max-width:1600px; margin:0 auto; display:grid; grid-template-columns:245px minmax(0,1fr) 245px; gap:28px; align-items:start; }
+        .nm-marketplace-layout { max-width:1600px; margin:0 auto; }
         .nm-marketplace-sidebar { position:sticky; top:100px; padding:24px 20px; border:1px solid var(--border-default, var(--nm-line)); border-radius:var(--radius-md, .375rem); background:var(--surface-panel, #fff); box-shadow:0 1px 2px rgba(15,23,42,.06), 0 8px 24px rgba(15,23,42,.04); }
         .nm-marketplace-sidebar h2 { margin:0 0 24px; font:400 11px/1.4 var(--nm-title); letter-spacing:.14em; text-transform:uppercase; }
         .nm-marketplace-search { display:grid; gap:10px; margin-bottom:25px; }
@@ -120,7 +119,6 @@
         .nm-marketplace-pricing-note { margin:0; color:#77746e; font:400 12px/1.55 var(--nm-body); }
         .nm-marketplace-pricing-note a { color:var(--nm-ink); text-underline-offset:3px; }
         @media (max-width:900px) {
-            .nm-marketplace-layout { grid-template-columns:205px minmax(0,1fr); gap:24px; }
             .nm-marketplace-sidebar { padding:20px 15px; }
             .nm-marketplace-commitments { grid-column:1 / -1; grid-template-columns:repeat(2,minmax(0,1fr)); }
             .nm-marketplace-commitments h2 { grid-column:1 / -1; }
@@ -130,7 +128,6 @@
             .nm-services-marketplace .nm-page-heading { min-height:48vh; padding:120px 0 35px; gap:17px; }
             .nm-services-kicker { font-size:8px; }
             .nm-services-intro { font-size:15px; }
-            .nm-marketplace-layout { display:flex; flex-direction:column; gap:28px; }
             .nm-marketplace-sidebar { position:static; width:100%; padding:18px; }
             .nm-marketplace-sidebar h2 { margin-bottom:18px; font-size:9px; }
             .nm-marketplace-main { width:100%; }
@@ -153,44 +150,14 @@
         </header>
 
         <div class="nm-marketplace-layout">
-            <aside class="nm-marketplace-sidebar" aria-label="Marketplace filters">
-                <h2>Refine your search</h2>
-                <form action="{{ $servicesUrl }}" method="get">
-                    <div class="nm-marketplace-search">
-                        <label for="marketplace-search">Search services</label>
-                        <input id="marketplace-search" name="q" type="search" value="{{ $searchQuery }}" placeholder="What do you need?" autocomplete="off">
-                    </div>
-                    <fieldset class="nm-marketplace-filter">
-                        <label class="nm-marketplace-filter-title" for="marketplace-category">Category</label>
-                        <select class="nm-marketplace-select" id="marketplace-category" name="category">
-                            <option value="">All categories</option>
-                            @foreach ($categoryMap as $categorySlug => $categoryName)
-                                <option value="{{ $categorySlug }}" @if ($selectedCategory === $categorySlug) selected @endif>{{ $categoryName }} ({{ $categoryCounts[$categorySlug] }})</option>
-                            @endforeach
-                        </select>
-                    </fieldset>
-                    <fieldset class="nm-marketplace-filter">
-                        <label class="nm-marketplace-filter-title" for="marketplace-engagement">Engagement</label>
-                        <select class="nm-marketplace-select" id="marketplace-engagement" name="engagement">
-                            <option value="">All formats</option>
-                            @foreach ($engagementMap as $engagementSlug => $engagementName)
-                                <option value="{{ $engagementSlug }}" @if ($selectedEngagement === $engagementSlug) selected @endif>{{ $engagementName }}</option>
-                            @endforeach
-                        </select>
-                    </fieldset>
-                    <fieldset class="nm-marketplace-filter">
-                        <legend class="nm-marketplace-filter-title">Price</legend>
-                        <label class="nm-marketplace-priced">
-                            <input type="checkbox" name="priced" value="1" @if ($priceOnly) checked @endif>
-                            <span>Show offers with a listed price</span>
-                        </label>
-                    </fieldset>
-                    <button class="nm-marketplace-apply" type="submit">Apply filters <x-webkernel::icon icon="arrow-up-right" set="lucide" width="14" height="14" class="nm-icon-arrow" aria-hidden="true" /></button>
-                    <a class="nm-marketplace-reset" href="{{ $servicesUrl }}">Clear all filters</a>
-                </form>
-            </aside>
 
             <section class="nm-marketplace-main" aria-label="Service offers">
+
+
+              <x-webkernel-platform::section style="margin-bottom:2rem;">
+                  Yo
+              </x-webkernel-platform::section>
+
                 <p class="nm-marketplace-results" role="status">{{ count($services) }} {{ count($services) === 1 ? 'offer' : 'offers' }}{{ $selectedCategory !== '' ? ' · '.$categoryMap[$selectedCategory] : '' }}{{ $selectedEngagement !== '' ? ' · '.$engagementMap[$selectedEngagement] : '' }}{{ $searchQuery !== '' ? ' · matching “'.$searchQuery.'”' : '' }}</p>
 
                 @if ($services !== [])
@@ -228,29 +195,6 @@
                 </section>
             </section>
 
-            <aside class="nm-marketplace-commitments" aria-labelledby="nm-marketplace-commitments-title">
-                <h2 id="nm-marketplace-commitments-title">Our commitments</h2>
-                <article class="nm-marketplace-commitment">
-                    <p class="nm-marketplace-commitment-number">01 · CLARITY</p>
-                    <h3>Scope agreed first</h3>
-                    <p>Objectives, responsibilities and terms are confirmed before work begins.</p>
-                </article>
-                <article class="nm-marketplace-commitment">
-                    <p class="nm-marketplace-commitment-number">02 · PEOPLE</p>
-                    <h3>A team shaped for the work</h3>
-                    <p>The specialists involved are chosen around the needs of each assignment.</p>
-                </article>
-                <article class="nm-marketplace-commitment">
-                    <p class="nm-marketplace-commitment-number">03 · ACCOUNTABILITY</p>
-                    <h3>One accountable lead</h3>
-                    <p>Numerimondes coordinates the engagement and remains accountable for its work.</p>
-                </article>
-                <article class="nm-marketplace-commitment">
-                    <p class="nm-marketplace-commitment-number">04 · TRANSPARENCY</p>
-                    <h3>Clear next steps</h3>
-                    <p>Timing, deliverables and fees are set out with you before you commit.</p>
-                </article>
-            </aside>
         </div>
     </main>
 </x-studio::page>
