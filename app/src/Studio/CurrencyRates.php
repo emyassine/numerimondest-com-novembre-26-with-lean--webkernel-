@@ -70,6 +70,37 @@ final class CurrencyRates
         ];
     }
 
+    /**
+     * Order currencies by the value of one unit, strongest first.
+     *
+     * Rates are quoted as units of the selected currency per MAD, so a lower
+     * quote represents a stronger currency. Currencies with no known rate are
+     * kept at the end in their configured order.
+     *
+     * @param array<string, array<string, mixed>> $options
+     * @return array<string, array<string, mixed>>
+     */
+    public static function strongestFirst(array $options): array
+    {
+        $rates = self::forPricing()['rates'];
+        $configuredOrder = array_flip(array_keys($options));
+        $currencies = array_keys($options);
+
+        usort($currencies, static function (string $left, string $right) use ($rates, $configuredOrder): int {
+            $leftRate = isset($rates[$left]) && $rates[$left] > 0 ? (float) $rates[$left] : INF;
+            $rightRate = isset($rates[$right]) && $rates[$right] > 0 ? (float) $rates[$right] : INF;
+
+            return ($leftRate <=> $rightRate) ?: ($configuredOrder[$left] <=> $configuredOrder[$right]);
+        });
+
+        $ordered = [];
+        foreach ($currencies as $currency) {
+            $ordered[$currency] = $options[$currency];
+        }
+
+        return $ordered;
+    }
+
     /** Fetch once for cron; missing quote currencies keep their last configured/snapshot value. */
     public static function refresh(): array
     {

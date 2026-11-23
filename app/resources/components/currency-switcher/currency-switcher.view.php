@@ -1,15 +1,12 @@
 @props([
     'currency' => 'MAD',
     'currency_options' => [],
-    'default_currency' => 'MAD',
     'show_symbol' => false,
     'site_prefix' => '',
     'current_path' => '/',
 ])
 @php
-    $ordered_currency_options = isset($currency_options[$default_currency])
-        ? [$default_currency => $currency_options[$default_currency]] + $currency_options
-        : $currency_options;
+    $ordered_currency_options = \App\Studio\CurrencyRates::strongestFirst($currency_options);
 @endphp
 <style>
     .nm-currency-switcher-trigger {

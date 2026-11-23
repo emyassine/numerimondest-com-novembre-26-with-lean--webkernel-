@@ -9,10 +9,7 @@
     'studio_config' => [],
 ])
 @php
-    $default_currency = is_string($currency_config['default'] ?? null) ? $currency_config['default'] : 'MAD';
-    $ordered_currency_options = isset($currency_options[$default_currency])
-        ? [$default_currency => $currency_options[$default_currency]] + $currency_options
-        : $currency_options;
+    $ordered_currency_options = \App\Studio\CurrencyRates::strongestFirst($currency_options);
     $nav_base = rtrim($site_prefix, '/');
     $nav_items = [
         'left' => [
@@ -309,7 +306,6 @@
                 <x-studio::currency-switcher
                     :currency="$currency"
                     :currency-options="$ordered_currency_options"
-                    :default-currency="$default_currency"
                     :show-symbol="($currency_config['show_symbol'] ?? false) === true"
                     :site-prefix="$site_prefix"
                     :current-path="$request_path"
