@@ -89,7 +89,7 @@ RSYNC_OPTIONS=(-azc --no-owner --no-group --partial --info=progress2 --stats --t
 CHANGED=false
 COMPOSER_CHANGED=false
 DEPLOY_COUNT="$(jq -r '[.deploys | to_entries[] | select((.value.enable // true) == true or (.value.enable // true) == 1)] | length' "$CONFIG")"
-TOTAL_STEPS=$((DEPLOY_COUNT + 1))
+TOTAL_STEPS=$((DEPLOY_COUNT + 2))
 LOG_DIR="$(mktemp -d "${TMPDIR:-/tmp}/numerimondes-deploy.XXXXXX")"
 ACTIVE_PID=''
 
@@ -163,7 +163,18 @@ printf '  %sProject %s %s\n' "$DIM" "$RESET" "$(basename "$ROOT")"
 printf '  %sTarget  %s %s%s%s (SSH port %s)\n' "$DIM" "$RESET" "$BOLD$GREEN" "$HOST" "$RESET" "$SSH_PORT"
 printf '  %sConfig  %s %s\n' "$DIM" "$RESET" "${CONFIG#"$ROOT"/}"
 
-STEP_NUMBER=0
+STEP_NUMBER=1
+step "$STEP_NUMBER" 'Building local frontend assets'
+LOCAL_BUILD_LOG="$LOG_DIR/local-assets.log"
+if ! run_with_spinner 'Synchronizing and building frontend assets...' "$LOCAL_BUILD_LOG" "$ROOT/platform" assets:sync; then
+    err 'Local frontend asset build failed; deployment was not started.'
+    print_remote_log "$LOCAL_BUILD_LOG" error
+    exit 1
+fi
+print_remote_log "$LOCAL_BUILD_LOG"
+ok 'Frontend assets are ready to include in the deployment.'
+
+STEP_NUMBER=1
 while IFS=$'\t' read -r NAME SOURCE DESTINATION TYPE; do
     [[ -n "$NAME" && -n "$SOURCE" && -n "$DESTINATION" ]] || continue
     STEP_NUMBER=$((STEP_NUMBER + 1))
@@ -172,7 +183,7 @@ while IFS=$'\t' read -r NAME SOURCE DESTINATION TYPE; do
 
     step "$STEP_NUMBER" "Syncing $NAME"
     info "$SOURCE_DIR -> $HOST:$DESTINATION/"
-    ARGS=(rsync "${RSYNC_OPTIONS[@]}" --exclude='/.git/')
+    ARGS=(rsync "${RSYNC_OPTIONS[@]}" --exclude='/.git/' --exclude='node_modules/')
     if [[ "$TYPE" == webkernel ]]; then
         ARGS+=(
             --exclude='/.env'
@@ -210,7 +221,7 @@ while IFS=$'\t' read -r NAME SOURCE DESTINATION TYPE; do
     for MANAGED_DIRECTORY in app config; do
         [[ -d "$SOURCE_DIR/$MANAGED_DIRECTORY" ]] || continue
         MANAGED_LOG="$LOG_DIR/$(printf '%s_%s' "$NAME" "$MANAGED_DIRECTORY" | tr -cs '[:alnum:]_.-' '_').log"
-        MANAGED_ARGS=(rsync "${RSYNC_OPTIONS[@]}" --exclude='/.git/' --delete)
+        MANAGED_ARGS=(rsync "${RSYNC_OPTIONS[@]}" --exclude='/.git/' --exclude='node_modules/' --delete)
         info "Mirroring managed source directory: $MANAGED_DIRECTORY/"
         if ! run_with_spinner "Syncing $MANAGED_DIRECTORY/ exactly..." "$MANAGED_LOG" "${MANAGED_ARGS[@]}" "$SOURCE_DIR/$MANAGED_DIRECTORY/" "$HOST:$DESTINATION/$MANAGED_DIRECTORY/"; then
             err "rsync failed for managed source directory $MANAGED_DIRECTORY/."
@@ -230,7 +241,8 @@ REMOTE_COMMAND="cd '$PRODUCTION_DEST'"
 if [[ "$COMPOSER_CHANGED" == true ]]; then
     REMOTE_COMMAND+=" && composer install --no-dev --optimize-autoloader --no-interaction --no-progress"
 fi
-REMOTE_COMMAND+=" && NO_COLOR=1 TERM=dumb APP_URL=https://numerimondes.com/ ./platform deploy"
+REMOTE_COMMAND+=" && composer reinstall 'webkernel/*' --no-interaction --no-progress"
+REMOTE_COMMAND+=" && NO_COLOR=1 TERM=dumb APP_URL=https://numerimondes.com/ ./platform deploy:prod"
 REMOTE_COMMAND+=" && mkdir -p runtime/cache/deploy && VERSION=\$(date -u +%Y%m%dT%H%M%S)-\$(od -An -N6 -tx1 /dev/urandom | tr -d ' \\n') && printf '%s\\n' \"\$VERSION\" > runtime/cache/deploy/site-version.tmp && mv runtime/cache/deploy/site-version.tmp runtime/cache/deploy/site-version && printf 'Deploy version: %s\\n' \"\$VERSION\""
 REMOTE_LOG="$LOG_DIR/production.log"
 if ! run_with_spinner 'Running production deployment actions...' "$REMOTE_LOG" ssh_remote "$REMOTE_COMMAND"; then

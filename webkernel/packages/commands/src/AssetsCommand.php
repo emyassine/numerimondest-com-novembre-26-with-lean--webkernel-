@@ -73,7 +73,94 @@ final class AssetsCommand
             return 127;
         }
 
-        return self::runProcess([$composer, 'dump-autoload'], base_path(), $environment);
+        $result = self::runProcess([$composer, 'dump-autoload'], base_path(), $environment);
+        if ($result !== 0) {
+            return $result;
+        }
+
+        return $this->publishDeclaredAssets($packages);
+    }
+
+    /** @return array<string, mixed> */
+    private function declaredAssetBuilds(): array
+    {
+        $builds = config('site.asset_builds', []);
+
+        return is_array($builds) ? $builds : [];
+    }
+
+    /** @param array<string, string> $built_packages */
+    private function publishDeclaredAssets(array $built_packages): int
+    {
+        foreach ($this->declaredAssetBuilds() as $package_name => $declaration) {
+            if (! is_array($declaration)) {
+                console()->error('Invalid asset build declaration for '.$package_name.'.');
+
+                return 2;
+            }
+            $source = $declaration['source'] ?? null;
+            $outputs = $declaration['outputs'] ?? null;
+            if (! is_string($source) || ! is_array($outputs)) {
+                console()->error('Invalid asset build declaration for '.$package_name.'.');
+
+                return 2;
+            }
+            $package_path = realpath(base_path($source));
+            if (! is_string($package_path)) {
+                foreach ($outputs as $destination) {
+                    if (! is_string($destination) || ! is_file(base_path($destination))) {
+                        console()->error('Asset source '.$package_name.' is unavailable and its declared output is missing.');
+
+                        return 1;
+                    }
+                }
+                continue;
+            }
+            if (! isset($built_packages[$package_name])) {
+                foreach ($outputs as $destination) {
+                    if (! is_string($destination) || ! is_file(base_path($destination))) {
+                        console()->error('Asset output '.$package_name.' is missing; run assets:sync all.');
+
+                        return 1;
+                    }
+                }
+                continue;
+            }
+            foreach ($outputs as $output => $destination) {
+                if (
+                    ! is_string($output)
+                    || ! is_string($destination)
+                    || str_starts_with($output, '/')
+                    || str_starts_with($destination, '/')
+                    || str_contains($output, '..')
+                    || str_contains($destination, '..')
+                ) {
+                    console()->error('Invalid asset output declared for '.$package_name.'.');
+
+                    return 2;
+                }
+                $source_path = realpath($package_path.'/'.$output);
+                $destination_path = base_path($destination);
+                if (! is_string($source_path) || ! is_file($source_path)) {
+                    console()->error('The asset build did not produce '.$package_name.'/'.$output.'.');
+
+                    return 1;
+                }
+                if (! is_dir(dirname($destination_path)) && ! mkdir(dirname($destination_path), 0775, true) && ! is_dir(dirname($destination_path))) {
+                    console()->error('Unable to create the asset output directory.');
+
+                    return 1;
+                }
+                if (! copy($source_path, $destination_path)) {
+                    console()->error('Unable to publish '.$package_name.'/'.$output.'.');
+
+                    return 1;
+                }
+                console()->info('Published '.$destination.'.');
+            }
+        }
+
+        return 0;
     }
 
     /** @return array<string, string>|null */
@@ -90,6 +177,13 @@ final class AssetsCommand
         foreach (InstalledVersions::getInstalledPackages() as $package_name) {
             $install_path = InstalledVersions::getInstallPath($package_name);
             $package_path = is_string($install_path) ? realpath($install_path) : false;
+            $workspace_package_path = base_path().'/webkernel/packages/'.substr($package_name, strlen('webkernel/'));
+            if (
+                str_starts_with($package_name, 'webkernel/')
+                && is_file($workspace_package_path.'/composer.json')
+            ) {
+                $package_path = realpath($workspace_package_path) ?: $workspace_package_path;
+            }
             $relative_package_path = is_string($package_path)
                 ? str_replace(DIRECTORY_SEPARATOR, '/', substr($package_path, strlen($workspace_root) + 1))
                 : '';
@@ -120,6 +214,29 @@ final class AssetsCommand
 
             $scripts = is_array($manifest) ? ($manifest['scripts'] ?? null) : null;
             if (is_array($scripts) && is_string($scripts['build'] ?? null)) {
+                $packages[$package_name] = $package_path;
+            }
+        }
+
+        foreach ($this->declaredAssetBuilds() as $package_name => $declaration) {
+            $source = $declaration['source'] ?? null;
+            if (! is_string($source) || preg_match('~\A[a-z0-9_.\/-]+\z~i', $source) !== 1) {
+                console()->error('Invalid asset build source declared for '.$package_name.'.');
+
+                return null;
+            }
+            $package_path = realpath(base_path($source));
+            if (! is_string($package_path) || ! is_file($package_path.'/package.json')) {
+                continue;
+            }
+            try {
+                $manifest = json_decode((string) file_get_contents($package_path.'/package.json'), true, 512, JSON_THROW_ON_ERROR);
+            } catch (\JsonException) {
+                console()->error('Invalid package.json in '.$package_name.'.');
+
+                return null;
+            }
+            if (is_string($manifest['scripts']['build'] ?? null)) {
                 $packages[$package_name] = $package_path;
             }
         }
@@ -287,6 +404,13 @@ final class AssetsCommand
         foreach (InstalledVersions::getInstalledPackages() as $package_name) {
             $install_path = InstalledVersions::getInstallPath($package_name);
             $package_path = is_string($install_path) ? realpath($install_path) : false;
+            $workspace_package_path = base_path().'/webkernel/packages/'.substr($package_name, strlen('webkernel/'));
+            if (
+                str_starts_with($package_name, 'webkernel/')
+                && is_file($workspace_package_path.'/composer.json')
+            ) {
+                $package_path = realpath($workspace_package_path) ?: $workspace_package_path;
+            }
             $relative_path = is_string($package_path)
                 ? str_replace(DIRECTORY_SEPARATOR, '/', substr($package_path, strlen($workspace_root) + 1))
                 : '';
@@ -301,6 +425,16 @@ final class AssetsCommand
                 continue;
             }
             $packages[$package_name] = $package_path;
+        }
+
+        foreach ($this->declaredAssetBuilds() as $package_name => $declaration) {
+            if (! is_array($declaration) || ! is_string($declaration['source'] ?? null)) {
+                continue;
+            }
+            $package_path = realpath(base_path($declaration['source']));
+            if (is_string($package_path) && is_file($package_path.'/package.json')) {
+                $packages[$package_name] = $package_path;
+            }
         }
 
         $root = InstalledVersions::getRootPackage();

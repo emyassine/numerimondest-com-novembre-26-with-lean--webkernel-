@@ -19,6 +19,7 @@ final readonly class ServerCommand
      */
     public function __construct(
         private Engine $engine,
+        private AssetsCommand $assets,
     ) {
     }
 
@@ -32,7 +33,7 @@ final readonly class ServerCommand
      */
     #[ConsoleCommand(
         name: 'server',
-        description: 'Local HTTP server (--host= --port= --profile-lifecycle --with-jit); Ctrl+C prints session timing statistics',
+        description: 'Sync frontend assets, then serve locally (--host= --port= --profile-lifecycle --with-jit)',
     )]
     public function __invoke(
         string $host = '127.0.0.1',
@@ -40,6 +41,12 @@ final readonly class ServerCommand
         bool $profile_lifecycle = false,
         ?bool $with_jit = null,
     ): ExitCode {
+        console()->info('Synchronizing frontend assets before starting the server...');
+        $asset_result = $this->assets->sync();
+        if ($asset_result !== 0) {
+            return ExitCode::tryFrom($asset_result) ?? ExitCode::ERROR;
+        }
+
         $jit = $with_jit;
         if ($jit === null) {
             $jit = Performance::wants_jit();

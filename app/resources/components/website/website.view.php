@@ -23,10 +23,6 @@
     $shortlistCount = count(\App\Studio\ServiceShortlist::all());
     $studioStylesheetPatterns = config('dependable-ui.stylesheets', []);
     $loadWebkernelPlatformTheme = (bool) config('dependable-ui.webkernel_platform_theme', false);
-    $webkernelPlatformThemePath = base_path('public/__webkernel-app/assets/webkernel/platform/dist/theme.css');
-    $webkernelPlatformThemeVersion = is_file($webkernelPlatformThemePath)
-        ? substr((string) hash_file('sha256', $webkernelPlatformThemePath), 0, 16)
-        : '';
     $preventMobileZoom = (bool) config('dependable-ui.prevent_mobile_zoom', false);
     $forceLightMode = (bool) config('dependable-ui.force_light_mode', false);
     $viewportContent = 'width=device-width, initial-scale=1';
@@ -106,14 +102,14 @@
         <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/Romie-Medium.woff2">
     @endif
     <link rel="canonical" href="{{ $canonical }}">
-    <link rel="stylesheet" href="/assets/dependable-ui/dependable-ui.css">
+    <link rel="stylesheet" href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/dependable-ui/dependable-ui.css') }}">
     <link rel="stylesheet" href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/css/dependable-ui.themes.css') }}">
     <link rel="stylesheet" href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/css/numerimondes-silky.css') }}">
     @foreach ($studioStylesheets as $studioStylesheet)
         <link rel="stylesheet" href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', $studioStylesheet) }}">
     @endforeach
-    @if ($loadWebkernelPlatformTheme && $webkernelPlatformThemeVersion !== '')
-        <link rel="stylesheet" href="/__webkernel-app/assets/webkernel/platform/dist/theme.css?v={{ $webkernelPlatformThemeVersion }}">
+    @if ($loadWebkernelPlatformTheme)
+        <link rel="stylesheet" href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/webkernel/platform/theme.css') }}">
     @endif
     <title>{{ $title }}</title>
     <style>
@@ -140,7 +136,7 @@
 </x-studio::website.navigation>
 <script defer src="{{ \Webkernel\Getters\GetAsset::url('webkernel/platform-support', 'dist/index.js') }}"></script>
 <script defer src="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/js/alpine.js') }}"></script>
-<script defer src="/assets/dependable-ui/dependable-ui.js"></script>
+<script defer src="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/dependable-ui/dependable-ui.js') }}"></script>
 <script defer src="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/js/dependable-ui.themes.js') }}"></script>
 <script defer src="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/js/shortlist.js') }}"></script>
 <script defer src="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/js/pwa.js') }}"></script>

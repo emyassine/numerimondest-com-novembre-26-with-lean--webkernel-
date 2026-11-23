@@ -18,4 +18,12 @@ return [
             'app/resources/components',
         ],
     ],
+    'asset_builds' => [
+        'webkernel/platform' => [
+            'source' => '../webkernel/packages/platform',
+            'outputs' => [
+                'dist/theme.css' => 'app/resources/assets/webkernel/platform/theme.css',
+            ],
+        ],
+    ],
 ];
