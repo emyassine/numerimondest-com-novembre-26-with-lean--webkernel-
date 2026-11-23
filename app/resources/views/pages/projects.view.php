@@ -7,13 +7,16 @@
     $projects = \App\Studio\ProjectCatalog::initiatives();
 @endphp
 
-<x-studio::website
+<x-studio::page
     title="Projects — Numerimondes"
     description="Explore projects and initiatives developed by Numerimondes."
     :canonical="$canonical"
     :locale="$locale"
     :site-ui="$site_ui ?? []"
 >
+    <style>
+        .nm-projects-page > .nm-about-section { padding-inline: 0; }
+    </style>
     <main class="nm-page nm-projects-page">
 
         <section class="nm-about-section" style="margin-top:5rem;">
@@ -33,4 +36,4 @@
             label="Numerimondes projects"
         />
     </main>
-</x-studio::website>
+</x-studio::page>

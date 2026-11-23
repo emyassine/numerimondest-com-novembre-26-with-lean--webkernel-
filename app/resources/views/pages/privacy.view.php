@@ -17,7 +17,7 @@
     ]);
 @endphp
 
-<x-studio::website
+<x-studio::page
     title="Privacy Policy — Numerimondes"
     description="Privacy and data handling on the public Numerimondes website."
     :canonical="$canonical"
@@ -52,7 +52,7 @@
             }
         }
     </style>
-    <main class="nm-page nm-policy" style="max-width:1040px;margin:0 auto;padding-top:var(--policy-top);padding-bottom:var(--policy-bottom)">
+    <main class="nm-page nm-policy" style="max-width:1040px;margin:0 auto;padding-block:var(--policy-top) var(--policy-bottom)">
         @markdown($policyContent)
     </main>
-</x-studio::website>
+</x-studio::page>

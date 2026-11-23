@@ -103,7 +103,8 @@
     unset($resolveAssets);
 @endphp
 
-<x-studio::website
+<x-studio::page
+    class="bleed-page"
     title="About — Numerimondes"
     description="Founder-led consulting and solutions delivered by small specialist teams in Casablanca, Morocco."
     :canonical="$canonical"
@@ -111,7 +112,6 @@
     :site-ui="$site_ui ?? []"
 >
     <style>
-        .nm-page.nm-about-page { padding: 0; }
         .nm-about-intro {
             height: 100vh;
             min-height: 600px;
@@ -318,4 +318,4 @@
             </div>
         </section>
     </main>
-</x-studio::website>
+</x-studio::page>

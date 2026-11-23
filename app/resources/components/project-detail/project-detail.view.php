@@ -20,7 +20,8 @@
     $logoDimensions = $logoDimensions ?: [260, 130];
 @endphp
 
-<x-studio::website
+<x-studio::page
+    class="bleed-page"
     :title="$project['name'].' — Numerimondes'"
     :description="$project['introduction']"
     :canonical="$canonical"
@@ -126,4 +127,4 @@
             </section>
         @endif
     </main>
-</x-studio::website>
+</x-studio::page>

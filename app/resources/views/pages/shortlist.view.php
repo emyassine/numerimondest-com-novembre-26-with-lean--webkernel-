@@ -9,7 +9,7 @@
     ));
 @endphp
 
-<x-studio::website
+<x-studio::page
     title="Your shortlist — Numerimondes"
     description="Keep selected Numerimondes services together and request a private discussion with the founder and account manager."
     :canonical="$canonical"
@@ -17,7 +17,7 @@
     :site-ui="$site_ui ?? []"
 >
     <style>
-        .nm-shortlist-page { width:100%; max-width:1040px; min-height:70vh; margin:0 auto; padding:180px 24px 120px; }
+        .nm-shortlist-page { width:100%; max-width:1040px; min-height:70vh; margin:0 auto; padding:180px 0 120px; }
         .nm-shortlist-heading { max-width:760px; margin-bottom:48px; }
         .nm-shortlist-kicker { margin:0 0 18px; color:#77746e; font:400 10px/1.4 var(--nm-title); letter-spacing:.15em; text-transform:uppercase; }
         .nm-shortlist-heading h1 { margin:0 0 22px; font:400 clamp(18px,2.2vw,30px)/1.4 var(--nm-title); letter-spacing:.12em; text-transform:uppercase; }
@@ -30,7 +30,7 @@
         .nm-shortlist-cta { margin-top:34px; }
         .nm-inquiry-offer-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr)); gap:10px; }
         @media (max-width:700px) {
-            .nm-shortlist-page { padding:130px 20px 75px; }
+            .nm-shortlist-page { padding:130px 0 75px; }
             .nm-shortlist-heading { margin-bottom:32px; }
             .nm-shortlist-kicker { font-size:8px; }
             .nm-shortlist-heading h1 { font-size:17px; }
@@ -63,4 +63,4 @@
             <a class="nm-shortlist-action" href="{{ simple_site('studio', 'services') }}">Explore services <x-webkernel::icon icon="arrow-up-right" set="lucide" width="14" height="14" aria-hidden="true" /></a>
         </div>
     </main>
-</x-studio::website>
+</x-studio::page>

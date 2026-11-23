@@ -10,7 +10,7 @@
     $heroPositioningText = 'Explore '.$serviceCount.' services to strengthen your brand, grow your sales pipeline and improve how work gets done — with a dedicated team shaped around your goals.';
 @endphp
 
-<x-studio::website :title="$title" :description="$description" :canonical="$canonical" :locale="$locale" :site-ui="$site_ui ?? []">
+<x-studio::page class="bleed-page" :title="$title" :description="$description" :canonical="$canonical" :locale="$locale" :site-ui="$site_ui ?? []">
     <style>
         .nm-home-explore { padding: 70px 50px 0; }
         .nm-home-explore h2 {
@@ -72,4 +72,4 @@
             </div>
         </section>
     </main>
-</x-studio::website>
+</x-studio::page>

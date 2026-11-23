@@ -127,7 +127,7 @@
     :request-path="$requestPath"
     :studio-config="$studioConfig"
 >
-    <div id="main">{{ $slot }}</div>
+    {{ $slot }}
 </x-studio::website.navigation>
 <script defer src="/assets/dependable-ui/dependable-ui.js"></script>
 @if ($loadWebkernelPlatformTheme)

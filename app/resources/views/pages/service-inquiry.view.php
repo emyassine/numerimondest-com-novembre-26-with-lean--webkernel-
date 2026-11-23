@@ -74,7 +74,7 @@
     $whatsappHref = 'https://wa.me/'.$whatsappNumber.'?text='.rawurlencode($whatsappMessage);
 @endphp
 
-<x-studio::website
+<x-studio::page
     title="A private discussion — Numerimondes"
     description="Share the services you are considering and request a personal follow-up from Numerimondes."
     :canonical="$canonical"
@@ -82,7 +82,7 @@
     :site-ui="$site_ui ?? []"
 >
     <style>
-        .nm-service-inquiry { width:100%; max-width:1040px; margin:0 auto; padding:180px 24px 120px; }
+        .nm-service-inquiry { width:100%; max-width:1040px; margin:0 auto; padding:180px 0 120px; }
         .nm-service-inquiry h1 { margin:0; font:400 16px/1.5 var(--nm-title); letter-spacing:.18em; text-transform:uppercase; }
         .nm-service-inquiry-lead { max-width:650px; margin:28px 0 50px; font:400 18px/1.4 var(--nm-body); }
         .nm-service-inquiry-offer { margin:0 0 38px; color:#77746e; font:400 10px/1.5 var(--nm-title); letter-spacing:.14em; text-transform:uppercase; }
@@ -105,7 +105,7 @@
         .nm-service-inquiry-contact-actions a:first-child { padding:12px 16px; border:1px solid var(--nm-ink); }
         .nm-service-inquiry-contact-actions a:hover { opacity:.62; }
         @media (max-width:700px) {
-            .nm-service-inquiry { padding:130px 20px 75px; }
+            .nm-service-inquiry { padding:130px 0 75px; }
             .nm-service-inquiry { padding-top:120px; padding-bottom:75px; }
             .nm-service-inquiry h1 { font-size:12px; }
             .nm-service-inquiry-lead { margin:20px 0 38px; font-size:15px; }
@@ -206,4 +206,4 @@
             </div>
         </section>
     </main>
-</x-studio::website>
+</x-studio::page>

@@ -1,6 +1,6 @@
 @props(['canonical' => '', 'locale' => 'en'])
 
-<x-studio::website
+<x-studio::page
     title="Private request received — Numerimondes"
     description="Your private request has reached Numerimondes for personal follow-up."
     :canonical="$canonical"
@@ -27,4 +27,4 @@
         <p>Your request has reached Numerimondes. Yassine, our founder, and the account manager will review your brief and follow up personally using the contact details you provided. Any scope, timing and fee will be agreed with you before work begins.</p>
         <a href="{{ simple_site('studio', 'services') }}">Back to services <x-webkernel::icon icon="arrow-up-right" set="lucide" width="14" height="14" class="nm-icon-arrow" aria-hidden="true" /></a>
     </main>
-</x-studio::website>
+</x-studio::page>

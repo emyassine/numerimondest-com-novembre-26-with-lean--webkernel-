@@ -8,7 +8,7 @@
     }
 @endphp
 
-<x-studio::website
+<x-studio::page
     title="Pricing & Engagement Policy — Numerimondes"
     description="How Numerimondes scopes services, sets fees, structures payments and handles indicative currency conversions."
     :canonical="$canonical"
@@ -24,7 +24,7 @@
         .nm-policy a { text-decoration:underline; text-underline-offset:.18em; }
         @media (max-width:700px) { .nm-policy { --policy-top:130px; --policy-bottom:75px; --policy-title-size:12px; --policy-body-size:15px; --policy-heading-gap:38px; } }
     </style>
-    <main class="nm-page nm-policy" style="max-width:1040px;margin:0 auto;padding:var(--policy-top) 24px var(--policy-bottom)">
+    <main class="nm-page nm-policy" style="max-width:1040px;margin:0 auto;padding-block:var(--policy-top) var(--policy-bottom)">
         @markdown($policyContent)
     </main>
-</x-studio::website>
+</x-studio::page>

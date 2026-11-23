@@ -20,7 +20,8 @@
     }
 @endphp
 
-<x-studio::website
+<x-studio::page
+    class="bleed-page"
     :title="$service['name'].' — Numerimondes'"
     :description="$service['card_description']"
     :canonical="$canonical"
@@ -90,4 +91,4 @@
             <x-studio::service-inquiry-launch :services="[$service['slug']]" class="nm-service-detail-cta">Request a private discussion <x-webkernel::icon icon="arrow-up-right" set="lucide" width="14" height="14" class="nm-icon-arrow" aria-hidden="true" /></x-studio::service-inquiry-launch>
         </section>
     </main>
-</x-studio::website>
+</x-studio::page>

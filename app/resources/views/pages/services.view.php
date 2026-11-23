@@ -76,7 +76,7 @@
 
 @endphp
 
-<x-studio::website
+<x-studio::page
     title="Services — Numerimondes"
     description="Explore Numerimondes services, save a private shortlist and request a personal discussion with the founder and account manager."
     :canonical="$canonical"
@@ -85,12 +85,12 @@
 >
     <style>
         .nm-services-marketplace .nm-page-heading {
-            min-height: 53vh; padding: 140px 50px 55px; display:flex; flex-direction:column; justify-content:center; gap:22px;
+            min-height: 53vh; padding: 140px 0 55px; display:flex; flex-direction:column; justify-content:center; gap:22px;
         }
         .nm-services-kicker { margin:0; color:#77746e; font:400 10px/1.35 var(--nm-title); letter-spacing:.15em; text-transform:uppercase; }
         .nm-services-marketplace .nm-page-heading h1 { margin:0; }
         .nm-services-intro { max-width:730px; margin:0; font:400 18px/1.4 var(--nm-body); }
-        .nm-marketplace-layout { max-width:1600px; margin:0 auto; padding:0 50px; display:grid; grid-template-columns:245px minmax(0,1fr) 245px; gap:28px; align-items:start; }
+        .nm-marketplace-layout { max-width:1600px; margin:0 auto; display:grid; grid-template-columns:245px minmax(0,1fr) 245px; gap:28px; align-items:start; }
         .nm-marketplace-sidebar { position:sticky; top:100px; padding:24px 20px; border:1px solid var(--border-default, var(--nm-line)); border-radius:var(--radius-md, .375rem); background:var(--surface-panel, #fff); box-shadow:0 1px 2px rgba(15,23,42,.06), 0 8px 24px rgba(15,23,42,.04); }
         .nm-marketplace-sidebar h2 { margin:0 0 24px; font:400 11px/1.4 var(--nm-title); letter-spacing:.14em; text-transform:uppercase; }
         .nm-marketplace-search { display:grid; gap:10px; margin-bottom:25px; }
@@ -124,17 +124,17 @@
         .nm-marketplace-pricing-note { margin:0; color:#77746e; font:400 12px/1.55 var(--nm-body); }
         .nm-marketplace-pricing-note a { color:var(--nm-ink); text-underline-offset:3px; }
         @media (max-width:900px) {
-            .nm-marketplace-layout { grid-template-columns:205px minmax(0,1fr); gap:24px; padding:0 28px; }
+            .nm-marketplace-layout { grid-template-columns:205px minmax(0,1fr); gap:24px; }
             .nm-marketplace-sidebar { padding:20px 15px; }
             .nm-marketplace-commitments { grid-column:1 / -1; grid-template-columns:repeat(2,minmax(0,1fr)); }
             .nm-marketplace-commitments h2 { grid-column:1 / -1; }
             .nm-marketplace-commitment { min-height:0; }
         }
         @media (max-width:700px) {
-            .nm-services-marketplace .nm-page-heading { min-height:48vh; padding:120px 20px 35px; gap:17px; }
+            .nm-services-marketplace .nm-page-heading { min-height:48vh; padding:120px 0 35px; gap:17px; }
             .nm-services-kicker { font-size:8px; }
             .nm-services-intro { font-size:15px; }
-            .nm-marketplace-layout { display:flex; flex-direction:column; gap:28px; padding:0 20px; }
+            .nm-marketplace-layout { display:flex; flex-direction:column; gap:28px; }
             .nm-marketplace-sidebar { position:static; width:100%; padding:18px; }
             .nm-marketplace-sidebar h2 { margin-bottom:18px; font-size:9px; }
             .nm-marketplace-main { width:100%; }
@@ -257,4 +257,4 @@
             </aside>
         </div>
     </main>
-</x-studio::website>
+</x-studio::page>
