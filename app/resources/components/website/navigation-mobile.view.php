@@ -10,6 +10,13 @@
     'site_prefix' => '/',
     'request_path' => '/',
 ])
+@php
+    $mobile_nav_items = array_merge($nav_items['left'] ?? [], $nav_items['right'] ?? []);
+    $mobile_nav_items = array_merge(
+        array_filter($mobile_nav_items, static fn (array $item): bool => ($item['type'] ?? null) !== 'currency'),
+        array_filter($mobile_nav_items, static fn (array $item): bool => ($item['type'] ?? null) === 'currency'),
+    );
+@endphp
 
 <style>
 .nm-nav--compact {
@@ -139,7 +146,7 @@
 
         <nav aria-label="Main navigation">
             <x-webkernel-platform::dropdown.list>
-                @foreach (array_merge($nav_items['left'] ?? [], $nav_items['right'] ?? []) as $item)
+                @foreach ($mobile_nav_items as $item)
                     @if (($item['type'] ?? null) === 'currency')
                         @if (count($currency_options) > 1)
                             <x-webkernel-platform::dropdown.list.item
