@@ -100,6 +100,13 @@
                 ($size instanceof Size) ? "fi-size-{$size->value}" : (is_string($size) ? $size : ''),
             ])
             ->color(BadgeComponent::class, $color)
+            ->style([
+                'flex' => '0 0 auto',
+                'width' => 'max-content',
+                'max-width' => '100%',
+                'flex-wrap' => 'nowrap',
+                'white-space' => 'nowrap',
+            ])
     }}
 >
     @if ($iconPosition === IconPosition::Before)
@@ -122,8 +129,8 @@
         @endif
     @endif
 
-    <span class="fi-badge-label-ctn">
-        <span class="fi-badge-label">
+    <span class="fi-badge-label-ctn" style="display:inline-flex;min-width:0;align-items:center;flex-wrap:nowrap;white-space:nowrap">
+        <span class="fi-badge-label" style="display:inline-flex;min-width:0;max-width:100%;align-items:center;flex-wrap:nowrap;column-gap:.25rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
             {{ $slot }}
         </span>
     </span>

@@ -50,7 +50,7 @@
                 .nm-home-hero-2 { width:100%; max-width:none; margin:0; padding:0 0 4.5rem; color:var(--ink-primary); }
                 .nm-home-hero-2__top,
                 .nm-home-hero-2__bottom { display:grid; grid-template-columns:1.35fr .85fr; gap:4rem; }
-                .nm-home-hero-2__top { min-height:80vh; align-items:center; margin:0; padding:4rem 0; border-bottom:1px solid var(--border-hairline); }
+                .nm-home-hero-2__top { min-height:80vh; align-items:center; margin:0;  border-bottom:1px solid var(--border-hairline); }
                 .nm-home-hero-2__eyebrow,
                 .nm-home-hero-2__label { display:block; color:#64748b; font-size:.75rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; }
                 .nm-home-hero-2__eyebrow { margin:0 0 1.5rem; font-size:.78rem; }
@@ -59,7 +59,7 @@
                 .nm-home-hero-2__right { display:flex; flex-direction:column; align-items:flex-start; gap:1.25rem; }
                 .nm-home-hero-2__lead { max-width:38rem; margin:0; color:var(--ink-secondary); font-size:1rem; line-height:1.55; }
                 .nm-home-hero-2__note { margin:0; color:var(--ink-muted); font-size:.8rem; line-height:1.45; }
-                .nm-home-hero-2__bottom { padding-top:3rem; }
+                .nm-home-hero-2__bottom { padding-top:0rem; }
                 .nm-home-hero-2__label { margin:0 0 1.25rem; }
                 .nm-home-hero-2__ventures-divider { display:block; width:100%; height:1px; min-height:1px; margin:0 0 1.25rem; border:0; border-top:1px solid var(--border-hairline); opacity:.7; }
                 .nm-home-hero-2__capabilities { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.25rem 2rem; }
@@ -94,27 +94,26 @@
                     <section aria-labelledby="nm-home-practice-title">
                         <h2 class="nm-home-hero-2__label" id="nm-home-practice-title">Practice Areas</h2>
                         <div class="nm-home-hero-2__capabilities">
-                            <div class="nm-home-hero-2__capability"><h3>Operations Advisory</h3><p>Primary research, market intelligence, and structural execution.</p></div>
+                            <div class="nm-home-hero-2__capability"><h3>Operations Advisory</h3><p>Research, market intelligence, and structural execution.</p></div>
                             <div class="nm-home-hero-2__capability"><h3>Business Systems</h3><p>Bespoke software architecture and internal operational tooling.</p></div>
-                            <div class="nm-home-hero-2__capability"><h3>Remote Recruitment</h3><p>Individually vetted specialists matched to exact operational briefs.</p></div>
+                            <div class="nm-home-hero-2__capability"><h3>Remote Recruitment</h3><p>Hand-vetted specialists aligned to exact operational briefs.</p></div>
                             <div class="nm-home-hero-2__capability"><h3>Brand Identity</h3><p>Institutional positioning, narrative, and visual systems.</p></div>
                             <div class="nm-home-hero-2__capability"><h3>Digital Presence</h3><p>High-craft web platforms built for clarity and permanence.</p></div>
                             <div class="nm-home-hero-2__capability"><h3>Sales Development</h3><p>Structured market entry and qualified commercial pipelines.</p></div>
                         </div>
                     </section>
                     <div>
-                        <hr class="nm-home-hero-2__ventures-divider">
                         <section aria-labelledby="nm-home-ventures-title">
-                            <h2 class="nm-home-hero-2__label" id="nm-home-ventures-title">Internal Studio &amp; Ventures</h2>
+                            <h2 class="nm-home-hero-2__label" id="nm-home-ventures-title">Internal Projects // Ventures</h2>
                             <x-webkernel-platform::section :compact="true" class="nm-home-hero-2__ventures">
                                 <p>Beyond client mandates, we research, architect, and incubate proprietary concepts—from luxury maisons to Rust-based application frameworks.</p>
                                 <div class="nm-home-hero-2__tags" aria-label="Studio ventures">
-                                    <x-webkernel-platform::badge color="gray" size="sm" icon="heroicon-o-sparkles">Caldezza</x-webkernel-platform::badge>
-                                    <x-webkernel-platform::badge color="gray" size="sm" icon="heroicon-o-code-bracket">Feluqa</x-webkernel-platform::badge>
-                                    <x-webkernel-platform::badge color="gray" size="sm" icon="heroicon-o-user-group">The Best Recruit</x-webkernel-platform::badge>
-                                    <x-webkernel-platform::badge color="gray" size="sm" icon="heroicon-o-globe-alt">Virtual Assistant Asia</x-webkernel-platform::badge>
+                                    <x-webkernel-platform::badge color="success" size="sm"><x-webkernel::icon icon="gem" set="lucide" width="14" height="14" aria-hidden="true" /> Caldezza</x-webkernel-platform::badge>
+                                    <x-webkernel-platform::badge color="danger" size="sm"><x-webkernel::icon icon="code-2" set="lucide" width="14" height="14" aria-hidden="true" /> Feluqa</x-webkernel-platform::badge>
+                                    <x-webkernel-platform::badge color="info" size="sm"><x-webkernel::icon icon="user-round-search" set="lucide" width="14" height="14" aria-hidden="true" /> The Best Recruit</x-webkernel-platform::badge>
+                                    <x-webkernel-platform::badge color="gray" size="sm"><x-webkernel::icon icon="globe-2" set="lucide" width="14" height="14" aria-hidden="true" /> Virtual Assistant Asia</x-webkernel-platform::badge>
                                 </div>
-                                <x-webkernel-platform::button tag="a" :href="simple_site('studio', 'projects')" color="gray" icon="heroicon-o-arrow-up-right">Explore ideas in development</x-webkernel-platform::button>
+                                <x-webkernel-platform::button tag="a" :href="simple_site('studio', 'projects')" color="gray" size="xs"><x-webkernel::icon icon="arrow-up-right" set="lucide" width="12" height="12" aria-hidden="true" /> Explore our projects</x-webkernel-platform::button>
                             </x-webkernel-platform::section>
                         </section>
                     </div>
