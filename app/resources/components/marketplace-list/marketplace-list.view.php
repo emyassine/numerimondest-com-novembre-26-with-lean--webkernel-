@@ -20,7 +20,13 @@
     @if (is_string($id) && $id !== '') id="{{ $id }}" @endif
     aria-label="{{ $label }}"
 >
+
+  <style>
+  .fi-section:not(.fi-section-not-contained):not(.fi-divided)>.fi-section-content-ctn>.fi-section-content, .fi-section:not(.fi-section-not-contained).fi-divided>.fi-section-content-ctn>.fi-section-content>* {
+       padding: 0;
+  }
+  </style>
     @foreach ($services as $service)
-        <x-studio::marketplace-card :service="$service" />
+        <x-studio::marketplace-card :service="$service" :card-class="'nm-marketplace-card-item-'.$loop->iteration" />
     @endforeach
 </section>
