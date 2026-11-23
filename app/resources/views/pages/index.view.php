@@ -1,6 +1,7 @@
 @props([
     'canonical' => '',
     'locale' => 'en',
+    'site_ui' => [],
 ])
 
 @php

@@ -1,4 +1,4 @@
-@props(['canonical' => '', 'locale' => 'en'])
+@props(['canonical' => '', 'locale' => 'en', 'site_ui' => []])
 @php
     $policyPath = base_path('app/resources/views/content/pricing-policy.en.md');
     $policyContent = file_get_contents($policyPath);

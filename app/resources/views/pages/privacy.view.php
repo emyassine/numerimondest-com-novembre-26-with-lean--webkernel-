@@ -1,4 +1,4 @@
-@props(['canonical' => '', 'locale' => 'en'])
+@props(['canonical' => '', 'locale' => 'en', 'site_ui' => []])
 @php
     $studioConfig = config('nm-studio', []);
     $company = $studioConfig['company'] ?? [];
