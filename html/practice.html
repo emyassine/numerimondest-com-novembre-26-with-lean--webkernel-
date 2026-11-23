@@ -76,8 +76,10 @@
       border: 1px solid var(--border-subtle); padding: 0.25rem 0.65rem; border-radius: 2px;
     }
     @media (max-width: 850px) {
+      header { flex-wrap: wrap; }
+      nav { width: 100%; justify-content: center; flex-wrap: wrap; gap: 0.75rem; }
+      nav a { display: inline; font-size: 0.75rem; }
       .practice-row { grid-template-columns: 1fr; gap: 0.75rem; }
-      nav a:not(.nav-action) { display: none; }
     }
   </style>
 </head>
@@ -87,8 +89,9 @@
     <nav>
       <a href="practice.html" class="active">The Practice</a>
       <a href="commissions.html">Commissions</a>
+      <a href="pricing-policy.html">Pricing Policy</a>
       <a href="standards.html">Standards</a>
-      <a href="briefing.html" class="nav-action">Private Briefing</a>
+      <a href="service-inquiry.html" class="nav-action">Private Discussion</a>
     </nav>
   </header>
 

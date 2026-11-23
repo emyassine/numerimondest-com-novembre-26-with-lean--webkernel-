@@ -263,6 +263,9 @@
     }
 
     @media (max-width: 960px) {
+      header { flex-wrap: wrap; }
+      nav { width: 100%; justify-content: center; flex-wrap: wrap; gap: 0.75rem; }
+      nav a { display: inline; font-size: 0.75rem; }
       .hero-top-grid,
       .hero-bottom {
         grid-template-columns: 1fr;
@@ -270,9 +273,6 @@
       }
       .capabilities-grid {
         grid-template-columns: repeat(2, 1fr);
-      }
-      nav a:not(.nav-action) {
-        display: none;
       }
     }
 
@@ -291,6 +291,9 @@
       <a href="#capabilities">Capabilities</a>
       <a href="#advisory">Advisory &amp; Research</a>
       <a href="#initiatives">Ideas in Development</a>
+      <a href="commissions.html">Commissions</a>
+      <a href="service-inquiry.html">Private Discussion</a>
+      <a href="pricing-policy.html">Pricing Policy</a>
       <a href="#contact" class="nav-action">Initiate a Mandate</a>
     </nav>
   </header>

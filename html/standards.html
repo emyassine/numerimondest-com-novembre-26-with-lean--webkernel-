@@ -71,8 +71,10 @@
       font-size: 0.95rem; color: var(--ink-secondary); line-height: 1.7;
     }
     @media (max-width: 800px) {
+      header { flex-wrap: wrap; }
+      nav { width: 100%; justify-content: center; flex-wrap: wrap; gap: 0.75rem; }
+      nav a { display: inline; font-size: 0.75rem; }
       .principles-grid { grid-template-columns: 1fr; }
-      nav a:not(.nav-action) { display: none; }
     }
   </style>
 </head>
@@ -82,8 +84,9 @@
     <nav>
       <a href="practice.html">The Practice</a>
       <a href="commissions.html">Commissions</a>
+      <a href="pricing-policy.html">Pricing Policy</a>
       <a href="standards.html" class="active">Standards</a>
-      <a href="briefing.html" class="nav-action">Private Briefing</a>
+      <a href="service-inquiry.html" class="nav-action">Private Discussion</a>
     </nav>
   </header>
 

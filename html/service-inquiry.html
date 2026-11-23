@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en" data-theme="nm-studio" data-mode="light" class="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light">
+  <title>Private Discussion — Numerimondes</title>
+  <style>
+    :root{--bg:#f1f5f9;--surface:#fff;--ink:#0f172a;--secondary:#475569;--muted:#64748b;--line:#cbd5e1;--subtle:#e2e8f0;--green:#065f46}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.6 system-ui,-apple-system,sans-serif}header{display:flex;justify-content:space-between;align-items:center;padding:1.1rem 5%;border-bottom:1px solid var(--subtle)}
+    a{color:inherit}.brand{text-decoration:none;font-weight:650;letter-spacing:.14em;text-transform:uppercase}.back{color:var(--secondary);text-decoration:none;font-size:.88rem}
+    main{width:min(100% - 2rem,1180px);margin:auto;padding:4rem 0 6rem;display:grid;grid-template-columns:1.15fr .85fr;gap:3rem;align-items:start}
+    .badge{color:var(--green);font-size:.78rem;font-weight:650}.title{margin:.8rem 0;font:400 clamp(2.3rem,4vw,3.5rem)/1.1 Georgia,serif;letter-spacing:-.02em}.lead{margin:0 0 2rem;color:var(--secondary)}
+    .panel,.account{padding:1.6rem;border:1px solid var(--subtle);background:var(--surface)}.panel{margin-bottom:1.2rem}.panel-head{display:flex;justify-content:space-between;gap:1rem;align-items:baseline}.panel h2,.account h2{margin:0;font-size:1.05rem}.count{padding:.1rem .5rem;background:var(--bg);font-size:.8rem}.sub{margin:.4rem 0 1.2rem;color:var(--muted);font-size:.85rem}
+    .items,.recommendations{display:grid;gap:.75rem}.item,.recommendation{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;padding:1rem;border:1px solid var(--line);background:var(--bg)}.item small,.recommendation small{display:block;color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.07em}.item strong,.recommendation strong{display:block}.item span,.recommendation span{color:var(--secondary);font-size:.82rem}
+    .text-button{border:0;background:none;color:var(--muted);text-decoration:underline;cursor:pointer}.add{padding:.45rem .8rem;border:1px solid var(--line);background:#fff;font-weight:600;cursor:pointer;white-space:nowrap}.browse{display:inline-block;margin-top:1rem;color:var(--secondary);font-size:.85rem}
+    .nav{display:flex;align-items:center;gap:1.25rem}.nav a{color:var(--secondary);font-size:.84rem;text-decoration:none}.nav a:hover,.nav a[aria-current=page]{color:var(--ink)}
+    .account{position:sticky;top:2rem;padding:2rem}.account h2{font:400 1.6rem Georgia,serif}.account p{color:var(--secondary);font-size:.9rem}.actions{display:grid;gap:.75rem;margin-top:1.5rem}.actions a{display:block;padding:.85rem 1rem;border:1px solid var(--line);text-align:center;text-decoration:none;font-size:.87rem;font-weight:650}.actions .primary{background:var(--ink);border-color:var(--ink);color:#fff}.actions .whatsapp{color:var(--green);border-color:#a7f3d0}.or{text-align:center;color:var(--muted);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
+    @media(max-width:850px){main{grid-template-columns:1fr}.account{position:static}}@media(max-width:580px){header{padding:1rem;flex-wrap:wrap}.nav{width:100%;justify-content:center;gap:.75rem;flex-wrap:wrap}.nav a{font-size:.74rem}.panel,.account{padding:1.1rem}.item,.recommendation{align-items:flex-start}}
+  </style>
+</head>
+<body>
+<header><a class="brand" href="index.html">Numerimondes</a><nav class="nav" aria-label="Main navigation"><a href="commissions.html">Commissions</a><a href="service-inquiry.html" aria-current="page">Private Discussion</a><a href="pricing-policy.html">Pricing Policy</a></nav></header>
+<main>
+  <div>
+    <span class="badge" id="context">Private Mandate Inquiry</span>
+    <h1 class="title">A private discussion.</h1>
+    <p class="lead">Share the outcome you have in mind. We will review the context with you, shape a suitable scope, and clarify the next step before any commitment.</p>
+    <section class="panel">
+      <div class="panel-head"><h2>Your selected offers</h2><span class="count" id="selectedCount">0</span></div>
+      <p class="sub">These offers are synced with your shortlist. Remove any that you do not want included in this request.</p>
+      <div class="items" id="selected"></div>
+      <a class="browse" href="commissions.html">View your shortlist in the catalogue</a>
+    </section>
+    <section class="panel">
+      <div class="panel-head"><h2>Other offers that may fit</h2></div>
+      <p class="sub">Add a relevant offer to your shortlist. You can choose more than one.</p>
+      <div class="recommendations" id="recommendations"></div>
+      <a class="browse" href="commissions.html">Browse all commissions →</a>
+    </section>
+  </div>
+  <aside class="account">
+    <h2>Continue with a client account</h2>
+    <p>Create your CRM client account to continue with these selected offers. Already have an account? Sign in, then return here.</p>
+    <div class="actions">
+      <a class="primary" href="#create-account">Create your client account</a>
+      <a href="#sign-in">Sign in</a>
+      <span class="or">or</span>
+      <a class="whatsapp" id="whatsapp" href="#" target="_blank" rel="noopener noreferrer">Continue on WhatsApp →</a>
+    </div>
+  </aside>
+</main>
+<script>
+(function(){
+  'use strict';
+  var key='nm_private_shortlist',phone='212620990692';
+  var offers=[
+    {id:'brand-book',category:'Brand identity',title:'Brand Book',meta:'From 39 000 MAD · 4–5 weeks · extended identity system'},
+    {id:'brand-kit-complete',category:'Brand identity',title:'Brand Kit · Complete',meta:'From 18 000 MAD · 3 weeks · full core visual identity'},
+    {id:'brand-kit-essential',category:'Brand identity',title:'Brand Kit · Essential',meta:'From 12 000 MAD · 2 weeks · foundational identity'},
+    {id:'workflow-automation',category:'Business systems',title:'Workflow automation sprint',meta:'From 20 000 MAD · 3–5 workflows'},
+    {id:'crm-client-portal',category:'Business systems',title:'CRM & client portal setup',meta:'From 25 000 MAD · 4 weeks'},
+    {id:'business-website',category:'Digital presence',title:'Business website',meta:'From 25 000 MAD · 5–6 pages'},
+    {id:'operations-audit',category:'Operations advisory',title:'Operations audit',meta:'4 900 MAD · credited toward qualifying Desk'},
+    {id:'tbr-executive',category:'Remote recruitment',title:'The Best Recruit · Executive & Director Search',meta:'46% of recruited candidate’s monthly salary'},
+    {id:'tbr-admin-ops',category:'Remote recruitment',title:'The Best Recruit · Administrative & Operations',meta:'46% of recruited candidate’s monthly salary'},
+    {id:'tbr-execution',category:'Remote recruitment',title:'The Best Recruit · Execution & Handling',meta:'46% of recruited candidate’s monthly salary'},
+    {id:'revenue-desk-pilot',category:'Sales development',title:'Revenue Desk · 30-day pilot',meta:'9 900 MAD one time'},
+    {id:'revenue-desk-growth',category:'Sales development',title:'Revenue Desk · Growth',meta:'From 19 900 MAD per month'},
+    {id:'revenue-desk-scale',category:'Sales development',title:'Revenue Desk · Scale',meta:'From 39 000 MAD per month'}
+  ];
+  var byId={};offers.forEach(function(o){byId[o.id]=o});
+  var $=function(id){return document.getElementById(id)};
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function get(){try{var a=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(a)?a.filter(function(id){return byId[id]}):[]}catch(e){return []}}
+  function save(a){localStorage.setItem(key,JSON.stringify(a));render()}
+  function add(id){var a=get();if(a.indexOf(id)<0){a.push(id);save(a)}}
+  function remove(id){save(get().filter(function(x){return x!==id}))}
+  var params=new URLSearchParams(location.search),direct=params.get('offer');
+  if(direct&&byId[direct]){var saved=get();if(saved.indexOf(direct)<0){saved.push(direct);localStorage.setItem(key,JSON.stringify(saved))}}
+  function render(){
+    var ids=get(),chosen=ids.map(function(id){return byId[id]}).filter(Boolean);
+    $('selectedCount').textContent=chosen.length;
+    $('context').textContent=chosen.length?chosen[0].category+' · Private mandate inquiry':'Private mandate inquiry';
+    $('selected').innerHTML=chosen.length?chosen.map(function(o){return '<div class="item"><div><small>'+esc(o.category)+'</small><strong>'+esc(o.title)+'</strong><span>'+esc(o.meta)+'</span></div><button class="text-button" type="button" data-remove="'+esc(o.id)+'">Remove</button></div>'}).join(''):'<p class="sub">Your shortlist is currently empty. Add a relevant offer below or browse the catalogue.</p>';
+    $('selected').querySelectorAll('[data-remove]').forEach(function(b){b.addEventListener('click',function(){remove(b.getAttribute('data-remove'))})});
+    var suggestions=['business-website','workflow-automation','operations-audit','crm-client-portal'].filter(function(id){return ids.indexOf(id)<0}).slice(0,2);
+    $('recommendations').innerHTML=suggestions.map(function(id){var o=byId[id];return '<div class="recommendation"><div><small>'+esc(o.category)+'</small><strong>'+esc(o.title)+'</strong><span>'+esc(o.meta)+'</span></div><button class="add" type="button" data-add="'+esc(id)+'">Add</button></div>'}).join('')||'<p class="sub">You have reviewed all suggested offers.</p>';
+    $('recommendations').querySelectorAll('[data-add]').forEach(function(b){b.addEventListener('click',function(){add(b.getAttribute('data-add'))})});
+    var titles=chosen.map(function(o){return o.title});
+    var message=titles.length?'Hello Numerimondes, I would like to initiate a private discussion regarding: '+titles.join(', ')+'.':'Hello Numerimondes, I would like to initiate a private discussion regarding a mandate.';
+    $('whatsapp').href='https://wa.me/'+phone+'?text='+encodeURIComponent(message);
+  }
+  window.addEventListener('storage',function(e){if(e.key===key)render()});
+  render();
+})();
+</script>
+</body>
+</html>
