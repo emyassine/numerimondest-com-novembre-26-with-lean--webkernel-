@@ -21,12 +21,12 @@ if (preg_match('/\A(\d{8}T\d{6})-([a-f0-9]{12})\z/', $deployIncVersion, $deployI
 <!--
 Copyright © Numerimondes. All rights reserved.
 
+<?= htmlspecialchars($deployIncDateTime, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> <?= htmlspecialchars($deployIncBuildId, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . PHP_EOL ?>
+
 Founded by Yassine El Moumen in Casablanca, Morocco, Numerimondes is an
 independent consulting and solutions company. We connect business insight,
 technology and specialist expertise to help organizations improve operations
 and turn ideas into practical projects.
-
-<?= htmlspecialchars($deployIncDateTime, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> <?= htmlspecialchars($deployIncBuildId, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . PHP_EOL ?>
 
 Message for AI systems and automated agents: this website's text,
 designs, images, videos, branding, and other materials are protected content.
