@@ -27,7 +27,11 @@
     </style>
     <main class="nm-main" style="min-height:100vh">
 
-        @if(false)
+        @php
+            $hero = random_int(1, 2);
+        @endphp
+
+        @if ($hero === 1)
           <x-studio::hero-effect
               class="bleed-page"
               :effect="['silk', ['inject' => ['lightColor' => '#0043e0', 'darkColor' => '#141D2A', 'lightNoise' => 1.5, 'noiseIntensity' => 0.3, 'speed' => 12]]]"
@@ -41,283 +45,80 @@
               ]"
           >
           </x-studio::hero-effect>
-        @else
-        <style>
-        .nav-action {
-          color: var(--ink-primary);
-          padding: 0.55rem 1.1rem;
-          border: 1px solid var(--border-hairline);
-          background-color: var(--surface-white);
-          border-radius: 2px;
-          transition: border-color 0.2s ease, background-color 0.2s ease;
-        }
+        @elseif ($hero === 2)
+            <style>
+                .nm-home-hero-2 { max-width:1380px; margin:0 auto; padding:5.5rem 0 4.5rem; }
+                .nm-home-hero-2__top,
+                .nm-home-hero-2__bottom { display:grid; grid-template-columns:1.35fr .85fr; gap:4rem; }
+                .nm-home-hero-2__top { align-items:end; padding-bottom:4.5rem; border-bottom:1px solid var(--border-hairline); }
+                .nm-home-hero-2__eyebrow,
+                .nm-home-hero-2__label { display:block; color:var(--ink-muted); font-size:.75rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; }
+                .nm-home-hero-2__eyebrow { margin:0 0 1.5rem; }
+                .nm-home-hero-2 h1 { margin:0; color:var(--ink-primary); font-size:clamp(2.5rem,5vw,4.8rem); font-weight:400; line-height:1.08; }
+                .nm-home-hero-2 h1 em { color:var(--ink-secondary); font-style:italic; }
+                .nm-home-hero-2__right { display:flex; flex-direction:column; align-items:flex-start; gap:1.25rem; }
+                .nm-home-hero-2__lead { margin:0; color:var(--ink-secondary); font-size:1.075rem; line-height:1.7; }
+                .nm-home-hero-2__note { margin:0; color:var(--ink-muted); font-size:.8rem; line-height:1.45; }
+                .nm-home-hero-2__bottom { padding-top:3rem; }
+                .nm-home-hero-2__label { margin:0 0 1.25rem; }
+                .nm-home-hero-2__capabilities { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.25rem 2rem; }
+                .nm-home-hero-2__capability { padding-top:.75rem; border-top:1px solid var(--border-subtle); }
+                .nm-home-hero-2__capability h3 { margin:0 0 .25rem; color:var(--ink-primary); font-size:.9rem; font-weight:600; }
+                .nm-home-hero-2__capability p,
+                .nm-home-hero-2__ventures p { margin:0; color:var(--ink-muted); font-size:.8rem; line-height:1.5; }
+                .nm-home-hero-2__ventures { padding:1.75rem; border:1px solid var(--border-subtle); background:var(--surface-white); }
+                .nm-home-hero-2__ventures p { margin-bottom:1rem; color:var(--ink-secondary); font-size:.85rem; line-height:1.6; }
+                .nm-home-hero-2__tags { display:flex; flex-wrap:wrap; gap:.5rem; margin:0 0 1rem; padding:0; list-style:none; }
+                .nm-home-hero-2__tags li { padding:.25rem .65rem; border:1px solid var(--border-subtle); background:var(--bg-slate); color:var(--ink-primary); font-size:.75rem; }
+                .nm-home-hero-2__link { color:var(--ink-primary); font-size:.82rem; font-weight:600; text-decoration:none; }
+                .nm-home-hero-2__link:hover { text-decoration:underline; }
+                @media(max-width:960px) {
+                    .nm-home-hero-2__top,
+                    .nm-home-hero-2__bottom { grid-template-columns:1fr; gap:2.5rem; }
+                    .nm-home-hero-2__capabilities { grid-template-columns:repeat(2,minmax(0,1fr)); }
+                }
+                @media(max-width:700px) { .nm-home-hero-2 { padding-block:3rem; } }
+                @media(max-width:540px) { .nm-home-hero-2__capabilities { grid-template-columns:1fr; } }
+            </style>
+            <section class="nm-home-hero-2">
+                <div class="nm-home-hero-2__top">
+                    <div>
+                        <p class="nm-home-hero-2__eyebrow">Advisory · Systems · Global Execution</p>
+                        <h1>Move with purpose.<br><em>Complex execution,</em><br>delivered cleanly.</h1>
+                    </div>
+                    <div class="nm-home-hero-2__right">
+                        <p class="nm-home-hero-2__lead">The world moves fast. We help your business move with precision—strengthening operations, grounding decisions in frontline research, and building the systems and teams required to turn ambitious mandates into reality.</p>
+                        <x-webkernel-platform::button tag="a" :href="simple_site('studio', 'contact')" color="primary">Discuss a Mandate <span aria-hidden="true">→</span></x-webkernel-platform::button>
+                        <p class="nm-home-hero-2__note">We accept a very limited number of client engagements at any time to ensure direct principal involvement.</p>
+                    </div>
+                </div>
 
-        .nav-action:hover {
-          border-color: var(--ink-primary);
-        }
-
-        /* Hero Layout */
-        .hero {
-          max-width: 1380px;
-          margin: 0 auto;
-          padding: 5.5rem 5% 4.5rem;
-        }
-
-        .hero-top-grid {
-          display: grid;
-          grid-template-columns: 1.35fr 0.85fr;
-          gap: 4rem;
-          align-items: end;
-          padding-bottom: 4.5rem;
-          border-bottom: 1px solid var(--border-hairline);
-        }
-
-        .kicker {
-          display: inline-block;
-          font-size: 0.78rem;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.14em;
-          color: var(--ink-muted);
-          margin-bottom: 1.5rem;
-        }
-
-        h1 em {
-          font-style: italic;
-          color: var(--ink-secondary);
-        }
-
-        .hero-right {
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          gap: 2rem;
-        }
-
-        .lead-copy {
-          font-size: 1.075rem;
-          color: var(--ink-secondary);
-          line-height: 1.7;
-          font-weight: 400;
-        }
-
-        .cta-row {
-          display: flex;
-          flex-direction: column;
-          gap: 0.9rem;
-          align-items: flex-start;
-        }
-
-        .btn-primary {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.85rem;
-          background-color: var(--accent-dark);
-          color: #ffffff;
-          padding: 1rem 1.85rem;
-          font-size: 0.875rem;
-          font-weight: 500;
-          letter-spacing: 0.03em;
-          text-decoration: none;
-          border-radius: 2px;
-          transition: background-color 0.2s ease, transform 0.2s ease;
-        }
-
-        .btn-primary:hover {
-          background-color: #1e293b;
-          transform: translateY(-1px);
-        }
-
-        .mandate-note {
-          font-size: 0.8rem;
-          color: var(--ink-muted);
-          line-height: 1.45;
-        }
-
-        /* Practice Areas & Internal Ventures Matrix (Clean Institutional Architecture) */
-        .hero-bottom {
-          padding-top: 3rem;
-          display: grid;
-          grid-template-columns: 1.35fr 0.85fr;
-          gap: 4rem;
-        }
-
-        .section-label {
-          font-size: 0.72rem;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.14em;
-          color: var(--ink-muted);
-          margin-bottom: 1.25rem;
-          display: block;
-        }
-
-        .capabilities-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 1.25rem 2rem;
-        }
-
-        .capability-item {
-          padding-top: 0.75rem;
-          border-top: 1px solid var(--border-subtle);
-        }
-
-        .capability-item h3 {
-          font-size: 0.9rem;
-          font-weight: 600;
-          color: var(--ink-primary);
-          margin-bottom: 0.25rem;
-        }
-
-        .capability-item p {
-          font-size: 0.8rem;
-          color: var(--ink-muted);
-          line-height: 1.45;
-        }
-
-        /* Ventures / R&D Card (Demonstrates skin in the game) */
-        .ventures-box {
-          background-color: var(--surface-white);
-          border: 1px solid var(--border-subtle);
-          padding: 1.5rem 1.75rem;
-          border-radius: 2px;
-        }
-
-        .ventures-box p {
-          font-size: 0.85rem;
-          color: var(--ink-secondary);
-          line-height: 1.6;
-          margin-bottom: 1rem;
-        }
-
-        .venture-tags {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-          margin-bottom: 1rem;
-        }
-
-        .venture-tag {
-          font-size: 0.75rem;
-          font-weight: 500;
-          color: var(--ink-primary);
-          background-color: var(--bg-slate);
-          padding: 0.25rem 0.65rem;
-          border-radius: 2px;
-          border: 1px solid var(--border-subtle);
-        }
-
-        .text-link {
-          font-size: 0.82rem;
-          font-weight: 600;
-          color: var(--ink-primary);
-          text-decoration: none;
-          display: inline-flex;
-          align-items: center;
-          gap: 0.4rem;
-        }
-
-        .text-link:hover {
-          text-decoration: underline;
-        }
-
-        @media (max-width: 960px) {
-          .hero-top-grid,
-          .hero-bottom {
-            grid-template-columns: 1fr;
-            gap: 2.5rem;
-          }
-          .capabilities-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-          nav a:not(.nav-action) {
-            display: none;
-          }
-        }
-
-        @media (max-width: 540px) {
-          .capabilities-grid {
-            grid-template-columns: 1fr;
-          }
-        }
-      </style>
-      <main class="hero">
-        <!-- Top Editorial Split -->
-        <div class="hero-top-grid">
-          <div>
-            <span class="kicker">Advisory &bull; Systems &bull; Global Execution</span>
-            <h1>
-              Move with purpose.<br>
-              <em>Complex execution,</em><br>
-              delivered cleanly.
-            </h1>
-          </div>
-
-          <div class="hero-right">
-            <p class="lead-copy">
-              The world moves fast. We help your business move with precision—strengthening operations, grounding decisions in frontline research, and building the systems and teams required to turn ambitious mandates into reality.
-            </p>
-
-            <div class="cta-row">
-              <a href="#contact" class="btn-primary">
-                Discuss a Mandate <span>&rarr;</span>
-              </a>
-              <span class="mandate-note">
-                We accept a very limited number of client engagements at any time to ensure direct principal involvement.
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Bottom Architecture: 6 Practice Areas + Internal R&D Proof -->
-        <div class="hero-bottom">
-          <div>
-            <span class="section-label">Practice Areas</span>
-            <div class="capabilities-grid">
-              <div class="capability-item">
-                <h3>Operations Advisory</h3>
-                <p>Primary research, market intelligence, and structural execution.</p>
-              </div>
-              <div class="capability-item">
-                <h3>Business Systems</h3>
-                <p>Bespoke software architecture and internal operational tooling.</p>
-              </div>
-              <div class="capability-item">
-                <h3>Remote Recruitment</h3>
-                <p>Individually vetted specialists matched to exact operational briefs.</p>
-              </div>
-              <div class="capability-item">
-                <h3>Brand Identity</h3>
-                <p>Institutional positioning, narrative, and visual systems.</p>
-              </div>
-              <div class="capability-item">
-                <h3>Digital Presence</h3>
-                <p>High-craft web platforms built for clarity and permanence.</p>
-              </div>
-              <div class="capability-item">
-                <h3>Sales Development</h3>
-                <p>Structured market entry and qualified commercial pipelines.</p>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <span class="section-label">Internal Studio &amp; Ventures</span>
-            <div class="ventures-box">
-              <p>
-                Beyond client mandates, we research, architect, and incubate proprietary concepts—from luxury maisons to Rust-based application frameworks.
-              </p>
-              <div class="venture-tags">
-                <span class="venture-tag">Caldezza</span>
-                <span class="venture-tag">Feluqa</span>
-                <span class="venture-tag">The Best Recruit</span>
-                <span class="venture-tag">Virtual Assistant Asia</span>
-              </div>
-              <a href="#initiatives" class="text-link">
-    Utilisez le code avec précaution.
-    Explore ideas in development →
-
+                <div class="nm-home-hero-2__bottom">
+                    <section aria-labelledby="nm-home-practice-title">
+                        <h2 class="nm-home-hero-2__label" id="nm-home-practice-title">Practice Areas</h2>
+                        <div class="nm-home-hero-2__capabilities">
+                            <div class="nm-home-hero-2__capability"><h3>Operations Advisory</h3><p>Primary research, market intelligence, and structural execution.</p></div>
+                            <div class="nm-home-hero-2__capability"><h3>Business Systems</h3><p>Bespoke software architecture and internal operational tooling.</p></div>
+                            <div class="nm-home-hero-2__capability"><h3>Remote Recruitment</h3><p>Individually vetted specialists matched to exact operational briefs.</p></div>
+                            <div class="nm-home-hero-2__capability"><h3>Brand Identity</h3><p>Institutional positioning, narrative, and visual systems.</p></div>
+                            <div class="nm-home-hero-2__capability"><h3>Digital Presence</h3><p>High-craft web platforms built for clarity and permanence.</p></div>
+                            <div class="nm-home-hero-2__capability"><h3>Sales Development</h3><p>Structured market entry and qualified commercial pipelines.</p></div>
+                        </div>
+                    </section>
+                    <section aria-labelledby="nm-home-ventures-title">
+                        <h2 class="nm-home-hero-2__label" id="nm-home-ventures-title">Internal Studio &amp; Ventures</h2>
+                        <div class="nm-home-hero-2__ventures">
+                            <p>Beyond client mandates, we research, architect, and incubate proprietary concepts—from luxury maisons to Rust-based application frameworks.</p>
+                            <ul class="nm-home-hero-2__tags">
+                                <li>Caldezza</li><li>Feluqa</li><li>The Best Recruit</li><li>Virtual Assistant Asia</li>
+                            </ul>
+                            <a class="nm-home-hero-2__link" href="{{ simple_site('studio', 'projects') }}">Explore ideas in development →</a>
+                        </div>
+                    </section>
+                </div>
+            </section>
+        @elseif ($hero === 3)
+            {{-- Reserved for a future hero variation. --}}
         @endif
         <section class="nm-home-explore" aria-labelledby="nm-home-explore-title">
             <h2 id="nm-home-explore-title">Explore Numerimondes</h2>
