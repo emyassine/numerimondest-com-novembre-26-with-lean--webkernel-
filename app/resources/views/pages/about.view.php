@@ -200,12 +200,10 @@
         .nm-founder-fact:last-child { padding-bottom: 0; border-bottom: 0; }
         .nm-founder-fact dt { font: inherit; font-weight: 600; }
         .nm-founder-fact dd { margin: 0; font: inherit; }
-        .nm-founder-interest { margin: 0; font: inherit; }
 
         @media (max-width: 700px) {
             .nm-about-intro { min-height: 500px; padding: 85px 20px 45px; }
             .nm-about-intro h1 { max-width: 12.49rem; font-size: 12px; }
-            .nm-about-intro p { font-size: 15px; }
             .nm-expertise-grid { gap: 35px 20px; }
             .nm-expertise-grid article { gap: 20px; }
             .nm-expertise-grid h3 { font-size: 12px; }
@@ -308,7 +306,7 @@
                     </dl>
                 </x-webkernel-platform::section>
                 <x-webkernel-platform::section heading="Outside work" icon="heroicon-o-heart" :collapsed="true" :compact="true" class="nm-founder-section">
-                    <p class="nm-founder-interest">{{ $about['profile']['interests'] }}</p>
+                    <p>{{ $about['profile']['interests'] }}</p>
                 </x-webkernel-platform::section>
             </div>
         </section>

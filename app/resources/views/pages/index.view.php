@@ -30,19 +30,19 @@
             <section class="nm-home-hero-2">
                 <div class="nm-home-hero-2__top">
                     <div>
-                        <p class="nm-label nm-label--eyebrow">Advisory · Systems · Global Execution</p>
-                        <h1 class="nm-heading-display">Move with purpose.<br><em>Complex execution,</em><br>delivered cleanly.</h1>
+                        <p class="label-text eyebrow-label">Advisory · Systems · Global Execution</p>
+                        <h1 class="h1-silky">Move with purpose.<br><em>Complex execution,</em><br>delivered cleanly.</h1>
                     </div>
                     <div class="nm-home-hero-2__right">
-                        <p class="nm-text--lead nm-text--muted">The world moves fast. We help your business move with precision—strengthening operations, grounding decisions in frontline research, and building the systems and teams required to turn ambitious mandates into reality.</p>
+                        <p class="lead-text secondary-text">The world moves fast. We help your business move with precision—strengthening operations, grounding decisions in frontline research, and building the systems and teams required to turn ambitious mandates into reality.</p>
                         <x-webkernel-platform::button tag="a" :href="simple_site('studio', 'contact')" color="primary">Discuss a Mandate <span aria-hidden="true">→</span></x-webkernel-platform::button>
-                        <p class="nm-text--small nm-text--muted">We accept a very limited number of client engagements at any time to ensure direct principal involvement.</p>
+                        <p class="small-text secondary-text">We accept a very limited number of client engagements at any time to ensure direct principal involvement.</p>
                     </div>
                 </div>
 
                 <div class="nm-home-hero-2__bottom">
                     <section aria-labelledby="nm-home-practice-title">
-                        <h2 class="nm-label nm-label--section" id="nm-home-practice-title">Practice Areas</h2>
+                        <h2 class="label-text section-label" id="nm-home-practice-title">Practice Areas</h2>
                         <div class="nm-home-hero-2__capabilities">
                             @php
                                 $capabilities = [
@@ -56,17 +56,17 @@
                             @endphp
                             @foreach ($capabilities as $capability)
                                 <div class="nm-home-hero-2__capability">
-                                    <h3 class="nm-heading-card">{{ $capability['title'] }}</h3>
-                                    <p class="nm-text--small nm-text--muted">{{ $capability['description'] }}</p>
+                                    <h3 class="card-heading">{{ $capability['title'] }}</h3>
+                                    <p class="small-text secondary-text">{{ $capability['description'] }}</p>
                                 </div>
                             @endforeach
                         </div>
                     </section>
                     <div>
                         <section aria-labelledby="nm-home-ventures-title">
-                            <h2 class="nm-label nm-label--section" id="nm-home-ventures-title">Internal Projects // Ventures</h2>
+                            <h2 class="label-text section-label" id="nm-home-ventures-title">Internal Projects // Ventures</h2>
                             <x-webkernel-platform::section :compact="true" class="nm-home-hero-2__ventures">
-                                <p class="nm-text--supporting nm-text--muted">Beyond client mandates, we research, architect, and incubate proprietary concepts—from luxury maisons to Rust-based application frameworks.</p>
+                                <p class="supporting-text secondary-text">Beyond client mandates, we research, architect, and incubate proprietary concepts—from luxury maisons to Rust-based application frameworks.</p>
                                 <div class="nm-home-hero-2__tags" aria-label="Studio ventures">
                                     @php
                                         $ventures = [
