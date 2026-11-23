@@ -133,7 +133,6 @@
         .nm-about-intro p {
             max-width: 550px;
             margin: 30px auto 0;
-            font: 400 18px/1.22 var(--nm-body);
         }
         .nm-expertise-grid { display: grid; grid-template-columns: 1fr; gap: 50px 30px; }
         .nm-expertise-grid article { display: flex; flex-direction: column; gap: 30px; }
@@ -165,20 +164,17 @@
         .nm-founder-role {
             margin: 0 0 18px;
             color: #8b8881;
-            font: 400 10px/1.4 BrownLLMain, Arial, sans-serif;
             letter-spacing: .12em;
             text-transform: uppercase;
         }
         .nm-founder-bio {
             max-width: 540px;
             margin: 0 0 16px;
-            font: 400 16px/1.45 BrownLLMain, Arial, sans-serif;
         }
         .nm-founder-positioning {
             max-width: 480px;
             margin: 26px 0 0;
             color: #77746e;
-            font: 400 15px/1.4 BrownLLMain, Arial, sans-serif;
         }
         .nm-founder-details { min-width: 0; display: grid; gap: 14px; }
         .nm-founder-section.fi-collapsed > .fi-section-content-ctn { display: none; }
@@ -199,7 +195,7 @@
         .nm-founder-fact:first-child { padding-top: 0; }
         .nm-founder-fact:last-child { padding-bottom: 0; border-bottom: 0; }
         .nm-founder-fact dt { font: inherit; font-weight: 600; }
-        .nm-founder-fact dd { margin: 0; font: inherit; }
+        .nm-founder-fact dd { margin: 0; }
 
         @media (max-width: 700px) {
             .nm-about-intro { min-height: 500px; padding: 85px 20px 45px; }
@@ -210,8 +206,7 @@
             .nm-expertise-grid li { font-size: 15px; }
             .nm-about-page .nm-team { padding: 0 0 50px; }
             .nm-founder-profile h3 { font-size: 24px; }
-            .nm-founder-bio { font-size: 14px; }
-            .nm-founder-positioning { margin-top: 20px; font-size: 14px; }
+            .nm-founder-positioning { margin-top: 20px; }
             .nm-founder-fact { grid-template-columns: minmax(100px, .38fr) minmax(0, 1fr); gap: 12px; }
         }
     </style>

@@ -9,7 +9,8 @@
   --nm-text-heading-size: .9rem;
 }
 
-:where(p, dd) {
+p,
+dd {
   font-size: var(--nm-text-size);
   line-height: var(--nm-text-leading);
   font-weight: 400;

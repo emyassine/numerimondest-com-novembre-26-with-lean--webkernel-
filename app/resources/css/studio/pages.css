@@ -16,14 +16,12 @@
 .nm-about-section p {
   max-width: 780px;
   margin: 0;
-  font: 400 18px/1.22 var(--nm-body);
   white-space: pre-line;
 }
 
 @media (max-width: 700px) {
   .nm-about-section h2 { font-size: 12px; }
 
-  .nm-about-section p { font-size: 15px; }
   .nm-about-section { grid-template-columns: 1fr; gap: 30px; padding: 50px 0; }
 }
 
