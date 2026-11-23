@@ -336,7 +336,13 @@
 
             @if (count($currency_options) > 1)
                 <div class="nm-mobile-currency-switcher">
-                    <x-webkernel-platform::dropdown placement="bottom-start" width="sm" offset="4" teleport>
+                    <x-webkernel-platform::dropdown
+                        placement="bottom-start"
+                        width="xs"
+                        offset="4"
+                        maxHeight="min(60dvh, 24rem)"
+                        shift
+                        teleport>
                         <x-slot name="trigger">
                             <button type="button" class="nm-mobile-menu-currency-trigger" role="menuitem" tabindex="-1" aria-label="Choose currency">
                                 <span>Currency</span>
