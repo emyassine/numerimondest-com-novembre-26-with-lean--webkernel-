@@ -1,6 +1,7 @@
 @props([
     'title' => 'Numerimondes — Ideas, Strategy, Execution',
     'description' => '',
+    'subheader' => null,
     'page_width' => [
         'desktop' => 'min(calc(100vw - 646px), 1054px)',
         'tablet' => 'calc(100vw - 329px)',

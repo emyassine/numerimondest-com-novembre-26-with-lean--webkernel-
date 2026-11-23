@@ -22,6 +22,11 @@
     }
     $shortlistCount = count(\App\Studio\ServiceShortlist::all());
     $studioStylesheetPatterns = config('dependable-ui.stylesheets', []);
+    $loadWebkernelPlatformTheme = (bool) config('dependable-ui.webkernel_platform_theme', false);
+    $webkernelPlatformThemePath = base_path('public/__webkernel-app/assets/webkernel/platform/dist/theme.css');
+    $webkernelPlatformThemeVersion = is_file($webkernelPlatformThemePath)
+        ? substr((string) hash_file('sha256', $webkernelPlatformThemePath), 0, 16)
+        : '';
     $preventMobileZoom = (bool) config('dependable-ui.prevent_mobile_zoom', false);
     $forceLightMode = (bool) config('dependable-ui.force_light_mode', false);
     $viewportContent = 'width=device-width, initial-scale=1';
@@ -107,6 +112,9 @@
     @foreach ($studioStylesheets as $studioStylesheet)
         <link rel="stylesheet" href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', $studioStylesheet) }}">
     @endforeach
+    @if ($loadWebkernelPlatformTheme && $webkernelPlatformThemeVersion !== '')
+        <link rel="stylesheet" href="/__webkernel-app/assets/webkernel/platform/dist/theme.css?v={{ $webkernelPlatformThemeVersion }}">
+    @endif
     <title>{{ $title }}</title>
     <style>
     		[x-cloak]{display:none!important}
