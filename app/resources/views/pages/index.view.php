@@ -29,22 +29,6 @@
 
         @php
             $hero = 2;
-
-            $capabilities = [
-                ['title' => 'Operations Advisory', 'description' => 'Research, market intelligence, and structural execution.'],
-                ['title' => 'Business Systems', 'description' => 'Bespoke software architecture and internal operational tooling.'],
-                ['title' => 'Remote Recruitment', 'description' => 'Hand-vetted specialists aligned to exact operational briefs.'],
-                ['title' => 'Brand Identity', 'description' => 'Institutional positioning, narrative, and visual systems.'],
-                ['title' => 'Digital Presence', 'description' => 'High-craft web platforms built for clarity and permanence.'],
-                ['title' => 'Sales Development', 'description' => 'Structured market entry and qualified commercial pipelines.'],
-            ];
-
-            $ventures = [
-                ['name' => 'Caldezza', 'color' => 'success', 'icon' => 'gem'],
-                ['name' => 'Feluqa', 'color' => 'danger', 'icon' => 'code-2'],
-                ['name' => 'The Best Recruit', 'color' => 'info', 'icon' => 'user-round-search'],
-                ['name' => 'Virtual Assistant Asia', 'color' => 'gray', 'icon' => 'globe-2'],
-            ];
         @endphp
 
         @if ($hero === 2)
@@ -96,6 +80,16 @@
                     <section aria-labelledby="nm-home-practice-title">
                         <h2 class="nm-home-hero-2__label" id="nm-home-practice-title">Practice Areas</h2>
                         <div class="nm-home-hero-2__capabilities">
+                            @php
+                                $capabilities = [
+                                    ['title' => 'Operations Advisory', 'description' => 'Research, market intelligence, and structural execution.'],
+                                    ['title' => 'Business Systems', 'description' => 'Bespoke software architecture and internal operational tooling.'],
+                                    ['title' => 'Remote Recruitment', 'description' => 'Hand-vetted specialists aligned to exact operational briefs.'],
+                                    ['title' => 'Brand Identity', 'description' => 'Institutional positioning, narrative, and visual systems.'],
+                                    ['title' => 'Digital Presence', 'description' => 'High-craft web platforms built for clarity and permanence.'],
+                                    ['title' => 'Sales Development', 'description' => 'Structured market entry and qualified commercial pipelines.'],
+                                ];
+                            @endphp
                             @foreach ($capabilities as $capability)
                                 <div class="nm-home-hero-2__capability">
                                     <h3>{{ $capability['title'] }}</h3>
@@ -110,6 +104,14 @@
                             <x-webkernel-platform::section :compact="true" class="nm-home-hero-2__ventures">
                                 <p>Beyond client mandates, we research, architect, and incubate proprietary concepts—from luxury maisons to Rust-based application frameworks.</p>
                                 <div class="nm-home-hero-2__tags" aria-label="Studio ventures">
+                                    @php
+                                        $ventures = [
+                                            ['name' => 'Caldezza', 'color' => 'success', 'icon' => 'gem'],
+                                            ['name' => 'Feluqa', 'color' => 'danger', 'icon' => 'code-2'],
+                                            ['name' => 'The Best Recruit', 'color' => 'info', 'icon' => 'user-round-search'],
+                                            ['name' => 'Virtual Assistant Asia', 'color' => 'gray', 'icon' => 'globe-2'],
+                                        ];
+                                    @endphp
                                     @foreach ($ventures as $venture)
                                         <x-webkernel-platform::badge :color="$venture['color']" size="sm">
                                             <x-webkernel::icon :icon="$venture['icon']" set="lucide" width="14" height="14" aria-hidden="true" />
