@@ -67,12 +67,14 @@
         $preloadImages[] = \App\Studio\ServiceCatalog::find($serviceSlug)['image_source'];
     }
     $preloadImages = array_values(array_unique($preloadImages));
+@endphp
+<!doctype html>
+@php
     $deploymentIncludePath = base_path('deploy.inc.php');
     if (is_file($deploymentIncludePath)) {
         require $deploymentIncludePath;
     }
 @endphp
-<!doctype html>
 <html lang="{{ $locale }}" data-theme="nm-studio" data-mode="{{ $forceLightMode ? 'light' : 'system' }}" data-srs-mode="{{ $forceLightMode ? 'light' : '' }}" class="{{ $forceLightMode ? 'light' : '' }}" data-currency="{{ $currency }}" style="color-scheme:{{ $forceLightMode ? 'light' : 'light dark' }};--nm-studio-background:{{ $studioBackground }};background-color:{{ $studioBackground }}">
 <head>
     <meta charset="utf-8">
