@@ -164,10 +164,6 @@
                                 'md' => 2,
                                 'lg' => 4,
                             ])->class('items-end')->style(['gap' => '1rem']);
-                            $filterFooterGrid = (new \Webkernel\Platform\Support\View\ComponentAttributeBag())->grid([
-                                'default' => 1,
-                                'sm' => 2,
-                            ])->class('items-center mt-5 border-t border-gray-200 pt-5')->style(['gap' => '1rem']);
                         @endphp
 
                         <div {{ $filterGrid }}>
@@ -209,18 +205,26 @@
                             </div>
 
                             <div>
-                                <x-webkernel-platform::button type="submit" size="sm">Apply filters</x-webkernel-platform::button>
+                                <x-webkernel-platform::button.group>
+                                    <x-webkernel-platform::button type="submit" size="sm">Apply filters</x-webkernel-platform::button>
+                                    <x-webkernel-platform::button
+                                        tag="a"
+                                        :href="$servicesUrl"
+                                        color="gray"
+                                        size="sm"
+                                        icon="heroicon-o-arrow-path"
+                                        aria-label="Clear all filters"
+                                        tooltip="Clear all filters"
+                                    />
+                                </x-webkernel-platform::button.group>
                             </div>
                         </div>
 
-                        <div {{ $filterFooterGrid }}>
+                        <div class="mt-4">
                             <label for="services-priced">
                                 <x-webkernel-platform::input.checkbox id="services-priced" name="priced" value="1" :checked="$priceOnly" />
                                 Show offers with listed pricing
                             </label>
-                            <div>
-                                <x-webkernel-platform::button tag="a" :href="$servicesUrl" color="gray" size="sm">Clear all filters</x-webkernel-platform::button>
-                            </div>
                         </div>
                     </form>
                 </x-webkernel-platform::section>
