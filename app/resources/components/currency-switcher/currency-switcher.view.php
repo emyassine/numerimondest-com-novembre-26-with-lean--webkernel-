@@ -38,9 +38,10 @@
         width:100%;
         min-height:48px;
         justify-content:space-between;
-        padding:10px 16px;
-        font:500 13px/1.25 var(--nm-body);
-        letter-spacing:.04em;
+        padding:10px 8px;
+        font:inherit;
+        letter-spacing:normal;
+        text-transform:none;
     }
     .nm-currency-switcher-trigger--nav-row > svg {
         width:14px;
