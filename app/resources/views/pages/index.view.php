@@ -52,7 +52,7 @@
                 .nm-home-hero-2__bottom { display:grid; grid-template-columns:1.35fr .85fr; gap:4rem; }
                 .nm-home-hero-2__top { min-height:80vh; align-items:center; margin:0; padding:4rem 0; border-bottom:1px solid var(--border-hairline); }
                 .nm-home-hero-2__eyebrow,
-                .nm-home-hero-2__label { display:block; color:var(--ink-muted); font-size:.75rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; }
+                .nm-home-hero-2__label { display:block; color:#64748b; font-size:.75rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; }
                 .nm-home-hero-2__eyebrow { margin:0 0 1.5rem; font-size:.78rem; }
                 .nm-home-hero-2 h1 { margin:0; color:var(--ink-primary); font-family:Romie,Georgia,serif; font-size:clamp(2.2rem,4vw,3.6rem); font-weight:400; letter-spacing:-.025em; line-height:1.12; }
                 .nm-home-hero-2 h1 em { color:var(--ink-secondary); font-style:italic; }
@@ -63,15 +63,12 @@
                 .nm-home-hero-2__label { margin:0 0 1.25rem; }
                 .nm-home-hero-2__ventures-divider { display:block; width:100%; height:1px; min-height:1px; margin:0 0 1.25rem; border:0; border-top:1px solid var(--border-hairline); opacity:.7; }
                 .nm-home-hero-2__capabilities { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.25rem 2rem; }
-                .nm-home-hero-2__capability { padding-top:.75rem; border-top:1px solid var(--border-subtle); }
-                .nm-home-hero-2__capability h3 { margin:0 0 .25rem; color:var(--ink-primary); font-size:.9rem; font-weight:600; }
-                .nm-home-hero-2__capability p,
-                .nm-home-hero-2__ventures p { margin:0; color:var(--ink-muted); font-size:.8rem; line-height:1.5; }
-                .nm-home-hero-2__ventures p { margin-bottom:1rem; color:var(--ink-secondary); font-size:.85rem; line-height:1.6; }
-                .nm-home-hero-2__tags { display:flex; flex-wrap:wrap; gap:.5rem; margin:0 0 1rem; padding:0; list-style:none; }
-                .nm-home-hero-2__tags li { padding:.25rem .65rem; border:1px solid var(--border-subtle); border-radius:2px; background:var(--bg-slate); color:var(--ink-primary); font-size:.75rem; }
-                .nm-home-hero-2__link { color:var(--ink-primary); font-size:.82rem; font-weight:600; text-decoration:none; }
-                .nm-home-hero-2__link:hover { text-decoration:underline; }
+                .nm-home-hero-2__capabilities { color:#0f172a; }
+                .nm-home-hero-2__capability { padding-top:.75rem; border-top:1px solid #e2e8f0; }
+                .nm-home-hero-2__capability h3 { margin:0 0 .25rem; color:#0f172a; font-size:.9rem; font-weight:600; }
+                .nm-home-hero-2__capability p { margin:0; color:#64748b; font-size:.8rem; line-height:1.5; }
+                .nm-home-hero-2__ventures p { margin:0 0 1rem; color:#475569; font-size:.85rem; line-height:1.6; }
+                .nm-home-hero-2__tags { display:flex; flex-wrap:wrap; gap:.5rem; margin:0 0 1rem; }
                 @media(max-width:960px) {
                     .nm-home-hero-2__top,
                     .nm-home-hero-2__bottom { grid-template-columns:1fr; gap:2.5rem; }
@@ -109,12 +106,15 @@
                         <hr class="nm-home-hero-2__ventures-divider">
                         <section aria-labelledby="nm-home-ventures-title">
                             <h2 class="nm-home-hero-2__label" id="nm-home-ventures-title">Internal Studio &amp; Ventures</h2>
-                            <x-webkernel-platform::section :compact="true" class="">
+                            <x-webkernel-platform::section :compact="true" class="nm-home-hero-2__ventures">
                                 <p>Beyond client mandates, we research, architect, and incubate proprietary concepts—from luxury maisons to Rust-based application frameworks.</p>
-                                <ul class="nm-home-hero-2__tags">
-                                    <li>Caldezza</li><li>Feluqa</li><li>The Best Recruit</li><li>Virtual Assistant Asia</li>
-                                </ul>
-                                <a class="nm-home-hero-2__link" href="{{ simple_site('studio', 'projects') }}">Explore ideas in development →</a>
+                                <div class="nm-home-hero-2__tags" aria-label="Studio ventures">
+                                    <x-webkernel-platform::badge color="gray" size="sm" icon="heroicon-o-sparkles">Caldezza</x-webkernel-platform::badge>
+                                    <x-webkernel-platform::badge color="gray" size="sm" icon="heroicon-o-code-bracket">Feluqa</x-webkernel-platform::badge>
+                                    <x-webkernel-platform::badge color="gray" size="sm" icon="heroicon-o-user-group">The Best Recruit</x-webkernel-platform::badge>
+                                    <x-webkernel-platform::badge color="gray" size="sm" icon="heroicon-o-globe-alt">Virtual Assistant Asia</x-webkernel-platform::badge>
+                                </div>
+                                <x-webkernel-platform::button tag="a" :href="simple_site('studio', 'projects')" color="gray" icon="heroicon-o-arrow-up-right">Explore ideas in development</x-webkernel-platform::button>
                             </x-webkernel-platform::section>
                         </section>
                     </div>
@@ -123,20 +123,6 @@
         @elseif ($hero === 3)
             {{-- Reserved for a future hero variation. --}}
         @endif
-        <section class="nm-home-explore" aria-labelledby="nm-home-explore-title">
-            <h2 id="nm-home-explore-title">Explore Numerimondes</h2>
-            <div class="nm-home-explore-grid">
-                <a class="nm-home-explore-card" href="{{ simple_site('studio', 'services') }}">
-                    <div><h3>Services</h3><p>Explore defined offers, starting prices and what each includes.</p></div>
-                    <x-webkernel::icon icon="arrow-up-right" set="lucide" width="18" height="18" class="nm-icon-arrow nm-icon-arrow--large" aria-hidden="true" />
-                </a>
-                <a class="nm-home-explore-card" href="{{ simple_site('studio', 'projects') }}">
-                    <div><h3>Projects</h3><p>Discover the ventures and services we are building and delivering.</p></div>
-                    <x-webkernel::icon icon="arrow-up-right" set="lucide" width="18" height="18" class="nm-icon-arrow nm-icon-arrow--large" aria-hidden="true" />
-                </a>
-            </div>
-        </section>
-
         <section class="nm-about-section nm-home-opportunity">
             <div>
                 <h2>What could your next opportunity become?</h2>
