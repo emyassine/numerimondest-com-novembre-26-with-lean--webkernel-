@@ -39,12 +39,15 @@
 .nm-nav--compact nav a {
     display: flex;
     align-items: center;
+    flex-wrap: nowrap;
     gap: 10px;
     white-space: nowrap;
 }
 .nm-nav-item-row {
     display: inline-flex;
     align-items: center;
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
     gap: 10px;
     white-space: nowrap;
     line-height: 1.25;
@@ -60,20 +63,66 @@
     line-height: 1.25;
 }
 
-/* Item natif currency dans le dropdown */
+/* Ligne currency : strictement sur une seule ligne */
 .nm-dropdown-currency-item {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    flex-wrap: nowrap;
     gap: 12px;
     width: 100%;
+    min-width: 0;
     white-space: nowrap;
     border-top: 1px solid var(--fi-dropdown-list-item-border-color, #eee);
 }
 .nm-dropdown-currency-trigger-wrap {
-    flex: 0 0 auto;
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: 0;
+    white-space: nowrap;
+}
+.nm-dropdown-currency-trigger-wrap > div,
+.nm-dropdown-currency-trigger-wrap .fi-dropdown,
+.nm-dropdown-currency-trigger-wrap .fi-dropdown-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    white-space: nowrap;
+}
+.nm-dropdown-currency-trigger-wrap .nm-currency-switcher-trigger {
     display: inline-flex;
     align-items: center;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    gap: 6px;
+    width: 100%;
+    min-height: 36px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: 500 13px/1.25 var(--nm-body);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.nm-dropdown-currency-trigger-wrap .nm-currency-switcher-trigger span {
+    white-space: nowrap;
+}
+.nm-dropdown-currency-trigger-wrap .nm-currency-switcher-trigger svg {
+    width: 14px;
+    height: 14px;
+    flex: 0 0 auto;
+    transition: transform 150ms ease;
+}
+.nm-dropdown-currency-trigger-wrap .nm-currency-switcher-trigger.is-open svg,
+.nm-dropdown-currency-trigger-wrap .nm-currency-switcher-trigger[aria-expanded="true"] svg {
+    transform: rotate(180deg);
 }
 
 @media (max-width: 900px) {
@@ -140,6 +189,9 @@
                     </span>
                     <span
                         class="nm-dropdown-currency-trigger-wrap"
+                        x-data="{ currencyOpen: false }"
+                        x-on:dropdown-open.window="if ($event.target.closest('.nm-dropdown-currency-trigger-wrap')) { currencyOpen = true; $el.querySelector('.nm-currency-switcher-trigger')?.classList.add('is-open'); $el.querySelector('.nm-currency-switcher-trigger')?.setAttribute('aria-expanded', 'true'); }"
+                        x-on:dropdown-close.window="if ($event.target.closest('.nm-dropdown-currency-trigger-wrap')) { currencyOpen = false; $el.querySelector('.nm-currency-switcher-trigger')?.classList.remove('is-open'); $el.querySelector('.nm-currency-switcher-trigger')?.setAttribute('aria-expanded', 'false'); }"
                         @click.stop
                     >
                         <x-studio::currency-switcher
