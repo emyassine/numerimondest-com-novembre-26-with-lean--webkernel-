@@ -123,33 +123,7 @@
 
                 <style>
                     .nm-services-filter-section { margin-bottom:2rem; }
-                    .nm-services-filter-layout { display:grid; }
                     .nm-services-filter-grid { gap:1rem; }
-                    .nm-services-filter-reset {
-                        height:42px;
-                        display:flex;
-                        align-items:stretch;
-                        justify-self:start;
-                        margin-inline-start:1rem;
-                        border:1px solid var(--border-default, var(--nm-line));
-                        border-radius:var(--radius-md, .375rem);
-                        background:var(--surface-panel, #fff);
-                        box-shadow:0 1px 2px rgba(15,23,42,.06), 0 8px 24px rgba(15,23,42,.04);
-                    }
-                    .nm-services-filter-reset > srs-button,
-                    .nm-services-filter-reset > s-button { height:100%; }
-                    .nm-services-filter-reset > srs-button::part(button),
-                    .nm-services-filter-reset > s-button::part(button),
-                    .nm-services-filter-reset > button {
-                        height:100%;
-                        min-height:0;
-                        border:0;
-                        background:transparent;
-                        box-shadow:none;
-                    }
-                    @media (min-width:1024px) {
-                        .nm-services-filter-layout { grid-template-columns:minmax(0, 1fr) auto; align-items:end; }
-                    }
                 </style>
                 <x-webkernel-platform::section class="nm-services-filter-section">
                     <form id="services-filters" aria-label="Filter services">
@@ -161,18 +135,17 @@
                             ])->class('items-end nm-services-filter-grid');
                         @endphp
 
-                        <div class="nm-services-filter-layout">
-                            <div {{ $filterGrid }}>
-                                <div>
-                                    <x-webkernel-platform::input.wrapper>
-                                        <x-webkernel-platform::input
-                                            id="services-query"
-                                            name="q"
-                                            type="search"
-                                            placeholder="Search offers"
-                                            :value="$searchQuery"
-                                        />
-                                    </x-webkernel-platform::input.wrapper>
+                        <div {{ $filterGrid }}>
+                            <div>
+                                <x-webkernel-platform::input.wrapper>
+                                    <x-webkernel-platform::input
+                                        id="services-query"
+                                        name="q"
+                                        type="search"
+                                        placeholder="Search offers"
+                                        :value="$searchQuery"
+                                    />
+                                </x-webkernel-platform::input.wrapper>
                                 </div>
 
                                 <div>
@@ -206,19 +179,6 @@
                                     </x-webkernel-platform::input.wrapper>
                                 </div>
 
-                            </div>
-                            <div class="nm-services-filter-reset">
-
-                                <x-webkernel-platform::button
-                                    type="reset"
-                                    color="gray"
-                                    size="sm"
-                                    icon="heroicon-o-arrow-path"
-                                    aria-label="Clear all filters"
-                                    tooltip="Clear all filters">
-                                      Clear
-                                    </x-webkernel-platform::button>
-                            </div>
                         </div>
 
                     </form>
@@ -303,7 +263,6 @@
 
             form.addEventListener('input', update);
             form.addEventListener('change', update);
-            form.addEventListener('reset', () => requestAnimationFrame(update));
             form.addEventListener('submit', (event) => event.preventDefault());
             update();
         })();

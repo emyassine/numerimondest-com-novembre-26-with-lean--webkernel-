@@ -75,54 +75,13 @@
     :site-prefix="$sitePrefix"
 >
     <x-slot name="subheader">
-        @if (! \Webkernel\Platform\Support\is_slot_empty($subheader))
-            <nav class="studio-page-subheader" aria-label="Page navigation">
-                {{ $subheader }}
-            </nav>
-        @endif
+        {{ $subheader }}
     </x-slot>
     <style>
         .studio-page-frame { box-sizing:border-box; width:100%; margin-inline:auto; padding-inline:50px; }
         .studio-page-frame--custom-width { max-width:calc(var(--studio-page-width-desktop) + 100px); }
         .studio-page-frame--unbounded { max-width:none; }
         .studio-page-frame.bleed-page { width:100%; max-width:none; margin:0; padding-inline:0; }
-        .studio-page-subheader {
-            box-sizing: border-box;
-            width: 100%;
-            min-height: 40px;
-            margin-top: 56px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding-inline: 20px;
-            border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent);
-            font: 400 11px/1.2 var(--nm-body);
-        }
-        .studio-page-subheader__start,
-        .studio-page-subheader__end {
-            min-width: 0;
-            max-width: 40%;
-            flex: 0 1 auto;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            overflow: hidden;
-        }
-        .studio-page-subheader__center {
-            min-width: 0;
-            flex: 1 1 auto;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            overflow-x: auto;
-            overscroll-behavior-x: contain;
-            scrollbar-width: none;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
-        }
-        .studio-page-subheader__center::-webkit-scrollbar { display: none; }
-        .studio-page-subheader a,
-        .studio-page-subheader button { font: inherit; }
         .nm-page { width: 100%; margin: 0; padding: 0; }
         .nm-page [x-cloak] { display: none !important; }
         .nm-page h1,
@@ -156,9 +115,6 @@
             .studio-page-frame { width:100%; padding-inline:20px; }
             .studio-page-frame--custom-width { max-width:calc(var(--studio-page-width-mobile) + 40px); }
             .studio-page-frame.bleed-page { padding-inline:0; }
-            .studio-page-subheader { min-height: 40px; margin-top: 56px; gap: 8px; padding-inline: 12px; }
-            .studio-page-subheader__start,
-            .studio-page-subheader__end { gap: 6px; }
             .nm-page-heading { min-height: 55vh; }
         }
         @media (min-width:701px) and (max-width:900px) {
