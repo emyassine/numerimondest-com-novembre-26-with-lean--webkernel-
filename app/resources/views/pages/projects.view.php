@@ -19,7 +19,27 @@
             <div>
                 <p>Explore initiatives at different stages of development. Each page identifies its current status and distinguishes concepts from available services.</p>
             </div>
-        </section>
+        </section>è
+        <style>
+	        @media (max-width: 1100px) {
+	          .nm-projects-page .nm-projects.nm-projects--grid.nm-projects--listing {
+	            grid-template-columns: repeat(2, minmax(0, 1fr));
+	          }
+	        }
+
+	        @media (max-width: 700px) {
+	          .nm-projects-page .nm-projects.nm-projects--grid.nm-projects--listing {
+	            grid-template-columns: minmax(0, 1fr);
+	            gap: 8px;
+	          }
+
+	          .nm-projects-page .nm-projects.nm-projects--grid.nm-projects--listing .nm-project {
+	            height: 72vh;
+	            height: 72svh;
+	            min-height: 360px;
+	          }
+	        }
+        </style>
 
         <x-studio::showcase-list
             :cards="$projects"
