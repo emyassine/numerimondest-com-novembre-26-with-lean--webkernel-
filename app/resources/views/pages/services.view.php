@@ -1,6 +1,5 @@
 @php
     $allServices = \App\Studio\ServiceCatalog::all();
-    $servicesUrl = simple_site('studio', 'services');
     $currencyConfig = config('nm-studio.currencies', []);
     $currencyOptions = is_array($currencyConfig['options'] ?? null) ? $currencyConfig['options'] : [];
     $currencyCookie = (string) ($currencyConfig['cookie'] ?? 'numerimondes_currency');
@@ -31,42 +30,7 @@
     $selectedCategory = array_key_exists($requestedCategory, $categoryMap) ? $requestedCategory : '';
     $requestedEngagement = is_string($_GET['engagement'] ?? null) ? $_GET['engagement'] : '';
     $selectedEngagement = array_key_exists($requestedEngagement, $engagementMap) ? $requestedEngagement : '';
-    $services = array_values(array_filter(
-        $allServices,
-        static function (array $service) use ($selectedCategory, $selectedEngagement, $searchQuery, $priceOnly, $slugify): bool {
-            $categorySlug = $slugify($service['category']);
-            $engagementSlug = $slugify($service['engagement_type'] ?? 'Project');
-
-            if ($selectedCategory !== '' && $categorySlug !== $selectedCategory) {
-                return false;
-            }
-
-            if ($selectedEngagement !== '' && $engagementSlug !== $selectedEngagement) {
-                return false;
-            }
-
-            if ($priceOnly && empty($service['price_display'])) {
-                return false;
-            }
-
-            if ($searchQuery !== '') {
-                $searchable = implode(' ', [
-                    $service['name'],
-                    $service['category'],
-                    $service['card_description'],
-                    $service['format'],
-                    $service['price_display'] ?? '',
-                    $service['brand'] ?? '',
-                ]);
-
-                if (mb_stripos($searchable, $searchQuery) === false) {
-                    return false;
-                }
-            }
-
-            return true;
-        },
-    ));
+    $services = $allServices;
     $servicesByCategory = [];
     foreach ($services as $service) {
         $servicesByCategory[$slugify($service['category'])][] = $service;
@@ -115,6 +79,7 @@
         .nm-marketplace-empty h2 { margin:0 0 12px; font:400 13px/1.4 var(--nm-title); letter-spacing:.13em; text-transform:uppercase; }
         .nm-marketplace-empty p { margin:0 0 20px; font:400 16px/1.45 var(--nm-body); }
         .nm-marketplace-empty a { color:var(--primary-600); font:400 9px/1.4 var(--nm-title); letter-spacing:.14em; text-transform:uppercase; text-underline-offset:5px; }
+        .nm-services-marketplace [hidden] { display:none !important; }
         .nm-services-notes { margin-top:34px; padding-top:18px; border-top:1px solid var(--border-default, var(--nm-line)); }
         .nm-marketplace-pricing-note { margin:0; color:#77746e; font:400 12px/1.55 var(--nm-body); }
         .nm-marketplace-pricing-note a { color:var(--nm-ink); text-underline-offset:3px; }
@@ -158,10 +123,15 @@
 
                 <style>
                     .nm-services-filter-section { margin-bottom:2rem; }
+                    .nm-services-filter-layout { display:grid; }
                     .nm-services-filter-grid { gap:1rem; }
+                    .nm-services-filter-reset { display:flex; align-items:flex-end; justify-self:start; }
+                    @media (min-width:1024px) {
+                        .nm-services-filter-layout { grid-template-columns:minmax(0, 1fr) auto; align-items:end; }
+                    }
                 </style>
                 <x-webkernel-platform::section class="nm-services-filter-section">
-                    <form method="get" action="{{ $servicesUrl }}" aria-label="Filter services">
+                    <form id="services-filters" aria-label="Filter services">
                         @php
                             $filterGrid = (new \Webkernel\Platform\Support\View\ComponentAttributeBag())->grid([
                                 'default' => 1,
@@ -170,6 +140,7 @@
                             ])->class('items-end nm-services-filter-grid');
                         @endphp
 
+                        <div class="nm-services-filter-layout">
                         <div {{ $filterGrid }}>
                             <div>
                                 <x-webkernel-platform::input.wrapper>
@@ -206,39 +177,38 @@
                             </div>
 
                             <div>
-                                <x-webkernel-platform::button.group>
-                                    <x-webkernel-platform::button type="submit" size="sm">Apply filters</x-webkernel-platform::button>
-                                    <x-webkernel-platform::button
-                                        tag="a"
-                                        :href="$servicesUrl"
-                                        color="gray"
-                                        size="sm"
-                                        icon="heroicon-o-arrow-path"
-                                        aria-label="Clear all filters"
-                                        tooltip="Clear all filters"
-                                    />
-                                </x-webkernel-platform::button.group>
+                                <x-webkernel-platform::input.wrapper>
+                                    <x-webkernel-platform::input.select id="services-priced" name="priced">
+                                        <option value="">All offers</option>
+                                        <option value="1" @selected($priceOnly)>Listed pricing</option>
+                                    </x-webkernel-platform::input.select>
+                                </x-webkernel-platform::input.wrapper>
                             </div>
+
+                        </div>
+                        <div class="nm-services-filter-reset">
+                            <x-webkernel-platform::button
+                                type="reset"
+                                color="gray"
+                                size="sm"
+                                icon="heroicon-o-arrow-path"
+                                aria-label="Clear all filters"
+                                tooltip="Clear all filters" />
+                        </div>
                         </div>
 
-                        <div class="mt-4">
-                            <label for="services-priced">
-                                <x-webkernel-platform::input.checkbox id="services-priced" name="priced" value="1" :checked="$priceOnly" />
-                                Show offers with listed pricing
-                            </label>
-                        </div>
                     </form>
                 </x-webkernel-platform::section>
 
-                <p class="nm-marketplace-results" role="status">{{ count($services) }} {{ count($services) === 1 ? 'offer' : 'offers' }}{{ $selectedCategory !== '' ? ' · '.$categoryMap[$selectedCategory] : '' }}{{ $selectedEngagement !== '' ? ' · '.$engagementMap[$selectedEngagement] : '' }}{{ $searchQuery !== '' ? ' · matching “'.$searchQuery.'”' : '' }}</p>
+                <p class="nm-marketplace-results" id="services-results" role="status" aria-live="polite"></p>
 
                 @if ($services !== [])
                     @foreach ($categoryMap as $categorySlug => $categoryName)
                         @if (! empty($servicesByCategory[$categorySlug]))
-                            <section class="nm-marketplace-category-group" aria-labelledby="nm-marketplace-category-{{ $categorySlug }}">
+                            <section class="nm-marketplace-category-group" data-category="{{ $categorySlug }}" aria-labelledby="nm-marketplace-category-{{ $categorySlug }}">
                                 <header class="nm-marketplace-category-heading">
                                     <h2 id="nm-marketplace-category-{{ $categorySlug }}">{{ $categoryName }}</h2>
-                                    <span>{{ count($servicesByCategory[$categorySlug]) }} {{ count($servicesByCategory[$categorySlug]) === 1 ? 'offer' : 'offers' }}</span>
+                                    <span data-category-count>{{ count($servicesByCategory[$categorySlug]) }} {{ count($servicesByCategory[$categorySlug]) === 1 ? 'offer' : 'offers' }}</span>
                                 </header>
                                 <x-studio::marketplace-list
                                     :services="$servicesByCategory[$categorySlug]"
@@ -248,13 +218,12 @@
                             </section>
                         @endif
                     @endforeach
-                @else
-                    <div class="nm-marketplace-empty">
-                        <h2>No offer matches this search.</h2>
-                        <p>Try a broader term or describe the outcome you need.</p>
-                        <a href="{{ simple_site('studio', 'contact') }}">Discuss a tailored brief <x-webkernel::icon icon="arrow-up-right" set="lucide" width="14" height="14" class="nm-icon-arrow" aria-hidden="true" /></a>
-                    </div>
                 @endif
+                <div class="nm-marketplace-empty" id="services-empty" hidden>
+                    <h2>No offer matches this search.</h2>
+                    <p>Try a broader term or describe the outcome you need.</p>
+                    <a href="{{ simple_site('studio', 'contact') }}">Discuss a tailored brief <x-webkernel::icon icon="arrow-up-right" set="lucide" width="14" height="14" class="nm-icon-arrow" aria-hidden="true" /></a>
+                </div>
                 <section class="nm-services-notes" aria-label="Service notes">
                     <p class="nm-marketplace-pricing-note">
                         @if ($displayCurrency === 'MAD')
@@ -269,4 +238,50 @@
 
         </div>
     </main>
+    <script>
+        (() => {
+            const form = document.getElementById('services-filters');
+            if (!form) return;
+
+            const query = form.querySelector('[name="q"]');
+            const category = form.querySelector('[name="category"]');
+            const engagement = form.querySelector('[name="engagement"]');
+            const priced = form.querySelector('[name="priced"]');
+            const cards = [...document.querySelectorAll('.nm-services-marketplace .nm-marketplace-card')];
+            const groups = [...document.querySelectorAll('.nm-services-marketplace .nm-marketplace-category-group')];
+            const result = document.getElementById('services-results');
+            const empty = document.getElementById('services-empty');
+
+            const update = () => {
+                const term = query.value.trim().toLocaleLowerCase();
+                let visibleCount = 0;
+
+                cards.forEach((card) => {
+                    const group = card.closest('.nm-marketplace-category-group');
+                    const matches = (!category.value || group?.dataset.category === category.value)
+                        && (!engagement.value || card.dataset.engagement === engagement.value)
+                        && (priced.value !== '1' || card.dataset.priced === 'true')
+                        && (!term || card.dataset.search.includes(term));
+                    card.hidden = !matches;
+                    if (matches) visibleCount++;
+                });
+
+                groups.forEach((group) => {
+                    const visible = [...group.querySelectorAll('.nm-marketplace-card')].filter((card) => !card.hidden).length;
+                    group.hidden = visible === 0;
+                    const count = group.querySelector('[data-category-count]');
+                    if (count) count.textContent = `${visible} ${visible === 1 ? 'offer' : 'offers'}`;
+                });
+
+                result.textContent = `${visibleCount} ${visibleCount === 1 ? 'offer' : 'offers'}`;
+                empty.hidden = visibleCount !== 0;
+            };
+
+            form.addEventListener('input', update);
+            form.addEventListener('change', update);
+            form.addEventListener('reset', () => requestAnimationFrame(update));
+            form.addEventListener('submit', (event) => event.preventDefault());
+            update();
+        })();
+    </script>
 </x-studio::page>

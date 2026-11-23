@@ -1,5 +1,17 @@
 @props(['service' => []])
-<article class="nm-marketplace-card {{ $service['class'] }}">
+<article
+    class="nm-marketplace-card {{ $service['class'] }}"
+    data-engagement="{{ \Webkernel\Utilities\Str::slug($service['engagement_type'] ?? 'Project') }}"
+    data-priced="{{ ! empty($service['price_display']) ? 'true' : 'false' }}"
+    data-search="{{ mb_strtolower(implode(' ', array_filter([
+        $service['name'],
+        $service['category'],
+        $service['card_description'],
+        $service['format'],
+        $service['price_display'] ?? '',
+        $service['brand'] ?? '',
+    ]))) }}"
+>
     <a class="nm-marketplace-card-link" href="{{ $service['href'] }}">
         <div class="nm-marketplace-card-image-wrap">
             <img

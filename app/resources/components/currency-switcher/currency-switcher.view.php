@@ -91,8 +91,8 @@
             <button
                 type="button"
                 class="nm-currency-switcher-trigger"
-                :role="$trigger_role"
-                :tabindex="$trigger_tabindex"
+                @if (filled($trigger_role)) role="{{ $trigger_role }}" @endif
+                @if (filled($trigger_tabindex)) tabindex="{{ $trigger_tabindex }}" @endif
                 aria-label="Choose quote currency">
                 <span>{{ $currency }}</span>
                 <x-webkernel::icon
