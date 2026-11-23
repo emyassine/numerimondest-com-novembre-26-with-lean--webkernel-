@@ -92,7 +92,6 @@
     @foreach ($preloadImages as $preloadImage)
         <link rel="preload" as="image" href="{{ simple_site('studio', $preloadImage) }}">
     @endforeach
-    <link rel="preload" as="font" type="font/woff" crossorigin href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/Simon-400-normal.woff') }}">
     <link rel="preload" as="font" type="font/woff" crossorigin href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/BrownLLMain-400-normal.woff') }}">
     @if ($studioPage === '' || $studioPage === 'contact')
         <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/Romie-MediumItalic.woff2">
@@ -111,7 +110,6 @@
     @endif
     <title>{{ $title }}</title>
     <style>
-        @font-face { font-family: Simon; src: url('{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/Simon-400-normal.woff') }}') format('woff'); font-style: normal; font-weight: 400; font-display: block; }
         @font-face { font-family: BrownLLMain; src: url('{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/BrownLLMain-400-normal.woff') }}') format('woff'); font-style: normal; font-weight: 400; font-display: block; }
     </style>
 </head>
