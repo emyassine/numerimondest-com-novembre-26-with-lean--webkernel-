@@ -73,21 +73,6 @@
 
 .nm-nav--right { justify-content: flex-end; }
 .nm-nav--compact { display: none; }
-.fi-dropdown-panel:has(.nm-mobile-menu-list) {
-  width: min(320px, calc(100vw - 24px));
-  max-width: min(320px, calc(100vw - 24px)) !important;
-  color: var(--nm-ink);
-}
-.nm-mobile-menu-list .fi-dropdown-list-item {
-  min-height: 48px;
-  padding: 12px 18px;
-  color: var(--nm-ink);
-  font: 500 14px/1.35 var(--nm-body);
-  letter-spacing: .06em;
-  text-decoration: none;
-}
-.nm-mobile-menu-list .fi-dropdown-list-item-label { color: inherit; font: inherit; letter-spacing: inherit; }
-.nm-mobile-menu-list .fi-dropdown-list-item-label > span:first-child { flex: 1 1 auto; }
 .nm-mobile-menu-currency-trigger {
   width: 100%;
   min-height: 48px;
@@ -105,7 +90,6 @@
 }
 .nm-mobile-menu-currency-trigger strong { margin-left: auto; font-weight: 600; }
 .nm-mobile-menu-currency-trigger svg { flex: 0 0 auto; }
-.fi-dropdown-panel:has(.nm-mobile-currency-list) { z-index: 110; min-width: min(260px, calc(100vw - 40px)); }
 .nm-nav-menu-trigger { box-sizing: border-box; width: 44px; height: 44px; display: grid; place-items: center; padding: 0; border: 0; background: transparent; cursor: pointer; color: inherit; }
 .nm-nav-menu-trigger svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
 
@@ -319,7 +303,6 @@
     </nav>
     <div class="nm-nav--compact">
         <x-webkernel-platform::dropdown
-            class="nm-mobile-menu-dropdown"
             placement="bottom-end"
             width="xs"
             offset="4"
@@ -332,7 +315,7 @@
                 </button>
             </x-slot>
             <nav aria-label="Main navigation">
-                <x-webkernel-platform::dropdown.list class="nm-mobile-menu-list">
+                <x-webkernel-platform::dropdown.list>
                     @foreach (array_merge($nav_items['left'], $nav_items['right']) as $item)
                         @if (($item['type'] ?? null) !== 'currency')
                             <x-webkernel-platform::dropdown.list.item
@@ -364,7 +347,7 @@
                         <form action="{{ rtrim($site_prefix, '/') }}/currency" method="post">
                             @csrf
                             <input type="hidden" name="return_to" value="{{ $request_path }}">
-                            <x-webkernel-platform::dropdown.list class="nm-mobile-currency-list">
+                            <x-webkernel-platform::dropdown.list>
                                 @foreach ($ordered_currency_options as $currencyCode => $option)
                                     <x-webkernel-platform::dropdown.list.item
                                         tag="button"

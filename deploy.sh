@@ -216,6 +216,8 @@ print_sync_summary() {
     while IFS= read -r line; do dim "$line"; done < <(grep -E '^(Number of files|Number of created files|Number of deleted files|Total file size|Total transferred file size|sent |received |speedup is)' "$log" || true)
 }
 
+load_composer_path_repositories || exit 1
+
 # ------------------------------- Header -------------------------------
 printf '\n%s%s+-- Numerimondes : deploy --+%s\n' "$BOLD" "$MAGENTA" "$RESET"
 printf '  %sProject %s %s\n' "$DIM" "$RESET" "$(basename "$ROOT")"
@@ -264,12 +266,28 @@ while IFS=$'\t' read -r NAME SOURCE DESTINATION TYPE; do
     fi
 
     LOG="$LOG_DIR/$(printf '%s' "$NAME" | tr -cs '[:alnum:]_.-' '_').log"
-    if ! run_with_spinner "Transferring $NAME..." "$LOG" "${ARGS[@]}" "$SOURCE_DIR/" "$HOST:$DESTINATION/"; then
+    if ! run_with_retries "Transferring $NAME..." "$LOG" "${ARGS[@]}" "$SOURCE_DIR/" "$HOST:$DESTINATION/"; then
         err "rsync failed for $NAME."
         while IFS= read -r line; do printf '      %s%s%s\n' "$RED" "$line" "$RESET" >&2; done <"$LOG"
         exit 1
     fi
     print_sync_summary "$LOG"
+
+    # Composer path repositories are build inputs. Transfer them explicitly and
+    # verify them remotely before Composer is allowed to mutate installed deps.
+    if [[ "$TYPE" == webkernel ]]; then
+        for REPOSITORY_PATH in "${COMPOSER_PATH_REPOSITORIES[@]}"; do
+            REPOSITORY_LOG="$LOG_DIR/$(printf '%s_%s' "$NAME" "$REPOSITORY_PATH" | tr -cs '[:alnum:]_.-' '_').log"
+            REPOSITORY_ARGS=(rsync "${RSYNC_OPTIONS[@]}" --exclude='/.git/' --exclude='/node_modules/')
+            if ! run_with_retries "Transferring Composer source $REPOSITORY_PATH..." "$REPOSITORY_LOG" "${REPOSITORY_ARGS[@]}" "$ROOT/$REPOSITORY_PATH/" "$HOST:$DESTINATION/$REPOSITORY_PATH/"; then
+                err "rsync failed for Composer path repository $REPOSITORY_PATH."
+                while IFS= read -r line; do printf '      %s%s%s\n' "$RED" "$line" "$RESET" >&2; done <"$REPOSITORY_LOG"
+                exit 1
+            fi
+            print_sync_summary "$REPOSITORY_LOG"
+        done
+    fi
+
     if grep -qE '^[<>ch*]' "$LOG"; then
         CHANGED=true
         if [[ "$TYPE" == webkernel ]] && grep -qE '^[<>ch*].*(/|[[:space:]])composer\.(json|lock)([[:space:]]|$)' "$LOG"; then
@@ -282,7 +300,7 @@ while IFS=$'\t' read -r NAME SOURCE DESTINATION TYPE; do
         MANAGED_LOG="$LOG_DIR/$(printf '%s_%s' "$NAME" "$MANAGED_DIRECTORY" | tr -cs '[:alnum:]_.-' '_').log"
         MANAGED_ARGS=(rsync "${RSYNC_OPTIONS[@]}" --exclude='/.git/' --exclude='node_modules/' --delete)
         info "Mirroring managed source directory: $MANAGED_DIRECTORY/"
-        if ! run_with_spinner "Syncing $MANAGED_DIRECTORY/ exactly..." "$MANAGED_LOG" "${MANAGED_ARGS[@]}" "$SOURCE_DIR/$MANAGED_DIRECTORY/" "$HOST:$DESTINATION/$MANAGED_DIRECTORY/"; then
+        if ! run_with_retries "Syncing $MANAGED_DIRECTORY/ exactly..." "$MANAGED_LOG" "${MANAGED_ARGS[@]}" "$SOURCE_DIR/$MANAGED_DIRECTORY/" "$HOST:$DESTINATION/$MANAGED_DIRECTORY/"; then
             err "rsync failed for managed source directory $MANAGED_DIRECTORY/."
             while IFS= read -r line; do printf '      %s%s%s\n' "$RED" "$line" "$RESET" >&2; done <"$MANAGED_LOG"
             exit 1
@@ -297,12 +315,14 @@ PRODUCTION_DEST="$(jq -er '.deploys.Production.dest' "$CONFIG")"
 step "$STEP_NUMBER" 'Rebuilding production'
 info "Production path: $HOST:$PRODUCTION_DEST"
 REMOTE_COMMAND="cd '$PRODUCTION_DEST'"
+REMOTE_COMMAND="set -Eeuo pipefail; $REMOTE_COMMAND"
+for REPOSITORY_PATH in "${COMPOSER_PATH_REPOSITORIES[@]}"; do
+    REMOTE_COMMAND+="; test -f '$REPOSITORY_PATH/composer.json' || { echo 'Missing Composer path repository: $REPOSITORY_PATH' >&2; exit 20; }"
+done
 if [[ "$COMPOSER_CHANGED" == true ]]; then
-    REMOTE_COMMAND+=" && composer install --no-dev --optimize-autoloader --no-interaction --no-progress"
+    REMOTE_COMMAND+="; mkdir -p runtime/cache/deploy; RECOVERY_DIR=\$(mktemp -d runtime/cache/deploy/composer-recovery.XXXXXX); cp -a internal/dependencies \"\$RECOVERY_DIR/dependencies\"; COMPOSER_OK=0; for ATTEMPT in 1 2; do if composer install --no-dev --optimize-autoloader --no-interaction --no-progress; then COMPOSER_OK=1; break; fi; echo \"Composer install failed on attempt \$ATTEMPT; restoring installed dependencies before retry.\" >&2; rm -rf internal/dependencies; cp -a \"\$RECOVERY_DIR/dependencies\" internal/dependencies; done; if [ \"\$COMPOSER_OK\" -ne 1 ]; then echo 'Composer install failed after recovery retry.' >&2; exit 21; fi; rm -rf \"\$RECOVERY_DIR\""
 fi
-REMOTE_COMMAND+=" && composer reinstall 'webkernel/*' --no-interaction --no-progress"
-REMOTE_COMMAND+=" && NO_COLOR=1 TERM=dumb APP_URL=https://numerimondes.com/ ./platform deploy:prod"
-REMOTE_COMMAND+=" && mkdir -p runtime/cache/deploy && VERSION=\$(date -u +%Y%m%dT%H%M%S)-\$(od -An -N6 -tx1 /dev/urandom | tr -d ' \\n') && printf '%s\\n' \"\$VERSION\" > runtime/cache/deploy/site-version.tmp && mv runtime/cache/deploy/site-version.tmp runtime/cache/deploy/site-version && printf 'Deploy version: %s\\n' \"\$VERSION\""
+REMOTE_COMMAND+="; DEPLOY_OK=0; for ATTEMPT in 1 2; do if NO_COLOR=1 TERM=dumb APP_URL=https://numerimondes.com/ ./platform deploy:prod; then DEPLOY_OK=1; break; fi; echo \"Production artifact build failed on attempt \$ATTEMPT; retrying from the last active generation.\" >&2; done; if [ \"\$DEPLOY_OK\" -ne 1 ]; then echo 'Production artifact build failed after retry; the previous active generation remains in place.' >&2; exit 22; fi; mkdir -p runtime/cache/deploy; VERSION=\$(date -u +%Y%m%dT%H%M%S)-\$(od -An -N6 -tx1 /dev/urandom | tr -d ' \\n'); printf '%s\\n' \"\$VERSION\" > runtime/cache/deploy/site-version.tmp; mv runtime/cache/deploy/site-version.tmp runtime/cache/deploy/site-version; printf 'Deploy version: %s\\n' \"\$VERSION\""
 REMOTE_LOG="$LOG_DIR/production.log"
 if ! run_with_spinner 'Running production deployment actions...' "$REMOTE_LOG" ssh_remote "$REMOTE_COMMAND"; then
     err 'Remote production deployment failed.'
