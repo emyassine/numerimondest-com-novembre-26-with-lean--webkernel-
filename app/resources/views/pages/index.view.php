@@ -60,12 +60,16 @@
             </div>
         </section>
 
-        <section class="nm-about-story">
-            <h2>What could your next opportunity become?</h2>
-            <p>
-                Share a challenge, an idea or a business objective. Yassine, our founder, and the account manager personally review each request and follow up to understand what would make a meaningful difference.
-                <a href="{{ simple_site('studio', 'contact') }}">Request a private discussion</a>.
-            </p>
+        <section class="nm-about-section">
+            <div>
+                <h2>What could your next opportunity become?</h2>
+            </div>
+            <div>
+                <p>
+                    Share a challenge, an idea or a business objective. Yassine, our founder, and the account manager personally review each request and follow up to understand what would make a meaningful difference.
+                    <a href="{{ simple_site('studio', 'contact') }}">Request a private discussion</a>.
+                </p>
+            </div>
         </section>
     </main>
 </x-studio::website>

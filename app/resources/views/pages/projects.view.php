@@ -16,9 +16,13 @@
 >
     <main class="nm-page nm-projects-page">
 
-        <section class="nm-about-story" style="margin-top:5rem;">
-            <h2>Ideas in development</h2>
-            <p>Explore initiatives at different stages of development. Each page identifies its current status and distinguishes concepts from available services.</p>
+        <section class="nm-about-section" style="margin-top:5rem;">
+            <div>
+                <h2>Ideas in development</h2>
+            </div>
+            <div>
+                <p>Explore initiatives at different stages of development. Each page identifies its current status and distinguishes concepts from available services.</p>
+            </div>
         </section>
 
         <x-studio::showcase-list
