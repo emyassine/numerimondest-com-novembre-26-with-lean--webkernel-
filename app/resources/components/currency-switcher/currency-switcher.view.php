@@ -7,6 +7,8 @@
     'current_path' => '/',
     'trigger_role' => null,
     'trigger_tabindex' => null,
+    'trigger_label' => null,
+    'trigger_icon' => null,
 ])
 @php
     $ordered_currency_options = \App\Studio\CurrencyRates::strongestFirst($currency_options, $default_currency);
@@ -30,6 +32,32 @@
     .nm-currency-switcher-trigger svg {
         width: 11px;
         height: 11px;
+    }
+    .nm-currency-switcher-trigger--nav-row {
+        box-sizing:border-box;
+        width:100%;
+        min-height:48px;
+        justify-content:space-between;
+        padding:10px 16px;
+        font:500 13px/1.25 var(--nm-body);
+        letter-spacing:.04em;
+    }
+    .nm-currency-switcher-trigger--nav-row > svg {
+        width:14px;
+        height:14px;
+        flex:0 0 auto;
+    }
+    .nm-currency-switcher-trigger-label {
+        display:inline-flex;
+        align-items:center;
+        gap:10px;
+        margin-right:auto;
+        text-align:start;
+    }
+    .nm-currency-switcher-trigger-label svg {
+        width:16px;
+        height:16px;
+        flex:0 0 auto;
     }
     .nm-currency-switcher-item {
         display: flex;
@@ -91,10 +119,18 @@
         <x-slot name="trigger">
             <button
                 type="button"
-                class="nm-currency-switcher-trigger"
+                class="nm-currency-switcher-trigger @if (filled($trigger_label)) nm-currency-switcher-trigger--nav-row @endif"
                 @if (filled($trigger_role)) role="{{ $trigger_role }}" @endif
                 @if (filled($trigger_tabindex)) tabindex="{{ $trigger_tabindex }}" @endif
                 aria-label="Choose quote currency">
+                @if (filled($trigger_label))
+                    <span class="nm-currency-switcher-trigger-label">
+                        @if (filled($trigger_icon))
+                            <x-webkernel::icon :icon="$trigger_icon" set="lucide" width="16" height="16" aria-hidden="true" />
+                        @endif
+                        <span>{{ $trigger_label }}</span>
+                    </span>
+                @endif
                 <span>{{ $currency }}</span>
                 <x-webkernel::icon
                     icon="chevron-down"

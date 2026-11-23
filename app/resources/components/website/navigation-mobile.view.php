@@ -1,3 +1,4 @@
+
 @props([
     'nav_items' => [],
     'shortlist_count' => 0,
@@ -11,7 +12,10 @@
 ])
 
 <style>
-.nm-nav--compact { display: none; }
+.nm-nav--compact {
+    display: none;
+}
+
 .nm-nav-menu-trigger {
     box-sizing: border-box;
     width: 44px;
@@ -24,6 +28,7 @@
     cursor: pointer;
     color: inherit;
 }
+
 .nm-nav-menu-trigger svg {
     width: 26px;
     height: 26px;
@@ -33,7 +38,6 @@
     stroke-linecap: round;
 }
 
-/* Alignement vertical icône + texte sur une seule ligne (no-wrap) */
 .nm-nav--compact [data-slot="list"] .fi-dropdown-list-item,
 .nm-nav--compact .fi-dropdown-list-item,
 .nm-nav--compact nav a {
@@ -43,6 +47,7 @@
     gap: 10px;
     white-space: nowrap;
 }
+
 .nm-nav-item-row {
     display: inline-flex;
     align-items: center;
@@ -52,106 +57,110 @@
     white-space: nowrap;
     line-height: 1.25;
 }
+
 .nm-nav-item-row svg {
     width: 16px;
     height: 16px;
     flex: 0 0 auto;
     display: block;
 }
+
 .nm-nav-item-label {
     white-space: nowrap;
     line-height: 1.25;
 }
 
-/* Ligne currency : strictement sur une seule ligne */
-.nm-dropdown-currency-item {
-    display: flex;
-    align-items: center;
-    flex-wrap: nowrap;
-    gap: 12px;
-    width: 100%;
+.nm-nav--compact .nm-dropdown-currency-item {
+    display: block !important;
+    width: 100% !important;
     min-width: 0;
-    white-space: nowrap;
-    border-top: 1px solid var(--fi-dropdown-list-item-border-color, #eee);
+    box-sizing: border-box;
+    padding: 0 !important;
+    border-top: 1px solid var(
+        --fi-dropdown-list-item-border-color,
+        #eee
+    );
 }
-.nm-dropdown-currency-trigger-wrap {
-    flex: 1 1 auto;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    min-width: 0;
-    white-space: nowrap;
-}
-.nm-dropdown-currency-trigger-wrap > div,
-.nm-dropdown-currency-trigger-wrap .fi-dropdown,
-.nm-dropdown-currency-trigger-wrap .fi-dropdown-trigger {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    flex: 1 1 auto;
-    width: 100%;
-    min-width: 0;
-    white-space: nowrap;
-}
-.nm-dropdown-currency-trigger-wrap .nm-currency-switcher-trigger {
-    display: inline-flex;
-    align-items: center;
-    justify-content: flex-end;
-    flex-wrap: nowrap;
-    gap: 6px;
-    width: 100%;
-    min-height: 36px;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: inherit;
-    font: 500 13px/1.25 var(--nm-body);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    white-space: nowrap;
-    cursor: pointer;
-}
-.nm-dropdown-currency-trigger-wrap .nm-currency-switcher-trigger span {
-    white-space: nowrap;
-}
-.nm-dropdown-currency-trigger-wrap .nm-currency-switcher-trigger svg {
-    width: 14px;
-    height: 14px;
-    flex: 0 0 auto;
-    transition: transform 150ms ease;
-}
-.nm-dropdown-currency-trigger-wrap .nm-currency-switcher-trigger.is-open svg,
-.nm-dropdown-currency-trigger-wrap .nm-currency-switcher-trigger[aria-expanded="true"] svg {
-    transform: rotate(180deg);
+
+.nm-nav--compact .nm-dropdown-currency-item .fi-dropdown,
+.nm-nav--compact .nm-dropdown-currency-item .fi-dropdown-trigger,
+.nm-nav--compact .nm-dropdown-currency-item > div {
+    display: block !important;
+    width: 100% !important;
 }
 
 @media (max-width: 900px) {
-    .nm-nav--compact { grid-column: 3; justify-self: end; display: block; }
+    .nm-nav--compact {
+        grid-column: 3;
+        justify-self: end;
+        display: block;
+    }
 }
+
 @media (max-width: 700px) {
-    .nm-nav--compact { display: block; margin-left: auto; flex: 0 0 auto; z-index: 2; }
-    .nm-nav-menu-trigger { flex: 0 0 44px; }
+    .nm-nav--compact {
+        display: block;
+        margin-left: auto;
+        flex: 0 0 auto;
+        z-index: 2;
+    }
+
+    .nm-nav-menu-trigger {
+        flex: 0 0 44px;
+    }
 }
 </style>
 
 <div class="nm-nav--compact">
     <x-webkernel-platform::dropdown
         placement="bottom-end"
-        width="xs"
+        width="sm"
         offset="4"
         maxHeight="min(60dvh, 24rem)"
         shift
-        teleport>
+        teleport
+    >
         <x-slot name="trigger">
-            <button type="button" class="nm-nav-menu-trigger" aria-label="Open site menu" title="Open site menu">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
+            <button
+                type="button"
+                class="nm-nav-menu-trigger"
+                aria-label="Open site menu"
+                title="Open site menu"
+            >
+                <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    focusable="false"
+                >
+                    <path d="M3 6h18M3 12h18M3 18h18" />
+                </svg>
             </button>
         </x-slot>
 
         <nav aria-label="Main navigation">
             <x-webkernel-platform::dropdown.list>
                 @foreach (array_merge($nav_items['left'] ?? [], $nav_items['right'] ?? []) as $item)
-                    @if (($item['type'] ?? null) !== 'currency')
+                    @if (($item['type'] ?? null) === 'currency')
+                        @if (count($currency_options) > 1)
+                            <x-webkernel-platform::dropdown.list.item
+                                tag="div"
+                                class="nm-dropdown-currency-item"
+                            >
+                                <x-studio::currency-switcher
+                                    :currency="$currency"
+                                    :currency-options="$ordered_currency_options"
+                                    :default-currency="$default_currency"
+                                    :show-symbol="($currency_config['show_symbol'] ?? false) === true"
+                                    :site-prefix="$site_prefix"
+                                    :current-path="$request_path"
+                                    trigger-label="Currency"
+                                    trigger-icon="coins"
+                                    trigger-role="menuitem"
+                                    trigger-tabindex="-1"
+                                />
+                            </x-webkernel-platform::dropdown.list.item>
+                        @endif
+                    @else
                         <x-webkernel-platform::dropdown.list.item
                             tag="a"
                             :href="$item['href']"
@@ -159,15 +168,42 @@
                             :data-shortlist-link="$item['key'] === 'shortlist' ? true : null"
                         >
                             <span class="nm-nav-item-row">
-                                <x-webkernel::icon :icon="$item['icon']" set="lucide" width="16" height="16" aria-hidden="true" />
-                                <span class="nm-nav-item-label">{{ $item['mobile_label'] }}</span>
+                                <x-webkernel::icon
+                                    :icon="$item['icon']"
+                                    set="lucide"
+                                    width="16"
+                                    height="16"
+                                    aria-hidden="true"
+                                />
+                                <span class="nm-nav-item-label">
+                                    {{ $item['mobile_label'] }}
+                                </span>
                             </span>
+
                             @if ($item['key'] === 'shortlist')
                                 <x-slot name="badge">
                                     @if ($shortlist_count > 0)
-                                        <span data-shortlist-badge><x-webkernel-platform::badge color="gray" size="sm"><span data-shortlist-count>{{ $shortlist_count }}</span></x-webkernel-platform::badge></span>
+                                        <span data-shortlist-badge>
+                                            <x-webkernel-platform::badge
+                                                color="gray"
+                                                size="sm"
+                                            >
+                                                <span data-shortlist-count>
+                                                    {{ $shortlist_count }}
+                                                </span>
+                                            </x-webkernel-platform::badge>
+                                        </span>
                                     @else
-                                        <template data-shortlist-badge-template><span data-shortlist-badge><x-webkernel-platform::badge color="gray" size="sm"><span data-shortlist-count>0</span></x-webkernel-platform::badge></span></template>
+                                        <template data-shortlist-badge-template>
+                                            <span data-shortlist-badge>
+                                                <x-webkernel-platform::badge
+                                                    color="gray"
+                                                    size="sm"
+                                                >
+                                                    <span data-shortlist-count>0</span>
+                                                </x-webkernel-platform::badge>
+                                            </span>
+                                        </template>
                                     @endif
                                 </x-slot>
                             @endif
@@ -176,35 +212,5 @@
                 @endforeach
             </x-webkernel-platform::dropdown.list>
         </nav>
-
-        @if (count($currency_options) > 1)
-            <x-webkernel-platform::dropdown.list>
-                <x-webkernel-platform::dropdown.list.item
-                    tag="div"
-                    class="nm-dropdown-currency-item"
-                >
-                    <span class="nm-nav-item-row">
-                        <x-webkernel::icon icon="coins" set="lucide" width="16" height="16" aria-hidden="true" />
-                        <span class="nm-nav-item-label">Currency</span>
-                    </span>
-                    <span
-                        class="nm-dropdown-currency-trigger-wrap"
-                        x-data="{ currencyOpen: false }"
-                        x-on:dropdown-open.window="if ($event.target.closest('.nm-dropdown-currency-trigger-wrap')) { currencyOpen = true; $el.querySelector('.nm-currency-switcher-trigger')?.classList.add('is-open'); $el.querySelector('.nm-currency-switcher-trigger')?.setAttribute('aria-expanded', 'true'); }"
-                        x-on:dropdown-close.window="if ($event.target.closest('.nm-dropdown-currency-trigger-wrap')) { currencyOpen = false; $el.querySelector('.nm-currency-switcher-trigger')?.classList.remove('is-open'); $el.querySelector('.nm-currency-switcher-trigger')?.setAttribute('aria-expanded', 'false'); }"
-                        @click.stop
-                    >
-                        <x-studio::currency-switcher
-                            :currency="$currency"
-                            :currency-options="$ordered_currency_options"
-                            :default-currency="$default_currency"
-                            :show-symbol="($currency_config['show_symbol'] ?? false) === true"
-                            :site-prefix="$site_prefix"
-                            :current-path="$request_path"
-                        />
-                    </span>
-                </x-webkernel-platform::dropdown.list.item>
-            </x-webkernel-platform::dropdown.list>
-        @endif
     </x-webkernel-platform::dropdown>
 </div>
