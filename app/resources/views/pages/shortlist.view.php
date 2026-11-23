@@ -12,6 +12,8 @@
 <x-studio::page
     title="Your shortlist — Numerimondes"
     description="Keep selected Numerimondes services together and request a private discussion with the founder and account manager."
+    robots="noindex,follow"
+    rss="false"
     :canonical="$canonical"
     :locale="$locale"
     :site-ui="$site_ui ?? []"

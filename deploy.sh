@@ -24,6 +24,23 @@ warn() { printf '  %s[!]%s  %s\n' "$YELLOW$BOLD" "$RESET" "$*"; }
 dim()  { printf '      %s%s%s\n' "$DIM" "$*" "$RESET"; }
 err()  { printf '  %s[ERROR]%s %s\n' "$BOLD$RED" "$RESET" "$*" >&2; }
 
+print_remote_log() {
+    local log=$1 mode=${2:-dim} line
+    while IFS= read -r line; do
+        if [[ "$mode" == error ]]; then
+            printf '      %s%s%s\n' "$RED" "$line" "$RESET" >&2
+        else
+            dim "$line"
+        fi
+    done < <(
+        sed -E \
+            -e $'s/\033\\[[0-9;]*[[:alpha:]]//g' \
+            -e 's/^([[:space:]]*)INFO[[:space:]]+/\1[INFO] /' \
+            -e 's/^([[:space:]]*)OK[[:space:]]+/\1[OK] /' \
+            "$log"
+    )
+}
+
 usage() {
     cat <<EOF
 Usage:
@@ -199,14 +216,14 @@ REMOTE_COMMAND="cd '$PRODUCTION_DEST' && rm -f app/resources/components/website/
 if [[ "$COMPOSER_CHANGED" == true ]]; then
     REMOTE_COMMAND+=" && composer install --no-dev --optimize-autoloader --no-interaction --no-progress"
 fi
-REMOTE_COMMAND+=" && APP_URL=https://numerimondes.com/ ./platform deploy"
+REMOTE_COMMAND+=" && NO_COLOR=1 TERM=dumb APP_URL=https://numerimondes.com/ ./platform deploy"
 REMOTE_LOG="$LOG_DIR/production.log"
 if ! run_with_spinner 'Running production deployment actions...' "$REMOTE_LOG" ssh_remote "$REMOTE_COMMAND"; then
     err 'Remote production deployment failed.'
-    while IFS= read -r line; do printf '      %s%s%s\n' "$RED" "$line" "$RESET" >&2; done <"$REMOTE_LOG"
+    print_remote_log "$REMOTE_LOG" error
     exit 1
 fi
-while IFS= read -r line; do dim "$line"; done <"$REMOTE_LOG"
+print_remote_log "$REMOTE_LOG"
 
 if [[ "$COMPOSER_CHANGED" == true ]]; then
     ok 'Composer installed with --no-dev; deployment artifacts rebuilt and activated.'

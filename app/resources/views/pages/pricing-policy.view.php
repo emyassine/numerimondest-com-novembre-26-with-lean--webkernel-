@@ -11,6 +11,7 @@
 <x-studio::page
     title="Pricing & Engagement Policy — Numerimondes"
     description="How Numerimondes scopes services, sets fees, structures payments and handles indicative currency conversions."
+    robots="index,follow"
     :canonical="$canonical"
     :locale="$locale"
     :site-ui="$site_ui ?? []"

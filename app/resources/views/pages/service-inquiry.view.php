@@ -77,6 +77,8 @@
 <x-studio::page
     title="A private discussion — Numerimondes"
     description="Share the services you are considering and request a personal follow-up from Numerimondes."
+    robots="noindex,follow"
+    rss="false"
     :canonical="$canonical"
     :locale="$locale"
     :site-ui="$site_ui ?? []"

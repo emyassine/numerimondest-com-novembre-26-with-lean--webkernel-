@@ -39,24 +39,7 @@ final class PageDiscovery
                 throw new RuntimeException(sprintf('Duplicate simple-site URL "%s" from %s and %s.', $urlPath, $pages[$key]['file'], $file));
             }
 
-            $props = [];
-            $template = file_get_contents($file);
-            if (is_string($template)) {
-                if (preg_match('/(?:^|\s):status\s*=\s*["\']([1-5][0-9]{2})["\']/', $template, $matches) === 1) {
-                    $props['status'] = (int) $matches[1];
-                }
-                if (preg_match('/(?:^|\s):robots\s*=\s*["\']([^"\']+)["\']/', $template, $matches) === 1) {
-                    $props['robots'] = $matches[1];
-                }
-            }
-            $metaFile = substr($file, 0, -strlen('.view.php')).'.meta.php';
-            if (is_file($metaFile)) {
-                $metadata = require $metaFile;
-                if (! is_array($metadata)) {
-                    throw new RuntimeException(sprintf('Page metadata must return an array: %s', $metaFile));
-                }
-                $props = array_replace($props, $metadata);
-            }
+            $props = self::pageProps($file);
             $viewName = rtrim((string) ($site['view_namespace'] ?? ''), ':');
             if ($viewName !== '') {
                 $viewName .= '::';
@@ -102,24 +85,7 @@ final class PageDiscovery
         if (is_file($file)) {
             $relative = substr($file, strlen(rtrim($root, '/\\')) + 1);
             $viewPath = substr($relative, 0, -strlen('.view.php'));
-            $props = [];
-            $template = file_get_contents($file);
-            if (is_string($template)) {
-                if (preg_match('/(?:^|\s):status\s*=\s*["\']([1-5][0-9]{2})["\']/', $template, $matches) === 1) {
-                    $props['status'] = (int) $matches[1];
-                }
-                if (preg_match('/(?:^|\s):robots\s*=\s*["\']([^"\']+)["\']/', $template, $matches) === 1) {
-                    $props['robots'] = $matches[1];
-                }
-            }
-            $metaFile = substr($file, 0, -strlen('.view.php')).'.meta.php';
-            if (is_file($metaFile)) {
-                $metadata = require $metaFile;
-                if (! is_array($metadata)) {
-                    throw new RuntimeException(sprintf('Page metadata must return an array: %s', $metaFile));
-                }
-                $props = array_replace($props, $metadata);
-            }
+            $props = self::pageProps($file);
             $viewName = rtrim((string) ($site['view_namespace'] ?? ''), ':');
             if ($viewName !== '') {
                 $viewName .= '::';
@@ -205,5 +171,30 @@ final class PageDiscovery
     private static function stripOrderPrefix(string $part): string
     {
         return preg_replace('/\A\d{1,4}[-_]/', '', $part) ?? $part;
+    }
+
+    /** Read the static SEO/feed metadata declared directly on a page component. */
+    private static function pageProps(string $file): array
+    {
+        $template = file_get_contents($file);
+        if (! is_string($template)
+            || preg_match('/<x-[a-z0-9_.-]+::page\b([^>]*)>/is', $template, $component) !== 1
+        ) {
+            return [];
+        }
+
+        $props = [];
+        preg_match_all('/(?<![:\w-])(title|description|robots|rss|status|updated_at|canonical)\s*=\s*(["\'])(.*?)\2/is', $component[1], $attributes, PREG_SET_ORDER);
+        foreach ($attributes as $attribute) {
+            $name = $attribute[1];
+            $value = html_entity_decode($attribute[3], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $props[$name] = match ($name) {
+                'rss' => filter_var($value, FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE) ?? $value,
+                'status' => ctype_digit($value) ? (int) $value : $value,
+                default => $value,
+            };
+        }
+
+        return $props;
     }
 }
