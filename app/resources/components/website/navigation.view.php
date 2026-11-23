@@ -113,14 +113,14 @@
 .nm-nav-menu-trigger { width: 44px; height: 44px; display: grid; place-items: center; cursor: pointer; color: inherit; }
 .nm-nav-menu-trigger svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
 
-.nm-nav > a,
+.nm-nav a,
+.nm-nav .nm-currency-switcher-trigger,
 .nm-language {
   color: inherit;
-  font: 400 10px/1.2 var(--nm-body);
+  font: 600 10px/1.2 var(--nm-body);
   letter-spacing: .12em;
   text-decoration: none;
   text-transform: uppercase;
-  font-weight:500;
 }
 
 .nm-nav a:hover { opacity: .56; }

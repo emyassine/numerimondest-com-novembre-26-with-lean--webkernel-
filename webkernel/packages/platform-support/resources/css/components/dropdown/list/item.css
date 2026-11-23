@@ -66,7 +66,23 @@
 }
 
 .fi-dropdown-list-item-label {
-    @apply flex-1 truncate text-start text-gray-700 dark:text-gray-200;
+    @apply flex min-w-0 flex-1 items-center gap-2 truncate text-start text-gray-700 dark:text-gray-200;
+}
+
+.fi-dropdown-list-item-label > span:not(:first-child) {
+    @apply min-w-0 flex-1;
+}
+
+.fi-dropdown-list-item-label > svg {
+    @apply flex-none;
+}
+
+.fi-dropdown-list-item-label > small {
+    @apply ms-auto flex-none;
+}
+
+.fi-dropdown-list-item-label > bdi {
+    @apply flex-none;
 }
 
 .fi-dropdown-list-item-badge-placeholder {

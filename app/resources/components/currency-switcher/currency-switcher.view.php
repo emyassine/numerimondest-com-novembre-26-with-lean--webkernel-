@@ -25,7 +25,7 @@
 </style>
 
 @if (count($currency_options) > 1)
-    <x-webkernel-platform::dropdown placement="bottom-end" width="xs" offset="4" max-height="min(60dvh, 24rem)" shift teleport>
+    <x-webkernel-platform::dropdown placement="bottom-end" width="xs" offset="4" maxHeight="min(60dvh, 24rem)" shift teleport>
         <x-slot name="trigger">
             <button type="button" class="nm-currency-switcher-trigger" aria-label="Choose quote currency">
                 <span>{{ $currency }}</span>
