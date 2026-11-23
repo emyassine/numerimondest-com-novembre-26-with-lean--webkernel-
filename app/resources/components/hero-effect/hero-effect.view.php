@@ -256,7 +256,7 @@
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const render = now => {
         frame = 0;
-        gl.uniform1f(timeUniform, reduceMotion ? 0 : (now - startedAt) / 1000);
+        gl.uniform1f(timeUniform, reduceMotion ? 0 : (now - startedAt) / 10000);
         gl.drawArrays(gl.TRIANGLES, 0, 6);
         if (!reduceMotion && visible) frame = requestAnimationFrame(render);
     };
