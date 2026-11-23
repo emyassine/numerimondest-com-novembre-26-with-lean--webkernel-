@@ -88,6 +88,7 @@ unset SSH_PASSWORD
 RSYNC_OPTIONS=(-azc --no-owner --no-group --partial --info=progress2 --stats --timeout=30 --out-format='%i %n%L' -e "$SSH_REMOTE")
 CHANGED=false
 COMPOSER_CHANGED=false
+COMPOSER_PATH_REPOSITORIES=()
 DEPLOY_COUNT="$(jq -r '[.deploys | to_entries[] | select((.value.enable // true) == true or (.value.enable // true) == 1)] | length' "$CONFIG")"
 TOTAL_STEPS=$((DEPLOY_COUNT + 2))
 LOG_DIR="$(mktemp -d "${TMPDIR:-/tmp}/numerimondes-deploy.XXXXXX")"
@@ -124,6 +125,64 @@ run_with_spinner() {
     if wait "$ACTIVE_PID"; then status=0; else status=$?; fi
     ACTIVE_PID=''
     return "$status"
+}
+
+run_with_retries() {
+    local label=$1 log=$2 max_attempts=3 attempt attempt_log
+    shift 2
+
+    for ((attempt = 1; attempt <= max_attempts; attempt++)); do
+        attempt_log="$log.attempt-$attempt"
+        if run_with_spinner "$label ($attempt/$max_attempts)" "$attempt_log" "$@"; then
+            cp -- "$attempt_log" "$log"
+            return 0
+        fi
+        cp -- "$attempt_log" "$log"
+        if (( attempt < max_attempts )); then
+            warn "$label failed; retrying safely in 2 seconds."
+            sleep 2
+        fi
+    done
+
+    return 1
+}
+
+load_composer_path_repositories() {
+    local repository source_path relative
+    local -a matches=()
+
+    while IFS= read -r repository; do
+        [[ -n "$repository" ]] || continue
+        if [[ "$repository" == /* || ! "$repository" =~ ^[A-Za-z0-9_./*-]+$ || "$repository" =~ (^|/)\.\.(/|$) ]]; then
+            err "Unsafe or unsupported Composer path repository URL: $repository"
+            return 1
+        fi
+
+        shopt -s nullglob
+        matches=("$ROOT"/$repository)
+        shopt -u nullglob
+        if ((${#matches[@]} == 0)); then
+            err "Composer path repository has no local source: $repository"
+            return 1
+        fi
+
+        for source_path in "${matches[@]}"; do
+            [[ -d "$source_path" && -f "$source_path/composer.json" ]] || continue
+            relative=${source_path#"$ROOT"/}
+            [[ "$relative" != "$source_path" ]] || {
+                err "Composer path repository is outside the project: $source_path"
+                return 1
+            }
+            COMPOSER_PATH_REPOSITORIES+=("$relative")
+        done
+    done < <(jq -r '.repositories[]? | select(.type == "path") | .url // empty' "$ROOT/composer.json")
+
+    if ((${#COMPOSER_PATH_REPOSITORIES[@]} == 0)); then
+        err 'Composer declares path repositories, but none resolved to local packages.'
+        return 1
+    fi
+
+    return 0
 }
 
 print_sync_summary() {
