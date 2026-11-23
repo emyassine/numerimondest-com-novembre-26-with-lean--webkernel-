@@ -206,13 +206,27 @@ while IFS=$'\t' read -r NAME SOURCE DESTINATION TYPE; do
             COMPOSER_CHANGED=true
         fi
     fi
+
+    for MANAGED_DIRECTORY in app config; do
+        [[ -d "$SOURCE_DIR/$MANAGED_DIRECTORY" ]] || continue
+        MANAGED_LOG="$LOG_DIR/$(printf '%s_%s' "$NAME" "$MANAGED_DIRECTORY" | tr -cs '[:alnum:]_.-' '_').log"
+        MANAGED_ARGS=(rsync "${RSYNC_OPTIONS[@]}" --exclude='/.git/' --delete)
+        info "Mirroring managed source directory: $MANAGED_DIRECTORY/"
+        if ! run_with_spinner "Syncing $MANAGED_DIRECTORY/ exactly..." "$MANAGED_LOG" "${MANAGED_ARGS[@]}" "$SOURCE_DIR/$MANAGED_DIRECTORY/" "$HOST:$DESTINATION/$MANAGED_DIRECTORY/"; then
+            err "rsync failed for managed source directory $MANAGED_DIRECTORY/."
+            while IFS= read -r line; do printf '      %s%s%s\n' "$RED" "$line" "$RESET" >&2; done <"$MANAGED_LOG"
+            exit 1
+        fi
+        print_sync_summary "$MANAGED_LOG"
+        if grep -qE '^[<>ch*]' "$MANAGED_LOG"; then CHANGED=true; fi
+    done
 done < <(jq -r '.deploys | to_entries[] | select((.value.enable // true) == true or (.value.enable // true) == 1) | [.key, .value.source, .value.dest, .value.type] | @tsv' "$CONFIG")
 
 STEP_NUMBER=$((STEP_NUMBER + 1))
 PRODUCTION_DEST="$(jq -er '.deploys.Production.dest' "$CONFIG")"
 step "$STEP_NUMBER" 'Rebuilding production'
 info "Production path: $HOST:$PRODUCTION_DEST"
-REMOTE_COMMAND="cd '$PRODUCTION_DEST' && rm -f app/resources/components/website/navigation.css app/resources/components/website/footer.css app/resources/css/studio/navigation.css"
+REMOTE_COMMAND="cd '$PRODUCTION_DEST'"
 if [[ "$COMPOSER_CHANGED" == true ]]; then
     REMOTE_COMMAND+=" && composer install --no-dev --optimize-autoloader --no-interaction --no-progress"
 fi
