@@ -22,6 +22,52 @@
         cursor: pointer;
     }
     .nm-currency-switcher-trigger svg { width: 11px; height: 11px; }
+
+    .nm-currency-switcher-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        white-space: nowrap;
+        line-height: 1.25;
+    }
+    .nm-currency-switcher-flag {
+        flex: 0 0 18px;
+        width: 18px;
+        height: 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+    }
+    .nm-currency-switcher-flag svg,
+    .nm-currency-switcher-flag img {
+        display: block;
+        width: 16px;
+        height: 12px;
+        object-fit: cover;
+        border-radius: 2px;
+    }
+    .nm-currency-switcher-label {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: start;
+        line-height: 1.25;
+    }
+    .nm-currency-switcher-code {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        line-height: 1.25;
+    }
+    .nm-currency-switcher-symbol {
+        flex: 0 0 auto;
+        margin-inline-start: auto;
+        white-space: nowrap;
+        line-height: 1.25;
+    }
 </style>
 
 @if (count($currency_options) > 1)
@@ -43,12 +89,13 @@
                         name="currency"
                         :value="$currency_code"
                         :aria-current="$currency === $currency_code ? 'true' : null"
+                        class="nm-currency-switcher-item"
                     >
-                        {!! flag_markup($option['flag'] ?? '') !!}
-                        <span>{{ $option['label'] ?? $currency_code }}</span>
-                        <small>{{ $currency_code }}</small>
+                        <span class="nm-currency-switcher-flag" aria-hidden="true">{!! flag_markup($option['flag'] ?? '') !!}</span>
+                        <span class="nm-currency-switcher-label">{{ $option['label'] ?? $currency_code }}</span>
+                        <small class="nm-currency-switcher-code">{{ $currency_code }}</small>
                         @if ($show_symbol && is_string($option['symbol'] ?? null))
-                            <bdi aria-hidden="true">{{ $option['symbol'] }}</bdi>
+                            <bdi class="nm-currency-switcher-symbol" aria-hidden="true">{{ $option['symbol'] }}</bdi>
                         @endif
                     </x-webkernel-platform::dropdown.list.item>
                 @endforeach

@@ -94,29 +94,53 @@
     @foreach ($preloadImages as $preloadImage)
         <link rel="preload" as="image" href="{{ simple_site('studio', $preloadImage) }}">
     @endforeach
-    <link rel="preload" as="font" type="font/woff" crossorigin href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/BrownLLMain-400-normal.woff') }}">
-    <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/Estedad-Regular.woff2') }}">
-    @if ($studioPage === '' || $studioPage === 'contact')
-        <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/Romie-MediumItalic.woff2">
-    @elseif (str_starts_with($studioPage, 'projects/'))
-        <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/Romie-Medium.woff2">
-    @endif
-    <link rel="canonical" href="{{ $canonical }}">
-    <link rel="stylesheet" href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/dependable-ui/dependable-ui.css') }}">
-    <link rel="stylesheet" href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/css/dependable-ui.themes.css') }}">
-    <link rel="stylesheet" href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/css/numerimondes-silky.css') }}">
-    @foreach ($studioStylesheets as $studioStylesheet)
-        <link rel="stylesheet" href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', $studioStylesheet) }}">
+    @php
+        $fontAssets = [
+            'brown' => [
+                'href' => \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/BrownLLMain-400-normal.woff'),
+                'type' => 'font/woff',
+            ],
+            'estedad' => [
+                'href' => \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/Estedad-Regular.woff2'),
+                'type' => 'font/woff2',
+            ],
+            'romie_italic' => ['href' => '/fonts/Romie-MediumItalic.woff2', 'type' => 'font/woff2'],
+            'romie' => ['href' => '/fonts/Romie-Medium.woff2', 'type' => 'font/woff2'],
+        ];
+        $fontPreloads = [$fontAssets['brown'], $fontAssets['estedad']];
+        if ($studioPage === '' || $studioPage === 'contact') {
+            $fontPreloads[] = $fontAssets['romie_italic'];
+        } elseif (str_starts_with($studioPage, 'projects/')) {
+            $fontPreloads[] = $fontAssets['romie'];
+        }
+    @endphp
+    @foreach ($fontPreloads as $fontPreload)
+        <link rel="preload" as="font" type="{{ $fontPreload['type'] }}" crossorigin href="{{ $fontPreload['href'] }}">
     @endforeach
-    @if ($loadWebkernelPlatformTheme)
-        <link rel="stylesheet" href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/webkernel/platform/theme.css') }}">
-    @endif
+    <link rel="canonical" href="{{ $canonical }}">
+    @php
+        $stylesheets = [
+            \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/dependable-ui/dependable-ui.css'),
+            \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/css/dependable-ui.themes.css'),
+            \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/css/numerimondes-silky.css'),
+        ];
+        foreach ($studioStylesheets as $studioStylesheet) {
+            $stylesheets[] = \Webkernel\Getters\GetAsset::url('numerimondes/website', $studioStylesheet);
+        }
+        if ($loadWebkernelPlatformTheme) {
+            $stylesheets[] = \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/webkernel/platform/theme.css');
+        }
+        $stylesheets = array_values(array_unique($stylesheets));
+    @endphp
+    @foreach ($stylesheets as $stylesheet)
+        <link rel="stylesheet" href="{{ $stylesheet }}">
+    @endforeach
     <title>{{ $title }}</title>
     <style>
     		[x-cloak]{display:none!important}
 
-        @font-face { font-family: BrownLLMain; src: url('{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/BrownLLMain-400-normal.woff') }}') format('woff'); font-style: normal; font-weight: 400; font-display: block; }
-        @font-face { font-family: Estedad; src: url('{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/Estedad-Regular.woff2') }}') format('woff2'); font-style: normal; font-weight: 400; font-display: swap; }
+        @font-face { font-family: BrownLLMain; src: url('{{ $fontAssets['brown']['href'] }}') format('woff'); font-style: normal; font-weight: 400; font-display: block; }
+        @font-face { font-family: Estedad; src: url('{{ $fontAssets['estedad']['href'] }}') format('woff2'); font-style: normal; font-weight: 400; font-display: swap; }
     </style>
 </head>
 <body>
