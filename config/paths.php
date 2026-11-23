@@ -14,7 +14,6 @@ return [
     'public_index' => 'public/index.php',
     'runtime' => 'runtime',
     'cache' => 'runtime/cache',
-    'boot_manifest' => 'runtime/cache/boot-manifest.php',
     'logs' => 'runtime/logs',
     'sessions' => 'runtime/sessions',
     'views' => 'runtime/views',

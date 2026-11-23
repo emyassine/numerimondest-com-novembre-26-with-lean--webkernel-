@@ -43,15 +43,12 @@
   font: 400 20px/1.4 var(--nm-title);
 }
 
-.nm-service-detail-price span,
-.nm-service-detail-brand {
+.nm-service-detail-price span {
   color: #77746e;
   font: 400 10px/1.45 var(--nm-title);
   letter-spacing: .08em;
   text-transform: uppercase;
 }
-
-.nm-service-detail-brand { margin: 10px 0 0; }
 
 .nm-service-detail-cta,
 .nm-service-detail-close a {
@@ -130,7 +127,7 @@
   .nm-service-detail-intro h1 { margin: 22px 0; font-size: 18px; }
   .nm-service-detail-lead { font-size: 15px; }
   .nm-service-detail-price { font-size: 17px; }
-  .nm-service-detail-price span,.nm-service-detail-brand { font-size: 8px; }
+  .nm-service-detail-price span { font-size: 8px; }
   .nm-service-detail-sections { padding: 45px 20px 15px; }
   .nm-service-detail-section { grid-template-columns: 1fr; gap: 20px; padding: 30px 0; }
   .nm-service-detail-section h2,

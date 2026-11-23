@@ -35,9 +35,6 @@
             @if (! empty($service['price_display']))
                 <p class="nm-service-detail-price">{{ $service['price_display'] }} <span>· final scope confirmed in writing</span></p>
             @endif
-            @if (! empty($service['brand']))
-                <p class="nm-service-detail-brand">{{ $service['brand'] }}</p>
-            @endif
             <div class="nm-service-detail-actions">
                 <x-studio::shortlist-button :service="$service" />
                 <x-studio::service-inquiry-launch :services="[$service['slug']]" class="nm-service-detail-cta">
