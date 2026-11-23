@@ -10,7 +10,10 @@
 }
 
 p,
-dd {
+dd,
+ul,
+ol,
+li {
   font-size: var(--nm-text-size);
   line-height: var(--nm-text-leading);
   font-weight: 400;
@@ -30,13 +33,16 @@ dd {
 }
 
 .text { font-size: var(--nm-text-size); line-height: var(--nm-text-leading); }
-.lead-text { max-width: 38rem; margin: 0; font-size: 1rem; line-height: 1.55; }
+.bigger,
+.lead-text { font-size: 1rem; line-height: 1.55; }
+.lead-text { max-width: 38rem; margin: 0; }
 .small-text { margin: 0; font-size: var(--nm-text-small-size); line-height: var(--nm-text-small-leading); font-weight: 400; }
 .supporting-text { margin: 0 0 1rem; font-size: var(--nm-text-supporting-size); line-height: var(--nm-text-supporting-leading); }
 .muted-text,
 .secondary-text { color: var(--text-secondary, #64748b); }
 .primary-text { color: var(--text-primary, #111); }
 .bold-text { font-weight: 700; }
+.uppercase { text-transform: uppercase; }
 
 .label-text {
   display: block;

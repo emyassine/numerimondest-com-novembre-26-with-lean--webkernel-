@@ -143,7 +143,7 @@
             text-transform: uppercase;
         }
         .nm-expertise-grid ul { margin: 0; padding: 0; list-style: none; }
-        .nm-expertise-grid li { margin: 0; color: var(--nm-ink); font: 400 18px/1.22 var(--nm-body); }
+        .nm-expertise-grid li { display:flex; align-items:center; gap:8px; margin:0; color:var(--nm-ink); }
         .nm-about-page .nm-team { padding: 0 50px 70px; }
         .nm-founder-profile { min-width: 0; }
         .nm-founder-profile h2 { margin: 0 0 2rem; }
@@ -171,11 +171,7 @@
             max-width: 540px;
             margin: 0 0 16px;
         }
-        .nm-founder-positioning {
-            max-width: 480px;
-            margin: 26px 0 0;
-            color: #77746e;
-        }
+
         .nm-founder-details { min-width: 0; display: grid; gap: 14px; }
         .nm-founder-section.fi-collapsed > .fi-section-content-ctn { display: none; }
         .nm-founder-section .fi-section-header-heading { font-size: 11px; line-height: 1.4; }
@@ -203,10 +199,8 @@
             .nm-expertise-grid { gap: 35px 20px; }
             .nm-expertise-grid article { gap: 20px; }
             .nm-expertise-grid h3 { font-size: 12px; }
-            .nm-expertise-grid li { font-size: 15px; }
             .nm-about-page .nm-team { padding: 0 0 50px; }
             .nm-founder-profile h3 { font-size: 24px; }
-            .nm-founder-positioning { margin-top: 20px; }
             .nm-founder-fact { grid-template-columns: minmax(100px, .38fr) minmax(0, 1fr); gap: 12px; }
         }
     </style>
@@ -217,7 +211,7 @@
             data-srs-header-tone="light"
         >
             <h1>Independent by design.<br>Curious by nature.</h1>
-            <p>{{ $about['intro'] }}</p>
+            <p class="bigger">{{ $about['intro'] }}</p>
         </section>
 
         <style>
@@ -232,7 +226,7 @@
                 <h2>Built around the mission</h2>
             </div>
             <div>
-                <p class="nm-about-p">{{ $about['about'] }}</p>
+                <p class="bigger">{{ $about['about'] }}</p>
             </div>
         </section>
 
@@ -241,7 +235,7 @@
                 <h2>Clear aims. Project-specific outcomes.</h2>
             </div>
             <div>
-                <p>Expected benefits are assessed for each engagement. Specific results depend on the project and its implementation; examples and visuals on this site are illustrative unless explicitly identified otherwise.</p>
+                <p class="bigger">Expected benefits are assessed for each engagement. Specific results depend on the project and its implementation; examples and visuals on this site are illustrative unless explicitly identified otherwise.</p>
             </div>
         </section>
 
@@ -256,7 +250,10 @@
                             <h3>{{ $service['name'] }}</h3>
                             <ul>
                                 @foreach ($service['items'] as $item)
-                                    <li>{{ $item }}</li>
+                                    <li>
+                                        <x-webkernel::icon icon="arrow-right" set="lucide" width="14" height="14" aria-hidden="true" />
+                                        <p class="bigger uppercase">{{ $item }}</p>
+                                    </li>
                                 @endforeach
                             </ul>
                         </article>
@@ -272,9 +269,9 @@
                         <h2>Founder</h2>
                         <img src="{{ $person['image'] }}" alt="{{ $person['name'] }}" width="2163" height="2163" fetchpriority="high">
                         <h3>{{ $person['name'] }}</h3>
-                        <p class="nm-founder-role">{{ $person['role'] }}</p>
-                        <p class="nm-founder-bio">{{ $person['bio'] }}</p>
-                        <p class="nm-founder-positioning">{{ $about['profile']['positioning'] }}</p>
+                         <p class="bigger secondary-text uppercase">{{ $person['role'] }}</p>
+                         <p class="bigger" style="margin-top:1rem;">{{ $person['bio'] }}</p>
+                        <p class="bigger secondary-text">{{ $about['profile']['positioning'] }}</p>
                     </article>
                 @endforeach
             </div>
@@ -301,7 +298,7 @@
                     </dl>
                 </x-webkernel-platform::section>
                 <x-webkernel-platform::section heading="Outside work" icon="heroicon-o-heart" :collapsed="true" :compact="true" class="nm-founder-section">
-                    <p>{{ $about['profile']['interests'] }}</p>
+                     <p class="bigger">{{ $about['profile']['interests'] }}</p>
                 </x-webkernel-platform::section>
             </div>
         </section>
