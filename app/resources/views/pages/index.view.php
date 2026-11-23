@@ -3,9 +3,9 @@
     $heroPositioningText = 'Explore '.$serviceCount.' services to strengthen your brand, grow your sales pipeline and improve how work gets done — with a dedicated team shaped around your goals.';
 @endphp
 
-<x-studio::page class="bleed-page" title="Numerimondes — Ideas, Strategy, Execution" description="Independent consulting and solutions based in Casablanca, Morocco. Business insight, technology and specialist expertise for lasting value." robots="index,follow">
+<x-studio::page title="Numerimondes — Ideas, Strategy, Execution" description="Independent consulting and solutions based in Casablanca, Morocco. Business insight, technology and specialist expertise for lasting value." robots="index,follow">
     <style>
-        .nm-home-explore { padding: 70px 50px 0; }
+        .nm-home-explore { padding: 70px 0 0; }
         .nm-home-explore h2 {
             margin: 0 0 28px;
             font: 400 12px/1.5 var(--nm-title);
@@ -20,9 +20,10 @@
         }
         .nm-home-explore-card h3 { margin:24px 0 10px; font:400 13px/1.45 var(--nm-title); letter-spacing:.13em; text-transform:uppercase; }
         .nm-home-explore-card p { max-width:340px; margin:0; font:400 16px/1.4 var(--nm-body); }
+        .nm-home-opportunity { padding-inline:0; }
         @media (max-width:800px) { .nm-home-explore-grid { grid-template-columns:1fr; } .nm-home-explore-card { min-height:160px; } }
         @media (max-width:700px) {
-            .nm-home-explore { padding:45px 20px 0; }
+            .nm-home-explore { padding:45px 0 0; }
             .nm-home-explore h2 { margin-bottom:20px; font-size:10px; }
             .nm-home-explore-card { padding:22px 20px; }
             .nm-home-explore-card h3 { font-size:11px; }
@@ -53,7 +54,7 @@
             </div>
         </section>
 
-        <section class="nm-about-section">
+        <section class="nm-about-section nm-home-opportunity">
             <div>
                 <h2>What could your next opportunity become?</h2>
             </div>

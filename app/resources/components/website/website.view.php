@@ -67,30 +67,12 @@
         $preloadImages[] = \App\Studio\ServiceCatalog::find($serviceSlug)['image_source'];
     }
     $preloadImages = array_values(array_unique($preloadImages));
-    $deploymentNoticePath = base_path('deploy.inc.txt');
-    $deploymentNotice = is_file($deploymentNoticePath) ? file_get_contents($deploymentNoticePath) : '';
-    $deploymentNotice = is_string($deploymentNotice) ? trim(str_replace('--', '—', $deploymentNotice)) : '';
-    $deploymentVersionPath = base_path('runtime/cache/deploy/site-version');
-    $deploymentVersion = is_file($deploymentVersionPath) ? trim((string) file_get_contents($deploymentVersionPath)) : '';
-    $deploymentDateTime = '';
-    $deploymentBuildId = '';
-    if (preg_match('/\A(\d{8}T\d{6})-([a-f0-9]{12})\z/', $deploymentVersion, $deploymentParts) === 1) {
-        $parsedDeploymentDate = \DateTimeImmutable::createFromFormat('!Ymd\THis', $deploymentParts[1], new \DateTimeZone('UTC'));
-        if ($parsedDeploymentDate instanceof \DateTimeImmutable) {
-            $deploymentDateTime = $parsedDeploymentDate->format('Y-m-d\TH:i:s\Z');
-            $deploymentBuildId = $deploymentParts[2];
-        }
+    $deploymentIncludePath = base_path('deploy.inc.php');
+    if (is_file($deploymentIncludePath)) {
+        require $deploymentIncludePath;
     }
-    $deploymentNotice = str_replace(
-        ['{{ dateTime }}', '{{ buildId }}'],
-        [$deploymentDateTime, $deploymentBuildId],
-        $deploymentNotice,
-    );
 @endphp
 <!doctype html>
-@if ($deploymentNotice !== '')
-<!-- {!! $deploymentNotice !!} -->
-@endif
 <html lang="{{ $locale }}" data-theme="nm-studio" data-mode="{{ $forceLightMode ? 'light' : 'system' }}" data-srs-mode="{{ $forceLightMode ? 'light' : '' }}" class="{{ $forceLightMode ? 'light' : '' }}" data-currency="{{ $currency }}" style="color-scheme:{{ $forceLightMode ? 'light' : 'light dark' }};--nm-studio-background:{{ $studioBackground }};background-color:{{ $studioBackground }}">
 <head>
     <meta charset="utf-8">
@@ -103,6 +85,7 @@
     <link rel="alternate" type="application/rss+xml" title="Numerimondes updates" href="/rss.xml">
     <link rel="apple-touch-icon" href="{{ simple_site('studio', $favicon) }}">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Numerimondes">
     <script>try { localStorage.setItem('platform:theme:mode', '{{ $forceLightMode ? 'light' : 'system' }}'); } catch {}</script>
     <link rel="icon" type="image/png" href="{{ simple_site('studio', $favicon) }}">
