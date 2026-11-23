@@ -168,7 +168,7 @@ final class Statements
 
                 return Php::OPEN
                     .' $__props = '.$list.';'
-                    .' foreach ($__props as $__n => $__d) { if (\\is_int($__n)) { unset($__props[$__n]); $__n = $__d; $__d = null; $__props[$__n] = null; } if (!isset($$__n)) { $$__n = $__d; } }'
+                    .' foreach ($__props as $__n => $__d) { if (\\is_int($__n)) { unset($__props[$__n]); $__n = $__d; $__d = null; $__props[$__n] = null; } if (!\\array_key_exists($__n, \\get_defined_vars())) { $$__n = $__d; } }'
                     .' $attributes = (isset($attributes) && $attributes instanceof \\Webkernel\\View\\AttributeBag'
                     .' ? $attributes : new \\Webkernel\\View\\AttributeBag([]))->except(\\array_keys($__props));'
                     .' unset($__props, $__n, $__d); ?>';
