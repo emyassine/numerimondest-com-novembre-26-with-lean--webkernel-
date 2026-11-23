@@ -113,8 +113,7 @@
 .nm-nav-menu-trigger { width: 44px; height: 44px; display: grid; place-items: center; cursor: pointer; color: inherit; }
 .nm-nav-menu-trigger svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
 
-.nm-nav a,
-.nm-nav *,
+.nm-nav > a,
 .nm-language {
   color: inherit;
   font: 400 10px/1.2 var(--nm-body);

@@ -132,9 +132,8 @@
     <x-slot name="subheader">{{ $subheader ?? '' }}</x-slot>
     {{ $slot }}
 </x-studio::website.navigation>
-@if ($loadWebkernelPlatformTheme)
-    <script defer src="{{ \Webkernel\Getters\GetAsset::url('webkernel/platform-support', 'dist/index.js') }}"></script>
-@endif
+<script defer src="{{ \Webkernel\Getters\GetAsset::url('webkernel/platform-support', 'dist/index.js') }}"></script>
+<script defer src="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/js/alpine.js') }}"></script>
 <script defer src="/assets/dependable-ui/dependable-ui.js"></script>
 <script defer src="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/js/dependable-ui.themes.js') }}"></script>
 <script defer src="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/js/shortlist.js') }}"></script>
