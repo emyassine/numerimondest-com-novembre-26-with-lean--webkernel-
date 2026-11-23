@@ -172,7 +172,6 @@
 
                         <div {{ $filterGrid }}>
                             <div>
-                                <label for="services-query">Search services</label>
                                 <x-webkernel-platform::input.wrapper>
                                     <x-webkernel-platform::input
                                         id="services-query"
@@ -185,7 +184,6 @@
                             </div>
 
                             <div>
-                                <label for="services-category">Category</label>
                                 <x-webkernel-platform::input.wrapper>
                                     <x-webkernel-platform::input.select id="services-category" name="category">
                                         <option value="">All categories</option>
@@ -197,7 +195,6 @@
                             </div>
 
                             <div>
-                                <label for="services-engagement">Engagement</label>
                                 <x-webkernel-platform::input.wrapper>
                                     <x-webkernel-platform::input.select id="services-engagement" name="engagement">
                                         <option value="">All formats</option>

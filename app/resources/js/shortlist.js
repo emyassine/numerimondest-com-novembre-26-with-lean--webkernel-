@@ -2,23 +2,22 @@
   const supportsAjax = typeof window.fetch === 'function' && typeof window.FormData === 'function';
 
   const updateHeader = (count) => {
-    const link = document.querySelector('[data-shortlist-link]');
-    if (!link) return;
+    document.querySelectorAll('[data-shortlist-link]').forEach((link) => {
+      let badge = link.querySelector('[data-shortlist-badge]');
+      if (count < 1) {
+        badge?.remove();
+        return;
+      }
 
-    let badge = link.querySelector('[data-shortlist-badge]');
-    if (count < 1) {
-      badge?.remove();
-      return;
-    }
-
-    if (!badge) {
-      const template = link.querySelector('[data-shortlist-badge-template]');
-      if (!template) return;
-      link.append(template.content.cloneNode(true));
-      badge = link.querySelector('[data-shortlist-badge]');
-    }
-    const label = badge?.querySelector('[data-shortlist-count]');
-    if (label) label.textContent = String(count);
+      if (!badge) {
+        const template = link.querySelector('[data-shortlist-badge-template]');
+        if (!template) return;
+        link.append(template.content.cloneNode(true));
+        badge = link.querySelector('[data-shortlist-badge]');
+      }
+      const label = badge?.querySelector('[data-shortlist-count]');
+      if (label) label.textContent = String(count);
+    });
   };
 
   const updateInquiryLaunchers = (services) => {

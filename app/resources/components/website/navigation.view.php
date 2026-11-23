@@ -73,23 +73,19 @@
 
 .nm-nav--right { justify-content: flex-end; }
 .nm-nav--compact { display: none; }
-.nm-mobile-menu-currency-trigger {
-  width: 100%;
+.nm-mobile-currency-switcher {
   min-height: 48px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: space-between;
+  gap: 16px;
   padding: 12px 18px;
-  border: 0;
   color: inherit;
-  background: transparent;
   font: 500 14px/1.35 var(--nm-body);
-  letter-spacing: .06em;
-  text-align: left;
-  cursor: pointer;
+  border-top: 1px solid var(--fi-dropdown-list-item-border-color, #eee);
 }
-.nm-mobile-menu-currency-trigger strong { margin-left: auto; font-weight: 600; }
-.nm-mobile-menu-currency-trigger svg { flex: 0 0 auto; }
+.nm-mobile-currency-switcher-label { display: inline-flex; align-items: center; gap: 10px; }
+.nm-mobile-currency-switcher-label svg { width: 16px; height: 16px; flex: 0 0 auto; }
 .nm-nav-menu-trigger { box-sizing: border-box; width: 44px; height: 44px; display: grid; place-items: center; padding: 0; border: 0; background: transparent; cursor: pointer; color: inherit; }
 .nm-nav-menu-trigger svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
 
@@ -321,13 +317,19 @@
                             <x-webkernel-platform::dropdown.list.item
                                 tag="a"
                                 :href="$item['href']"
-                                :icon="$item['icon']"
                                 :aria-current="$request_path === $item['href'] ? 'page' : null"
                                 :data-shortlist-link="$item['key'] === 'shortlist' ? true : null"
                             >
-                                <span>{{ $item['mobile_label'] }}</span>
-                                @if ($item['key'] === 'shortlist' && $shortlist_count > 0)
-                                    <span data-shortlist-count>{{ $shortlist_count }}</span>
+                                <x-webkernel::icon :icon="$item['icon']" set="lucide" width="16" height="16" aria-hidden="true" />
+                                {{ $item['mobile_label'] }}
+                                @if ($item['key'] === 'shortlist')
+                                    <x-slot name="badge">
+                                        @if ($shortlist_count > 0)
+                                            <span data-shortlist-badge><x-webkernel-platform::badge color="gray" size="sm"><span data-shortlist-count>{{ $shortlist_count }}</span></x-webkernel-platform::badge></span>
+                                        @else
+                                            <template data-shortlist-badge-template><span data-shortlist-badge><x-webkernel-platform::badge color="gray" size="sm"><span data-shortlist-count>0</span></x-webkernel-platform::badge></span></template>
+                                        @endif
+                                    </x-slot>
                                 @endif
                             </x-webkernel-platform::dropdown.list.item>
                         @endif
@@ -336,55 +338,21 @@
             </nav>
 
             @if (count($currency_options) > 1)
-                <div class="nm-mobile-currency-switcher">
-                    <x-webkernel-platform::dropdown
-                        placement="bottom-end"
-                        width="xs"
-                        offset="4"
-                        maxHeight="min(60dvh, 24rem)"
-                        shift
-                        teleport>
-                        <x-slot name="trigger">
-                            <button type="button" class="nm-mobile-menu-currency-trigger" role="menuitem" tabindex="-1" aria-label="Choose currency">
-                                <x-webkernel::icon icon="coins" set="lucide" width="16" height="16" aria-hidden="true" />
-                                <span>Currency</span>
-                                <strong>{{ $currency }}</strong>
-                                <x-webkernel::icon icon="chevron-down" set="lucide" width="14" height="14" aria-hidden="true" />
-                            </button>
-                        </x-slot>
-                        <form action="{{ rtrim($site_prefix, '/') }}/currency" method="post">
-                            @csrf
-                            <input type="hidden" name="return_to" value="{{ $request_path }}">
-                            <x-webkernel-platform::dropdown.list>
-                                @foreach ($ordered_currency_options as $currencyCode => $option)
-                                    <x-webkernel-platform::dropdown.list.item
-                                        tag="button"
-                                        type="submit"
-                                        name="currency"
-                                        :value="$currencyCode"
-                                        :aria-current="$currency === $currencyCode ? 'true' : null"
-                                    >
-                                        <span class="nm-currency-switcher-item">
-                                            <span class="nm-currency-switcher-flag" aria-hidden="true">
-                                                {!! flag_markup($option['flag'] ?? '') !!}
-                                            </span>
-                                            <span class="nm-currency-switcher-label">
-                                                {{ $option['label'] ?? $currencyCode }}
-                                            </span>
-                                            <small class="nm-currency-switcher-code">
-                                                {{ $currencyCode }}
-                                            </small>
-                                            @if (($currency_config['show_symbol'] ?? false) === true && is_string($option['symbol'] ?? null))
-                                                <bdi class="nm-currency-switcher-symbol" aria-hidden="true">
-                                                    {{ $option['symbol'] }}
-                                                </bdi>
-                                            @endif
-                                        </span>
-                                    </x-webkernel-platform::dropdown.list.item>
-                                @endforeach
-                            </x-webkernel-platform::dropdown.list>
-                        </form>
-                    </x-webkernel-platform::dropdown>
+                <div class="nm-mobile-currency-switcher" role="none">
+                    <span class="nm-mobile-currency-switcher-label">
+                        <x-webkernel::icon icon="coins" set="lucide" aria-hidden="true" />
+                        <span>Currency</span>
+                    </span>
+                    <x-studio::currency-switcher
+                        :currency="$currency"
+                        :currency-options="$ordered_currency_options"
+                        :default-currency="$default_currency"
+                        :show-symbol="($currency_config['show_symbol'] ?? false) === true"
+                        :site-prefix="$site_prefix"
+                        :current-path="$request_path"
+                        trigger-role="menuitem"
+                        trigger-tabindex="-1"
+                    />
                 </div>
             @endif
         </x-webkernel-platform::dropdown>

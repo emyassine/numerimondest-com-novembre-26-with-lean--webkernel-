@@ -5,6 +5,8 @@
     'show_symbol' => false,
     'site_prefix' => '',
     'current_path' => '/',
+    'trigger_role' => null,
+    'trigger_tabindex' => null,
 ])
 @php
     $ordered_currency_options = \App\Studio\CurrencyRates::strongestFirst($currency_options, $default_currency);
@@ -89,6 +91,8 @@
             <button
                 type="button"
                 class="nm-currency-switcher-trigger"
+                :role="$trigger_role"
+                :tabindex="$trigger_tabindex"
                 aria-label="Choose quote currency">
                 <span>{{ $currency }}</span>
                 <x-webkernel::icon
