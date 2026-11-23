@@ -69,7 +69,7 @@ use Webkernel\Platform\Support\View\ComponentAttributeBag as PlatformComponentAt
     @endif
     @if ($hasTooltip)
         x-tooltip='{
-            content: @js($tooltip),
+            content: {!! htmlspecialchars(\Webkernel\View\View::js($tooltip), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false) !!},
             theme: $store.theme,
             allowHTML: @js($tooltip instanceof Htmlable),
         }'
@@ -146,7 +146,7 @@ use Webkernel\Platform\Support\View\ComponentAttributeBag as PlatformComponentAt
             <span
                 @if ($badgeTooltip)
                     x-tooltip='{
-                        content: @js($badgeTooltip),
+                        content: {!! htmlspecialchars(\Webkernel\View\View::js($badgeTooltip), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false) !!},
                         theme: $store.theme,
                         allowHTML: @js($badgeTooltip instanceof Htmlable),
                     }'

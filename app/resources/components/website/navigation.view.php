@@ -73,46 +73,40 @@
 
 .nm-nav--right { justify-content: flex-end; }
 .nm-nav--compact { display: none; }
-.nm-mobile-menu { position: relative; }
-.nm-mobile-menu summary { list-style: none; }
-.nm-mobile-menu summary::-webkit-details-marker { display: none; }
-.nm-mobile-menu-panel { display: none; }
-.nm-mobile-menu[open] .nm-mobile-menu-panel {
-  position: fixed;
-  inset: calc(56px + env(safe-area-inset-top)) 12px auto auto;
-  z-index: 100;
-  display: block;
+.fi-dropdown-panel:has(.nm-mobile-menu-list) {
   width: min(320px, calc(100vw - 24px));
-  max-height: calc(100dvh - 76px - env(safe-area-inset-top));
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 8px 0;
-  border: 1px solid var(--nm-line);
-  border-radius: 12px;
-  background: #fff;
+  max-width: min(320px, calc(100vw - 24px)) !important;
   color: var(--nm-ink);
-  box-shadow: 0 12px 36px rgb(0 0 0 / 16%);
 }
-.nm-mobile-menu-panel nav { display: grid; }
-.nm-mobile-menu-panel nav a,
+.nm-mobile-menu-list .fi-dropdown-list-item {
+  min-height: 48px;
+  padding: 12px 18px;
+  color: var(--nm-ink);
+  font: 500 14px/1.35 var(--nm-body);
+  letter-spacing: .06em;
+  text-decoration: none;
+}
+.nm-mobile-menu-list .fi-dropdown-list-item-label { color: inherit; font: inherit; letter-spacing: inherit; }
+.nm-mobile-menu-list .fi-dropdown-list-item-label > span:first-child { flex: 1 1 auto; }
 .nm-mobile-menu-currency-trigger {
+  width: 100%;
   min-height: 48px;
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 12px 18px;
+  border: 0;
   color: inherit;
+  background: transparent;
   font: 500 14px/1.35 var(--nm-body);
   letter-spacing: .06em;
-  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
 }
-.nm-mobile-menu-panel nav a + a { border-top: 1px solid var(--nm-line); }
-.nm-mobile-currency-switcher { border-top: 1px solid var(--nm-line); }
-.nm-mobile-menu-currency-trigger { width: 100%; border: 0; background: transparent; text-align: left; cursor: pointer; }
 .nm-mobile-menu-currency-trigger strong { margin-left: auto; font-weight: 600; }
 .nm-mobile-menu-currency-trigger svg { flex: 0 0 auto; }
-.nm-mobile-currency-switcher .fi-dropdown-panel { z-index: 110; min-width: min(260px, calc(100vw - 40px)); }
-.nm-nav-menu-trigger { width: 44px; height: 44px; display: grid; place-items: center; cursor: pointer; color: inherit; }
+.fi-dropdown-panel:has(.nm-mobile-currency-list) { z-index: 110; min-width: min(260px, calc(100vw - 40px)); }
+.nm-nav-menu-trigger { box-sizing: border-box; width: 44px; height: 44px; display: grid; place-items: center; padding: 0; border: 0; background: transparent; cursor: pointer; color: inherit; }
 .nm-nav-menu-trigger svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
 
 .nm-nav a,
@@ -163,7 +157,6 @@
 .nm-header[data-scroll-state="down"][data-logo-tone="light"] .logo-wordmark-dark { opacity: 0; }
 .nm-header[data-scroll-state="down"][data-logo-tone="light"] .logo-wordmark-light { opacity: 1; transform: translateY(0) scale(1); }
 
-.nm-nav-menu-trigger.fi-icon-btn { color: inherit; }
 .nm-menu-currency-option { display: flex; width: 100%; align-items: center; gap: 9px; }
 .nm-menu-currency-option > span:first-child { display: grid; place-items: center; }
 .nm-menu-currency-option svg { width: 18px; height: 13px; }
@@ -325,53 +318,72 @@
         @endforeach
     </nav>
     <div class="nm-nav--compact">
-        <details class="nm-mobile-menu">
-            <summary class="nm-nav-menu-trigger" aria-label="Open site menu" title="Open site menu">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
-            </summary>
-            <div class="nm-mobile-menu-panel">
-                <nav aria-label="Main navigation">
+        <x-webkernel-platform::dropdown
+            class="nm-mobile-menu-dropdown"
+            placement="bottom-end"
+            width="xs"
+            offset="4"
+            maxHeight="min(60dvh, 24rem)"
+            shift
+            teleport>
+            <x-slot name="trigger">
+                <button type="button" class="nm-nav-menu-trigger" aria-label="Open site menu" title="Open site menu">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
+                </button>
+            </x-slot>
+            <nav aria-label="Main navigation">
+                <x-webkernel-platform::dropdown.list class="nm-mobile-menu-list">
                     @foreach (array_merge($nav_items['left'], $nav_items['right']) as $item)
                         @if (($item['type'] ?? null) !== 'currency')
-                            <a href="{{ $item['href'] }}" @if ($item['key'] === 'shortlist') data-shortlist-link @endif>{{ $item['mobile_label'] }} @if ($item['key'] === 'shortlist' && $shortlist_count > 0)<span data-shortlist-count>{{ $shortlist_count }}</span>@endif</a>
+                            <x-webkernel-platform::dropdown.list.item
+                                tag="a"
+                                :href="$item['href']"
+                                :aria-current="$request_path === $item['href'] ? 'page' : null"
+                                :data-shortlist-link="$item['key'] === 'shortlist' ? true : null"
+                            >
+                                <span>{{ $item['mobile_label'] }}</span>
+                                @if ($item['key'] === 'shortlist' && $shortlist_count > 0)
+                                    <span data-shortlist-count>{{ $shortlist_count }}</span>
+                                @endif
+                            </x-webkernel-platform::dropdown.list.item>
                         @endif
                     @endforeach
-                </nav>
+                </x-webkernel-platform::dropdown.list>
+            </nav>
 
-                @if (count($currency_options) > 1)
-                    <div class="nm-mobile-currency-switcher">
-                        <x-webkernel-platform::dropdown placement="bottom-start" width="sm" offset="4" teleport>
-                            <x-slot name="trigger">
-                                <button type="button" class="nm-mobile-menu-currency-trigger" aria-label="Choose currency">
-                                    <span>Currency</span>
-                                    <strong>{{ $currency }}</strong>
-                                    <x-webkernel::icon icon="chevron-down" set="lucide" width="14" height="14" aria-hidden="true" />
-                                </button>
-                            </x-slot>
-                            <form action="{{ rtrim($site_prefix, '/') }}/currency" method="post">
-                                @csrf
-                                <input type="hidden" name="return_to" value="{{ $request_path }}">
-                                <x-webkernel-platform::dropdown.list>
-                                    @foreach ($ordered_currency_options as $currencyCode => $option)
-                                        <x-webkernel-platform::dropdown.list.item
-                                            tag="button"
-                                            type="submit"
-                                            name="currency"
-                                            :value="$currencyCode"
-                                            :aria-current="$currency === $currencyCode ? 'true' : null"
-                                        >
-                                            <span aria-hidden="true">{!! flag_markup($option['flag'] ?? '') !!}</span>
-                                            <span>{{ $option['label'] ?? $currencyCode }}</span>
-                                            <small>{{ $currencyCode }}</small>
-                                        </x-webkernel-platform::dropdown.list.item>
-                                    @endforeach
-                                </x-webkernel-platform::dropdown.list>
-                            </form>
-                        </x-webkernel-platform::dropdown>
-                    </div>
-                @endif
-            </div>
-        </details>
+            @if (count($currency_options) > 1)
+                <div class="nm-mobile-currency-switcher">
+                    <x-webkernel-platform::dropdown placement="bottom-start" width="sm" offset="4" teleport>
+                        <x-slot name="trigger">
+                            <button type="button" class="nm-mobile-menu-currency-trigger" role="menuitem" tabindex="-1" aria-label="Choose currency">
+                                <span>Currency</span>
+                                <strong>{{ $currency }}</strong>
+                                <x-webkernel::icon icon="chevron-down" set="lucide" width="14" height="14" aria-hidden="true" />
+                            </button>
+                        </x-slot>
+                        <form action="{{ rtrim($site_prefix, '/') }}/currency" method="post">
+                            @csrf
+                            <input type="hidden" name="return_to" value="{{ $request_path }}">
+                            <x-webkernel-platform::dropdown.list class="nm-mobile-currency-list">
+                                @foreach ($ordered_currency_options as $currencyCode => $option)
+                                    <x-webkernel-platform::dropdown.list.item
+                                        tag="button"
+                                        type="submit"
+                                        name="currency"
+                                        :value="$currencyCode"
+                                        :aria-current="$currency === $currencyCode ? 'true' : null"
+                                    >
+                                        <span aria-hidden="true">{!! flag_markup($option['flag'] ?? '') !!}</span>
+                                        <span>{{ $option['label'] ?? $currencyCode }}</span>
+                                        <small>{{ $currencyCode }}</small>
+                                    </x-webkernel-platform::dropdown.list.item>
+                                @endforeach
+                            </x-webkernel-platform::dropdown.list>
+                        </form>
+                    </x-webkernel-platform::dropdown>
+                </div>
+            @endif
+        </x-webkernel-platform::dropdown>
     </div>
 </header>
 

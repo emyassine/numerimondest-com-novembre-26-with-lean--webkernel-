@@ -104,8 +104,14 @@
                 'href' => \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/Estedad-Regular.woff2'),
                 'type' => 'font/woff2',
             ],
-            'romie_italic' => ['href' => '/fonts/Romie-MediumItalic.woff2', 'type' => 'font/woff2'],
-            'romie' => ['href' => '/fonts/Romie-Medium.woff2', 'type' => 'font/woff2'],
+            'romie_italic' => [
+                'href' => \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/Romie-MediumItalic.woff2'),
+                'type' => 'font/woff2',
+            ],
+            'romie' => [
+                'href' => \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/Romie-Medium.woff2'),
+                'type' => 'font/woff2',
+            ],
         ];
         $fontPreloads = [$fontAssets['brown'], $fontAssets['estedad']];
         if ($studioPage === '' || $studioPage === 'contact') {

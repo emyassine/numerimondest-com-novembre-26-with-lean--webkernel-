@@ -3,7 +3,7 @@
   font-style: normal;
   font-weight: 500;
   font-display: block;
-  src: url('/fonts/Romie-Medium.woff2') format('woff2');
+  src: url('../assets/fonts/Romie-Medium.woff2') format('woff2');
 }
 
 @font-face {
@@ -11,7 +11,7 @@
   font-style: italic;
   font-weight: 500;
   font-display: block;
-  src: url('/fonts/Romie-MediumItalic.woff2') format('woff2');
+  src: url('../assets/fonts/Romie-MediumItalic.woff2') format('woff2');
 }
 
 @font-face {
@@ -19,7 +19,7 @@
   font-style: normal;
   font-weight: 700;
   font-display: block;
-  src: url('/fonts/Romie-Bold.woff2') format('woff2');
+  src: url('../assets/fonts/Romie-Bold.woff2') format('woff2');
 }
 
 /* Typography variants keep surrounding weight unless their name specifies one. */
