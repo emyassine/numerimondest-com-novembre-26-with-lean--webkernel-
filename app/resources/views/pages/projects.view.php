@@ -19,7 +19,7 @@
             <div>
                 <p>Explore initiatives at different stages of development. Each page identifies its current status and distinguishes concepts from available services.</p>
             </div>
-        </section>è
+        </section>
         <style>
 	        @media (max-width: 1100px) {
 	          .nm-projects-page .nm-projects.nm-projects--grid.nm-projects--listing {
