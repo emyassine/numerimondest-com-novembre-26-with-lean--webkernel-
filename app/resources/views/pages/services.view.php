@@ -1,5 +1,3 @@
-@props(['canonical' => '', 'locale' => 'en', 'site_ui' => []])
-
 @php
     $allServices = \App\Studio\ServiceCatalog::all();
     $servicesUrl = simple_site('studio', 'services');
@@ -79,9 +77,6 @@
 <x-studio::page
     title="Services — Numerimondes"
     description="Explore Numerimondes services, save a private shortlist and request a personal discussion with the founder and account manager."
-    :canonical="$canonical"
-    :locale="$locale"
-    :site-ui="$site_ui ?? []"
 >
     <style>
         .nm-services-marketplace .nm-page-heading {

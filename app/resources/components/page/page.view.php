@@ -1,17 +1,33 @@
 @props([
     'title' => 'Numerimondes — Ideas, Strategy, Execution',
     'description' => '',
-    'canonical' => '',
-    'locale' => 'en',
-    'site_ui' => [],
 ])
+
+@php
+    $site = \Webkernel\SimpleSite\Site\SiteRegistry::forCurrentRequest();
+    $sitePrefix = rtrim((string) ($site['prefix'] ?? ''), '/');
+    $requestPath = parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH);
+    $requestPath = is_string($requestPath) ? $requestPath : '/';
+    $pagePath = $sitePrefix !== '' && str_starts_with($requestPath, $sitePrefix)
+        ? substr($requestPath, strlen($sitePrefix))
+        : $requestPath;
+    $pagePath = trim($pagePath, '/');
+    $canonicalPath = $pagePath === '' ? '/' : '/'.$pagePath.'/';
+    $siteBaseUrl = $site['canonical_url'] ?? config('app.url', '');
+    $siteUrl = rtrim((string) $siteBaseUrl, '/').($sitePrefix === '' ? '' : '/'.trim($sitePrefix, '/'));
+    $canonical = $siteUrl.$canonicalPath;
+    $locale = \Webkernel\I18n\I18nContext::get_locale();
+    $locale = $locale !== '' ? $locale : (string) ($site['fallback_locale'] ?? 'en');
+    $siteUi = is_array($site['ui'] ?? null) ? $site['ui'] : [];
+@endphp
 
 <x-studio::website
     :title="$title"
     :description="$description"
     :canonical="$canonical"
     :locale="$locale"
-    :site-ui="$site_ui"
+    :site-ui="$siteUi"
+    :site-prefix="$sitePrefix"
 >
     <style>
         .studio-page-frame { padding-inline: 50px; }

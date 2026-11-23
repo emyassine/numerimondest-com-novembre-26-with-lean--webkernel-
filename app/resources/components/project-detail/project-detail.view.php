@@ -1,8 +1,5 @@
 @props([
     'project' => [],
-    'canonical' => '',
-    'locale' => 'en',
-    'site_ui' => [],
 ])
 
 @php
@@ -24,9 +21,6 @@
     class="bleed-page"
     :title="$project['name'].' — Numerimondes'"
     :description="$project['introduction']"
-    :canonical="$canonical"
-    :locale="$locale"
-    :site-ui="$site_ui"
 >
     <main class="nm-page nm-project-detail project--{{ $project['slug'] }}">
         <header class="nm-project-detail-intro">

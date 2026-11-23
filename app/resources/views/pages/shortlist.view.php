@@ -1,5 +1,3 @@
-@props(['canonical' => '', 'locale' => 'en', 'site_ui' => []])
-
 @php
     $savedSlugs = \App\Studio\ServiceShortlist::all();
     $catalog = \App\Studio\ServiceCatalog::all();
@@ -14,9 +12,6 @@
     description="Keep selected Numerimondes services together and request a private discussion with the founder and account manager."
     robots="noindex,follow"
     rss="false"
-    :canonical="$canonical"
-    :locale="$locale"
-    :site-ui="$site_ui ?? []"
 >
     <style>
         .nm-shortlist-page { width:100%; max-width:1040px; min-height:70vh; margin:0 auto; padding:180px 0 120px; }

@@ -1,4 +1,3 @@
-@props(['canonical' => '', 'locale' => 'en', 'site_ui' => []])
 @php
     $studioConfig = config('nm-studio', []);
     $company = $studioConfig['company'] ?? [];
@@ -20,9 +19,6 @@
 <x-studio::page
     title="Privacy Policy — Numerimondes"
     description="Privacy and data handling on the public Numerimondes website."
-    :canonical="$canonical"
-    :locale="$locale"
-    :site-ui="$site_ui ?? []"
 >
     <style>
         .nm-policy {

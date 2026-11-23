@@ -5,6 +5,7 @@
     'locale' => 'en',
     'favicon' => 'brand/pwa-icon-192.png',
     'site_ui' => [],
+    'site_prefix' => '/',
 ])
 @php
     \Webkernel\I18n\I18nContext::set_locale($locale);
@@ -44,7 +45,7 @@
     if (! is_string($studioBackground) || preg_match('/\A#[0-9a-fA-F]{6}\z/', $studioBackground) !== 1) {
         $studioBackground = '#f1f5f9';
     }
-    $sitePrefix = rtrim((string) ($site_prefix ?? '/'), '/');
+    $sitePrefix = rtrim($site_prefix, '/');
     $home = $sitePrefix.'/';
     $headerContrast = ($site_ui['header']['contrast'] ?? 'sections') === 'sections';
     $requestPath = parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH) ?: '/';
@@ -69,6 +70,22 @@
     $deploymentNoticePath = base_path('deploy.inc.txt');
     $deploymentNotice = is_file($deploymentNoticePath) ? file_get_contents($deploymentNoticePath) : '';
     $deploymentNotice = is_string($deploymentNotice) ? trim(str_replace('--', '—', $deploymentNotice)) : '';
+    $deploymentVersionPath = base_path('runtime/cache/deploy/site-version');
+    $deploymentVersion = is_file($deploymentVersionPath) ? trim((string) file_get_contents($deploymentVersionPath)) : '';
+    $deploymentDateTime = '';
+    $deploymentBuildId = '';
+    if (preg_match('/\A(\d{8}T\d{6})-([a-f0-9]{12})\z/', $deploymentVersion, $deploymentParts) === 1) {
+        $parsedDeploymentDate = \DateTimeImmutable::createFromFormat('!Ymd\THis', $deploymentParts[1], new \DateTimeZone('UTC'));
+        if ($parsedDeploymentDate instanceof \DateTimeImmutable) {
+            $deploymentDateTime = $parsedDeploymentDate->format('Y-m-d\TH:i:s\Z');
+            $deploymentBuildId = $deploymentParts[2];
+        }
+    }
+    $deploymentNotice = str_replace(
+        ['{{ dateTime }}', '{{ buildId }}'],
+        [$deploymentDateTime, $deploymentBuildId],
+        $deploymentNotice,
+    );
 @endphp
 <!doctype html>
 @if ($deploymentNotice !== '')

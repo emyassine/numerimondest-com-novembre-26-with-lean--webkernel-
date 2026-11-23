@@ -212,11 +212,12 @@ STEP_NUMBER=$((STEP_NUMBER + 1))
 PRODUCTION_DEST="$(jq -er '.deploys.Production.dest' "$CONFIG")"
 step "$STEP_NUMBER" 'Rebuilding production'
 info "Production path: $HOST:$PRODUCTION_DEST"
-REMOTE_COMMAND="cd '$PRODUCTION_DEST' && rm -f app/resources/components/website/navigation.css app/resources/components/website/footer.css app/resources/css/studio/navigation.css && mkdir -p runtime/cache/deploy && VERSION=\$(date -u +%Y%m%dT%H%M%S)-\$(od -An -N6 -tx1 /dev/urandom | tr -d ' \\n') && printf '%s\\n' \"\$VERSION\" > runtime/cache/deploy/site-version.tmp && mv runtime/cache/deploy/site-version.tmp runtime/cache/deploy/site-version && printf 'Deploy version: %s\\n' \"\$VERSION\""
+REMOTE_COMMAND="cd '$PRODUCTION_DEST' && rm -f app/resources/components/website/navigation.css app/resources/components/website/footer.css app/resources/css/studio/navigation.css"
 if [[ "$COMPOSER_CHANGED" == true ]]; then
     REMOTE_COMMAND+=" && composer install --no-dev --optimize-autoloader --no-interaction --no-progress"
 fi
 REMOTE_COMMAND+=" && NO_COLOR=1 TERM=dumb APP_URL=https://numerimondes.com/ ./platform deploy"
+REMOTE_COMMAND+=" && mkdir -p runtime/cache/deploy && VERSION=\$(date -u +%Y%m%dT%H%M%S)-\$(od -An -N6 -tx1 /dev/urandom | tr -d ' \\n') && printf '%s\\n' \"\$VERSION\" > runtime/cache/deploy/site-version.tmp && mv runtime/cache/deploy/site-version.tmp runtime/cache/deploy/site-version && printf 'Deploy version: %s\\n' \"\$VERSION\""
 REMOTE_LOG="$LOG_DIR/production.log"
 if ! run_with_spinner 'Running production deployment actions...' "$REMOTE_LOG" ssh_remote "$REMOTE_COMMAND"; then
     err 'Remote production deployment failed.'

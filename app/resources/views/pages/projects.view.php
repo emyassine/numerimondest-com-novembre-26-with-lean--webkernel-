@@ -1,9 +1,3 @@
-@props([
-    'canonical' => '',
-    'locale' => 'en',
-    'site_ui' => [],
-])
-
 @php
     $projects = \App\Studio\ProjectCatalog::initiatives();
 @endphp
@@ -11,9 +5,6 @@
 <x-studio::page
     title="Projects — Numerimondes"
     description="Explore projects and initiatives developed by Numerimondes."
-    :canonical="$canonical"
-    :locale="$locale"
-    :site-ui="$site_ui ?? []"
 >
     <style>
         .nm-projects-page > .nm-about-section { padding-inline: 0; }

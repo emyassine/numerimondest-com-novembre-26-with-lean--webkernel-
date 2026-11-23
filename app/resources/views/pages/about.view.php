@@ -1,5 +1,3 @@
-@props(['canonical' => '', 'locale' => 'en', 'site_ui' => []])
-
 @php
     $about = [
         'intro' => 'Numerimondes is an independent consulting and solutions company based in Casablanca, Morocco. We connect business insight, technology and specialist expertise to explore opportunities, improve operations and turn ideas into practical projects.',
@@ -107,9 +105,6 @@
     class="bleed-page"
     title="About — Numerimondes"
     description="Founder-led consulting and solutions delivered by small specialist teams in Casablanca, Morocco."
-    :canonical="$canonical"
-    :locale="$locale"
-    :site-ui="$site_ui ?? []"
 >
     <style>
         .nm-about-intro {

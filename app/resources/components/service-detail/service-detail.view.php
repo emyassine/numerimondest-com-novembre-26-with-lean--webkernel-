@@ -1,8 +1,5 @@
 @props([
     'service' => [],
-    'canonical' => '',
-    'locale' => 'en',
-    'site_ui' => [],
 ])
 
 @php
@@ -24,9 +21,6 @@
     class="bleed-page"
     :title="$service['name'].' — Numerimondes'"
     :description="$service['card_description']"
-    :canonical="$canonical"
-    :locale="$locale"
-    :site-ui="$site_ui"
 >
     <main class="nm-page nm-service-detail">
         <header class="nm-service-detail-intro">

@@ -1,4 +1,3 @@
-@props(['canonical' => '', 'locale' => 'en', 'site_ui' => []])
 @php
     $policyPath = base_path('app/resources/views/content/pricing-policy.en.md');
     $policyContent = file_get_contents($policyPath);
@@ -12,9 +11,6 @@
     title="Pricing & Engagement Policy — Numerimondes"
     description="How Numerimondes scopes services, sets fees, structures payments and handles indicative currency conversions."
     robots="index,follow"
-    :canonical="$canonical"
-    :locale="$locale"
-    :site-ui="$site_ui ?? []"
 >
     <style>
         .nm-policy { --policy-top:180px; --policy-bottom:120px; --policy-title-size:16px; --policy-body-size:18px; --policy-heading-gap:52px; }

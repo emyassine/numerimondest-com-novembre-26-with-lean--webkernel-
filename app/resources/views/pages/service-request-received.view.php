@@ -1,13 +1,8 @@
-@props(['canonical' => '', 'locale' => 'en', 'site_ui' => []])
-
 <x-studio::page
     title="Private request received — Numerimondes"
     description="Your private request has reached Numerimondes for personal follow-up."
     robots="noindex,follow"
     rss="false"
-    :canonical="$canonical"
-    :locale="$locale"
-    :site-ui="$site_ui ?? []"
 >
     <style>
         .nm-service-request-received { min-height:70vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; }

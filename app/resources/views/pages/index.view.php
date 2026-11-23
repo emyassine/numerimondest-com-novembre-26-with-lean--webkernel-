@@ -1,15 +1,9 @@
-@props([
-    'canonical' => '',
-    'locale' => 'en',
-    'site_ui' => [],
-])
-
 @php
     $serviceCount = count(\App\Studio\ServiceCatalog::all());
     $heroPositioningText = 'Explore '.$serviceCount.' services to strengthen your brand, grow your sales pipeline and improve how work gets done — with a dedicated team shaped around your goals.';
 @endphp
 
-<x-studio::page class="bleed-page" title="Numerimondes — Ideas, Strategy, Execution" description="Independent consulting and solutions based in Casablanca, Morocco. Business insight, technology and specialist expertise for lasting value." robots="index,follow" :canonical="$canonical" :locale="$locale" :site-ui="$site_ui ?? []">
+<x-studio::page class="bleed-page" title="Numerimondes — Ideas, Strategy, Execution" description="Independent consulting and solutions based in Casablanca, Morocco. Business insight, technology and specialist expertise for lasting value." robots="index,follow">
     <style>
         .nm-home-explore { padding: 70px 50px 0; }
         .nm-home-explore h2 {

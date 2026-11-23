@@ -1,5 +1,3 @@
-@props(['canonical' => '', 'locale' => 'en', 'site_ui' => []])
-
 @php
     $serviceCatalog = \App\Studio\ServiceCatalog::all();
     $selectedSlugs = \App\Studio\ServiceInquiryController::selectedSlugs();
@@ -79,9 +77,6 @@
     description="Share the services you are considering and request a personal follow-up from Numerimondes."
     robots="noindex,follow"
     rss="false"
-    :canonical="$canonical"
-    :locale="$locale"
-    :site-ui="$site_ui ?? []"
 >
     <style>
         .nm-service-inquiry { width:100%; max-width:1040px; margin:0 auto; padding:180px 0 120px; }

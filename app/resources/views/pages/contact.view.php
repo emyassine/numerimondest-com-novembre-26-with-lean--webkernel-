@@ -1,9 +1,8 @@
-@props(['canonical' => '', 'locale' => 'en', 'site_ui' => []])
 @php
     $studioConfig = config('nm-studio', []);
 @endphp
 
-<x-studio::page title="Contact — Numerimondes" description="Contact Numerimondes about a project, a partnership or a technical discussion." :canonical="$canonical" :locale="$locale" :site-ui="$site_ui ?? []">
+<x-studio::page title="Contact — Numerimondes" description="Contact Numerimondes about a project, a partnership or a technical discussion.">
 <main class="nm-page nm-contact-page">
     <header class="nm-page-heading" style="min-height: 5vh !important; margin-top:10rem;"><h1 class="silky-ri">Contact</h1></header>
     <section class="nm-contact-form" aria-label="Contact Numerimondes" style="width:100%;margin:0 auto 100px;display:grid;place-items:center">
