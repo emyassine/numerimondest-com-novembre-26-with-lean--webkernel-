@@ -22,7 +22,6 @@
     }
     $shortlistCount = count(\App\Studio\ServiceShortlist::all());
     $studioStylesheetPatterns = config('dependable-ui.stylesheets', []);
-    $loadWebkernelPlatformTheme = (bool) config('dependable-ui.webkernel_platform_theme', false);
     $preventMobileZoom = (bool) config('dependable-ui.prevent_mobile_zoom', false);
     $forceLightMode = (bool) config('dependable-ui.force_light_mode', false);
     $viewportContent = 'width=device-width, initial-scale=1';
@@ -108,9 +107,6 @@
     @foreach ($studioStylesheets as $studioStylesheet)
         <link rel="stylesheet" href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', $studioStylesheet) }}">
     @endforeach
-    @if ($loadWebkernelPlatformTheme)
-        <link rel="stylesheet" href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/css/platform-theme.css') }}">
-    @endif
     <title>{{ $title }}</title>
     <style>
     		[x-cloak]{display:none!important}
