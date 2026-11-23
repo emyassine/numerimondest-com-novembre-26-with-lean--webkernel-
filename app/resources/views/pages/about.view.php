@@ -134,74 +134,9 @@
             max-width: 550px;
             margin: 30px auto 0;
         }
-        .nm-expertise-grid { display: grid; grid-template-columns: 1fr; gap: 50px 30px; }
-        .nm-expertise-grid article { display: flex; flex-direction: column; gap: 30px; }
-        .nm-expertise-grid h3 {
-            margin: 0;
-            font: 400 16px/1.19 var(--nm-title);
-            letter-spacing: .19em;
-            text-transform: uppercase;
-        }
-        .nm-expertise-grid ul { margin: 0; padding: 0; list-style: none; }
-        .nm-expertise-grid li { display:flex; align-items:center; gap:8px; margin:0; color:var(--nm-ink); }
-        .nm-about-page .nm-team { padding: 0 50px 70px; }
-        .nm-founder-profile { min-width: 0; }
-        .nm-founder-profile h2 { margin: 0 0 2rem; }
-        .nm-founder-profile img {
-            display: block;
-            width: 100%;
-            height: auto;
-            aspect-ratio: 1;
-            object-fit: cover;
-            object-position: center 35%;
-        }
-        .nm-founder-profile h3 {
-            margin: 20px 0 7px;
-            font: 400 26px/1.2 Romie, Georgia, serif;
-            letter-spacing: normal;
-            text-transform: none;
-        }
-        .nm-founder-role {
-            margin: 0 0 18px;
-            color: #8b8881;
-            letter-spacing: .12em;
-            text-transform: uppercase;
-        }
-        .nm-founder-bio {
-            max-width: 540px;
-            margin: 0 0 16px;
-        }
-
-        .nm-founder-details { min-width: 0; display: grid; gap: 14px; }
-        .nm-founder-section.fi-collapsed > .fi-section-content-ctn { display: none; }
-        .nm-founder-section .fi-section-header-heading { font-size: 11px; line-height: 1.4; }
-        .nm-founder-section .fi-section-content-ctn > .fi-section-content,
-        .nm-founder-section .fi-section-content,
-        .nm-founder-section .nm-founder-facts,
-        .nm-founder-section .nm-founder-fact { font-size: 13px; line-height: 1.45; }
-        .nm-founder-section .fi-section-header-text-ctn { margin-top: .35rem; }
-        .nm-founder-facts { display: grid; }
-        .nm-founder-fact {
-            display: grid;
-            grid-template-columns: minmax(125px, .36fr) minmax(0, 1fr);
-            gap: 18px;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border-default, var(--nm-line));
-        }
-        .nm-founder-fact:first-child { padding-top: 0; }
-        .nm-founder-fact:last-child { padding-bottom: 0; border-bottom: 0; }
-        .nm-founder-fact dt { font: inherit; font-weight: 600; }
-        .nm-founder-fact dd { margin: 0; }
-
         @media (max-width: 700px) {
             .nm-about-intro { min-height: 500px; padding: 85px 20px 45px; }
             .nm-about-intro h1 { max-width: 12.49rem; font-size: 12px; }
-            .nm-expertise-grid { gap: 35px 20px; }
-            .nm-expertise-grid article { gap: 20px; }
-            .nm-expertise-grid h3 { font-size: 12px; }
-            .nm-about-page .nm-team { padding: 0 0 50px; }
-            .nm-founder-profile h3 { font-size: 24px; }
-            .nm-founder-fact { grid-template-columns: minmax(100px, .38fr) minmax(0, 1fr); gap: 12px; }
         }
     </style>
     <main class="nm-page nm-about-page">
@@ -214,13 +149,6 @@
             <p class="bigger">{{ $about['intro'] }}</p>
         </section>
 
-        <style>
-        .nm-about-p { margin-inline-end: 0 !important; }
-        @media (min-width: 640px) { .nm-about-p { margin-inline-end: 2rem !important; } }
-        @media (min-width: 768px) { .nm-about-p { margin-inline-end: 5rem !important; } }
-        @media (min-width: 1080px) { .nm-about-p { margin-inline-end: 12rem !important; } }
-        @media (min-width: 1280px) { .nm-about-p { margin-inline-end: 20rem !important; } }
-        </style>
         <section class="nm-about-section">
             <div>
                 <h2>Built around the mission</h2>
@@ -239,6 +167,18 @@
             </div>
         </section>
 
+        <style>
+            .nm-expertise-grid { display:grid; grid-template-columns:1fr; gap:50px 30px; }
+            .nm-expertise-grid article { display:flex; flex-direction:column; gap:30px; }
+            .nm-expertise-grid h3 { margin:0; font:400 16px/1.19 var(--nm-title); letter-spacing:.19em; text-transform:uppercase; }
+            .nm-expertise-grid ul { margin:0; padding:0; list-style:none; }
+            .nm-expertise-grid li { display:flex; align-items:center; gap:8px; margin:0; color:var(--nm-ink); }
+            @media (max-width:700px) {
+                .nm-expertise-grid { gap:35px 20px; }
+                .nm-expertise-grid article { gap:20px; }
+                .nm-expertise-grid h3 { font-size:12px; }
+            }
+        </style>
         <section class="nm-about-section">
             <div>
                 <h2>Our expertise</h2>
@@ -252,7 +192,7 @@
                                 @foreach ($service['items'] as $item)
                                     <li>
                                         <x-webkernel::icon icon="arrow-right" set="lucide" width="14" height="14" aria-hidden="true" />
-                                        <p class="bigger uppercase">{{ $item }}</p>
+                                        <p class="bigger secondary-text uppercase">{{ $item }}</p>
                                     </li>
                                 @endforeach
                             </ul>
@@ -262,6 +202,32 @@
             </div>
         </section>
 
+        <style>
+            .nm-about-page .nm-team { padding:0 50px 70px; }
+            .nm-founder-profile { min-width:0; }
+            .nm-founder-profile h2 { margin:0 0 2rem; }
+            .nm-founder-profile img { display:block; width:100%; height:auto; aspect-ratio:1; object-fit:cover; object-position:center 35%; }
+            .nm-founder-profile h3 { margin:20px 0 7px; font:400 26px/1.2 Romie, Georgia, serif; letter-spacing:normal; text-transform:none; }
+            .nm-founder-details { min-width:0; display:grid; gap:14px; }
+            .nm-founder-section.fi-collapsed > .fi-section-content-ctn { display:none; }
+            .nm-founder-section .fi-section-header-heading { font-size:11px; line-height:1.4; }
+            .nm-founder-section .fi-section-content-ctn > .fi-section-content,
+            .nm-founder-section .fi-section-content,
+            .nm-founder-section .nm-founder-facts,
+            .nm-founder-section .nm-founder-fact { font-size:13px; line-height:1.45; }
+            .nm-founder-section .fi-section-header-text-ctn { margin-top:.35rem; }
+            .nm-founder-facts { display:grid; }
+            .nm-founder-fact { display:grid; grid-template-columns:minmax(125px,.36fr) minmax(0,1fr); gap:18px; padding:8px 0; border-bottom:1px solid var(--border-default,var(--nm-line)); }
+            .nm-founder-fact:first-child { padding-top:0; }
+            .nm-founder-fact:last-child { padding-bottom:0; border-bottom:0; }
+            .nm-founder-fact dt { font:inherit; font-weight:600; }
+            .nm-founder-fact dd { margin:0; }
+            @media (max-width:700px) {
+                .nm-about-page .nm-team { padding:0 0 50px; }
+                .nm-founder-profile h3 { font-size:24px; }
+                .nm-founder-fact { grid-template-columns:minmax(100px,.38fr) minmax(0,1fr); gap:12px; }
+            }
+        </style>
         <section class="nm-about-section nm-team">
             <div>
                 @foreach ($about['team'] as $person)
@@ -270,7 +236,7 @@
                         <img src="{{ $person['image'] }}" alt="{{ $person['name'] }}" width="2163" height="2163" fetchpriority="high">
                         <h3>{{ $person['name'] }}</h3>
                          <p class="bigger secondary-text uppercase">{{ $person['role'] }}</p>
-                         <p class="bigger" style="margin-top:1rem;">{{ $person['bio'] }}</p>
+                         <p class="bigger mt-4">{{ $person['bio'] }}</p>
                         <p class="bigger secondary-text">{{ $about['profile']['positioning'] }}</p>
                     </article>
                 @endforeach
