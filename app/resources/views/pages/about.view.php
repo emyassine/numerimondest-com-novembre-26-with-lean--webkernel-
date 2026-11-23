@@ -110,6 +110,118 @@
     :locale="$locale"
     :site-ui="$site_ui ?? []"
 >
+    <style>
+        .nm-page.nm-about-page { padding: 0; }
+        .nm-about-intro {
+            height: 100vh;
+            min-height: 600px;
+            padding: 90px 50px 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fffcf3;
+            text-align: center;
+            background-color: #222;
+            background-image: var(--nm-about-hero-image);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .nm-about-intro h1 {
+            max-width: 550px;
+            margin: 0;
+            font: 400 16px/1.63 var(--nm-title);
+            letter-spacing: .19em;
+            text-transform: uppercase;
+        }
+        .nm-about-intro p {
+            max-width: 550px;
+            margin: 30px auto 0;
+            font: 400 18px/1.22 var(--nm-body);
+        }
+        .nm-expertise-grid { display: grid; grid-template-columns: 1fr; gap: 50px 30px; }
+        .nm-expertise-grid article { display: flex; flex-direction: column; gap: 30px; }
+        .nm-expertise-grid h3 {
+            margin: 0;
+            font: 400 16px/1.19 var(--nm-title);
+            letter-spacing: .19em;
+            text-transform: uppercase;
+        }
+        .nm-expertise-grid ul { margin: 0; padding: 0; list-style: none; }
+        .nm-expertise-grid li { margin: 0; color: var(--nm-ink); font: 400 18px/1.22 var(--nm-body); }
+        .nm-about-page .nm-team { padding: 0 50px 70px; }
+        .nm-founder-profile { min-width: 0; }
+        .nm-founder-profile h2 { margin: 0 0 2rem; }
+        .nm-founder-profile img {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1;
+            object-fit: cover;
+            object-position: center 35%;
+        }
+        .nm-founder-profile h3 {
+            margin: 20px 0 7px;
+            font: 400 26px/1.2 Romie, Georgia, serif;
+            letter-spacing: normal;
+            text-transform: none;
+        }
+        .nm-founder-role {
+            margin: 0 0 18px;
+            color: #8b8881;
+            font: 400 10px/1.4 BrownLLMain, Arial, sans-serif;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+        .nm-founder-bio {
+            max-width: 540px;
+            margin: 0 0 16px;
+            font: 400 16px/1.45 BrownLLMain, Arial, sans-serif;
+        }
+        .nm-founder-positioning {
+            max-width: 480px;
+            margin: 26px 0 0;
+            color: #77746e;
+            font: 400 15px/1.4 BrownLLMain, Arial, sans-serif;
+        }
+        .nm-founder-details { min-width: 0; display: grid; gap: 14px; }
+        .nm-founder-section.fi-collapsed > .fi-section-content-ctn { display: none; }
+        .nm-founder-section .fi-section-header-heading { font-size: 11px; line-height: 1.4; }
+        .nm-founder-section .fi-section-content-ctn > .fi-section-content,
+        .nm-founder-section .fi-section-content,
+        .nm-founder-section .nm-founder-facts,
+        .nm-founder-section .nm-founder-fact { font-size: 13px; line-height: 1.45; }
+        .nm-founder-section .fi-section-header-text-ctn { margin-top: .35rem; }
+        .nm-founder-facts { display: grid; }
+        .nm-founder-fact {
+            display: grid;
+            grid-template-columns: minmax(125px, .36fr) minmax(0, 1fr);
+            gap: 18px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-default, var(--nm-line));
+        }
+        .nm-founder-fact:first-child { padding-top: 0; }
+        .nm-founder-fact:last-child { padding-bottom: 0; border-bottom: 0; }
+        .nm-founder-fact dt { font: inherit; font-weight: 600; }
+        .nm-founder-fact dd { margin: 0; font: inherit; }
+        .nm-founder-interest { margin: 0; font: inherit; }
+
+        @media (max-width: 700px) {
+            .nm-about-intro { min-height: 500px; padding: 85px 20px 45px; }
+            .nm-about-intro h1 { max-width: 12.49rem; font-size: 12px; }
+            .nm-about-intro p { font-size: 15px; }
+            .nm-expertise-grid { gap: 35px 20px; }
+            .nm-expertise-grid article { gap: 20px; }
+            .nm-expertise-grid h3 { font-size: 12px; }
+            .nm-expertise-grid li { font-size: 15px; }
+            .nm-about-page .nm-team { padding: 0 0 50px; }
+            .nm-founder-profile h3 { font-size: 24px; }
+            .nm-founder-bio { font-size: 14px; }
+            .nm-founder-positioning { margin-top: 20px; font-size: 14px; }
+            .nm-founder-fact { grid-template-columns: minmax(100px, .38fr) minmax(0, 1fr); gap: 12px; }
+        }
+    </style>
     <main class="nm-page nm-about-page">
         <section
             class="nm-about-intro"
@@ -120,12 +232,19 @@
             <p>{{ $about['intro'] }}</p>
         </section>
 
+        <style>
+        .nm-about-p { margin-inline-end: 0 !important; }
+        @media (min-width: 640px) { .nm-about-p { margin-inline-end: 2rem !important; } }
+        @media (min-width: 768px) { .nm-about-p { margin-inline-end: 5rem !important; } }
+        @media (min-width: 1080px) { .nm-about-p { margin-inline-end: 12rem !important; } }
+        @media (min-width: 1280px) { .nm-about-p { margin-inline-end: 20rem !important; } }
+        </style>
         <section class="nm-about-section">
             <div>
                 <h2>Built around the mission</h2>
             </div>
             <div>
-                <p class="md-me-80">{{ $about['about'] }}</p>
+                <p class="nm-about-p">{{ $about['about'] }}</p>
             </div>
         </section>
 
@@ -158,8 +277,8 @@
             </div>
         </section>
 
-        <section class="nm-about-section">
-            <div class="nm-founder-layout">
+        <section class="nm-about-section nm-team">
+            <div>
                 @foreach ($about['team'] as $person)
                     <article class="nm-founder-profile">
                         <h2>Founder</h2>
@@ -171,34 +290,32 @@
                     </article>
                 @endforeach
             </div>
-
-
-                            <div class="nm-founder-details" aria-label="Yassine El Moumen's experience and background">
-                                <x-webkernel-platform::section heading="Technical skills" icon="heroicon-o-code-bracket" :collapsed="true" :compact="true" class="nm-founder-section">
-                                    <dl class="nm-founder-facts">
-                                        @foreach ($about['profile']['technical_skills'] as $skill)
-                                            <div class="nm-founder-fact"><dt>{{ $skill[0] }}</dt><dd>{{ $skill[1] }}</dd></div>
-                                        @endforeach
-                                    </dl>
-                                </x-webkernel-platform::section>
-                                <x-webkernel-platform::section heading="Operational experience and expertise" icon="heroicon-o-briefcase" :collapsed="true" :compact="true" class="nm-founder-section">
-                                    <dl class="nm-founder-facts">
-                                        @foreach ($about['profile']['operational_experience'] as $experience)
-                                            <div class="nm-founder-fact"><dt>{{ $experience[0] }}</dt><dd>{{ $experience[1] }}</dd></div>
-                                        @endforeach
-                                    </dl>
-                                </x-webkernel-platform::section>
-                                <x-webkernel-platform::section heading="Background and languages" icon="heroicon-o-academic-cap" :collapsed="true" :compact="true" class="nm-founder-section">
-                                    <dl class="nm-founder-facts">
-                                        @foreach ($about['profile']['background'] as $item)
-                                            <div class="nm-founder-fact"><dt>{{ $item[0] }}</dt><dd>{{ $item[1] }}</dd></div>
-                                        @endforeach
-                                    </dl>
-                                </x-webkernel-platform::section>
-                                <x-webkernel-platform::section heading="Outside work" icon="heroicon-o-heart" :collapsed="true" :compact="true" class="nm-founder-section">
-                                    <p class="nm-founder-interest">{{ $about['profile']['interests'] }}</p>
-                                </x-webkernel-platform::section>
-                            </div>
+            <div class="nm-founder-details" aria-label="Yassine El Moumen's experience and background">
+                <x-webkernel-platform::section heading="Technical skills" icon="heroicon-o-code-bracket" :collapsed="true" :compact="true" class="nm-founder-section">
+                    <dl class="nm-founder-facts">
+                        @foreach ($about['profile']['technical_skills'] as $skill)
+                            <div class="nm-founder-fact"><dt>{{ $skill[0] }}</dt><dd>{{ $skill[1] }}</dd></div>
+                        @endforeach
+                    </dl>
+                </x-webkernel-platform::section>
+                <x-webkernel-platform::section heading="Operational experience and expertise" icon="heroicon-o-briefcase" :collapsed="true" :compact="true" class="nm-founder-section">
+                    <dl class="nm-founder-facts">
+                        @foreach ($about['profile']['operational_experience'] as $experience)
+                            <div class="nm-founder-fact"><dt>{{ $experience[0] }}</dt><dd>{{ $experience[1] }}</dd></div>
+                        @endforeach
+                    </dl>
+                </x-webkernel-platform::section>
+                <x-webkernel-platform::section heading="Background and languages" icon="heroicon-o-academic-cap" :collapsed="true" :compact="true" class="nm-founder-section">
+                    <dl class="nm-founder-facts">
+                        @foreach ($about['profile']['background'] as $item)
+                            <div class="nm-founder-fact"><dt>{{ $item[0] }}</dt><dd>{{ $item[1] }}</dd></div>
+                        @endforeach
+                    </dl>
+                </x-webkernel-platform::section>
+                <x-webkernel-platform::section heading="Outside work" icon="heroicon-o-heart" :collapsed="true" :compact="true" class="nm-founder-section">
+                    <p class="nm-founder-interest">{{ $about['profile']['interests'] }}</p>
+                </x-webkernel-platform::section>
+            </div>
         </section>
     </main>
 </x-studio::website>

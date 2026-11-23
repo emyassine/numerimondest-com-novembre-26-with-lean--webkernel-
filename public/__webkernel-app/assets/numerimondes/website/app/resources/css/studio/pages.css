@@ -1,6 +1,5 @@
 .nm-page { width: 100%; margin: 0; padding: 0 50px; }
 .nm-page [x-cloak] { display: none !important; }
-.nm-founder-section.fi-collapsed > .fi-section-content-ctn { display: none; }
 .nm-page h1,
 .nm-page h2,
 .nm-page h3 {
@@ -54,141 +53,13 @@
   white-space: pre-line;
 }
 
-.nm-expertise-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 50px 30px; }
-.nm-expertise-grid article { display: flex; flex-direction: column; gap: 30px; }
-
-.nm-expertise-grid h3 {
-  margin: 0;
-  font: 400 16px/1.19 var(--nm-title);
-  letter-spacing: .19em;
-  text-transform: uppercase;
-}
-
-.nm-expertise-grid ul { margin: 0; padding: 0; list-style: none; }
-
-.nm-expertise-grid li {
-  margin: 0;
-  color: var(--nm-ink);
-  font: 400 18px/1.22 var(--nm-body);
-}
-
-/* About page */
-.nm-page.nm-about-page { padding: 0; }
-.nm-about-intro {
-  height: 100vh;
-  min-height: 600px;
-  padding: 90px 50px 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #fffcf3;
-  text-align: center;
-  background-color: #222;
-  background-image: var(--nm-about-hero-image);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-.nm-about-intro h1 {
-  max-width: 550px;
-  margin: 0;
-  font: 400 16px/1.63 var(--nm-title);
-  letter-spacing: .19em;
-  text-transform: uppercase;
-}
-.nm-about-intro p {
-  max-width: 550px;
-  margin: 30px auto 0;
-  font: 400 18px/1.22 var(--nm-body);
-}
-.nm-about-page .nm-about-section > div:last-of-type > p.md-me-80 { margin-inline-end: 20rem; }
-.nm-about-page .nm-expertise-grid { grid-template-columns: 1fr; }
-.nm-about-page .nm-team { padding: 0 50px 70px; }
-.nm-founder-layout {
-  display: grid;
-  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
-  gap: 50px;
-  align-items: start;
-}
-.nm-founder-profile { min-width: 0; }
-.nm-founder-profile h2 {
-  margin: 0 0 24px;
-  font: 400 16px/1.3 var(--nm-title);
-  letter-spacing: .16em;
-  text-transform: uppercase;
-}
-.nm-founder-profile img {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-height: 520px;
-  object-fit: cover;
-  object-position: center 35%;
-}
-.nm-founder-profile h3 {
-  margin: 20px 0 7px;
-  font: 400 14px/1.3 var(--nm-title);
-  letter-spacing: .12em;
-  text-transform: uppercase;
-}
-.nm-founder-role {
-  margin: 0 0 18px;
-  color: #8b8881;
-  font: 400 10px/1.4 var(--nm-title);
-  letter-spacing: .12em;
-  text-transform: uppercase;
-}
-.nm-founder-bio { max-width: 540px; margin: 0 0 16px; font: 400 16px/1.45 var(--nm-body); }
-.nm-founder-positioning { max-width: 480px; margin: 26px 0 0; color: #77746e; font: 400 15px/1.4 var(--nm-body); }
-.nm-founder-details { min-width: 0; display: grid; gap: 14px; }
-.nm-founder-section .fi-section-header-heading { font-size: 11px; line-height: 1.4; }
-.nm-founder-section .fi-section-content-ctn > .fi-section-content,
-.nm-founder-section .fi-section-content,
-.nm-founder-section .nm-founder-facts,
-.nm-founder-section .nm-founder-fact { font-size: 13px; line-height: 1.45; }
-.nm-founder-section .fi-section-header-text-ctn { margin-top: .35rem; }
-.nm-founder-facts { display: grid; }
-.nm-founder-fact {
-  display: grid;
-  grid-template-columns: minmax(125px, .36fr) minmax(0, 1fr);
-  gap: 18px;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border-default, var(--nm-line));
-}
-.nm-founder-fact:first-child { padding-top: 0; }
-.nm-founder-fact:last-child { padding-bottom: 0; border-bottom: 0; }
-.nm-founder-fact dt { font: inherit; font-weight: 600; }
-.nm-founder-fact dd { margin: 0; font: inherit; }
-.nm-founder-interest { margin: 0; font: inherit; }
-
-@media (max-width: 900px) {
-  .nm-founder-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 30px; }
-}
-
 @media (max-width: 700px) {
   .nm-page { padding: 0 20px; }
   .nm-page-heading { min-height: 55vh; }
-  .nm-about-section h2,
-  .nm-expertise-grid h3 { font-size: 12px; }
+  .nm-about-section h2 { font-size: 12px; }
 
-  .nm-about-section p,
-  .nm-expertise-grid li { font-size: 15px; }
+  .nm-about-section p { font-size: 15px; }
   .nm-about-section { grid-template-columns: 1fr; gap: 30px; padding: 50px 0; }
-  .nm-expertise-grid { grid-template-columns: 1fr 1fr; gap: 35px 20px; }
-  .nm-expertise-grid article { gap: 20px; }
-  .nm-about-intro { min-height: 500px; padding: 85px 20px 45px; }
-  .nm-about-intro h1 { max-width: 12.49rem; font-size: 12px; }
-  .nm-about-intro p { font-size: 15px; }
-  .nm-about-page .nm-about-section > div:last-of-type > p.md-me-80 { margin-inline-end: 0; }
-  .nm-about-page .nm-team { padding: 0 0 50px; }
-  .nm-founder-layout { grid-template-columns: 1fr; gap: 44px; }
-  .nm-founder-profile h2 { margin-bottom: 20px; font-size: 12px; }
-  .nm-founder-profile img { width: min(100%, 420px); max-height: 500px; }
-  .nm-founder-profile h3 { font-size: 12px; }
-  .nm-founder-bio { font-size: 14px; }
-  .nm-founder-positioning { margin-top: 20px; font-size: 14px; }
-  .nm-founder-fact { grid-template-columns: minmax(100px, .38fr) minmax(0, 1fr); gap: 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
