@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="nm-studio" data-mode="light" class="light" style="color-scheme:light; background-color:#f1f5f9">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Standards — Numerimondes</title>
+  <link rel="preconnect" href="https://googleapis.com">
+  <link rel="preconnect" href="https://gstatic.com" crossorigin>
+  <link href="https://googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-slate: #f1f5f9;
+      --surface-white: #ffffff;
+      --ink-primary: #0f172a;
+      --ink-secondary: #475569;
+      --ink-muted: #64748b;
+      --border-hairline: #cbd5e1;
+      --border-subtle: #e2e8f0;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background-color: var(--bg-slate);
+      color: var(--ink-primary);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.75rem 5%; border-bottom: 1px solid var(--border-subtle);
+      background-color: rgba(241, 245, 249, 0.92); backdrop-filter: blur(8px);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .brand {
+      font-size: 0.95rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--ink-primary); text-decoration: none;
+    }
+    nav { display: flex; gap: 2.25rem; align-items: center; }
+    nav a { font-size: 0.875rem; font-weight: 500; color: var(--ink-secondary); text-decoration: none; }
+    nav a:hover, nav a.active { color: var(--ink-primary); }
+    .nav-action {
+      color: var(--ink-primary); padding: 0.55rem 1.1rem;
+      border: 1px solid var(--border-hairline); background-color: var(--surface-white);
+      border-radius: 2px;
+    }
+    .container { max-width: 1120px; margin: 0 auto; padding: 5rem 5% 6rem; }
+    .kicker {
+      display: block; font-size: 0.75rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-muted);
+      margin-bottom: 1.25rem;
+    }
+    h1 {
+      font-family: 'Newsreader', Georgia, serif; font-weight: 400;
+      font-size: clamp(2.5rem, 4.5vw, 3.85rem); line-height: 1.1;
+      letter-spacing: -0.02em; margin-bottom: 2rem;
+    }
+    .thesis {
+      font-family: 'Newsreader', Georgia, serif; font-size: 1.5rem;
+      line-height: 1.5; color: var(--ink-secondary);
+      padding-bottom: 3.5rem; border-bottom: 1px solid var(--border-hairline);
+      margin-bottom: 3.5rem;
+    }
+    .principles-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 3rem 4rem;
+    }
+    .principle h2 {
+      font-size: 1.05rem; font-weight: 600; margin-bottom: 0.75rem;
+      color: var(--ink-primary);
+    }
+    .principle p {
+      font-size: 0.95rem; color: var(--ink-secondary); line-height: 1.7;
+    }
+    @media (max-width: 800px) {
+      .principles-grid { grid-template-columns: 1fr; }
+      nav a:not(.nav-action) { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="brand">Numerimondes</a>
+    <nav>
+      <a href="practice.html">The Practice</a>
+      <a href="commissions.html">Commissions</a>
+      <a href="standards.html" class="active">Standards</a>
+      <a href="briefing.html" class="nav-action">Private Briefing</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <span class="kicker">Operating Standards</span>
+    <h1>How we work, and why we remain selective.</h1>
+    <p class="thesis">
+      In an era of automated output and interchangeable vendors, durable advantage comes from primary verification, senior accountability, and systems built without shortcuts.
+    </p>
+
+    <div class="principles-grid">
+      <div class="principle">
+        <h2>01. First-Hand Verification</h2>
+        <p>Whether sourcing a key remote engineer or conducting market diligence, we do not rely on aggregated databases or surface credentials. Every insight and every candidate is individually verified against the exact parameters of your mandate.</p>
+      </div>
+
+      <div class="principle">
+        <h2>02. Direct Principal Involvement</h2>
+        <p>We deliberately limit the number of active engagements we accept. Clients work directly with the principals architecting the solution—never through layers of account managers or junior intermediaries.</p>
+      </div>
+
+      <div class="principle">
+        <h2>03. Calm, Predictable Execution</h2>
+        <p>The complexity of cross-border recruitment, software architecture, and research belongs on our side of the table. We structure timelines, communication, and deliverables so your leadership receives clear decisions and finished work.</p>
+      </div>
+
+      <div class="principle">
+        <h2>04. Discretion by Default</h2>
+        <p>Strategic research, organizational shifts, and new product architecture require confidentiality. We operate quietly, protect client identity, and never use sensitive mandates for public promotion.</p>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="nm-studio" data-mode="light" class="light" style="color-scheme:light; background-color:#f1f5f9">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Private Briefing — Numerimondes</title>
+  <link rel="preconnect" href="https://googleapis.com">
+  <link rel="preconnect" href="https://gstatic.com" crossorigin>
+  <link href="https://googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-slate: #f1f5f9;
+      --surface-white: #ffffff;
+      --ink-primary: #0f172a;
+      --ink-secondary: #475569;
+      --ink-muted: #64748b;
+      --border-hairline: #cbd5e1;
+      --border-subtle: #e2e8f0;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background-color: var(--bg-slate);
+      color: var(--ink-primary);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.75rem 5%; border-bottom: 1px solid var(--border-subtle);
+      background-color: rgba(241, 245, 249, 0.92); backdrop-filter: blur(8px);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .brand {
+      font-size: 0.95rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--ink-primary); text-decoration: none;
+    }
+    nav { display: flex; gap: 2.25rem; align-items: center; }
+    nav a { font-size: 0.875rem; font-weight: 500; color: var(--ink-secondary); text-decoration: none; }
+    nav a:hover { color: var(--ink-primary); }
+    .nav-action {
+      color: var(--ink-primary); padding: 0.55rem 1.1rem;
+      border: 1px solid var(--ink-primary); background-color: var(--surface-white);
+      border-radius: 2px;
+    }
+    .container {
+      max-width: 1240px; margin: 0 auto; padding: 5rem 5% 6rem;
+      display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 5rem;
+    }
+    .kicker {
+      display: block; font-size: 0.75rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-muted);
+      margin-bottom: 1.25rem;
+    }
+    h1 {
+      font-family: 'Newsreader', Georgia, serif; font-weight: 400;
+      font-size: clamp(2.4rem, 4vw, 3.4rem); line-height: 1.12;
+      letter-spacing: -0.02em; margin-bottom: 1.5rem;
+    }
+    .side-copy { font-size: 0.98rem; color: var(--ink-secondary); margin-bottom: 2.5rem; }
+    .process-steps { border-top: 1px solid var(--border-hairline); padding-top: 1.75rem; }
+    .step { margin-bottom: 1.5rem; }
+    .step strong { display: block; font-size: 0.85rem; color: var(--ink-primary); margin-bottom: 0.25rem; }
+    .step span { font-size: 0.85rem; color: var(--ink-muted); }
+
+    .form-box {
+      background-color: var(--surface-white); border: 1px solid var(--border-subtle);
+      padding: 2.75rem; border-radius: 2px;
+    }
+    .form-group { margin-bottom: 1.5rem; }
+    label {
+      display: block; font-size: 0.8rem; font-weight: 600;
+      color: var(--ink-primary); margin-bottom: 0.5rem;
+    }
+    input, select, textarea {
+      width: 100%; padding: 0.8rem 0.95rem; font-family: inherit; font-size: 0.9rem;
+      color: var(--ink-primary); background-color: var(--bg-slate);
+      border: 1px solid var(--border-hairline); border-radius: 2px;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none; border-color: var(--ink-primary); background-color: #ffffff;
+    }
+    button {
+      width: 100%; background-color: var(--ink-primary); color: #ffffff;
+      border: none; padding: 1rem; font-size: 0.875rem; font-weight: 500;
+      letter-spacing: 0.04em; cursor: pointer; border-radius: 2px;
+      transition: background-color 0.2s ease;
+    }
+    button:hover { background-color: #1e293b; }
+    @media (max-width: 900px) {
+      .container { grid-template-columns: 1fr; gap: 3rem; }
+      nav a:not(.nav-action) { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="brand">Numerimondes</a>
+    <nav>
+      <a href="practice.html">The Practice</a>
+      <a href="commissions.html">Commissions</a>
+      <a href="standards.html">Standards</a>
+      <a href="briefing.html" class="nav-action">Private Briefing</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div>
+      <span class="kicker">Private Briefing</span>
+      <h1>Initiate a confidential discussion.</h1>
+      <p class="side-copy">
+        Every engagement begins with a direct conversation between principals to assess scope, timing, and alignment before any formal proposal is issued.
+      </p>
+
+      <div class="process-steps">
+        <div class="step">
+          <strong>1. Initial Brief Review</strong>
+          <span>We review your context within 48 hours and confirm whether our capacity aligns with your timeline.</span>
+        </div>
+        <div class="step">
+          <strong>2. Principal Consultation</strong>
+          <span>A structured discussion focused on operational realities, constraints, and required outcomes.</span>
+        </div>
+        <div class="step">
+          <strong>3. Mandate Architecture</strong>
+          <span>Clear scope, fixed governance, and direct execution without intermediary layers.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-box">
+      <form action="#" method="POST">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="organization">Organization &amp; Role</label>
+          <input type="text" id="organization" name="organization" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Work Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="domain">Primary Area of Inquiry</label>
+          <select id="domain" name="domain">
+            <option value="advisory">Operations Advisory &amp; Market Research</option>
+            <option value="systems">Business Systems &amp; Software Architecture</option>
+            <option value="recruitment">Remote Recruitment &amp; Talent Qualification</option>
+            <option value="brand">Brand Identity &amp; Digital Presence</option>
+            <option value="sales">Sales Development &amp; Market Entry</option>
+            <option value="ventures">Studio Ventures / Employer Inquiry (The Best Recruit)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="context">Mandate Context &amp; Timeline</label>
+          <textarea id="context" name="context" rows="4" placeholder="Briefly describe the decision, system, or capability you are looking to establish."></textarea>
+        </div>
+
+        <button type="submit">Request a Private Briefing &rarr;</button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

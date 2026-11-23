@@ -5,6 +5,7 @@
 <x-studio::page
     title="Projects — Numerimondes"
     description="Explore projects and initiatives developed by Numerimondes."
+    :page-width="null"
 >
     <style>
         .nm-projects-page > .nm-about-section { padding-inline: 0; }

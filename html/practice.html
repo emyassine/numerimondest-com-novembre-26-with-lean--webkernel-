@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="nm-studio" data-mode="light" class="light" style="color-scheme:light; background-color:#f1f5f9">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Practice — Numerimondes</title>
+  <link rel="preconnect" href="https://googleapis.com">
+  <link rel="preconnect" href="https://gstatic.com" crossorigin>
+  <link href="https://googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-slate: #f1f5f9;
+      --surface-white: #ffffff;
+      --ink-primary: #0f172a;
+      --ink-secondary: #475569;
+      --ink-muted: #64748b;
+      --border-hairline: #cbd5e1;
+      --border-subtle: #e2e8f0;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background-color: var(--bg-slate);
+      color: var(--ink-primary);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.75rem 5%; border-bottom: 1px solid var(--border-subtle);
+      background-color: rgba(241, 245, 249, 0.92); backdrop-filter: blur(8px);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .brand {
+      font-size: 0.95rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--ink-primary); text-decoration: none;
+    }
+    nav { display: flex; gap: 2.25rem; align-items: center; }
+    nav a { font-size: 0.875rem; font-weight: 500; color: var(--ink-secondary); text-decoration: none; }
+    nav a:hover, nav a.active { color: var(--ink-primary); }
+    .nav-action {
+      color: var(--ink-primary); padding: 0.55rem 1.1rem;
+      border: 1px solid var(--border-hairline); background-color: var(--surface-white);
+      border-radius: 2px;
+    }
+    .container { max-width: 1320px; margin: 0 auto; padding: 5rem 5% 6rem; }
+    .kicker {
+      display: block; font-size: 0.75rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-muted);
+      margin-bottom: 1.25rem;
+    }
+    h1 {
+      font-family: 'Newsreader', Georgia, serif; font-weight: 400;
+      font-size: clamp(2.5rem, 4.5vw, 4rem); line-height: 1.1;
+      letter-spacing: -0.02em; max-width: 820px; margin-bottom: 1.75rem;
+    }
+    .intro-text {
+      font-size: 1.1rem; color: var(--ink-secondary); max-width: 680px;
+      margin-bottom: 4.5rem;
+    }
+    .practice-list { border-top: 1px solid var(--border-hairline); }
+    .practice-row {
+      display: grid; grid-template-columns: 80px 1.1fr 1.6fr;
+      gap: 2rem; padding: 2.75rem 0;
+      border-bottom: 1px solid var(--border-subtle);
+      align-items: start;
+    }
+    .practice-num { font-size: 0.8rem; font-weight: 600; color: var(--ink-muted); padding-top: 0.25rem; }
+    .practice-title { font-family: 'Newsreader', Georgia, serif; font-size: 1.75rem; font-weight: 400; }
+    .practice-desc { font-size: 0.95rem; color: var(--ink-secondary); margin-bottom: 1rem; }
+    .deliverables {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+    }
+    .deliverables span {
+      font-size: 0.75rem; color: var(--ink-primary); background: var(--surface-white);
+      border: 1px solid var(--border-subtle); padding: 0.25rem 0.65rem; border-radius: 2px;
+    }
+    @media (max-width: 850px) {
+      .practice-row { grid-template-columns: 1fr; gap: 0.75rem; }
+      nav a:not(.nav-action) { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="brand">Numerimondes</a>
+    <nav>
+      <a href="practice.html" class="active">The Practice</a>
+      <a href="commissions.html">Commissions</a>
+      <a href="standards.html">Standards</a>
+      <a href="briefing.html" class="nav-action">Private Briefing</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <span class="kicker">The Practice</span>
+    <h1>Six integrated disciplines. Structured around operational clarity.</h1>
+    <p class="intro-text">
+      Complex mandates rarely fail from a lack of effort; they fail from fragmentation. We operate across research, systems, talent, and market positioning under a single accountable structure.
+    </p>
+
+    <div class="practice-list">
+      <div class="practice-row">
+        <div class="practice-num">01</div>
+        <h2 class="practice-title">Operations Advisory &amp; Research</h2>
+        <div>
+          <p class="practice-desc">Primary market research, frontline sector intelligence, and operational restructuring. We connect leadership decisions to verified data and direct conversations with practitioners closest to the field.</p>
+          <div class="deliverables">
+            <span>Primary Market Studies</span>
+            <span>Feasibility &amp; Diligence</span>
+            <span>Process Architecture</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="practice-row">
+        <div class="practice-num">02</div>
+        <h2 class="practice-title">Business Systems</h2>
+        <div>
+          <p class="practice-desc">Design and engineering of resilient internal software, workflow automation, and data infrastructure tailored to how your organization actually operates.</p>
+          <div class="deliverables">
+            <span>Custom Internal Platforms</span>
+            <span>Systems Integration</span>
+            <span>Performance Engineering</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="practice-row">
+        <div class="practice-num">03</div>
+        <h2 class="practice-title">Remote Recruitment</h2>
+        <div>
+          <p class="practice-desc">Targeted sourcing and rigorous qualification of remote operators and technical specialists. Every candidate is individually assessed against your exact brief before introduction.</p>
+          <div class="deliverables">
+            <span>Technical &amp; Ops Sourcing</span>
+            <span>Structured Qualification</span>
+            <span>Cross-Border Onboarding</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="practice-row">
+        <div class="practice-num">04</div>
+        <h2 class="practice-title">Brand Identity</h2>
+        <div>
+          <p class="practice-desc">Institutional positioning, editorial voice, and visual architecture built for longevity rather than seasonal trends.</p>
+          <div class="deliverables">
+            <span>Strategic Positioning</span>
+            <span>Visual Systems</span>
+            <span>Editorial Direction</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="practice-row">
+        <div class="practice-num">05</div>
+        <h2 class="practice-title">Digital Presence</h2>
+        <div>
+          <p class="practice-desc">High-craft web platforms and digital flagships engineered for clarity, speed, and enduring authority.</p>
+          <div class="deliverables">
+            <span>Flagship Web Architecture</span>
+            <span>Content Structuring</span>
+            <span>Technical Accessibility</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="practice-row">
+        <div class="practice-num">06</div>
+        <h2 class="practice-title">Sales Development</h2>
+        <div>
+          <p class="practice-desc">Methodical market entry, account research, and outbound commercial architecture designed to initiate qualified institutional conversations.</p>
+          <div class="deliverables">
+            <span>Market Entry Playbooks</span>
+            <span>Account Intelligence</span>
+            <span>Pipeline Infrastructure</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

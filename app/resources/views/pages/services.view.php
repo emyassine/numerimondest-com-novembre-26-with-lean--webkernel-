@@ -77,6 +77,7 @@
 <x-studio::page
     title="Services — Numerimondes"
     description="Explore Numerimondes services, save a private shortlist and request a personal discussion with the founder and account manager."
+    :page-width="null"
 >
     <style>
         .nm-services-marketplace .nm-page-heading {

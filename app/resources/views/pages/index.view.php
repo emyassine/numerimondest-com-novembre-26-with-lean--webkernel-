@@ -54,7 +54,7 @@
                 .nm-home-hero-2__eyebrow,
                 .nm-home-hero-2__label { display:block; color:var(--ink-muted); font-size:.75rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; }
                 .nm-home-hero-2__eyebrow { margin:0 0 1.5rem; }
-                .nm-home-hero-2 h1 { margin:0; color:var(--ink-primary); font-size:clamp(2.5rem,5vw,4.8rem); font-weight:400; line-height:1.08; }
+                .nm-home-hero-2 h1 { margin:0; color:var(--ink-primary); font-size:clamp(2.5rem,5vw,4rem); font-weight:400; line-height:1.08; }
                 .nm-home-hero-2 h1 em { color:var(--ink-secondary); font-style:italic; }
                 .nm-home-hero-2__right { display:flex; flex-direction:column; align-items:flex-start; gap:1.25rem; }
                 .nm-home-hero-2__lead { margin:0; color:var(--ink-secondary); font-size:1.075rem; line-height:1.7; }

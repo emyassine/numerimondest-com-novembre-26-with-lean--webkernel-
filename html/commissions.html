@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="nm-studio" data-mode="light" class="light" style="color-scheme:light; background-color:#f1f5f9">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commissions &amp; Initiatives — Numerimondes</title>
+  <link rel="preconnect" href="https://googleapis.com">
+  <link rel="preconnect" href="https://gstatic.com" crossorigin>
+  <link href="https://googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-slate: #f1f5f9;
+      --surface-white: #ffffff;
+      --ink-primary: #0f172a;
+      --ink-secondary: #475569;
+      --ink-muted: #64748b;
+      --border-hairline: #cbd5e1;
+      --border-subtle: #e2e8f0;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background-color: var(--bg-slate);
+      color: var(--ink-primary);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.75rem 5%; border-bottom: 1px solid var(--border-subtle);
+      background-color: rgba(241, 245, 249, 0.92); backdrop-filter: blur(8px);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .brand {
+      font-size: 0.95rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--ink-primary); text-decoration: none;
+    }
+    nav { display: flex; gap: 2.25rem; align-items: center; }
+    nav a { font-size: 0.875rem; font-weight: 500; color: var(--ink-secondary); text-decoration: none; }
+    nav a:hover, nav a.active { color: var(--ink-primary); }
+    .nav-action {
+      color: var(--ink-primary); padding: 0.55rem 1.1rem;
+      border: 1px solid var(--border-hairline); background-color: var(--surface-white);
+      border-radius: 2px;
+    }
+    .container { max-width: 1320px; margin: 0 auto; padding: 5rem 5% 6rem; }
+    .kicker {
+      display: block; font-size: 0.75rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-muted);
+      margin-bottom: 1.25rem;
+    }
+    h1 {
+      font-family: 'Newsreader', Georgia, serif; font-weight: 400;
+      font-size: clamp(2.5rem, 4.5vw, 4rem); line-height: 1.1;
+      letter-spacing: -0.02em; max-width: 820px; margin-bottom: 1.5rem;
+    }
+    .intro-text {
+      font-size: 1.075rem; color: var(--ink-secondary); max-width: 680px;
+      margin-bottom: 4rem;
+    }
+    .section-header {
+      display: flex; justify-content: space-between; align-items: baseline;
+      border-bottom: 1px solid var(--border-hairline);
+      padding-bottom: 1rem; margin-bottom: 2.5rem;
+    }
+    .section-header h2 {
+      font-family: 'Newsreader', Georgia, serif; font-size: 1.85rem; font-weight: 400;
+    }
+    .section-header span { font-size: 0.82rem; color: var(--ink-muted); }
+    .grid-2 {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem;
+      margin-bottom: 5rem;
+    }
+    .card {
+      background-color: var(--surface-white); border: 1px solid var(--border-subtle);
+      padding: 2.25rem; border-radius: 2px; display: flex; flex-direction: column;
+      justify-content: space-between;
+    }
+    .card-meta {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 1.25rem; font-size: 0.75rem;
+    }
+    .status-badge {
+      font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--ink-primary); background: var(--bg-slate);
+      padding: 0.25rem 0.6rem; border-radius: 2px;
+    }
+    .category-label { color: var(--ink-muted); }
+    .card h3 {
+      font-family: 'Newsreader', Georgia, serif; font-size: 1.6rem; font-weight: 400;
+      margin-bottom: 0.75rem;
+    }
+    .card p { font-size: 0.92rem; color: var(--ink-secondary); line-height: 1.65; }
+    @media (max-width: 850px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      nav a:not(.nav-action) { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="brand">Numerimondes</a>
+    <nav>
+      <a href="practice.html">The Practice</a>
+      <a href="commissions.html" class="active">Commissions</a>
+      <a href="standards.html">Standards</a>
+      <a href="briefing.html" class="nav-action">Private Briefing</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <span class="kicker">Commissions &amp; Studio Work</span>
+    <h1>Client mandates and proprietary initiatives.</h1>
+    <p class="intro-text">
+      Most client commissions remain under strict non-disclosure. Alongside private advisory work, we allocate internal capacity to research, build, and validate our own ventures—each clearly distinguished by its current stage.
+    </p>
+
+    <!-- Part 1: Representative Client Mandates -->
+    <div class="section-header">
+      <h2>Selected Client Mandates</h2>
+      <span>Anonymized summaries</span>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div>
+          <div class="card-meta">
+            <span class="status-badge">Completed Mandate</span>
+            <span class="category-label">Operations Advisory &amp; Research</span>
+          </div>
+          <h3>Cross-Border Supply &amp; Market Entry Study</h3>
+          <p>Conducted primary field interviews across three jurisdictions for an industrial investor evaluating regional manufacturing partners, delivering verified operational benchmarks prior to capital allocation.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div>
+          <div class="card-meta">
+            <span class="status-badge">Ongoing Retainer</span>
+            <span class="category-label">Business Systems &amp; Recruitment</span>
+          </div>
+          <h3>Distributed Engineering &amp; Internal Tooling</h3>
+          <p>Architected core workflow systems and sourced a dedicated remote product team for a European financial services operator, replacing fragmented legacy tools with a unified internal platform.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Part 2: Ideas in Development (Vos projets internes exacts) -->
+    <div class="section-header">
+      <h2>Ideas in Development</h2>
+      <span>Proprietary studio initiatives</span>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div>
+          <div class="card-meta">
+            <span class="status-badge">Concept &amp; Market Study</span>
+            <span class="category-label">Luxury Jewellery</span>
+          </div>
+          <h3>Caldezza</h3>
+          <p>A private high-jewellery maison concept shaped around Moroccan craft and atelier provenance.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div>
+          <div class="card-meta">
+            <span class="status-badge">In Development</span>
+            <span class="category-label">Application Platform</span>
+          </div>
+          <h3>Feluqa</h3>
+          <p>A Rust-based framework being developed for efficient, cross-platform software.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div>
+          <div class="card-meta">
+            <span class="status-badge">Employer Inquiries Welcome</span>
+            <span class="category-label">Remote Recruitment</span>
+          </div>
+          <h3>The Best Recruit</h3>
+          <p>Remote recruitment for employers, centered on candidate qualification and relevant information.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div>
+          <div class="card-meta">
+            <span class="status-badge">In Development</span>
+            <span class="category-label">Remote Operations</span>
+          </div>
+          <h3>Virtual Assistant Asia</h3>
+          <p>A Numerimondes service project for coordinated remote operations support.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

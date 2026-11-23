@@ -374,7 +374,7 @@
 <div id="main">{{ $slot }}</div>
 
 <footer class="nm-footer" id="contact" style="margin-top:5rem;">
-    <span class="nm-footer-copy" style="margin-bottom:2rem;">
+    <span class="nm-footer-copy" style="margin-bottom:0rem;">
         © {{ $studio_config['company']['name'] }} · {{ $studio_config['company']['location'] }} — Page Load took {{ number_format(request_time(), 2, ',', ' ') . ' ms' }}
     </span>
     <div class="nm-footer-links">
