@@ -1,4 +1,4 @@
-<x-studio::page title="Numerimondes — Ideas, Strategy, Execution" description="Independent consulting and solutions based in Casablanca, Morocco. Business insight, technology and specialist expertise for lasting value." robots="index,follow" pageWidth="['desktop'=> '1380px']">
+<x-studio::page title="Numerimondes — Ideas, Strategy, Execution" description="Independent consulting and solutions based in Casablanca, Morocco. Business insight, technology and specialist expertise for lasting value." robots="index,follow" :page-width="['desktop' => '1200px']">
     <style>
         .nm-home-explore { padding: 70px 0 0; }
         .nm-home-explore h2 {

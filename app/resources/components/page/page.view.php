@@ -1,7 +1,7 @@
 @props([
     'title' => 'Numerimondes — Ideas, Strategy, Execution',
     'description' => '',
-    'pageWidth' => 'marketplace',
+    'page_width' => 'marketplace',
 ])
 
 @php
@@ -21,8 +21,8 @@
     $locale = $locale !== '' ? $locale : (string) ($site['fallback_locale'] ?? 'en');
     $siteUi = is_array($site['ui'] ?? null) ? $site['ui'] : [];
 
-    $isMarketplaceWidth = $pageWidth === 'marketplace';
-    $isUnboundedWidth = $pageWidth === null;
+    $isMarketplaceWidth = $page_width === 'marketplace';
+    $isUnboundedWidth = $page_width === null;
     $pageWidthStyle = '';
 
     if (! $isMarketplaceWidth && ! $isUnboundedWidth) {
@@ -38,12 +38,12 @@
             return null;
         };
 
-        if (is_array($pageWidth)) {
-            $desktopPageWidth = $normalizePageWidth($pageWidth['desktop'] ?? $pageWidth['tablet'] ?? null);
-            $tabletPageWidth = $normalizePageWidth($pageWidth['tablet'] ?? $desktopPageWidth);
-            $mobilePageWidth = $normalizePageWidth($pageWidth['mobile'] ?? $tabletPageWidth);
+        if (is_array($page_width)) {
+            $desktopPageWidth = $normalizePageWidth($page_width['desktop'] ?? $page_width['tablet'] ?? null);
+            $tabletPageWidth = $normalizePageWidth($page_width['tablet'] ?? $desktopPageWidth);
+            $mobilePageWidth = $normalizePageWidth($page_width['mobile'] ?? $tabletPageWidth);
         } else {
-            $desktopPageWidth = $normalizePageWidth($pageWidth);
+            $desktopPageWidth = $normalizePageWidth($page_width);
             $tabletPageWidth = $desktopPageWidth;
             $mobilePageWidth = $desktopPageWidth;
         }
