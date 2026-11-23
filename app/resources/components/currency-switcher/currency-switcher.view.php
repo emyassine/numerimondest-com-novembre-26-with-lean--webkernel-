@@ -16,6 +16,7 @@
         min-height: 32px;
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 5px;
         padding: 0;
         border: 0;

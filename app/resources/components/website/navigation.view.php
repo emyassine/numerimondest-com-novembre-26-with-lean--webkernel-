@@ -74,6 +74,7 @@
 .nm-nav--right { justify-content: flex-end; }
 .nm-nav--compact { display: none; }
 .nm-mobile-currency-switcher {
+  position: relative;
   min-height: 48px;
   display: flex;
   align-items: center;
@@ -83,6 +84,7 @@
   color: inherit;
   font: 500 14px/1.35 var(--nm-body);
   border-top: 1px solid var(--fi-dropdown-list-item-border-color, #eee);
+  cursor: pointer;
 }
 .nm-mobile-currency-switcher-label { display: inline-flex; align-items: center; gap: 10px; }
 .nm-mobile-currency-switcher-label svg { width: 16px; height: 16px; flex: 0 0 auto; }
@@ -358,6 +360,15 @@
         </x-webkernel-platform::dropdown>
     </div>
 </header>
+
+<script>
+    document.querySelectorAll('.nm-mobile-currency-switcher').forEach((row) => {
+        row.addEventListener('click', (event) => {
+            if (event.target.closest('.nm-currency-switcher-trigger')) return;
+            row.querySelector('.nm-currency-switcher-trigger')?.click();
+        });
+    });
+</script>
 
 {{ $subheader ?? '' }}
 

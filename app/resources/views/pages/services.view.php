@@ -78,7 +78,7 @@
         .nm-marketplace-empty { padding:70px 30px; border-top:1px solid rgba(17,17,17,.2); text-align:center; }
         .nm-marketplace-empty h2 { margin:0 0 12px; font:400 13px/1.4 var(--nm-title); letter-spacing:.13em; text-transform:uppercase; }
         .nm-marketplace-empty p { margin:0 0 20px; font:400 16px/1.45 var(--nm-body); }
-        .nm-marketplace-empty a { color:var(--primary-600); font:400 9px/1.4 var(--nm-title); letter-spacing:.14em; text-transform:uppercase; text-underline-offset:5px; }
+        .nm-marketplace-empty a { width:fit-content; display:inline-flex; align-items:center; gap:5px; color:var(--primary-600); font:400 9px/1.4 var(--nm-title); letter-spacing:.14em; text-transform:uppercase; text-underline-offset:5px; }
         .nm-services-marketplace [hidden] { display:none !important; }
         .nm-services-notes { margin-top:34px; padding-top:18px; border-top:1px solid var(--border-default, var(--nm-line)); }
         .nm-marketplace-pricing-note { margin:0; color:#77746e; font:400 12px/1.55 var(--nm-body); }
@@ -125,7 +125,28 @@
                     .nm-services-filter-section { margin-bottom:2rem; }
                     .nm-services-filter-layout { display:grid; }
                     .nm-services-filter-grid { gap:1rem; }
-                    .nm-services-filter-reset { display:flex; align-items:flex-end; justify-self:start; }
+                    .nm-services-filter-reset {
+                        height:42px;
+                        display:flex;
+                        align-items:stretch;
+                        justify-self:start;
+                        margin-inline-start:1rem;
+                        border:1px solid var(--border-default, var(--nm-line));
+                        border-radius:var(--radius-md, .375rem);
+                        background:var(--surface-panel, #fff);
+                        box-shadow:0 1px 2px rgba(15,23,42,.06), 0 8px 24px rgba(15,23,42,.04);
+                    }
+                    .nm-services-filter-reset > srs-button,
+                    .nm-services-filter-reset > s-button { height:100%; }
+                    .nm-services-filter-reset > srs-button::part(button),
+                    .nm-services-filter-reset > s-button::part(button),
+                    .nm-services-filter-reset > button {
+                        height:100%;
+                        min-height:0;
+                        border:0;
+                        background:transparent;
+                        box-shadow:none;
+                    }
                     @media (min-width:1024px) {
                         .nm-services-filter-layout { grid-template-columns:minmax(0, 1fr) auto; align-items:end; }
                     }
@@ -141,60 +162,63 @@
                         @endphp
 
                         <div class="nm-services-filter-layout">
-                        <div {{ $filterGrid }}>
-                            <div>
-                                <x-webkernel-platform::input.wrapper>
-                                    <x-webkernel-platform::input
-                                        id="services-query"
-                                        name="q"
-                                        type="search"
-                                        placeholder="Search offers"
-                                        :value="$searchQuery"
-                                    />
-                                </x-webkernel-platform::input.wrapper>
-                            </div>
+                            <div {{ $filterGrid }}>
+                                <div>
+                                    <x-webkernel-platform::input.wrapper>
+                                        <x-webkernel-platform::input
+                                            id="services-query"
+                                            name="q"
+                                            type="search"
+                                            placeholder="Search offers"
+                                            :value="$searchQuery"
+                                        />
+                                    </x-webkernel-platform::input.wrapper>
+                                </div>
 
-                            <div>
-                                <x-webkernel-platform::input.wrapper>
-                                    <x-webkernel-platform::input.select id="services-category" name="category">
-                                        <option value="">All categories</option>
-                                        @foreach ($categoryMap as $categorySlug => $categoryName)
-                                            <option value="{{ $categorySlug }}" @selected($selectedCategory === $categorySlug)>{{ $categoryName }}</option>
-                                        @endforeach
-                                    </x-webkernel-platform::input.select>
-                                </x-webkernel-platform::input.wrapper>
-                            </div>
+                                <div>
+                                    <x-webkernel-platform::input.wrapper>
+                                        <x-webkernel-platform::input.select id="services-category" name="category">
+                                            <option value="">All categories</option>
+                                            @foreach ($categoryMap as $categorySlug => $categoryName)
+                                                <option value="{{ $categorySlug }}" @selected($selectedCategory === $categorySlug)>{{ $categoryName }}</option>
+                                            @endforeach
+                                        </x-webkernel-platform::input.select>
+                                    </x-webkernel-platform::input.wrapper>
+                                </div>
 
-                            <div>
-                                <x-webkernel-platform::input.wrapper>
-                                    <x-webkernel-platform::input.select id="services-engagement" name="engagement">
-                                        <option value="">All formats</option>
-                                        @foreach ($engagementMap as $engagementSlug => $engagementName)
-                                            <option value="{{ $engagementSlug }}" @selected($selectedEngagement === $engagementSlug)>{{ $engagementName }}</option>
-                                        @endforeach
-                                    </x-webkernel-platform::input.select>
-                                </x-webkernel-platform::input.wrapper>
-                            </div>
+                                <div>
+                                    <x-webkernel-platform::input.wrapper>
+                                        <x-webkernel-platform::input.select id="services-engagement" name="engagement">
+                                            <option value="">All formats</option>
+                                            @foreach ($engagementMap as $engagementSlug => $engagementName)
+                                                <option value="{{ $engagementSlug }}" @selected($selectedEngagement === $engagementSlug)>{{ $engagementName }}</option>
+                                            @endforeach
+                                        </x-webkernel-platform::input.select>
+                                    </x-webkernel-platform::input.wrapper>
+                                </div>
 
-                            <div>
-                                <x-webkernel-platform::input.wrapper>
-                                    <x-webkernel-platform::input.select id="services-priced" name="priced">
-                                        <option value="">All offers</option>
-                                        <option value="1" @selected($priceOnly)>Listed pricing</option>
-                                    </x-webkernel-platform::input.select>
-                                </x-webkernel-platform::input.wrapper>
-                            </div>
+                                <div>
+                                    <x-webkernel-platform::input.wrapper>
+                                        <x-webkernel-platform::input.select id="services-priced" name="priced">
+                                            <option value="">All offers</option>
+                                            <option value="1" @selected($priceOnly)>Listed pricing</option>
+                                        </x-webkernel-platform::input.select>
+                                    </x-webkernel-platform::input.wrapper>
+                                </div>
 
-                        </div>
-                        <div class="nm-services-filter-reset">
-                            <x-webkernel-platform::button
-                                type="reset"
-                                color="gray"
-                                size="sm"
-                                icon="heroicon-o-arrow-path"
-                                aria-label="Clear all filters"
-                                tooltip="Clear all filters" />
-                        </div>
+                            </div>
+                            <div class="nm-services-filter-reset">
+
+                                <x-webkernel-platform::button
+                                    type="reset"
+                                    color="gray"
+                                    size="sm"
+                                    icon="heroicon-o-arrow-path"
+                                    aria-label="Clear all filters"
+                                    tooltip="Clear all filters">
+                                      Clear
+                                    </x-webkernel-platform::button>
+                            </div>
                         </div>
 
                     </form>
