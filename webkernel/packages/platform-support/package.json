@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": { "build": "node scripts/build.js" },
   "devDependencies": {
+    "@alpinejs/focus": "^3.17.4",
     "@awcodes/alpine-floating-ui": "^3.4.0",
     "@floating-ui/dom": "^1.7.0",
     "@ryangjchandler/alpine-tooltip": "^2.0.0",

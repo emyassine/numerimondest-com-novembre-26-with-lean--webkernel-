@@ -1,4 +1,5 @@
 import AlpineFloatingUI from '@awcodes/alpine-floating-ui'
+import AlpineFocus from '@alpinejs/focus'
 import AlpineLazyLoadAssets from 'alpine-lazy-load-assets'
 import AsyncAlpine from 'async-alpine'
 import { md5 } from 'js-md5'
@@ -36,6 +37,7 @@ const registerPlatformSupport = (reinitializeExistingDropdowns = false) => {
     })
 
     Alpine.plugin(AlpineFloatingUI)
+    Alpine.plugin(AlpineFocus)
     Alpine.plugin(AlpineLazyLoadAssets)
     Alpine.plugin(AsyncAlpine)
     Alpine.plugin(Sortable)

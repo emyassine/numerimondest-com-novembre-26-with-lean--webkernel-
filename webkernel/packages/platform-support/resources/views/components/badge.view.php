@@ -71,11 +71,11 @@
         x-mousetrap.global.{{ collect($keyBindings)->map(fn (string $keyBinding): string => str_replace('+', '-', $keyBinding))->implode('.') }}="document.getElementById($el.id)?.click()"
     @endif
     @if ($hasTooltip)
-        x-tooltip="{
+        x-tooltip='{
             content: @js($tooltip),
             theme: $store.theme,
             allowHTML: @js($tooltip instanceof Htmlable),
-        }"
+        }'
     @endif
     {{
         $attributes
