@@ -129,12 +129,13 @@
     :request-path="$requestPath"
     :studio-config="$studioConfig"
 >
+    <x-slot name="subheader">{{ $subheader ?? '' }}</x-slot>
     {{ $slot }}
 </x-studio::website.navigation>
-<script defer src="/assets/dependable-ui/dependable-ui.js"></script>
 @if ($loadWebkernelPlatformTheme)
     <script defer src="{{ \Webkernel\Getters\GetAsset::url('webkernel/platform-support', 'dist/index.js') }}"></script>
 @endif
+<script defer src="/assets/dependable-ui/dependable-ui.js"></script>
 <script defer src="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/js/dependable-ui.themes.js') }}"></script>
 <script defer src="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/js/shortlist.js') }}"></script>
 <script defer src="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/js/pwa.js') }}"></script>

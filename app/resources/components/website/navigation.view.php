@@ -114,12 +114,14 @@
 .nm-nav-menu-trigger svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
 
 .nm-nav a,
+.nm-nav *,
 .nm-language {
   color: inherit;
   font: 400 10px/1.2 var(--nm-body);
   letter-spacing: .12em;
   text-decoration: none;
   text-transform: uppercase;
+  font-weight:500;
 }
 
 .nm-nav a:hover { opacity: .56; }
@@ -370,6 +372,8 @@
         </details>
     </div>
 </header>
+
+{{ $subheader ?? '' }}
 
 <div id="main">{{ $slot }}</div>
 
