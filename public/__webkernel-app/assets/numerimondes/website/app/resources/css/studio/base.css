@@ -2,8 +2,74 @@
   --nm-ink: #111;
   --nm-muted: rgba(17, 17, 17, .56);
   --nm-line: rgba(17, 17, 17, .2);
-  --nm-body: BrownLLMain, Estedad, Arial, sans-serif;
-  --nm-title: BrownLLMain, Estedad, Arial, sans-serif;
+  --nm-font-latin: BrownLLMain, Arial, sans-serif;
+  --nm-font-arabic: "IBM Plex Sans Arabic", Estedad, Rubik, "Noto Naskh Arabic", system-ui, sans-serif;
+  --nm-font-hebrew: "Noto Sans Hebrew", "David Libre", system-ui, sans-serif;
+  --nm-font-cjk: "Noto Sans JP", "Noto Sans SC", "Noto Sans KR", "Hiragino Sans", "PingFang SC", sans-serif;
+  --nm-font-urdu: "Noto Nastaliq Urdu", "IBM Plex Sans Arabic", Estedad, system-ui, sans-serif;
+  --nm-font-stack: var(--nm-font-latin), var(--nm-font-arabic), var(--nm-font-hebrew), var(--nm-font-cjk), sans-serif;
+  --nm-body: var(--nm-font-stack);
+  --nm-title: var(--nm-font-stack);
+}
+
+:lang(ar), :lang(fa) {
+  --nm-font-stack: var(--nm-font-arabic), var(--nm-font-latin), var(--nm-font-hebrew), var(--nm-font-cjk), sans-serif;
+  font-family: var(--nm-font-stack);
+  letter-spacing: 0;
+}
+
+:lang(ar) p, :lang(fa) p {
+  font-family: Rubik, "IBM Plex Sans Arabic", Estedad, var(--nm-font-latin);
+  line-height: 1.9;
+  letter-spacing: 0;
+}
+
+:lang(ar) :is(h1, h2, h3, h4, h5, h6),
+:lang(fa) :is(h1, h2, h3, h4, h5, h6) {
+  font-family: "IBM Plex Sans Arabic", Estedad, var(--nm-font-latin);
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+:lang(he) {
+  --nm-font-stack: var(--nm-font-hebrew), var(--nm-font-latin), var(--nm-font-arabic), var(--nm-font-cjk), sans-serif;
+  font-family: var(--nm-font-stack);
+  letter-spacing: 0;
+}
+
+:lang(ja) {
+  --nm-font-stack: "Noto Sans JP", var(--nm-font-latin), var(--nm-font-cjk), sans-serif;
+  font-family: var(--nm-font-stack);
+  line-height: 1.7;
+  letter-spacing: .02em;
+}
+
+:lang(zh) {
+  --nm-font-stack: "Noto Sans SC", var(--nm-font-latin), var(--nm-font-cjk), sans-serif;
+  font-family: var(--nm-font-stack);
+  line-height: 1.75;
+  letter-spacing: 0;
+}
+
+:lang(ko) {
+  --nm-font-stack: "Noto Sans KR", var(--nm-font-latin), var(--nm-font-cjk), sans-serif;
+  font-family: var(--nm-font-stack);
+  line-height: 1.7;
+  letter-spacing: 0;
+}
+
+:lang(ur), .ur-nastaliq {
+  --nm-font-stack: var(--nm-font-urdu), var(--nm-font-arabic), var(--nm-font-latin), sans-serif;
+  font-family: var(--nm-font-stack);
+  line-height: 2.4;
+  letter-spacing: 0;
+  direction: rtl;
+  text-align: start;
+}
+
+:lang(ar) :lang(en), :lang(fa) :lang(en), :lang(he) :lang(en) {
+  font-family: var(--nm-font-latin);
+  letter-spacing: normal;
 }
 
 * { box-sizing: border-box; }
