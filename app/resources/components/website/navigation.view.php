@@ -9,6 +9,10 @@
     'studio_config' => [],
 ])
 @php
+    $default_currency = is_string($currency_config['default'] ?? null) ? $currency_config['default'] : 'MAD';
+    $ordered_currency_options = isset($currency_options[$default_currency])
+        ? [$default_currency => $currency_options[$default_currency]] + $currency_options
+        : $currency_options;
     $nav_base = rtrim($site_prefix, '/');
     $nav_items = [
         'left' => [
@@ -304,7 +308,8 @@
             @if (($item['type'] ?? null) === 'currency')
                 <x-studio::currency-switcher
                     :currency="$currency"
-                    :currency-options="$currency_options"
+                    :currency-options="$ordered_currency_options"
+                    :default-currency="$default_currency"
                     :show-symbol="($currency_config['show_symbol'] ?? false) === true"
                     :site-prefix="$site_prefix"
                     :current-path="$request_path"
@@ -349,7 +354,7 @@
                                 @csrf
                                 <input type="hidden" name="return_to" value="{{ $request_path }}">
                                 <x-webkernel-platform::dropdown.list>
-                                    @foreach ($currency_options as $currencyCode => $option)
+                                    @foreach ($ordered_currency_options as $currencyCode => $option)
                                         <x-webkernel-platform::dropdown.list.item
                                             tag="button"
                                             type="submit"
