@@ -14,14 +14,14 @@
     $nav_base = rtrim($site_prefix, '/');
     $nav_items = [
         'left' => [
-            ['key' => 'services', 'href' => $nav_base.'/services', 'label' => 'services', 'mobile_label' => 'Services'],
-            ['key' => 'projects', 'href' => $nav_base.'/projects', 'label' => 'projects', 'mobile_label' => 'Projects'],
+            ['key' => 'services', 'href' => $nav_base.'/services', 'label' => 'services', 'mobile_label' => 'Services', 'icon' => 'briefcase-business'],
+            ['key' => 'projects', 'href' => $nav_base.'/projects', 'label' => 'projects', 'mobile_label' => 'Projects', 'icon' => 'folder-kanban'],
         ],
         'right' => [
-            ['key' => 'about', 'href' => $nav_base.'/about', 'label' => 'about', 'mobile_label' => 'About'],
-            ['key' => 'shortlist', 'href' => $nav_base.'/shortlist', 'label' => 'shortlist', 'mobile_label' => 'Shortlist'],
-            ['key' => 'currency', 'type' => 'currency'],
-            ['key' => 'contact', 'href' => $nav_base.'/contact', 'label' => 'contact', 'mobile_label' => 'Contact'],
+            ['key' => 'about', 'href' => $nav_base.'/about', 'label' => 'about', 'mobile_label' => 'About', 'icon' => 'info'],
+            ['key' => 'shortlist', 'href' => $nav_base.'/shortlist', 'label' => 'shortlist', 'mobile_label' => 'Shortlist', 'icon' => 'bookmark'],
+            ['key' => 'currency', 'type' => 'currency', 'icon' => 'coins'],
+            ['key' => 'contact', 'href' => $nav_base.'/contact', 'label' => 'contact', 'mobile_label' => 'Contact', 'icon' => 'mail'],
         ],
         'footer' => [],
     ];
@@ -321,6 +321,7 @@
                             <x-webkernel-platform::dropdown.list.item
                                 tag="a"
                                 :href="$item['href']"
+                                :icon="$item['icon']"
                                 :aria-current="$request_path === $item['href'] ? 'page' : null"
                                 :data-shortlist-link="$item['key'] === 'shortlist' ? true : null"
                             >
@@ -337,7 +338,7 @@
             @if (count($currency_options) > 1)
                 <div class="nm-mobile-currency-switcher">
                     <x-webkernel-platform::dropdown
-                        placement="bottom-start"
+                        placement="bottom-end"
                         width="xs"
                         offset="4"
                         maxHeight="min(60dvh, 24rem)"
@@ -345,6 +346,7 @@
                         teleport>
                         <x-slot name="trigger">
                             <button type="button" class="nm-mobile-menu-currency-trigger" role="menuitem" tabindex="-1" aria-label="Choose currency">
+                                <x-webkernel::icon icon="coins" set="lucide" width="16" height="16" aria-hidden="true" />
                                 <span>Currency</span>
                                 <strong>{{ $currency }}</strong>
                                 <x-webkernel::icon icon="chevron-down" set="lucide" width="14" height="14" aria-hidden="true" />
@@ -362,9 +364,22 @@
                                         :value="$currencyCode"
                                         :aria-current="$currency === $currencyCode ? 'true' : null"
                                     >
-                                        <span aria-hidden="true">{!! flag_markup($option['flag'] ?? '') !!}</span>
-                                        <span>{{ $option['label'] ?? $currencyCode }}</span>
-                                        <small>{{ $currencyCode }}</small>
+                                        <span class="nm-currency-switcher-item">
+                                            <span class="nm-currency-switcher-flag" aria-hidden="true">
+                                                {!! flag_markup($option['flag'] ?? '') !!}
+                                            </span>
+                                            <span class="nm-currency-switcher-label">
+                                                {{ $option['label'] ?? $currencyCode }}
+                                            </span>
+                                            <small class="nm-currency-switcher-code">
+                                                {{ $currencyCode }}
+                                            </small>
+                                            @if (($currency_config['show_symbol'] ?? false) === true && is_string($option['symbol'] ?? null))
+                                                <bdi class="nm-currency-switcher-symbol" aria-hidden="true">
+                                                    {{ $option['symbol'] }}
+                                                </bdi>
+                                            @endif
+                                        </span>
                                     </x-webkernel-platform::dropdown.list.item>
                                 @endforeach
                             </x-webkernel-platform::dropdown.list>

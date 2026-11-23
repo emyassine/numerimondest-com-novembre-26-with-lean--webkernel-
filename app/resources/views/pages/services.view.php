@@ -156,14 +156,18 @@
             <section class="nm-marketplace-main" aria-label="Service offers">
 
 
-                <x-webkernel-platform::section style="margin-bottom:2rem;">
+                <style>
+                    .nm-services-filter-section { margin-bottom:2rem; }
+                    .nm-services-filter-grid { gap:1rem; }
+                </style>
+                <x-webkernel-platform::section class="nm-services-filter-section">
                     <form method="get" action="{{ $servicesUrl }}" aria-label="Filter services">
                         @php
                             $filterGrid = (new \Webkernel\Platform\Support\View\ComponentAttributeBag())->grid([
                                 'default' => 1,
                                 'md' => 2,
                                 'lg' => 4,
-                            ])->class('items-end')->style(['gap' => '1rem']);
+                            ])->class('items-end nm-services-filter-grid');
                         @endphp
 
                         <div {{ $filterGrid }}>
