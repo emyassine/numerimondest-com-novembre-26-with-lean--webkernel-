@@ -47,7 +47,7 @@
           </x-studio::hero-effect>
         @elseif ($hero === 2)
             <style>
-                .nm-home-hero-2 { max-width:1380px; margin:0 auto; padding:5.5rem 0 4.5rem; }
+                .nm-home-hero-2 { width:100%; max-width:none; margin:0; padding:5.5rem 0 4.5rem; }
                 .nm-home-hero-2__top,
                 .nm-home-hero-2__bottom { display:grid; grid-template-columns:1.35fr .85fr; gap:4rem; }
                 .nm-home-hero-2__top { align-items:end; padding-bottom:4.5rem; border-bottom:1px solid var(--border-hairline); }
@@ -66,7 +66,6 @@
                 .nm-home-hero-2__capability h3 { margin:0 0 .25rem; color:var(--ink-primary); font-size:.9rem; font-weight:600; }
                 .nm-home-hero-2__capability p,
                 .nm-home-hero-2__ventures p { margin:0; color:var(--ink-muted); font-size:.8rem; line-height:1.5; }
-                .nm-home-hero-2__ventures { padding:1.75rem; border:1px solid var(--border-subtle); background:var(--surface-white); }
                 .nm-home-hero-2__ventures p { margin-bottom:1rem; color:var(--ink-secondary); font-size:.85rem; line-height:1.6; }
                 .nm-home-hero-2__tags { display:flex; flex-wrap:wrap; gap:.5rem; margin:0 0 1rem; padding:0; list-style:none; }
                 .nm-home-hero-2__tags li { padding:.25rem .65rem; border:1px solid var(--border-subtle); background:var(--bg-slate); color:var(--ink-primary); font-size:.75rem; }
@@ -107,13 +106,13 @@
                     </section>
                     <section aria-labelledby="nm-home-ventures-title">
                         <h2 class="nm-home-hero-2__label" id="nm-home-ventures-title">Internal Studio &amp; Ventures</h2>
-                        <div class="nm-home-hero-2__ventures">
+                        <x-webkernel-platform::section :compact="true" class="nm-home-hero-2__ventures">
                             <p>Beyond client mandates, we research, architect, and incubate proprietary concepts—from luxury maisons to Rust-based application frameworks.</p>
                             <ul class="nm-home-hero-2__tags">
                                 <li>Caldezza</li><li>Feluqa</li><li>The Best Recruit</li><li>Virtual Assistant Asia</li>
                             </ul>
                             <a class="nm-home-hero-2__link" href="{{ simple_site('studio', 'projects') }}">Explore ideas in development →</a>
-                        </div>
+                        </x-webkernel-platform::section>
                     </section>
                 </div>
             </section>
