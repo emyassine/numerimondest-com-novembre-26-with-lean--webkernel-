@@ -100,7 +100,7 @@
   gap: 12px;
   padding: 12px 18px;
   color: inherit;
-  font: 500 14px/1.35 var(--nm-title);
+  font: 500 14px/1.35 var(--nm-body);
   letter-spacing: .06em;
   text-decoration: none;
 }
@@ -116,7 +116,7 @@
 .nm-nav a,
 .nm-language {
   color: inherit;
-  font: 400 10px/1.2 var(--nm-title);
+  font: 400 10px/1.2 var(--nm-body);
   letter-spacing: .12em;
   text-decoration: none;
   text-transform: uppercase;
@@ -267,7 +267,7 @@
 .nm-footer-privacy,
 .nm-footer-copy {
   color: var(--nm-ink);
-  font: 400 10px/1.2 var(--nm-title);
+  font: 400 10px/1.2 var(--nm-body);
   letter-spacing: .12em;
   text-decoration: none;
   text-transform: uppercase;

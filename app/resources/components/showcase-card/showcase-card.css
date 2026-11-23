@@ -84,7 +84,7 @@
   border-radius: 999px;
   color: #fffcf3;
   background: rgba(145, 142, 133, .5);
-  font: 400 10px/1.2 var(--nm-title);
+  font: 400 10px/1.2 var(--nm-body);
   letter-spacing: .12em;
   text-transform: uppercase;
 }

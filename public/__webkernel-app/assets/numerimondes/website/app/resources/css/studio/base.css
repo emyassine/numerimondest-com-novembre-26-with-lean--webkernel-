@@ -2,14 +2,14 @@
   --nm-ink: #111;
   --nm-muted: rgba(17, 17, 17, .56);
   --nm-line: rgba(17, 17, 17, .2);
-  --nm-font-latin: BrownLLMain, Arial, sans-serif;
+  --nm-font-latin: Estedad, BrownLLMain, Arial, sans-serif;
   --nm-font-arabic: "IBM Plex Sans Arabic", Estedad, Rubik, "Noto Naskh Arabic", system-ui, sans-serif;
   --nm-font-hebrew: "Noto Sans Hebrew", "David Libre", system-ui, sans-serif;
   --nm-font-cjk: "Noto Sans JP", "Noto Sans SC", "Noto Sans KR", "Hiragino Sans", "PingFang SC", sans-serif;
   --nm-font-urdu: "Noto Nastaliq Urdu", "IBM Plex Sans Arabic", Estedad, system-ui, sans-serif;
   --nm-font-stack: var(--nm-font-latin), var(--nm-font-arabic), var(--nm-font-hebrew), var(--nm-font-cjk), sans-serif;
   --nm-body: var(--nm-font-stack);
-  --nm-title: var(--nm-font-stack);
+  --nm-title: BrownLLMain, Arial, sans-serif;
 }
 
 :lang(ar), :lang(fa) {
@@ -84,7 +84,7 @@ body {
   margin: 0;
   color: var(--nm-ink);
   background: var(--nm-paper);
-  font-family: var(--nm-title);
+  font-family: var(--nm-body);
   font-size: 18px;
   line-height: 1.22;
   letter-spacing: .02em;

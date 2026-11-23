@@ -49,7 +49,7 @@
 .nm-marketplace-card-status,
 .nm-marketplace-card-cta {
   margin: 0;
-  font: 400 10px/1.35 var(--nm-title);
+  font: 400 10px/1.35 var(--nm-body);
   letter-spacing: .14em;
   text-transform: uppercase;
 }
@@ -63,7 +63,7 @@
 
 .nm-marketplace-card-price {
   margin: 7px 0 0;
-  font: 400 12px/1.35 var(--nm-title);
+  font: 400 12px/1.35 var(--nm-body);
 }
 
 .nm-marketplace-card-footer {
@@ -85,7 +85,7 @@
   align-items: center;
   gap: 5px;
   white-space: nowrap;
-  font: 400 10px/1.35 var(--nm-title);
+  font: 400 10px/1.35 var(--nm-body);
   letter-spacing: .14em;
   text-decoration: none;
   text-transform: uppercase;
@@ -98,9 +98,9 @@
 .nm-marketplace-card-modal-content { display: grid; gap: 16px; }
 .nm-marketplace-card-modal-content p { margin: 0; font: 400 16px/1.5 var(--nm-body); }
 .nm-marketplace-card-modal-content .nm-marketplace-card-modal-format,
-.nm-marketplace-card-modal-content .nm-marketplace-card-modal-brand { color: var(--text-secondary, #77746e); font: 400 11px/1.5 var(--nm-title); letter-spacing: .08em; text-transform: uppercase; }
-.nm-marketplace-card-modal-content .nm-marketplace-card-modal-price { font: 400 14px/1.4 var(--nm-title); }
-.nm-marketplace-card-modal-content > a { width: fit-content; color: var(--primary-600); font: 400 10px/1.4 var(--nm-title); letter-spacing: .12em; text-decoration: none; text-transform: uppercase; }
+.nm-marketplace-card-modal-content .nm-marketplace-card-modal-brand { color: var(--text-secondary, #77746e); font: 400 11px/1.5 var(--nm-body); letter-spacing: .08em; text-transform: uppercase; }
+.nm-marketplace-card-modal-content .nm-marketplace-card-modal-price { font: 400 14px/1.4 var(--nm-body); }
+.nm-marketplace-card-modal-content > a { width: fit-content; color: var(--primary-600); font: 400 10px/1.4 var(--nm-body); letter-spacing: .12em; text-decoration: none; text-transform: uppercase; }
 .nm-marketplace-card-modal-content > a:hover { text-decoration: underline; text-underline-offset: .2em; }
 
 @media (max-width: 700px) {

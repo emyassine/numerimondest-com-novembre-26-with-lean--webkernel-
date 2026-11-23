@@ -15,7 +15,7 @@
 .nm-service-detail-cta,
 .nm-service-detail-close a {
   margin: 0;
-  font: 400 10px/1.35 var(--nm-title);
+  font: 400 10px/1.35 var(--nm-body);
   letter-spacing: .15em;
   text-transform: uppercase;
 }
@@ -40,12 +40,12 @@
 
 .nm-service-detail-price {
   margin: 24px 0 0;
-  font: 400 20px/1.4 var(--nm-title);
+  font: 400 20px/1.4 var(--nm-body);
 }
 
 .nm-service-detail-price span {
   color: #77746e;
-  font: 400 10px/1.45 var(--nm-title);
+  font: 400 10px/1.45 var(--nm-body);
   letter-spacing: .08em;
   text-transform: uppercase;
 }
@@ -90,7 +90,7 @@
   font: 400 17px/1.4 var(--nm-body);
 }
 
-.nm-service-detail-section li { margin: 0 0 16px; font: 400 17px/1.4 var(--nm-title); }
+.nm-service-detail-section li { margin: 0 0 16px; font: 400 17px/1.4 var(--nm-body); }
 
 .nm-service-detail-section p:last-child { margin-bottom: 0; }
 .nm-service-detail-section ul { margin: 0; padding-left: 20px; }

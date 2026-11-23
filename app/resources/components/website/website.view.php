@@ -93,6 +93,7 @@
         <link rel="preload" as="image" href="{{ simple_site('studio', $preloadImage) }}">
     @endforeach
     <link rel="preload" as="font" type="font/woff" crossorigin href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/BrownLLMain-400-normal.woff') }}">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/Estedad-Regular.woff2') }}">
     @if ($studioPage === '' || $studioPage === 'contact')
         <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/Romie-MediumItalic.woff2">
     @elseif (str_starts_with($studioPage, 'projects/'))
@@ -111,7 +112,7 @@
     <title>{{ $title }}</title>
     <style>
         @font-face { font-family: BrownLLMain; src: url('{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/BrownLLMain-400-normal.woff') }}') format('woff'); font-style: normal; font-weight: 400; font-display: block; }
-        @font-face { font-family: Estedad; src: url('{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/Estedad-Regular.woff2') }}') format('woff2'); font-style: normal; font-weight: 400; font-display: swap; unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF; }
+        @font-face { font-family: Estedad; src: url('{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/Estedad-Regular.woff2') }}') format('woff2'); font-style: normal; font-weight: 400; font-display: swap; }
     </style>
 </head>
 <body>

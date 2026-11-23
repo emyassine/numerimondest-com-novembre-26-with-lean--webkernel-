@@ -32,12 +32,12 @@
     <link rel="preload" as="image" href="{{ simple_site('studio', 'brand/pwa-icon-192.png') }}">
     <link rel="preload" as="image" href="{{ simple_site('studio', 'brand/numerimondes-logo-alone-lightmode.png') }}">
     <link rel="preload" as="font" type="font/woff" crossorigin href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/BrownLLMain-400-normal.woff') }}">
-    <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/Romie-Medium.woff2') }}">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/Estedad-Regular.woff2') }}">
     <link rel="stylesheet" href="{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/css/dependable-ui.themes.css') }}">
     <title>{{ $status }} — Numerimondes</title>
     <style>
         @font-face { font-family: BrownLLMain; src: url('{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/BrownLLMain-400-normal.woff') }}') format('woff'); font-style:normal; font-weight:400; font-display:block; }
-        @font-face { font-family: Romie; src: url('{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/Romie-Medium.woff2') }}') format('woff2'); font-style:normal; font-weight:500; font-display:block; }
+        @font-face { font-family: Estedad; src: url('{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/Estedad-Regular.woff2') }}') format('woff2'); font-style:normal; font-weight:400; font-display:swap; }
         :root { --nm-studio-background:{{ $studioBackground }}; }
         * { box-sizing:border-box; }
         html,body { min-height:100%; margin:0; }
@@ -48,8 +48,8 @@
         .nm-error-logo--darkmode { display:none; }
         .nm-error-brand[data-tone="dark"] .nm-error-logo--lightmode { display:none; }
         .nm-error-brand[data-tone="dark"] .nm-error-logo--darkmode { display:block; }
-        .nm-error-title { margin:42px 0 18px; font:500 16px/1.19 Romie,Georgia,serif; letter-spacing:.19em; text-transform:uppercase; }
-        .nm-error-description { max-width:560px; margin:0; font:400 18px/1.22 BrownLLMain,Arial,sans-serif; letter-spacing:.02em; }
+        .nm-error-title { margin:42px 0 18px; font:400 16px/1.19 BrownLLMain,Arial,sans-serif; letter-spacing:.19em; text-transform:uppercase; }
+        .nm-error-description { max-width:560px; margin:0; font:400 18px/1.22 Estedad,BrownLLMain,Arial,sans-serif; letter-spacing:.02em; }
         @media(max-width:600px) { body { padding:22px; } .nm-error-brand { width:min(100%,230px); } .nm-error-title { margin-top:35px; font-size:13px; } .nm-error-description { font-size:16px; } }
     </style>
 </head>
