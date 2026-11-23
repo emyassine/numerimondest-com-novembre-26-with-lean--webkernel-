@@ -26,18 +26,16 @@
         }
     </style>
     <main class="nm-main" style="min-height:100vh">
-        @php
-            $serviceCount = count(\App\Studio\ServiceCatalog::all());
-            $heroPositioningText = 'Explore '.$serviceCount.' services to strengthen your brand, grow your sales pipeline and improve how work gets done — with a dedicated team shaped around your goals.';
-        @endphp
         <x-studio::hero-effect
             class="bleed-page"
             :effect="['silk', ['inject' => ['lightColor' => '#0043e0', 'darkColor' => '#141D2A', 'lightNoise' => 1.5, 'noiseIntensity' => 0.3, 'speed' => 12]]]"
             :hero-style="['minHeight' => '90vh']"
-            :title="['text' => 'Operations that move<br><span class=\'silky-ri\'>businesses forward</span>', 'color' => ['light' => '#e2e8f0', 'dark' => '#e2e8f0']]"
-            :description="['text' => $heroPositioningText, 'color' => ['light' => '#e2e8f0', 'dark' => '#e2e8f0']]"
+            :eyebrow="['text' => 'Achieve the extraordinary', 'color' => ['light' => '#e2e8f0', 'dark' => '#e2e8f0']]"
+            :title="['text' => 'Solve what’s slowing your business down.', 'color' => ['light' => '#e2e8f0', 'dark' => '#e2e8f0']]"
+            :description="['text' => 'The world moves fast. We help your business move with purpose—strengthening operations, turning ambitious ideas into action, and opening new opportunities.', 'color' => ['light' => '#e2e8f0', 'dark' => '#e2e8f0']]"
             :buttons="[
-                ['label' => 'Explore services', 'href' => simple_site('studio', 'services').'#marketplace', 'color' => 'primary'],
+                ['label' => 'Plan your next move', 'href' => simple_site('studio', 'contact'), 'color' => 'primary'],
+                ['label' => 'Explore services', 'href' => simple_site('studio', 'services').'#marketplace', 'color' => 'gray'],
             ]"
         >
         </x-studio::hero-effect>
