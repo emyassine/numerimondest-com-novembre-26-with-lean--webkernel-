@@ -144,9 +144,11 @@
 
     <main class="nm-page nm-services-marketplace">
         <header class="nm-page-heading">
-            <p class="nm-services-kicker">Numerimondes marketplace · {{ count($allServices) }} offers</p>
+            <p class="nm-services-kicker">Numerimondes Practice · Commissioned work · {{ count($allServices) }} offers</p>
             <h1>Find the right service for your next move.</h1>
-            <p class="nm-services-intro">Explore the offers, save the ones you are considering, then share one considered brief. Yassine, our founder, and the account manager will follow up personally.</p>
+            <p class="nm-services-intro">
+            Commissioned outcomes, scoped with clarity. Select individual deliverables, operational sprints, or retained desks to build your private shortlist. Every engagement is led directly by Numerimondes principals and confirmed in a written proposal.
+              </p>
         </header>
 
         <div class="nm-marketplace-layout">
@@ -154,9 +156,74 @@
             <section class="nm-marketplace-main" aria-label="Service offers">
 
 
-              <x-webkernel-platform::section style="margin-bottom:2rem;">
-                  Yo
-              </x-webkernel-platform::section>
+                <x-webkernel-platform::section style="margin-bottom:2rem;">
+                    <form method="get" action="{{ $servicesUrl }}" aria-label="Filter services">
+                        @php
+                            $filterGrid = (new \Webkernel\Platform\Support\View\ComponentAttributeBag())->grid([
+                                'default' => 1,
+                                'md' => 2,
+                                'lg' => 4,
+                            ])->class('items-end')->style(['gap' => '1rem']);
+                            $filterFooterGrid = (new \Webkernel\Platform\Support\View\ComponentAttributeBag())->grid([
+                                'default' => 1,
+                                'sm' => 2,
+                            ])->class('items-center mt-5 border-t border-gray-200 pt-5')->style(['gap' => '1rem']);
+                        @endphp
+
+                        <div {{ $filterGrid }}>
+                            <div>
+                                <label for="services-query">Search services</label>
+                                <x-webkernel-platform::input.wrapper>
+                                    <x-webkernel-platform::input
+                                        id="services-query"
+                                        name="q"
+                                        type="search"
+                                        placeholder="Search offers"
+                                        :value="$searchQuery"
+                                    />
+                                </x-webkernel-platform::input.wrapper>
+                            </div>
+
+                            <div>
+                                <label for="services-category">Category</label>
+                                <x-webkernel-platform::input.wrapper>
+                                    <x-webkernel-platform::input.select id="services-category" name="category">
+                                        <option value="">All categories</option>
+                                        @foreach ($categoryMap as $categorySlug => $categoryName)
+                                            <option value="{{ $categorySlug }}" @selected($selectedCategory === $categorySlug)>{{ $categoryName }}</option>
+                                        @endforeach
+                                    </x-webkernel-platform::input.select>
+                                </x-webkernel-platform::input.wrapper>
+                            </div>
+
+                            <div>
+                                <label for="services-engagement">Engagement</label>
+                                <x-webkernel-platform::input.wrapper>
+                                    <x-webkernel-platform::input.select id="services-engagement" name="engagement">
+                                        <option value="">All formats</option>
+                                        @foreach ($engagementMap as $engagementSlug => $engagementName)
+                                            <option value="{{ $engagementSlug }}" @selected($selectedEngagement === $engagementSlug)>{{ $engagementName }}</option>
+                                        @endforeach
+                                    </x-webkernel-platform::input.select>
+                                </x-webkernel-platform::input.wrapper>
+                            </div>
+
+                            <div>
+                                <x-webkernel-platform::button type="submit" size="sm">Apply filters</x-webkernel-platform::button>
+                            </div>
+                        </div>
+
+                        <div {{ $filterFooterGrid }}>
+                            <label for="services-priced">
+                                <x-webkernel-platform::input.checkbox id="services-priced" name="priced" value="1" :checked="$priceOnly" />
+                                Show offers with listed pricing
+                            </label>
+                            <div>
+                                <x-webkernel-platform::button tag="a" :href="$servicesUrl" color="gray" size="sm">Clear all filters</x-webkernel-platform::button>
+                            </div>
+                        </div>
+                    </form>
+                </x-webkernel-platform::section>
 
                 <p class="nm-marketplace-results" role="status">{{ count($services) }} {{ count($services) === 1 ? 'offer' : 'offers' }}{{ $selectedCategory !== '' ? ' · '.$categoryMap[$selectedCategory] : '' }}{{ $selectedEngagement !== '' ? ' · '.$engagementMap[$selectedEngagement] : '' }}{{ $searchQuery !== '' ? ' · matching “'.$searchQuery.'”' : '' }}</p>
 
@@ -186,7 +253,7 @@
                 <section class="nm-services-notes" aria-label="Service notes">
                     <p class="nm-marketplace-pricing-note">
                         @if ($displayCurrency === 'MAD')
-                            MAD is the catalogue reference currency. Starting prices and scope are confirmed in a written proposal.
+                        MAD is the catalogue reference currency. Starting prices reflect senior-led architecture and execution; final scope, timelines, and multi-mandate terms are confirmed in a written proposal prior to commencement.
                         @else
                             {{ $displayCurrency }} prices are indicative conversions, buffered and rounded for readability. Reference rate date: {{ $rateMetadata['rate_date'] !== '' ? $rateMetadata['rate_date'] : 'not available' }}@if ($rateMetadata['checked_at'] !== '') (checked {{ $rateMetadata['checked_at'] }} UTC)@endif. Final currency and fee are confirmed in a written proposal.
                         @endif
