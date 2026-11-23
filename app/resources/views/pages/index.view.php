@@ -28,24 +28,26 @@
     <main class="nm-main" style="min-height:100vh">
 
         @php
-            $hero = random_int(1, 2);
+            $hero = 2;
+
+            $capabilities = [
+                ['title' => 'Operations Advisory', 'description' => 'Research, market intelligence, and structural execution.'],
+                ['title' => 'Business Systems', 'description' => 'Bespoke software architecture and internal operational tooling.'],
+                ['title' => 'Remote Recruitment', 'description' => 'Hand-vetted specialists aligned to exact operational briefs.'],
+                ['title' => 'Brand Identity', 'description' => 'Institutional positioning, narrative, and visual systems.'],
+                ['title' => 'Digital Presence', 'description' => 'High-craft web platforms built for clarity and permanence.'],
+                ['title' => 'Sales Development', 'description' => 'Structured market entry and qualified commercial pipelines.'],
+            ];
+
+            $ventures = [
+                ['name' => 'Caldezza', 'color' => 'success', 'icon' => 'gem'],
+                ['name' => 'Feluqa', 'color' => 'danger', 'icon' => 'code-2'],
+                ['name' => 'The Best Recruit', 'color' => 'info', 'icon' => 'user-round-search'],
+                ['name' => 'Virtual Assistant Asia', 'color' => 'gray', 'icon' => 'globe-2'],
+            ];
         @endphp
 
-        @if ($hero === 1)
-          <x-studio::hero-effect
-              class="bleed-page"
-              :effect="['silk', ['inject' => ['lightColor' => '#0043e0', 'darkColor' => '#141D2A', 'lightNoise' => 1.5, 'noiseIntensity' => 0.3, 'speed' => 12]]]"
-              :hero-style="['minHeight' => '90vh']"
-              :eyebrow="['text' => 'Achieve the extraordinary', 'color' => ['light' => '#e2e8f0', 'dark' => '#e2e8f0']]"
-              :title="['text' => 'Solve what’s slowing your business down.', 'color' => ['light' => '#e2e8f0', 'dark' => '#e2e8f0']]"
-              :description="['text' => 'The world moves fast. We help your business move with purpose—strengthening operations, turning ambitious ideas into action, and opening new opportunities.', 'color' => ['light' => '#e2e8f0', 'dark' => '#e2e8f0']]"
-              :buttons="[
-                  ['label' => 'Plan your next move', 'href' => simple_site('studio', 'contact'), 'color' => 'primary'],
-                  ['label' => 'Explore services', 'href' => simple_site('studio', 'services').'#marketplace', 'color' => 'gray'],
-              ]"
-          >
-          </x-studio::hero-effect>
-        @elseif ($hero === 2)
+        @if ($hero === 2)
             <style>
                 .nm-home-hero-2 { width:100%; max-width:none; margin:0; padding:0 0 4.5rem; color:var(--ink-primary); }
                 .nm-home-hero-2__top,
@@ -94,12 +96,12 @@
                     <section aria-labelledby="nm-home-practice-title">
                         <h2 class="nm-home-hero-2__label" id="nm-home-practice-title">Practice Areas</h2>
                         <div class="nm-home-hero-2__capabilities">
-                            <div class="nm-home-hero-2__capability"><h3>Operations Advisory</h3><p>Research, market intelligence, and structural execution.</p></div>
-                            <div class="nm-home-hero-2__capability"><h3>Business Systems</h3><p>Bespoke software architecture and internal operational tooling.</p></div>
-                            <div class="nm-home-hero-2__capability"><h3>Remote Recruitment</h3><p>Hand-vetted specialists aligned to exact operational briefs.</p></div>
-                            <div class="nm-home-hero-2__capability"><h3>Brand Identity</h3><p>Institutional positioning, narrative, and visual systems.</p></div>
-                            <div class="nm-home-hero-2__capability"><h3>Digital Presence</h3><p>High-craft web platforms built for clarity and permanence.</p></div>
-                            <div class="nm-home-hero-2__capability"><h3>Sales Development</h3><p>Structured market entry and qualified commercial pipelines.</p></div>
+                            @foreach ($capabilities as $capability)
+                                <div class="nm-home-hero-2__capability">
+                                    <h3>{{ $capability['title'] }}</h3>
+                                    <p>{{ $capability['description'] }}</p>
+                                </div>
+                            @endforeach
                         </div>
                     </section>
                     <div>
@@ -108,10 +110,12 @@
                             <x-webkernel-platform::section :compact="true" class="nm-home-hero-2__ventures">
                                 <p>Beyond client mandates, we research, architect, and incubate proprietary concepts—from luxury maisons to Rust-based application frameworks.</p>
                                 <div class="nm-home-hero-2__tags" aria-label="Studio ventures">
-                                    <x-webkernel-platform::badge color="success" size="sm"><x-webkernel::icon icon="gem" set="lucide" width="14" height="14" aria-hidden="true" /> Caldezza</x-webkernel-platform::badge>
-                                    <x-webkernel-platform::badge color="danger" size="sm"><x-webkernel::icon icon="code-2" set="lucide" width="14" height="14" aria-hidden="true" /> Feluqa</x-webkernel-platform::badge>
-                                    <x-webkernel-platform::badge color="info" size="sm"><x-webkernel::icon icon="user-round-search" set="lucide" width="14" height="14" aria-hidden="true" /> The Best Recruit</x-webkernel-platform::badge>
-                                    <x-webkernel-platform::badge color="gray" size="sm"><x-webkernel::icon icon="globe-2" set="lucide" width="14" height="14" aria-hidden="true" /> Virtual Assistant Asia</x-webkernel-platform::badge>
+                                    @foreach ($ventures as $venture)
+                                        <x-webkernel-platform::badge :color="$venture['color']" size="sm">
+                                            <x-webkernel::icon :icon="$venture['icon']" set="lucide" width="14" height="14" aria-hidden="true" />
+                                            {{ $venture['name'] }}
+                                        </x-webkernel-platform::badge>
+                                    @endforeach
                                 </div>
                                 <x-webkernel-platform::button tag="a" :href="simple_site('studio', 'projects')" color="gray" size="xs"><x-webkernel::icon icon="arrow-up-right" set="lucide" width="12" height="12" aria-hidden="true" /> Explore our projects</x-webkernel-platform::button>
                             </x-webkernel-platform::section>
