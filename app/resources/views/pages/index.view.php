@@ -47,10 +47,10 @@
           </x-studio::hero-effect>
         @elseif ($hero === 2)
             <style>
-                .nm-home-hero-2 { width:100%; max-width:none; min-height:80vh; margin:0; padding:7.5rem 0 4.5rem; color:var(--ink-primary); }
+                .nm-home-hero-2 { width:100%; max-width:none; margin:0; padding:0 0 4.5rem; color:var(--ink-primary); }
                 .nm-home-hero-2__top,
                 .nm-home-hero-2__bottom { display:grid; grid-template-columns:1.35fr .85fr; gap:4rem; }
-                .nm-home-hero-2__top { align-items:end; margin-top:1.5rem; padding-bottom:4.5rem; border-bottom:1px solid var(--border-hairline); }
+                .nm-home-hero-2__top { min-height:80vh; align-items:center; margin:0; padding:4rem 0; border-bottom:1px solid var(--border-hairline); }
                 .nm-home-hero-2__eyebrow,
                 .nm-home-hero-2__label { display:block; color:var(--ink-muted); font-size:.75rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; }
                 .nm-home-hero-2__eyebrow { margin:0 0 1.5rem; font-size:.78rem; }
@@ -77,7 +77,7 @@
                     .nm-home-hero-2__bottom { grid-template-columns:1fr; gap:2.5rem; }
                     .nm-home-hero-2__capabilities { grid-template-columns:repeat(2,minmax(0,1fr)); }
                 }
-                @media(max-width:700px) { .nm-home-hero-2 { padding-block:4rem 3rem; } .nm-home-hero-2 h1 { font-size:clamp(2rem,8vw,2.8rem); } }
+                @media(max-width:700px) { .nm-home-hero-2 { padding-bottom:3rem; } .nm-home-hero-2__top { min-height:80vh; padding-block:3rem; } .nm-home-hero-2 h1 { font-size:clamp(2rem,8vw,2.8rem); } }
                 @media(max-width:540px) { .nm-home-hero-2__capabilities { grid-template-columns:1fr; } }
             </style>
             <section class="nm-home-hero-2">
