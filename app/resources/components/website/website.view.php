@@ -113,6 +113,8 @@
     @endif
     <title>{{ $title }}</title>
     <style>
+    		[x-cloak]{display:none!important}
+
         @font-face { font-family: BrownLLMain; src: url('{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/BrownLLMain-400-normal.woff') }}') format('woff'); font-style: normal; font-weight: 400; font-display: block; }
         @font-face { font-family: Estedad; src: url('{{ \Webkernel\Getters\GetAsset::url('numerimondes/website', 'app/resources/assets/fonts/Estedad-Regular.woff2') }}') format('woff2'); font-style: normal; font-weight: 400; font-display: swap; }
     </style>
