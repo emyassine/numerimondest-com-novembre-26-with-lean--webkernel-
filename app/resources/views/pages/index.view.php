@@ -13,7 +13,7 @@
                 .nm-home-hero-2 { width:100%; max-width:none; margin:0; padding:0 0 4.5rem; }
                 .nm-home-hero-2__top,
                 .nm-home-hero-2__bottom { display:grid; grid-template-columns:1.35fr .85fr; gap:4rem; }
-                .nm-home-hero-2__top { min-height:80vh; align-items:center; margin:0; border-bottom:1px solid var(--border-default, var(--nm-line)); }
+                .nm-home-hero-2__top { min-height:80vh; align-items:center; margin:0;  }
                 .nm-home-hero-2__right { display:flex; flex-direction:column; align-items:flex-start; gap:1.25rem; }
                 .nm-home-hero-2__bottom { padding-top:0rem; }
                 .nm-home-hero-2__capabilities { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.25rem 2rem; }
