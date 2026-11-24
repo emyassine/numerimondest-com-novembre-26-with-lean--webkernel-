@@ -16,9 +16,9 @@
         'left' => [
             ['key' => 'services', 'href' => $nav_base.'/services', 'label' => 'services', 'mobile_label' => 'Services', 'icon' => 'briefcase-business'],
             ['key' => 'projects', 'href' => $nav_base.'/projects', 'label' => 'projects', 'mobile_label' => 'Projects', 'icon' => 'folder-kanban'],
+            ['key' => 'about', 'href' => $nav_base.'/about', 'label' => 'about', 'mobile_label' => 'About', 'icon' => 'info'],
         ],
         'right' => [
-            ['key' => 'about', 'href' => $nav_base.'/about', 'label' => 'about', 'mobile_label' => 'About', 'icon' => 'info'],
             ['key' => 'shortlist', 'href' => $nav_base.'/shortlist', 'label' => 'shortlist', 'mobile_label' => 'Shortlist', 'icon' => 'bookmark'],
             ['key' => 'currency', 'type' => 'currency', 'icon' => 'coins'],
             ['key' => 'contact', 'href' => $nav_base.'/contact', 'label' => 'contact', 'mobile_label' => 'Contact', 'icon' => 'mail'],

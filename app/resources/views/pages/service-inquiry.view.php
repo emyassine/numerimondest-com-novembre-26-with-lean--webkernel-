@@ -11,7 +11,10 @@
         array_map(static fn (string $slug): ?array => $projectCatalog[$slug] ?? null, $selectedProjectSlugs),
         'is_array',
     ));
-    $allServices = array_values($serviceCatalog);
+    $allServices = array_values(array_filter(
+        $serviceCatalog,
+        static fn (array $service): bool => ($service['type'] ?? null) !== 'extension',
+    ));
     $recommendedSlugs = [];
     foreach ($selectedServices as $selectedService) {
         foreach (($selectedService['related_slugs'] ?? []) as $relatedSlug) {

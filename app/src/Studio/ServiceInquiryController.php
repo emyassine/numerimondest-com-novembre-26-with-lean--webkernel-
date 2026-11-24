@@ -166,7 +166,10 @@ final class ServiceInquiryController
             $leadMessage[] = 'Enquiry type: General enquiry (no offer selected)';
         }
         foreach ($selectedServices as $offer) {
-            $leadMessage[] = 'Selected service: '.$offer['name'];
+            $offerLabel = isset($offer['parent'], $offer['parent_name'])
+                ? 'Extension · '.$offer['parent_name'].' — '.$offer['name']
+                : $offer['name'];
+            $leadMessage[] = 'Selected service: '.$offerLabel;
             $leadMessage[] = 'Offer format: '.$offer['format'];
             $leadMessage[] = ! empty($offer['price_display']) ? 'Published pricing: '.$offer['price_display'] : '';
         }

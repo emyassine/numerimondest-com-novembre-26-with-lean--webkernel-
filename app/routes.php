@@ -9,6 +9,9 @@ Route::post('/service-inquiry/select', [\App\Studio\ServiceInquiryController::cl
 Route::post('/service-inquiry/project/remove', [\App\Studio\ServiceInquiryController::class, 'removeProject']);
 Route::post('/service-inquiry', [\App\Studio\ServiceInquiryController::class, 'submit']);
 Route::post('/shortlist/toggle', [\App\Studio\ShortlistController::class, 'toggle']);
+$mandateRouteSlugs = array_column(\App\Studio\MandateCatalog::data()['mandates'], 'id');
+$mandateRoutePattern = implode('|', array_map(static fn (string $slug): string => preg_quote($slug, '/'), $mandateRouteSlugs));
+Route::get('/services/{slug}', [\App\Studio\ServiceMandateController::class, 'show'])->where('slug', $mandateRoutePattern);
 
 Route::permanent_redirect('/capabilities', '/services');
 

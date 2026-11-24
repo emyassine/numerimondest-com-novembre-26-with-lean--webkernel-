@@ -39,6 +39,27 @@ final class ServiceCatalog
             $services[$service['slug']] = $service;
         }
 
+        $services = array_replace($services, MandateCatalog::selectable());
+        $imageReferences = [
+            'brand' => 'brand-kit-complete',
+            'digital' => 'website-build',
+            'systems' => 'crm-client-portal',
+            'intel' => 'ops-audit',
+            'recruit' => 'remote-talent-search',
+            'sales' => 'revenue-desk-pilot',
+        ];
+        foreach ($services as &$service) {
+            if (($service['type'] ?? null) !== 'mandate') {
+                continue;
+            }
+            $reference = $services[$imageReferences[$service['cat']] ?? ''] ?? [];
+            $service['image_source'] = $reference['image_source'] ?? '';
+            $service['image'] = $reference['image'] ?? '';
+            $service['image_alt'] = $reference['image_alt'] ?? $service['name'];
+            $service['image_width'] = $reference['image_width'] ?? 1200;
+            $service['image_height'] = $reference['image_height'] ?? 800;
+        }
+        unset($service);
         return self::withCurrentPrices($services);
     }
 

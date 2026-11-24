@@ -68,6 +68,23 @@
             @endforeach
         </div>
 
+        @if (! empty($service['extensions']))
+            <x-webkernel-platform::section :heading="'Configurable · '.count($service['extensions']).' extensions available'" style="margin-top:2rem">
+                <div style="display:grid;gap:1rem">
+                    @foreach ($service['extensions'] as $extension)
+                        <x-webkernel-platform::card compact>
+                            <h3>{{ $extension['name'] }}</h3>
+                            @if (! empty($extension['description']))
+                                <p>{{ $extension['description'] }}</p>
+                            @endif
+                            <p>+ {{ price((float) $extension['price_mad'], 'MAD') }}{{ ! empty($extension['monthly']) ? ' / month' : '' }}</p>
+                            <x-studio::shortlist-button :service="$extension" :compact="true" />
+                        </x-webkernel-platform::card>
+                    @endforeach
+                </div>
+            </x-webkernel-platform::section>
+        @endif
+
         @if ($relatedServices !== [])
             <section class="nm-service-detail-related" aria-labelledby="nm-service-related-title">
                 <h2 id="nm-service-related-title">Services that work alongside this offer</h2>

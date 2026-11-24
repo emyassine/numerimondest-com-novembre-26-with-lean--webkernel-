@@ -31,10 +31,11 @@ return [
             'AED' => 3.6695,
             'SAR' => 3.7523,
             'QAR' => 3.6427,
+            'CHF' => 0.88,
         ],
         'by_country' => [
             'AU' => 'AUD', 'NZ' => 'NZD', 'AE' => 'AED', 'SA' => 'SAR', 'QA' => 'QAR',
-            'GB' => 'GBP', 'IE' => 'EUR', 'FR' => 'EUR', 'SG' => 'SGD', 'HK' => 'HKD',
+            'GB' => 'GBP', 'IE' => 'EUR', 'FR' => 'EUR', 'CH' => 'CHF', 'SG' => 'SGD', 'HK' => 'HKD',
             'MY' => 'MYR', 'IN' => 'INR', 'MA' => 'MAD', 'ES' => 'EUR', 'GF' => 'EUR', 'CA' => 'CAD',
         ],
         'options' => [
@@ -52,6 +53,7 @@ return [
             'INR' => ['label' => 'Indian Rupee', 'flag' => 'in', 'symbol' => '₹'],
             'MAD' => ['label' => 'Moroccan Dirham', 'flag' => 'ma', 'symbol' => 'د.م.'],
             'CAD' => ['label' => 'Canadian Dollar', 'flag' => 'ca', 'symbol' => '$'],
+            'CHF' => ['label' => 'Swiss Franc', 'flag' => 'ch', 'symbol' => 'CHF'],
         ],
     ],
     'contact' => [

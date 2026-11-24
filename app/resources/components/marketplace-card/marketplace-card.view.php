@@ -40,6 +40,7 @@
     style="min-width:0;overflow:hidden;border-radius:var(--radius-md,.375rem)"
     :data-engagement="$engagement_slug"
     :data-priced="$is_priced"
+    :data-price="$service['price_mad'] ?? ''"
     :data-search="$search_text"
 >
     <a class="nm-marketplace-card-link" href="{{ $service['href'] }}" style="position:relative;height:100%;display:flex;flex-direction:column;color:var(--nm-ink);text-decoration:none">
@@ -60,6 +61,9 @@
         <div class="nm-marketplace-card-content" style="padding:20px;display:flex;flex:1;flex-direction:column;gap:12px">
             <h3 class="nm-marketplace-card-heading" style="margin:0;font:400 var(--nm-text-leading)/1.25 var(--nm-title);letter-spacing:.01em">{{ $service['name'] }}</h3>
             <p class="nm-marketplace-card-scope" style="flex:1;margin:0 0 8px;color:var(--text-secondary,#475569);font:400 var(--nm-text-size)/1.5 var(--nm-body)">{{ $service['card_description'] }}</p>
+            @if (! empty($service['extensions']))
+                <x-webkernel-platform::badge color="gray" size="sm">Configurable · {{ count($service['extensions']) }} {{ count($service['extensions']) === 1 ? 'extension' : 'extensions' }} available</x-webkernel-platform::badge>
+            @endif
             @if (! empty($service['price_display']))
                 <p class="nm-marketplace-card-price" style="margin:0;padding-top:13px;border-top:1px solid var(--border-subtle,#e2e8f0);font:600 14px/1.4 var(--nm-body)">{{ $service['price_display'] }}</p>
             @endif
@@ -79,8 +83,32 @@
             @if (! empty($service['price_display']))
                 <p class="nm-marketplace-card-modal-price" style="margin:0;font:400 14px/1.4 var(--nm-body)">{{ $service['price_display'] }}</p>
             @endif
+            @if (! empty($service['catalog_mandate']))
+                <x-studio::shortlist-button :service="$service" :compact="true" />
+            @endif
             @if (! empty($service['brand']))
                 <p class="nm-marketplace-card-modal-brand" style="margin:0;color:var(--text-secondary,#77746e);font:400 11px/1.5 var(--nm-body);letter-spacing:.08em;text-transform:uppercase">{{ $service['brand'] }}</p>
+            @endif
+            @if (! empty($service['extensions']))
+                <h3>Configurable · {{ count($service['extensions']) }} {{ count($service['extensions']) === 1 ? 'extension' : 'extensions' }} available</h3>
+                @foreach ($service['extensions'] as $extension)
+                    <x-webkernel-platform::card compact>
+                        <div>
+                            <div>
+                                <strong>{{ $extension['name'] }}</strong>
+                                @if (! empty($extension['description']))
+                                    <p>{{ $extension['description'] }}</p>
+                                @endif
+                                @if (! empty($extension['monthly']))
+                                    <p>+ {{ price((float) $extension['price_mad'], 'MAD') }} / month</p>
+                                @else
+                                    <p>+ {{ price((float) $extension['price_mad'], 'MAD') }}</p>
+                                @endif
+                            </div>
+                            <x-studio::shortlist-button :service="$extension" :compact="true" />
+                        </div>
+                    </x-webkernel-platform::card>
+                @endforeach
             @endif
             <a href="{{ $service['href'] }}" style="width:fit-content;display:inline-flex;align-items:center;gap:5px;color:var(--primary-600);font:400 10px/1.4 var(--nm-body);letter-spacing:.12em;text-decoration:none;text-transform:uppercase">View full offer <x-webkernel::icon icon="arrow-up-right" set="lucide" width="14" height="14" aria-hidden="true" /></a>
         </div>
