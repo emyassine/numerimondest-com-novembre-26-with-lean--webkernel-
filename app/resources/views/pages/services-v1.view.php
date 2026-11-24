@@ -1,5 +1,5 @@
 @php
-    $allServices = \App\Studio\ServiceCatalog::all();
+    $allServices = \App\Studio\Catalog\ServiceCatalog::all();
     $servicesUrl = simple_site('studio', 'services');
     $currencyConfig = config('nm-studio.currencies', []);
     $currencyOptions = is_array($currencyConfig['options'] ?? null) ? $currencyConfig['options'] : [];
@@ -7,7 +7,7 @@
     $displayCurrency = is_string($_COOKIE[$currencyCookie] ?? null) && isset($currencyOptions[$_COOKIE[$currencyCookie]])
         ? $_COOKIE[$currencyCookie]
         : (string) ($currencyConfig['default'] ?? 'MAD');
-    $rateMetadata = \App\Studio\CurrencyRates::displayMetadata($displayCurrency);
+    $rateMetadata = \App\Studio\Pricing\CurrencyRates::displayMetadata($displayCurrency);
     $searchQuery = is_string($_GET['q'] ?? null) ? trim($_GET['q']) : '';
     $priceOnly = ($_GET['priced'] ?? null) === '1';
     $slugify = static fn (string $value): string => strtolower(trim((string) preg_replace('/[^a-z0-9]+/i', '-', $value), '-'));

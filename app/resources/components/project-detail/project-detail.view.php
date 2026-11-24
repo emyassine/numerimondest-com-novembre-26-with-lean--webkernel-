@@ -97,7 +97,7 @@
         </section>
 
         @php
-            $allProjects = \App\Studio\ProjectCatalog::all();
+            $allProjects = \App\Studio\Catalog\ProjectCatalog::all();
             $relatedProjects = array_filter(
                 array_map(
                     static fn (string $slug): ?array => $allProjects[$slug] ?? null,

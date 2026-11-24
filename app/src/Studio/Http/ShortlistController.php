@@ -1,6 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace App\Studio;
+namespace App\Studio\Http;
+
+use App\Studio\Catalog\ServiceCatalog;
+use App\Studio\Shortlist\ServiceShortlist;
 
 use Webkernel\HttpFoundation\RedirectResponse;
 use Webkernel\HttpFoundation\JsonResponse;

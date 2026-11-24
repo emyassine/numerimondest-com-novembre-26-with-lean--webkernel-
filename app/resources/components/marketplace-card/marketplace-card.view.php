@@ -15,6 +15,8 @@
         $service['price_display'] ?? '',
         $service['brand'] ?? '',
     ])));
+    $industries = implode(',', $service['industries'] ?? []);
+    $business_needs = implode(',', $service['business_needs'] ?? []);
 @endphp
 <style>
 .nm-marketplace-card.is-removing { opacity: 0; transform: translateY(5px); }
@@ -42,6 +44,8 @@
     :data-priced="$is_priced"
     :data-price="$service['price_mad'] ?? ''"
     :data-search="$search_text"
+    :data-industries="$industries"
+    :data-business-needs="$business_needs"
 >
     <a class="nm-marketplace-card-link" href="{{ $service['href'] }}" style="position:relative;height:100%;display:flex;flex-direction:column;color:var(--nm-ink);text-decoration:none">
         <div class="nm-marketplace-card-image-wrap" style="position:relative;min-height:125px;aspect-ratio:2.15;overflow:hidden;background:linear-gradient(135deg,#e2e8f0,#f8fafc)">

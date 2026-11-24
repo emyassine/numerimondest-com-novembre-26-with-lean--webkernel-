@@ -5,7 +5,7 @@
 ])
 
 @php
-    $savedSlugs = \App\Studio\ServiceShortlist::all();
+    $savedSlugs = \App\Studio\Shortlist\ServiceShortlist::all();
     $isSaved = in_array($service['slug'] ?? null, $savedSlugs, true);
     $returnTo = $return_to !== '' ? $return_to : (string) ($_SERVER['REQUEST_URI'] ?? '/services');
 @endphp

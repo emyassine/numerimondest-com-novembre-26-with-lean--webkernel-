@@ -1,5 +1,5 @@
 @php
-    $project = \App\Studio\ProjectCatalog::find('virtual-assistant-asia');
+    $project = \App\Studio\Catalog\ProjectCatalog::find('virtual-assistant-asia');
 @endphp
 
 <x-studio::project-detail

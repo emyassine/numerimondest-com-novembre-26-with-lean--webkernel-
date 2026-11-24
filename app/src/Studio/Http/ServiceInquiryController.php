@@ -1,7 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace App\Studio;
+namespace App\Studio\Http;
 
+use App\Studio\Catalog\ProjectCatalog;
+use App\Studio\Catalog\ServiceCatalog;
+use App\Studio\Integration\Perfex\PerfexAccountSession;
+use App\Studio\Integration\Perfex\PerfexLeadGateway;
+use App\Studio\Shortlist\ServiceShortlist;
 use Webkernel\HttpFoundation\RedirectResponse;
 use Webkernel\Route\Request;
 use Webkernel\Session\Session;

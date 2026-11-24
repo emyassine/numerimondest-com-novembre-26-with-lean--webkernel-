@@ -20,7 +20,7 @@
     if (! isset($currencyOptions[$currency])) {
         $currency = (string) array_key_first($currencyOptions);
     }
-    $shortlistCount = count(\App\Studio\ServiceShortlist::all());
+    $shortlistCount = count(\App\Studio\Shortlist\ServiceShortlist::all());
     $studioStylesheetPatterns = config('dependable-ui.stylesheets', []);
     $loadWebkernelPlatformTheme = (bool) config('dependable-ui.webkernel_platform_theme', false);
     $preventMobileZoom = (bool) config('dependable-ui.prevent_mobile_zoom', false);
@@ -54,7 +54,7 @@
     if ($studioPage === 'about') {
         $preloadImages[] = 'about/hero.jpg';
     } elseif (str_starts_with($studioPage, 'projects/')) {
-        $allProjects = \App\Studio\ProjectCatalog::initiatives();
+        $allProjects = \App\Studio\Catalog\ProjectCatalog::initiatives();
         $projectSlug = substr($studioPage, strlen('projects/'));
         if (isset($allProjects[$projectSlug])) {
             $preloadImages[] = $allProjects[$projectSlug]['cover'];
@@ -64,7 +64,7 @@
         }
     } elseif (str_starts_with($studioPage, 'services/')) {
         $serviceSlug = substr($studioPage, strlen('services/'));
-        $preloadImages[] = \App\Studio\ServiceCatalog::find($serviceSlug)['image_source'];
+        $preloadImages[] = \App\Studio\Catalog\ServiceCatalog::find($serviceSlug)['image_source'];
     }
     $preloadImages = array_values(array_unique($preloadImages));
 @endphp

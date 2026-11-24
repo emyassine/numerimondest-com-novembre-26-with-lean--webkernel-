@@ -1,5 +1,5 @@
 @php
-    $projects = \App\Studio\ProjectCatalog::initiatives();
+    $projects = \App\Studio\Catalog\ProjectCatalog::initiatives();
 @endphp
 
 <x-studio::page

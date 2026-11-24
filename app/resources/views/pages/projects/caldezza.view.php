@@ -1,5 +1,5 @@
 @php
-    $project = \App\Studio\ProjectCatalog::find('caldezza');
+    $project = \App\Studio\Catalog\ProjectCatalog::find('caldezza');
 @endphp
 
 <x-studio::project-detail

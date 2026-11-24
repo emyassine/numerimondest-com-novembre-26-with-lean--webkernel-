@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace App\Studio;
+namespace App\Studio\Http;
 
+use App\Studio\Catalog\ServiceCatalog;
 use Webkernel\HttpFoundation\Response;
 use Webkernel\View\View;
 

@@ -1,6 +1,6 @@
 @php
-    $savedSlugs = \App\Studio\ServiceShortlist::all();
-    $catalog = \App\Studio\ServiceCatalog::all();
+    $savedSlugs = \App\Studio\Shortlist\ServiceShortlist::all();
+    $catalog = \App\Studio\Catalog\ServiceCatalog::all();
     $shortlistedServices = array_values(array_filter(
         array_map(static fn (string $slug): ?array => $catalog[$slug] ?? null, $savedSlugs),
         'is_array',

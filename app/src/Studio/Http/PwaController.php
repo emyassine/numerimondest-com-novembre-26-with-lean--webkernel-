@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Studio;
+namespace App\Studio\Http;
 
 use JsonException;
 use Webkernel\Config\Config;

@@ -126,7 +126,7 @@ if (! function_exists('price')) {
         if (! isset($options[$base])) {
             $base = $default;
         }
-        $rateData = \App\Studio\CurrencyRates::forPricing();
+        $rateData = \App\Studio\Pricing\CurrencyRates::forPricing();
         $rates = $rateData['rates'];
         if (! isset($options[$target]) || ! isset($rates[$target], $rates[$base]) || (float) $rates[$base] <= 0) {
             $target = $base;

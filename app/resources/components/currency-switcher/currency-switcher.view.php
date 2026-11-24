@@ -11,7 +11,7 @@
     'trigger_icon' => null,
 ])
 @php
-    $ordered_currency_options = \App\Studio\CurrencyRates::strongestFirst($currency_options, $default_currency);
+    $ordered_currency_options = \App\Studio\Pricing\CurrencyRates::strongestFirst($currency_options, $default_currency);
 @endphp
 <style>
     .nm-currency-switcher-trigger {

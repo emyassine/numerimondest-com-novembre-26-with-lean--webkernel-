@@ -9,7 +9,7 @@
     $relatedServices = [];
     foreach (($service['related_slugs'] ?? []) as $relatedSlug) {
         if (is_string($relatedSlug) && $relatedSlug !== ($service['slug'] ?? '')) {
-            $related = \App\Studio\ServiceCatalog::all()[$relatedSlug] ?? null;
+            $related = \App\Studio\Catalog\ServiceCatalog::all()[$relatedSlug] ?? null;
             if (is_array($related)) {
                 $relatedServices[] = $related;
             }

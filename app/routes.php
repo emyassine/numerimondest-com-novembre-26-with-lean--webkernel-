@@ -2,16 +2,17 @@
 
 use Webkernel\Route\Route;
 
-Route::get('/manifest.webmanifest', [\App\Studio\PwaController::class, 'manifest']);
-Route::get('/service-worker.js', [\App\Studio\PwaController::class, 'serviceWorker']);
+Route::get('/manifest.webmanifest', [\App\Studio\Http\PwaController::class, 'manifest']);
+Route::get('/service-worker.js', [\App\Studio\Http\PwaController::class, 'serviceWorker']);
 
-Route::post('/service-inquiry/select', [\App\Studio\ServiceInquiryController::class, 'select']);
-Route::post('/service-inquiry/project/remove', [\App\Studio\ServiceInquiryController::class, 'removeProject']);
-Route::post('/service-inquiry', [\App\Studio\ServiceInquiryController::class, 'submit']);
-Route::post('/shortlist/toggle', [\App\Studio\ShortlistController::class, 'toggle']);
-$mandateRouteSlugs = array_column(\App\Studio\MandateCatalog::data()['mandates'], 'id');
+Route::post('/service-inquiry/select', [\App\Studio\Http\ServiceInquiryController::class, 'select']);
+Route::post('/service-inquiry/project/remove', [\App\Studio\Http\ServiceInquiryController::class, 'removeProject']);
+Route::post('/service-inquiry', [\App\Studio\Http\ServiceInquiryController::class, 'submit']);
+Route::post('/shortlist/toggle', [\App\Studio\Http\ShortlistController::class, 'toggle']);
+Route::post('/services/recommendations', [\App\Studio\Http\MarketFitController::class, 'record']);
+$mandateRouteSlugs = array_column(\App\Studio\Catalog\MandateCatalog::data()['mandates'], 'id');
 $mandateRoutePattern = implode('|', array_map(static fn (string $slug): string => preg_quote($slug, '/'), $mandateRouteSlugs));
-Route::get('/services/{slug}', [\App\Studio\ServiceMandateController::class, 'show'])->where('slug', $mandateRoutePattern);
+Route::get('/services/{slug}', [\App\Studio\Http\ServiceMandateController::class, 'show'])->where('slug', $mandateRoutePattern);
 
 Route::permanent_redirect('/capabilities', '/services');
 

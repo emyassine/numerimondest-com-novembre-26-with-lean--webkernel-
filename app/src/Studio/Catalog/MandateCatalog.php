@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace App\Studio;
+namespace App\Studio\Catalog;
+
+use App\Studio\Catalog\Taxonomy\OfferMarketFit;
 
 /** Server-owned catalogue data for the commissioned services prototype. */
 final class MandateCatalog
@@ -44,6 +46,7 @@ final class MandateCatalog
             $priceText = $m[10] ?? null;
             $items[] = ['id'=>$id,'slug'=>$id,'category'=>self::CATEGORIES[$cat],'cat'=>$cat,'format'=>match($fmt){'oneoff'=>'Diagnostic / study','recruit'=>'Mandate',default=>'Project'},'fmt'=>$fmt,'tier'=>$tier,'name'=>$name,'scope'=>$scope,'deliverables'=>$deliverables,'price_mad'=>$price,'price_amount'=>$price,'price_currency'=>'MAD','price_text'=>$priceText,'price_display'=>$priceText ?? ($price === null ? '' : 'From '.price((float)$price,'MAD',null,'prestige')),'terms'=>$terms,'flagship'=>(bool)($m[8] ?? false),'extensions'=>[],'type'=>'mandate','href'=>simple_site('studio','services/'.$id)];
         }
+        $items = OfferMarketFit::apply($items);
         $ext = [
             'brand-system'=>[['x-brand-kit','Social and motion template kit',12000]],
             'brand-doctrine'=>[['x-brand-multi','Multi-entity brand architecture',30000]],
@@ -62,6 +65,10 @@ final class MandateCatalog
             [$id,$name,$amount] = $row; $monthly = (bool)($row[4] ?? false);
             $extensions[$parent][] = ['id'=>$id,'slug'=>$id,'name'=>$name,'description'=>$row[3] ?? null,'parent'=>$parent,'parent_name'=>array_column($items,'name','id')[$parent],'price_mad'=>$amount,'price_amount'=>$amount,'price_currency'=>'MAD','price_interval'=>$monthly?'/ month':null,'billing'=>$monthly?'monthly':'one_time','monthly'=>$monthly,'visibility'=>'detail-only','type'=>'extension','category'=>'Extension · '.array_column($items,'name','id')[$parent],'format'=>'Extension','price_display'=>price((float)$amount,'MAD',null,'prestige'),'href'=>simple_site('studio','services/'.$parent)];
         }
+        foreach ($extensions as &$parentExtensions) {
+            $parentExtensions = OfferMarketFit::apply($parentExtensions);
+        }
+        unset($parentExtensions);
         foreach ($items as &$item) {
             $item['extensions'] = $extensions[$item['id']] ?? [];
             $item['engagement_type'] = $item['format'];
@@ -78,13 +85,16 @@ final class MandateCatalog
             ['pb-brand','Brand Positioning & Doctrine Blueprint',18000,'Companies whose image no longer reflects the real level of their service.','Brand platform · competitive positioning · offer architecture · editorial line','Institutional Brand Doctrine'],
         ];
         $playbooks = array_map(static fn($p)=>['id'=>$p[0],'slug'=>$p[0],'name'=>$p[1],'price_mad'=>$p[2],'price_amount'=>$p[2],'price_currency'=>'MAD','price_display'=>price((float)$p[2],'MAD',null,'prestige'),'target'=>$p[3],'deliverables'=>$p[4],'gateway'=>$p[5],'category'=>'Executive Playbook','format'=>'Playbook','type'=>'playbook','credit_window_days'=>30,'credit_percent'=>100,'href'=>simple_site('studio','services')],$playbooks);
+        $playbooks = OfferMarketFit::apply($playbooks);
         $modules = [
             ['mod-auto','Driving Schools Module',690,'Candidate records, driving-lesson scheduling, exam tracking, payments and automated reminders.'],
             ['mod-school','Private Schools & Training Centres Module',990,'Enrolment, monthly invoicing, absence tracking, parent portal and communication.'],
             ['mod-book','Bookshops & Trade Module',790,'Multi-reference stock, fast checkout, supplier orders and a synchronised online catalogue.'],
         ];
         $modules = array_map(static fn($m)=>['id'=>$m[0],'slug'=>$m[0],'name'=>$m[1],'price_mad'=>$m[2],'price_amount'=>$m[2],'price_currency'=>'MAD','price_interval'=>'/ month','price_display'=>'From '.price((float)$m[2],'MAD',null,'prestige').' / month','scope'=>$m[3],'category'=>'Vertical Software','format'=>'Subscription','type'=>'subscription','billing'=>'monthly','status'=>'waitlist_open','onboarding_min_mad'=>1500,'onboarding_max_mad'=>3000,'href'=>simple_site('studio','services#modules')],$modules);
+        $modules = OfferMarketFit::apply($modules);
         $revenueForce = ['id'=>'sales-force','slug'=>'sales-force','name'=>'Revenue Force · Recruit, Equip, Supervise','category'=>'Sales development','format'=>'Revenue Force','type'=>'revenue_force','price_mad'=>7500,'price_amount'=>null,'price_currency'=>'MAD','price_display'=>'Setup '.price(7500,'MAD',null,'prestige').' + weekly supervision '.price(4500,'MAD',null,'prestige').'–'.price(6500,'MAD',null,'prestige').' / month','monthly_min_mad'=>4500,'monthly_max_mad'=>6500,'href'=>simple_site('studio','services')];
+        $revenueForce = OfferMarketFit::apply([$revenueForce])[0];
         $cached = ['categories'=>self::CATEGORIES,'mandates'=>$items,'extensions'=>$extensions,'playbooks'=>$playbooks,'modules'=>$modules,'revenue_force'=>$revenueForce];
         return $cached;
     }

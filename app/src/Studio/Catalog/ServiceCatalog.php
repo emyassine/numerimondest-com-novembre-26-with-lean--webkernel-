@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace App\Studio;
+namespace App\Studio\Catalog;
+
+use App\Studio\Catalog\Taxonomy\OfferMarketFit;
 
 use RuntimeException;
 
@@ -60,7 +62,7 @@ final class ServiceCatalog
             $service['image_height'] = $reference['image_height'] ?? 800;
         }
         unset($service);
-        return self::withCurrentPrices($services);
+        return self::withCurrentPrices(OfferMarketFit::apply($services));
     }
 
     /** @return array<string, mixed> */

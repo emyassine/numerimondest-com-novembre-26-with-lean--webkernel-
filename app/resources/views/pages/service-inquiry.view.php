@@ -1,12 +1,12 @@
 @php
-    $serviceCatalog = \App\Studio\ServiceCatalog::all();
-    $selectedSlugs = \App\Studio\ServiceInquiryController::selectedSlugs();
+    $serviceCatalog = \App\Studio\Catalog\ServiceCatalog::all();
+    $selectedSlugs = \App\Studio\Http\ServiceInquiryController::selectedSlugs();
     $selectedServices = array_values(array_filter(
         array_map(static fn (string $slug): ?array => $serviceCatalog[$slug] ?? null, $selectedSlugs),
         'is_array',
     ));
-    $projectCatalog = \App\Studio\ProjectCatalog::all();
-    $selectedProjectSlugs = \App\Studio\ServiceInquiryController::selectedProjects();
+    $projectCatalog = \App\Studio\Catalog\ProjectCatalog::all();
+    $selectedProjectSlugs = \App\Studio\Http\ServiceInquiryController::selectedProjects();
     $selectedProjects = array_values(array_filter(
         array_map(static fn (string $slug): ?array => $projectCatalog[$slug] ?? null, $selectedProjectSlugs),
         'is_array',
@@ -63,7 +63,7 @@
     };
     $studioConfig = config('nm-studio', []);
     $crmConfig = is_array($studioConfig['crm'] ?? null) ? $studioConfig['crm'] : [];
-    $accountStatus = \App\Studio\PerfexAccountSession::current();
+    $accountStatus = \App\Studio\Integration\Perfex\PerfexAccountSession::current();
     $isClientConnected = $accountStatus['client_id'] > 0;
     $isStaffConnected = $accountStatus['staff_id'] > 0;
     $whatsappNumber = preg_replace('/\D+/', '', (string) ($studioConfig['contact']['phone']['display'] ?? ''));

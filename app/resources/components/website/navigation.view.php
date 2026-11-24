@@ -10,7 +10,7 @@
 ])
 @php
     $default_currency = is_string($currency_config['default'] ?? null) ? $currency_config['default'] : 'MAD';
-    $ordered_currency_options = \App\Studio\CurrencyRates::strongestFirst($currency_options, $default_currency);
+    $ordered_currency_options = \App\Studio\Pricing\CurrencyRates::strongestFirst($currency_options, $default_currency);
     $nav_base = rtrim($site_prefix, '/');
     $nav_items = [
         'left' => [
