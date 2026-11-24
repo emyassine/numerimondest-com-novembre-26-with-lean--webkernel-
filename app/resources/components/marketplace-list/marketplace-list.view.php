@@ -22,8 +22,9 @@
 >
 
   <style>
-  .fi-section:not(.fi-section-not-contained):not(.fi-divided)>.fi-section-content-ctn>.fi-section-content, .fi-section:not(.fi-section-not-contained).fi-divided>.fi-section-content-ctn>.fi-section-content>* {
-       padding: 0;
+  .fi-section.nm-marketplace-card[class*=" nm-marketplace-card-item-"]:not(.fi-section-not-contained):not(.fi-divided) > .fi-section-content-ctn > .fi-section-content,
+  .fi-section.nm-marketplace-card[class*=" nm-marketplace-card-item-"]:not(.fi-section-not-contained).fi-divided > .fi-section-content-ctn > .fi-section-content > * {
+      padding: 0;
   }
   </style>
     @foreach ($services as $service)

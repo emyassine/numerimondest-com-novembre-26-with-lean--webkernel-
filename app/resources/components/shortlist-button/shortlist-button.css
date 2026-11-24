@@ -17,20 +17,10 @@
 .nm-shortlist-button button:hover,
 .nm-shortlist-button button[aria-pressed="true"] { background: var(--surface-muted, #f1f5f9); }
 
-.nm-marketplace-card .nm-shortlist-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 2;
-}
-
-.nm-marketplace-card .nm-shortlist-button button { min-height: 33px; }
-
 .nm-service-detail-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 30px; }
 .nm-service-detail-actions .nm-shortlist-button button { min-height: 42px; padding-inline: 15px; }
 
 @media (max-width: 700px) {
   .nm-shortlist-button button { min-height: 36px; padding: 8px 10px; font-size: 8px; }
-  .nm-marketplace-card .nm-shortlist-button { top: 8px; right: 8px; }
   .nm-service-detail-actions { gap: 10px; }
 }

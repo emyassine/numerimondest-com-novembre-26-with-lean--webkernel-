@@ -1,135 +1,447 @@
-<!doctype html>
-<html lang="en" data-theme="nm-studio" data-mode="light" class="light">
+<!DOCTYPE html>
+<html lang="en" data-theme="nm-studio" data-mode="light" class="light" style="color-scheme:light;background-color:#f1f5f9">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="color-scheme" content="light">
-  <title>Commissions &amp; Mandates — Numerimondes</title>
-  <style>
-    :root{--bg:#f1f5f9;--surface:#fff;--ink:#0f172a;--secondary:#475569;--muted:#64748b;--line:#cbd5e1;--subtle:#e2e8f0;--green:#065f46}
-    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.6 system-ui,-apple-system,sans-serif}
-    a{color:inherit}header{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1.1rem 5%;border-bottom:1px solid var(--subtle);background:#f1f5f9ed;backdrop-filter:blur(8px)}
-    .brand{text-decoration:none;font-weight:600;letter-spacing:.14em;text-transform:uppercase}.nav{display:flex;align-items:center;gap:1.5rem}.nav a{text-decoration:none;color:var(--secondary);font-size:.88rem}.nav a:hover,.nav a[aria-current=page]{color:var(--ink)}
-    button,.button{font:inherit;cursor:pointer}.trigger,.button{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;padding:.65rem 1rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);text-decoration:none;font-size:.84rem;font-weight:600}
-    .count{padding:.05rem .4rem;background:var(--ink);color:#fff;font-size:.75rem}
-    main{width:min(100% - 2rem,1380px);margin:auto;padding:4rem 0 6rem}.kicker,.label{display:block;color:var(--muted);font-size:.73rem;font-weight:650;letter-spacing:.14em;text-transform:uppercase}
-    h1,h2,h3,p{margin-top:0}h1{max-width:820px;margin-bottom:1rem;font:400 clamp(2.5rem,5vw,4rem)/1.08 Georgia,serif;letter-spacing:-.02em}.intro{max-width:700px;margin-bottom:3rem;color:var(--secondary);font-size:1.05rem}
-    .filters{margin-bottom:2.5rem;padding:1.5rem;border:1px solid var(--subtle);background:var(--surface)}.filter-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:1rem;align-items:end}
-    .field label{display:block;margin-bottom:.4rem;color:var(--muted);font-size:.72rem;font-weight:650;letter-spacing:.08em;text-transform:uppercase}.field input,.field select{width:100%;min-height:42px;padding:.6rem .75rem;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
-    .filter-footer{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:1.1rem;padding-top:1rem;border-top:1px solid var(--subtle);color:var(--secondary);font-size:.85rem}
-    .clear{border:0;background:none;color:var(--muted);text-decoration:underline}.category{margin:0 0 3.5rem}.category-head{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:1.4rem;padding-bottom:.7rem;border-bottom:1px solid var(--line)}.category-head h2{margin:0;font:400 1.7rem/1.2 Georgia,serif}.category-head span{color:var(--muted);font-size:.82rem}
-    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.25rem}.offer{display:flex;flex-direction:column;min-height:100%;border:1px solid var(--subtle);background:var(--surface);transition:transform .2s,border-color .2s}.offer:hover{transform:translateY(-2px);border-color:var(--ink)}
-    .visual{display:flex;align-items:flex-end;min-height:125px;padding:1rem;background:linear-gradient(135deg,#e2e8f0,#f8fafc);border-bottom:1px solid var(--subtle)}.visual span{padding:.25rem .5rem;background:#fff;font-size:.68rem;font-weight:650;letter-spacing:.08em;text-transform:uppercase}
-    .offer-body{display:flex;flex:1;flex-direction:column;padding:1.25rem}.offer h3{margin:0 0 .55rem;font:400 1.4rem/1.25 Georgia,serif}.scope{flex:1;margin:0 0 1rem;color:var(--secondary);font-size:.86rem}.price{margin:0;padding-top:.8rem;border-top:1px solid var(--subtle);font-weight:650;font-size:.9rem}.status{margin:.4rem 0 1rem;color:var(--green);font-size:.78rem}.offer-actions{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}.offer-actions a,.offer-actions button{min-height:40px;padding:.55rem;border:1px solid var(--line);background:white;color:var(--ink);text-align:center;text-decoration:none;font-size:.8rem;font-weight:600}.offer-actions button{background:var(--ink);color:white;border-color:var(--ink)}.offer-actions button[aria-pressed=true]{background:#ecfdf5;color:var(--green);border-color:#a7f3d0}
-    .policy{display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap;margin:3.5rem 0;padding:1.8rem 2rem;border:1px solid var(--line);background:#fff}.policy p{max-width:780px;margin:0;color:var(--secondary);font-size:.92rem}.policy a{font-size:.85rem;font-weight:650}
-    .commitments{padding-top:2.5rem;border-top:1px solid var(--line)}.commitments h2{font:400 1.8rem/1.2 Georgia,serif}.commit-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem;margin-top:1.5rem}.commit{padding:1.3rem;border:1px solid var(--subtle);background:#fff}.commit small{display:block;margin-bottom:.7rem;color:var(--muted);font-weight:650;letter-spacing:.1em}.commit h3{margin-bottom:.4rem;font-size:1rem}.commit p{margin:0;color:var(--secondary);font-size:.86rem}
-    .backdrop{position:fixed;inset:0;z-index:30;display:none;justify-content:flex-end;background:#0f172a73}.backdrop.open{display:flex}.drawer{display:flex;flex-direction:column;width:min(100%,460px);height:100%;padding:2rem;background:#fff;overflow:auto}.drawer-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:1rem;border-bottom:1px solid var(--subtle)}.drawer-head h2{margin:0;font:400 1.7rem Georgia,serif}.close{border:0;background:none;font-size:1.5rem}.drawer-desc{color:var(--secondary);font-size:.85rem}.drawer-list{display:grid;gap:.75rem;flex:1}.empty{padding:1.5rem;background:var(--bg);color:var(--secondary);text-align:center}.saved{display:flex;justify-content:space-between;gap:1rem;padding:1rem;background:var(--bg);border:1px solid var(--subtle)}.saved small,.saved strong,.saved span{display:block}.saved small,.saved span{color:var(--muted);font-size:.78rem}.saved button{align-self:start;border:0;background:none;text-decoration:underline}.drawer-foot{padding-top:1.2rem;border-top:1px solid var(--subtle)}.drawer-foot a{display:block;padding:.9rem;background:var(--ink);color:white;text-align:center;text-decoration:none;font-weight:600}
-    @media(max-width:1000px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.commit-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(max-width:640px){header{padding:1rem;flex-wrap:wrap}.nav{width:100%;justify-content:center;gap:.6rem;flex-wrap:wrap}.nav a,.trigger{font-size:.74rem;padding:.45rem .55rem}main{padding-top:2.5rem}.filter-grid,.grid,.commit-grid{grid-template-columns:1fr}.filters{padding:1rem}.policy{padding:1.2rem}.drawer{padding:1.25rem}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services &amp; Deployable Architectures — Numerimondes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f1f5f9;--surface:#fff;--ink:#0f172a;--ink2:#475569;--muted:#64748b;--line:#cbd5e1;--sub:#e2e8f0;--em-bg:#ecfdf5;--em:#065f46;--am-bg:#fffbeb;--am:#92400e}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',-apple-system,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+header{display:flex;justify-content:space-between;align-items:center;padding:1.2rem 5%;border-bottom:1px solid var(--sub);background:rgba(241,245,249,.94);backdrop-filter:blur(8px);position:sticky;top:0;z-index:100;gap:1rem;flex-wrap:wrap}
+.brand{font-size:.95rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;text-decoration:none}
+nav{display:flex;gap:1.8rem}
+nav a{font-size:.875rem;font-weight:500;color:var(--ink2);text-decoration:none}
+nav a:hover,nav a.active{color:var(--ink)}
+.ctrl{display:flex;align-items:center;gap:.8rem}
+select,input{font-family:inherit}
+.cur{background:var(--surface);border:1px solid var(--line);padding:.5rem .7rem;font-size:.8rem;font-weight:600;border-radius:2px;cursor:pointer;color:var(--ink)}
+.sl-btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--ink);color:#fff;border:1px solid var(--ink);padding:.52rem .95rem;font:600 .8rem inherit;font-family:inherit;cursor:pointer;border-radius:2px}
+.sl-count{background:#fff;color:var(--ink);font-size:.72rem;padding:.05rem .42rem;border-radius:2px;font-weight:700}
+.container{max-width:1380px;margin:0 auto;padding:4rem 5% 4rem}
+.kicker{display:block;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:1rem}
+h1{font-family:'Newsreader',Georgia,serif;font-weight:400;font-size:clamp(2.4rem,4.5vw,3.8rem);line-height:1.08;letter-spacing:-.02em;max-width:880px;margin-bottom:1.2rem}
+.intro{font-size:1.05rem;color:var(--ink2);max-width:740px;margin-bottom:2.5rem}
+.spectrum{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:3rem}
+.spectrum div{background:var(--surface);border:1px solid var(--sub);padding:1.3rem 1.5rem;border-radius:2px}
+.spectrum small{display:block;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.3rem}
+.spectrum strong{display:block;font-size:.95rem;margin-bottom:.25rem}
+.spectrum p{font-size:.82rem;color:var(--ink2);line-height:1.5}
+.filters{background:var(--surface);border:1px solid var(--sub);padding:1.6rem;border-radius:2px;margin-bottom:2rem}
+.fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:1.25rem}
+.fg label{display:block;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.45rem}
+.fg input,.fg select{width:100%;padding:.65rem .85rem;font-size:.875rem;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:2px}
+.fg input:focus,.fg select:focus{outline:none;border-color:var(--ink);background:#fff}
+.ffoot{display:flex;justify-content:space-between;align-items:center;margin-top:1.1rem;padding-top:1.1rem;border-top:1px solid var(--sub);flex-wrap:wrap;gap:1rem}
+.chk{display:inline-flex;align-items:center;gap:.5rem;font-size:.84rem;color:var(--ink2);cursor:pointer}
+.link-btn{background:none;border:none;font:600 .82rem inherit;font-family:inherit;color:var(--muted);cursor:pointer;text-decoration:underline}
+.meta{font-size:.85rem;font-weight:600;margin-bottom:2rem}
+.cat{margin-bottom:4rem}
+.cat-h{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:.8rem;margin-bottom:1.8rem}
+.cat-h h2{font-family:'Newsreader',Georgia,serif;font-size:1.9rem;font-weight:400}
+.cat-h span{font-size:.82rem;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.75rem}
+.card{background:var(--surface);border:1px solid var(--sub);border-radius:2px;display:flex;flex-direction:column;justify-content:space-between;transition:border-color .2s,transform .2s}
+.card:hover{border-color:var(--ink);transform:translateY(-2px)}
+.card.flag{border-top:3px solid var(--ink)}
+.body{padding:1.75rem;flex-grow:1;display:flex;flex-direction:column}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.85rem;gap:.5rem}
+.tag{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.tier{font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:.2rem .5rem;border-radius:2px;background:var(--bg)}
+.title{font-family:'Newsreader',Georgia,serif;font-size:1.5rem;font-weight:400;line-height:1.22;margin-bottom:.75rem}
+.scope{font-size:.86rem;color:var(--ink2);margin-bottom:1.2rem;flex-grow:1}
+.deliv{font-size:.78rem;color:var(--muted);background:var(--bg);padding:.65rem .85rem;border-radius:2px;margin-bottom:1.2rem;line-height:1.5}
+.price{font-size:.96rem;font-weight:600;padding-top:1rem;border-top:1px solid var(--sub);margin-bottom:.3rem}
+.status{font-size:.76rem;color:var(--em);font-weight:500;margin-bottom:1.2rem}
+.actions{display:grid;grid-template-columns:1fr 1.15fr;gap:.65rem}
+.b-out,.b-add{padding:.68rem .8rem;font:600 .8rem inherit;font-family:inherit;text-align:center;border-radius:2px;cursor:pointer;text-decoration:none;transition:all .2s}
+.b-out{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.b-out:hover{border-color:var(--ink)}
+.b-add{background:var(--ink);color:#fff;border:1px solid var(--ink)}
+.b-add:hover{background:#1e293b}
+.b-add.added{background:var(--em-bg);color:var(--em);border-color:#a7f3d0}
+.bp{background:var(--surface);border:1px solid var(--line);padding:2.75rem;border-radius:2px;margin:4rem 0}
+.bp-h{max-width:760px;margin-bottom:2.25rem}
+.bp-h h2{font-family:'Newsreader',Georgia,serif;font-size:2.1rem;font-weight:400;line-height:1.15;margin-bottom:.7rem}
+.bp-h p{font-size:.95rem;color:var(--ink2)}
+.bp-card{background:var(--bg);border:1px solid var(--sub);padding:1.75rem;border-radius:2px;display:flex;flex-direction:column;justify-content:space-between}
+.study{display:inline-block;align-self:flex-start;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;background:var(--am-bg);color:var(--am);padding:.22rem .55rem;border-radius:2px;margin-bottom:.9rem}
+.bp-card h3{font-family:'Newsreader',Georgia,serif;font-size:1.45rem;font-weight:400;margin-bottom:.6rem}
+.bp-card p{font-size:.85rem;color:var(--ink2);margin-bottom:1.2rem}
+.bp-f{border-top:1px solid var(--line);padding-top:1rem;display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.bp-f strong{font-size:.86rem}
+.bp-f .b-add{padding:.55rem .8rem}
+.nomatch{background:var(--surface);border:1px solid var(--line);padding:3rem 2rem;text-align:center;border-radius:2px;margin-bottom:3rem;display:none}
+.nomatch h3{font-family:'Newsreader',Georgia,serif;font-size:1.65rem;font-weight:400;margin-bottom:.5rem}
+.nomatch p{font-size:.92rem;color:var(--ink2);margin-bottom:1.4rem}
+.policy{background:var(--surface);border:1px solid var(--sub);padding:2rem 2.25rem;border-radius:2px;margin-bottom:3rem;display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap}
+.policy p{font-size:.9rem;color:var(--ink2);max-width:780px}
+.policy a{font-size:.85rem;font-weight:600}
+.commit h2{font-family:'Newsreader',Georgia,serif;font-size:1.9rem;font-weight:400}
+.cgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.75rem;margin-top:1.5rem}
+.cgrid div{background:var(--surface);border:1px solid var(--sub);padding:1.6rem;border-radius:2px}
+.cgrid small{font-size:.72rem;font-weight:600;letter-spacing:.12em;color:var(--muted);display:block;margin-bottom:.6rem}
+.cgrid h3{font-size:.98rem;font-weight:600;margin-bottom:.4rem}
+.cgrid p{font-size:.84rem;color:var(--ink2)}
+footer{border-top:1px solid var(--line);padding:2.5rem 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;font-size:.82rem;color:var(--muted)}
+footer a{color:var(--ink2);text-decoration:none;margin-left:1.25rem}
+footer a:hover{color:var(--ink)}
+.backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;z-index:200;justify-content:flex-end}
+.backdrop.open{display:flex}
+.drawer{width:100%;max-width:460px;background:var(--surface);height:100%;padding:2.25rem;display:flex;flex-direction:column;overflow-y:auto;border-left:1px solid var(--line)}
+.d-h{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:1.2rem;border-bottom:1px solid var(--sub);margin-bottom:1.2rem}
+.d-h h2{font-family:'Newsreader',Georgia,serif;font-size:1.75rem;font-weight:400}
+.x{background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--muted);line-height:1}
+.d-desc{font-size:.84rem;color:var(--ink2);margin-bottom:1.4rem}
+.items{flex-grow:1;display:flex;flex-direction:column;gap:1rem}
+.empty{background:var(--bg);border:1px dashed var(--line);padding:2rem 1.5rem;text-align:center;border-radius:2px;font-size:.86rem;color:var(--ink2)}
+.item{background:var(--bg);border:1px solid var(--sub);padding:1rem 1.15rem;border-radius:2px;display:flex;justify-content:space-between;align-items:flex-start;gap:1rem}
+.item small{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.2rem}
+.item strong{display:block;font-size:.92rem;margin-bottom:.2rem}
+.item span{font-size:.8rem;color:var(--ink2)}
+.rm{background:none;border:none;font:.75rem inherit;font-family:inherit;color:var(--muted);text-decoration:underline;cursor:pointer}
+.d-f{padding-top:1.4rem;border-top:1px solid var(--sub);margin-top:1.4rem}
+.total{display:flex;justify-content:space-between;font-size:.85rem;font-weight:600;margin-bottom:1rem}
+.cta{display:block;width:100%;text-align:center;background:var(--ink);color:#fff;padding:.95rem 1.25rem;font-size:.85rem;font-weight:600;text-decoration:none;border-radius:2px}
+@media(max-width:1080px){.grid,.spectrum{grid-template-columns:repeat(2,1fr)}.cgrid{grid-template-columns:repeat(2,1fr)}.fgrid{grid-template-columns:1fr 1fr}}
+@media(max-width:680px){.grid,.spectrum,.cgrid,.fgrid{grid-template-columns:1fr}nav a{display:none}.bp{padding:1.5rem}}
+.gw{font-size:.82rem;font-weight:600;color:var(--ink);margin-top:.8rem}
+.note{font-size:.78rem;color:var(--ink2);margin-bottom:.3rem}
+.via{font-size:.76rem;color:var(--muted);margin-bottom:1rem}
+.cgrid.g3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:1080px){.cgrid.g3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.cgrid.g3{grid-template-columns:1fr}}
+.conf{font-size:.74rem;font-weight:600;color:var(--muted);margin:-.6rem 0 1rem}
+.backdrop.center{align-items:center;justify-content:center}
+.modal{background:var(--surface);max-width:580px;width:calc(100% - 2rem);padding:2rem;border-radius:2px;max-height:90vh;overflow:auto;border:1px solid var(--line)}
+.modal h2{font-family:'Newsreader',Georgia,serif;font-size:1.7rem;font-weight:400;line-height:1.2;margin-bottom:.6rem}
+.modal p{font-size:.88rem;color:var(--ink2);margin-bottom:1rem}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin:.6rem 0 1.4rem}
+.chip{background:var(--bg);border:1px solid var(--line);padding:.75rem .8rem;font:600 .8rem inherit;font-family:inherit;text-align:left;cursor:pointer;border-radius:2px;color:var(--ink)}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ext-h{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:1.4rem 0 .6rem}
+.ext{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.8rem 0;border-top:1px solid var(--sub);font-size:.85rem}
+.ext small{display:block;color:var(--muted);font-size:.76rem}
+.ext .b-add{padding:.5rem .7rem;white-space:nowrap}
+.cta-btn{border:0;cursor:pointer;font-family:inherit}
+@media(max-width:680px){.chips{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 <header>
   <a class="brand" href="index.html">Numerimondes</a>
-  <nav class="nav" aria-label="Main navigation">
-    <a href="practice.html">The Practice</a><a href="commissions.html" aria-current="page">Commissions</a><a href="service-inquiry.html">Private Discussion</a><a href="pricing-policy.html">Pricing Policy</a><a href="standards.html">Standards</a>
-    <button class="trigger" id="openDrawer" type="button">Your shortlist <span class="count" id="headerCount">0</span></button>
+  <nav>
+    <a href="services.html" class="active">Services</a>
+    <a href="projects.html">Projects</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
   </nav>
+  <div class="ctrl">
+    <select id="cur" class="cur" aria-label="Currency">
+      <option value="MAD">MAD (DH)</option>
+      <option value="EUR">EUR (€)</option>
+      <option value="USD">USD ($)</option>
+      <option value="GBP">GBP (£)</option>
+      <option value="AED">AED</option>
+      <option value="SAR">SAR</option>
+      <option value="CAD">CAD</option>
+      <option value="CHF">CHF</option>
+    </select>
+    <button class="sl-btn" id="openDrawer">Shortlist <span class="sl-count" id="count">0</span></button>
+  </div>
 </header>
-<main>
-  <span class="kicker">The Practice · Commissioned work</span>
-  <h1>Structured mandates &amp; advisory catalogue</h1>
-  <p class="intro">Commissioned outcomes, scoped with clarity. Select individual deliverables, operational sprints, or retained desks to build your private shortlist. Every engagement is led directly by Numerimondes principals and confirmed in a written proposal.</p>
-  <section class="filters" aria-label="Filter services">
-    <div class="filter-grid">
-      <div class="field"><label for="query">Search services</label><input id="query" type="search" placeholder="Search offers"></div>
-      <div class="field"><label for="category">Category</label><select id="category"><option value="">All categories</option></select></div>
-      <div class="field"><label for="engagement">Engagement</label><select id="engagement"><option value="">All formats</option></select></div>
-      <button class="button" id="apply" type="button">Apply filters</button>
+
+<main class="container">
+  <span class="kicker">Numerimondes Practice · Commissioned Work</span>
+  <h1>Digital assets, systems and teams, built to compound.</h1>
+  <p class="intro">We design and deliver the brand, digital and operating assets that established and growing companies rely on. Fixed scope, fixed fee, partner-led from first brief to handover.</p>
+
+  <div class="spectrum">
+    <div><small>01 · Flagship assets</small><strong>For established groups and institutions</strong><p>Search-engineered platforms, proprietary software and institutional brand doctrine. Mandates from 150,000 MAD.</p></div>
+    <div><small>02 · Revenue force</small><strong>For owner-led businesses that need to sell</strong><p>We recruit the salesperson, install the CRM and supervise the rhythm. The owner keeps control; we supply the method.</p></div>
+    <div><small>03 · Vertical software</small><strong>For sectors still run on paper and spreadsheets</strong><p>One software engine deployed sector by sector: driving schools, private schools, bookshops. Monthly subscription.</p></div>
+  </div>
+
+  <section class="filters" aria-label="Filters">
+    <div class="fgrid">
+      <div class="fg"><label for="q">What do you need?</label><input id="q" type="search" placeholder="e.g. SEO, CRM, brand, hiring"></div>
+      <div class="fg"><label for="fcat">Practice</label>
+        <select id="fcat">
+          <option value="all">All practices</option>
+          <option value="digital">Digital presence &amp; search assets</option>
+          <option value="systems">Business systems &amp; software</option>
+          <option value="brand">Brand identity &amp; doctrine</option>
+          <option value="intel">Advisory &amp; research</option>
+          <option value="recruit">Talent &amp; recruitment</option>
+          <option value="sales">Sales development</option>
+        </select></div>
+      <div class="fg"><label for="ffmt">Engagement type</label>
+        <select id="ffmt">
+          <option value="all">All types</option>
+          <option value="project">Project or asset build</option>
+          <option value="oneoff">Diagnostic or study</option>
+          <option value="recruit">Recruitment mandate</option>
+        </select></div>
     </div>
-    <div class="filter-footer"><label><input id="priced" type="checkbox"> Show offers with listed pricing</label><button class="clear" id="clear" type="button">Clear all filters</button></div>
+    <div class="ffoot">
+      <label class="chk"><input type="checkbox" id="owner"> Owner-managed budgets (under 50,000 MAD)</label>
+      <button class="link-btn" id="clear">Clear filters</button>
+    </div>
   </section>
-  <p id="results" class="label" role="status"></p>
-  <div id="catalogue"></div>
-  <section class="policy">
-    <p>MAD is the catalogue reference currency. Starting prices reflect senior-led architecture and execution; final scope, timelines, and multi-mandate terms are confirmed in a written proposal prior to commencement.</p>
-    <a href="pricing-policy.html">Pricing &amp; engagement policy →</a>
+
+  <div class="meta" id="meta"></div>
+  <div class="nomatch" id="nomatch">
+    <h3>No mandate matches these filters.</h3>
+    <p>Broaden your search, or describe the system, platform or outcome you have in mind.</p>
+    <a class="cta" style="display:inline-block;width:auto" href="contact.html">Discuss a tailored brief →</a>
+  </div>
+  <div id="catalog"></div>
+
+  <section class="commit" style="margin:1rem 0 4rem" id="revenue-force">
+    <span class="kicker">Revenue Force · Owner-led businesses</span>
+    <h2>Hire the salesperson. Install the system. Manage the rhythm.</h2>
+    <p class="intro" style="margin:.8rem 0 0">You carry the salary. We recruit, equip and supervise, so the sales function runs without becoming a second job for the owner.</p>
+    <div class="cgrid g3">
+      <div><small>STEP 1 · RECRUIT</small><h3>Salesperson selection</h3><p>Sourcing, live sales simulations and selection of a field or inside salesperson, through The Best Recruit.</p><p class="gw">46% of one month’s salary, on signature</p></div>
+      <div><small>STEP 2 · EQUIP</small><h3>CRM, scripts and qualified files</h3><p>A configured CRM, qualified prospect files, the sales narrative and a tracking grid.</p><p class="gw"><span data-mad="7500"></span> · one-time setup</p></div>
+      <div><small>STEP 3 · SUPERVISE</small><h3>Weekly commercial direction</h3><p>A partner reviews calls and KPIs each week, coaches the salesperson and reports to the owner.</p><p class="gw"><span data-mad="4500"></span> – <span data-mad="6500"></span> per month</p></div>
+    </div>
+    <div style="margin-top:1.5rem;max-width:320px" id="rfBtn"></div>
   </section>
-  <section class="commitments">
+
+  <section class="bp" id="modules">
+    <div class="bp-h">
+      <span class="kicker">Vertical Software · Early Access</span>
+      <h2>One software engine, deployed sector by sector.</h2>
+      <p>Per-establishment monthly subscription, plus onboarding and data import. Join the waitlist: we prioritise the sectors that respond first.</p>
+    </div>
+    <div class="grid" id="modGrid"></div>
+  </section>
+
+  <section class="bp" id="playbooks">
+    <div class="bp-h">
+      <span class="kicker">Capability Transfer · Executive Playbooks</span>
+      <h2>Keep control of the method. Delegate execution when you choose.</h2>
+      <p>Each Playbook transfers a complete operating architecture (processes, decision grids, selection criteria, scripts and technical structure) with a working session with a partner. If you commission full execution within 30 days, the Playbook fee is credited in full.</p>
+    </div>
+    <div class="grid" id="pbGrid"></div>
+  </section>
+
+  <div class="policy">
+    <p>Prices shown are starting fees in Moroccan dirhams (MAD). International mandates may be invoiced in EUR, USD, GBP or AED by agreement. Fixed-fee engagements are paid in two milestones: 50% at kickoff, 50% on delivery. Scope, deliverables and timeline are confirmed in writing before work begins. Currency conversions are indicative.</p>
+    <a href="pricing.html">Pricing and engagement policy →</a>
+  </div>
+
+  <section class="commit">
     <h2>Our commitments</h2>
-    <div class="commit-grid">
-      <article class="commit"><small>01 · CLARITY</small><h3>Scope agreed first</h3><p>Objectives, responsibilities and terms are confirmed before work begins.</p></article>
-      <article class="commit"><small>02 · PEOPLE</small><h3>A team shaped for the work</h3><p>The specialists involved are chosen around the needs of each assignment.</p></article>
-      <article class="commit"><small>03 · ACCOUNTABILITY</small><h3>One accountable lead</h3><p>Numerimondes coordinates the engagement and remains accountable for its work.</p></article>
-      <article class="commit"><small>04 · TRANSPARENCY</small><h3>Clear next steps</h3><p>Timing, deliverables and fees are set out with you before you commit.</p></article>
+    <div class="cgrid">
+      <div><small>01 · CLARITY</small><h3>Scope fixed upfront</h3><p>Objectives, responsibilities and terms agreed before any work starts.</p></div>
+      <div><small>02 · TEAM</small><h3>A team built for the mandate</h3><p>Specialists are assembled for each engagement, not allocated from a bench.</p></div>
+      <div><small>03 · ACCOUNTABILITY</small><h3>One accountable lead</h3><p>Numerimondes orchestrates the whole and owns the quality of the result.</p></div>
+      <div><small>04 · TRANSPARENCY</small><h3>Clear milestones</h3><p>Timeline, deliverables and fees are detailed and accepted before commitment.</p></div>
     </div>
   </section>
 </main>
+
+<footer>
+  <span>© Numerimondes SARL AU · Casablanca, Morocco</span>
+  <span><a href="client.html">Client area</a><a href="pricing.html">Pricing &amp; engagement</a><a href="tel:+212620990692">+212 620 990 692</a></span>
+</footer>
+
 <div class="backdrop" id="backdrop" aria-hidden="true">
-  <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
-    <div class="drawer-head"><h2 id="drawerTitle">Your shortlist</h2><button class="close" id="closeDrawer" type="button" aria-label="Close">×</button></div>
-    <p class="drawer-desc">Your shortlist stays in sync with the private discussion form.</p>
-    <div class="drawer-list" id="drawerList"></div>
-    <div class="drawer-foot"><a id="drawerCta" href="service-inquiry.html">Continue to a private discussion</a></div>
+  <aside class="drawer" role="dialog" aria-label="Your shortlist">
+    <div class="d-h">
+      <div><span class="kicker" style="margin-bottom:.3rem">Private selection</span><h2>Your shortlist</h2></div>
+      <button class="x" id="closeDrawer" aria-label="Close">×</button>
+    </div>
+    <p class="d-desc">Add or remove mandates here or from any card. Your selection travels with you to the private enquiry form.</p>
+    <div class="items" id="items"></div>
+    <div class="d-f">
+      <div class="total"><span>Indicative total (one-time starting fees)</span><span id="total">—</span></div>
+      <a class="cta" id="ctaLink" href="contact.html">Request a private discussion →</a>
+    </div>
   </aside>
 </div>
+
+<div class="backdrop center" id="detailBd" aria-hidden="true"><div class="modal" id="detail" role="dialog"></div></div>
+
+<div class="backdrop center" id="welcomeBd" aria-hidden="true">
+  <div class="modal" role="dialog" aria-label="Welcome">
+    <span class="kicker">Welcome to Numerimondes</span>
+    <h2>Two quick choices to tailor this page.</h2>
+    <div class="fg" style="margin-bottom:1rem"><label for="wCur">Display prices in</label>
+      <select id="wCur"><option value="MAD">MAD (DH)</option><option value="EUR">EUR (€)</option><option value="USD">USD ($)</option><option value="GBP">GBP (£)</option><option value="AED">AED</option><option value="SAR">SAR</option><option value="CAD">CAD</option><option value="CHF">CHF</option></select></div>
+    <div class="fg"><label>What brings you here?</label></div>
+    <div class="chips" id="chips">
+      <button class="chip" data-i="revenue">Grow sales and revenue</button>
+      <button class="chip" data-i="digital">Build a digital asset or platform</button>
+      <button class="chip" data-i="brand">Structure brand and operations</button>
+      <button class="chip" data-i="recruit">Hire talent</button>
+    </div>
+    <button class="cta cta-btn" id="wGo">View services</button>
+  </div>
+</div>
+
 <script>
+/* ADAPTATION NOTES FOR IMPLEMENTERS
+ * EXT = extensions. Each has visibility:"detail-only": they are NEVER rendered in the main catalog.
+ * The catalog card only shows "Configurable · N extensions available"; extensions appear in the detail view
+ * of the parent mandate, where they can be added to the shortlist as separate items (id prefix "x-").
+ * Pricing model: one-time fixed fee (50% kickoff / 50% delivery) by default. Monthly pricing is reserved for
+ * continuous operations only (vertical software subscriptions and weekly sales supervision).
+ * First visit: a welcome dialog sets currency and intent. Storage key: nm_visited (localStorage). */
 (function(){
-  'use strict';
-  var key='nm_private_shortlist';
-  var offers=[
-    {id:'brand-book',category:'Brand identity',title:'Brand Book',price:'From 39 000 MAD',format:'Fixed scope',meta:'4–5 weeks · extended identity system',scope:'Complete institutional positioning, verbal architecture, typography, visual grammar, and governance manual.'},
-    {id:'brand-kit-complete',category:'Brand identity',title:'Brand Kit · Complete',price:'From 18 000 MAD',format:'Fixed scope',meta:'3 weeks · full core visual identity',scope:'Primary and secondary marks, color architecture, editorial templates, and executive presentation collateral.'},
-    {id:'brand-kit-essential',category:'Brand identity',title:'Brand Kit · Essential',price:'From 12 000 MAD',format:'Fixed scope',meta:'2 weeks · foundational identity',scope:'Focused visual foundation, logotype, typographic pairing, and core digital stationery for new initiatives.'},
-    {id:'workflow-automation',category:'Business systems',title:'Workflow automation sprint',price:'From 20 000 MAD',format:'Fixed scope',meta:'3–5 workflows · scoped build',scope:'Eliminate manual operational bottlenecks by connecting internal tools, approvals, and reporting pipelines.'},
-    {id:'crm-client-portal',category:'Business systems',title:'CRM & client portal setup',price:'From 25 000 MAD',format:'Fixed scope',meta:'4 weeks · bespoke architecture',scope:'Structured commercial pipeline, client onboarding environment, and single-source operational visibility.'},
-    {id:'business-website',category:'Digital presence',title:'Business website',price:'From 25 000 MAD',format:'Fixed scope',meta:'5–6 pages · 3–4 weeks',scope:'High-craft institutional flagship engineered for clarity, speed, editorial authority, and conversion.'},
-    {id:'operations-audit',category:'Operations advisory',title:'Operations audit',price:'4 900 MAD · credited toward a qualifying Desk started within 30 days',format:'Fixed scope',meta:'Diagnostic & roadmap · 10 days',scope:'Senior diagnostic of workflows, cost leaks, and organizational friction with an actionable execution brief.'},
-    {id:'tbr-executive',category:'Remote recruitment',title:'The Best Recruit · Executive & Director Search',price:'46% of the recruited candidate’s monthly salary',format:'Search & Placement',meta:'Direct headhunting & vetting',scope:'Targeted search and multi-stage assessment for senior leadership, directors, and key functional heads.'},
-    {id:'tbr-admin-ops',category:'Remote recruitment',title:'The Best Recruit · Administrative & Operations',price:'46% of the recruited candidate’s monthly salary',format:'Search & Placement',meta:'Individually vetted operators',scope:'Qualification and placement of high-reliability executive assistants, coordinators, and operations managers.'},
-    {id:'tbr-execution',category:'Remote recruitment',title:'The Best Recruit · Execution & Handling',price:'46% of the recruited candidate’s monthly salary',format:'Search & Placement',meta:'Specialized remote talent',scope:'Vetted specialists for customer operations, back-office handling, and structured daily execution.'},
-    {id:'revenue-desk-pilot',category:'Sales development',title:'Revenue Desk · 30-day pilot',price:'9 900 MAD one time',format:'Fixed scope',meta:'30-day validation sprint',scope:'Controlled outbound market test to validate messaging, ICP responsiveness, and pipeline economics.'},
-    {id:'revenue-desk-growth',category:'Sales development',title:'Revenue Desk · Growth',price:'From 19 900 MAD per month',format:'Monthly Desk / Retainer',meta:'Dedicated commercial desk',scope:'Ongoing account intelligence, targeted outreach, and qualified meeting generation managed end-to-end.'},
-    {id:'revenue-desk-scale',category:'Sales development',title:'Revenue Desk · Scale',price:'From 39 000 MAD per month',format:'Monthly Desk / Retainer',meta:'Multi-market commercial team',scope:'Full-cycle outbound infrastructure, multi-channel executive prospecting, and CRM pipeline governance.'}
+  var RATES={MAD:1,EUR:0.092,USD:0.108,GBP:0.079,AED:0.397,SAR:0.405,CAD:0.150,CHF:0.087};
+  var SYM={MAD:"MAD",EUR:"€",USD:"$",GBP:"£",AED:"AED",SAR:"SAR",CAD:"CA$",CHF:"CHF"};
+  var CATS={brand:"Brand identity & doctrine",digital:"Digital presence & search assets",systems:"Business systems & software",intel:"Advisory & research",recruit:"Talent & recruitment",sales:"Sales development"};
+  var FMT={project:"Project",oneoff:"Diagnostic / study",recruit:"Mandate"};
+  var TERMS="Fixed fee · 50% at kickoff, 50% on delivery";
+  var OFFERS=[
+   {id:"brand-core",cat:"brand",fmt:"project",tier:"Foundation",name:"Core Identity Mandate",price:24000,scope:"Visual foundations to launch or structure a serious business, without excess.",deliv:"Logo system · typography · palette · production files · usage guide"},
+   {id:"brand-system",cat:"brand",fmt:"project",tier:"System",name:"Brand System & Verbal Architecture",price:48000,scope:"A complete identity, editorial voice and operating assets, ready for teams to apply.",deliv:"Full identity · verbal territory · templates · usage kit"},
+   {id:"brand-doctrine",cat:"brand",fmt:"project",tier:"Institutional",name:"Institutional Brand Doctrine",price:85000,flag:1,scope:"End-to-end brand governance, strategic doctrine and a documented system for groups and houses.",deliv:"Doctrine · brand book · governance model · multi-entity rollout"},
+   {id:"dig-flagship",cat:"digital",fmt:"project",tier:"Executive",name:"Executive Flagship",price:45000,scope:"A five-to-six-page institutional presence, delivered in three weeks, to establish credibility immediately.",deliv:"5–6 pages · bespoke design · performance engineering · launch"},
+   {id:"dig-cocon",cat:"digital",fmt:"project",tier:"Flagship asset",name:"Search-Engineered Commercial Asset",price:150000,flag:1,scope:"Bespoke architecture, dedicated backend, expert copy and a full semantic cluster (pillar page plus themed satellites), engineered to rank and generate proprietary traffic.",deliv:"Semantic cluster · custom backend · expert content · internal and external linking · technical SEO"},
+   {id:"dig-multi",cat:"digital",fmt:"project",tier:"Programme",name:"Multi-Market Search Authority Programme",price:320000,flag:1,scope:"Coordinated search assets across countries, languages or verticals, with a semantic cluster per market and central editorial governance.",deliv:"2+ clusters · multilingual · shared backend · 12-month editorial plan"},
+   {id:"sys-sprint",cat:"systems",fmt:"project",tier:"Sprint",name:"Operational Workflow Sprint",price:35000,scope:"Targeted automation of three to five critical workflows on the tools you already use.",deliv:"Process mapping · 3–5 automations · documentation · handover"},
+   {id:"sys-crm",cat:"systems",fmt:"project",tier:"Infrastructure",name:"CRM & Client Portal Infrastructure",price:65000,scope:"A bespoke sales pipeline and client portal, connected to your existing tools.",deliv:"CRM · client portal · roles and access · integrations"},
+   {id:"sys-saas",cat:"systems",fmt:"project",tier:"Platform",name:"Proprietary SaaS & Platform Engineering",price:280000,flag:1,scope:"Design, backend architecture (Rust, cloud) and deployment of complete software products.",deliv:"Architecture · Rust backend · front end · cloud infrastructure · deployment"},
+   {id:"sys-ent",cat:"systems",fmt:"project",tier:"Enterprise",name:"Enterprise Data & Platform Programme",price:520000,flag:1,scope:"An organisation-scale business platform: data, integrations, security, governance and a dedicated delivery team.",deliv:"Target architecture · platform · IS integrations · security · run"},
+   {id:"intel-diag",cat:"intel",fmt:"oneoff",tier:"Diagnostic",name:"Executive Operations Diagnostic",price:4900,scope:"A 90-minute working session and a written action plan, credited against any subsequent mandate.",deliv:"90-minute session · written action plan",terms:"Fixed fee · due before the session"},
+   {id:"intel-study",cat:"intel",fmt:"oneoff",tier:"Study",name:"Primary Market & Sector Intelligence Study",price:65000,scope:"Field research, verified expert interviews and a benchmark ahead of a major investment.",deliv:"Expert interviews · benchmark · decision report · debrief"},
+   {id:"intel-dd",cat:"intel",fmt:"oneoff",tier:"Audit",name:"Technical & Vendor Due Diligence",price:14500,scope:"An independent review before you sign an expensive quote with an agency or software vendor.",deliv:"Quote review · technical risks · counter-estimate · recommendation"},
+   {id:"rec-ops",cat:"recruit",fmt:"recruit",tier:"Execution & admin",name:"The Best Recruit · Execution & Admin",ptxt:"46% of monthly salary",terms:"Due on signature of the hire",scope:"Fast recruitment of qualified operational and support profiles, remote or on site.",deliv:"Sourcing · assessments · interviews · supported probation"},
+   {id:"rec-exec",cat:"recruit",fmt:"recruit",tier:"Executive",name:"The Best Recruit · Executive & Director Search",ptxt:"46% of monthly salary",terms:"Due on signature of the hire",flag:1,scope:"Confidential executive search and in-depth assessment of senior leaders.",deliv:"Market mapping · direct approach · assessed shortlist · onboarding"},
+   {id:"sales-desk",cat:"sales",fmt:"project",tier:"Programme",name:"Revenue Desk · 90-Day Programme",price:59000,scope:"A dedicated outbound desk that tests your market, builds the sequences and delivers a documented pipeline.",deliv:"Targeting · sequences · appointment setting · weekly reporting · final report"}
   ];
-  var byId={};offers.forEach(function(o){byId[o.id]=o});
-  var $=function(id){return document.getElementById(id)};
-  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-  function list(){try{var v=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(v)?v.filter(function(id){return !!byId[id]}):[]}catch(e){return []}}
-  function save(v){localStorage.setItem(key,JSON.stringify(v));render();draw()}
-  function toggle(id){var a=list(),i=a.indexOf(id);if(i<0)a.push(id);else a.splice(i,1);save(a)}
-  var cats=[],formats=[];offers.forEach(function(o){if(cats.indexOf(o.category)<0)cats.push(o.category);if(formats.indexOf(o.format)<0)formats.push(o.format)});
-  cats.forEach(function(v){$('category').insertAdjacentHTML('beforeend','<option>'+esc(v)+'</option>')});
-  formats.forEach(function(v){$('engagement').insertAdjacentHTML('beforeend','<option>'+esc(v)+'</option>')});
-  function render(){
-    var q=$('query').value.trim().toLowerCase(),cat=$('category').value,fmt=$('engagement').value,priced=$('priced').checked,saved=list();
-    var filtered=offers.filter(function(o){return (!q||(o.title+' '+o.scope+' '+o.category).toLowerCase().indexOf(q)>=0)&&(!cat||o.category===cat)&&(!fmt||o.format===fmt)&&(!priced||!!o.price)});
-    $('results').textContent=filtered.length+' '+(filtered.length===1?'offer':'offers');
-    var html='';
-    cats.forEach(function(c){var items=filtered.filter(function(o){return o.category===c});if(!items.length)return;
-      html+='<section class="category"><div class="category-head"><h2>'+esc(c)+'</h2><span>'+items.length+' '+(items.length===1?'offer':'offers')+'</span></div><div class="grid">';
-      items.forEach(function(o){var added=saved.indexOf(o.id)>=0;html+='<article class="offer"><div class="visual"><span>'+esc(o.category)+'</span></div><div class="offer-body"><h3>'+esc(o.title)+'</h3><p class="scope">'+esc(o.scope)+'</p><p class="price">'+esc(o.price)+'</p><p class="status">Available to enquire · '+esc(o.meta)+'</p><div class="offer-actions"><a href="service-inquiry.html?offer='+encodeURIComponent(o.id)+'">View offer</a><button type="button" data-toggle="'+esc(o.id)+'" aria-pressed="'+(added?'true':'false')+'">'+(added?'In shortlist ✓':'Add to shortlist')+'</button></div></div></article>'});
-      html+='</div></section>';
+  var EXT={
+   "brand-system":[{id:"x-brand-kit",name:"Social and motion template kit",price:12000}],
+   "brand-doctrine":[{id:"x-brand-multi",name:"Multi-entity brand architecture",price:30000}],
+   "dig-flagship":[{id:"x-flag-bi",name:"Arabic and English bilingual build",price:12000},{id:"x-flag-lead",name:"Booking and lead-capture integration",price:9000}],
+   "dig-cocon":[{id:"x-cocon-10",name:"10-page expert cluster",price:25000,desc:"A new themed cluster to capture an additional vertical."},{id:"x-cocon-ml",name:"Multilingual pack",price:40000,desc:"Cluster localised into a second language."},{id:"x-cocon-links",name:"Authority link-building programme",price:35000}],
+   "dig-multi":[{id:"x-multi-mkt",name:"Additional market cluster",price:90000},{id:"x-multi-gov",name:"12-month editorial governance",price:60000}],
+   "sys-sprint":[{id:"x-sprint-flow",name:"Additional workflow automation",price:9000,desc:"Per workflow."},{id:"x-sprint-train",name:"Team onboarding and training",price:6000}],
+   "sys-crm":[{id:"x-crm-int",name:"Additional system integration",price:12000},{id:"x-crm-app",name:"White-label client mobile app",price:55000}],
+   "sys-saas":[{id:"x-saas-admin",name:"Admin and analytics console",price:45000},{id:"x-saas-pay",name:"Payments and subscription billing",price:30000},{id:"x-saas-sec",name:"Security and penetration review",price:25000}],
+   "sys-ent":[{id:"x-ent-team",name:"Dedicated delivery team, per quarter",price:150000}],
+   "intel-study":[{id:"x-study-geo",name:"Additional sector or geography",price:30000}],
+   "sales-desk":[{id:"x-desk-seg",name:"Additional target segment",price:20000},{id:"x-desk-mo",name:"Continue as a monthly desk",price:19900,monthly:1,desc:"Billed monthly after the programme."}]
+  };
+  var PLAY=[
+   {id:"pb-sem",name:"Semantic Authority Blueprint",price:19000,target:"SMEs and e-commerce brands that want to win on Google without paying for ads indefinitely.",deliv:"Cluster map (1 pillar, 15–25 satellites) · internal linking plan · writing briefs · technical audit",gw:"Search-Engineered Commercial Asset"},
+   {id:"pb-rem",name:"Remote Operations & Hiring Blueprint",price:15000,target:"Leaders who want to hire and manage remotely without chaos.",deliv:"Candidate scorecards · interview grids · onboarding SOPs · weekly operating rhythm",gw:"The Best Recruit"},
+   {id:"pb-out",name:"Outbound & Pipeline Blueprint",price:16500,target:"B2B firms and practices that sign only through word of mouth.",deliv:"ICP definition · outreach sequences · qualification scripts · CRM structure",gw:"Revenue Desk · 90-Day Programme"},
+   {id:"pb-saas",name:"Software & SaaS Scoping Blueprint",price:29000,target:"Founders and large accounts before committing 300,000 MAD or more to development.",deliv:"Functional architecture · stack choice (Rust, cloud) · data model · costing · roadmap",gw:"Proprietary SaaS & Platform Engineering"},
+   {id:"pb-brand",name:"Brand Positioning & Doctrine Blueprint",price:18000,target:"Companies whose image no longer reflects the real level of their service.",deliv:"Brand platform · competitive positioning · offer architecture · editorial line",gw:"Institutional Brand Doctrine"}
+  ];
+  var MODS=[
+   {id:"mod-auto",name:"Driving Schools Module",price:690,scope:"Candidate records, driving-lesson scheduling, exam tracking, payments and automated reminders."},
+   {id:"mod-school",name:"Private Schools & Training Centres Module",price:990,scope:"Enrolment, monthly invoicing, absence tracking, parent portal and communication."},
+   {id:"mod-book",name:"Bookshops & Trade Module",price:790,scope:"Multi-reference stock, fast checkout, supplier orders and a synchronised online catalogue."}
+  ];
+  var RF={id:"sales-force",name:"Revenue Force · Recruit, Equip, Supervise",price:7500,monthly_note:1};
+  var ALL={};
+  OFFERS.forEach(function(o){ALL[o.id]=o;});
+  PLAY.forEach(function(o){o.kind="Playbook";ALL[o.id]=o;});
+  MODS.forEach(function(o){o.kind="Subscription";o.sub=1;ALL[o.id]=o;});
+  RF.kind="Revenue Force";ALL[RF.id]=RF;
+  Object.keys(EXT).forEach(function(k){EXT[k].forEach(function(x){x.parent=k;x.kind="Extension";x.visibility="detail-only";ALL[x.id]=x;});});
+
+  var cur="MAD",sel=[];
+  try{sel=JSON.parse(localStorage.getItem("nm_shortlist")||"[]").filter(function(i){return ALL[i];});}catch(e){}
+  try{var c0=localStorage.getItem("nm_currency");if(c0&&RATES[c0])cur=c0;}catch(e){}
+  var $=function(id){return document.getElementById(id);};
+  $("cur").value=cur;
+  function fmt(m){var v=m*RATES[cur],r=m>=10000?(cur==="MAD"?Math.round(v/500)*500:Math.round(v/10)*10):Math.round(v);return r.toLocaleString("en-GB")+" "+SYM[cur];}
+  function esc(x){return String(x).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+  function save(){try{localStorage.setItem("nm_shortlist",JSON.stringify(sel));}catch(e){}}
+  function btn(id,on,done){var a=sel.indexOf(id)>-1;return '<button class="b-add'+(a?" added":"")+'" data-id="'+id+'">'+(a?done:on)+"</button>";}
+  function priceLine(o){return o.ptxt||("From "+fmt(o.price));}
+  function cardHTML(o){
+    var n=(EXT[o.id]||[]).length;
+    return '<article class="card'+(o.flag?" flag":"")+'"><div class="body"><div class="top"><span class="tag">'+esc(FMT[o.fmt])+'</span><span class="tier">'+esc(o.tier)+'</span></div><h3 class="title">'+esc(o.name)+'</h3><p class="scope">'+esc(o.scope)+'</p><div class="deliv">'+esc(o.deliv)+'</div>'+(n?'<div class="conf">Configurable · '+n+(n>1?" extensions":" extension")+' available</div>':'')+'<div class="price">'+priceLine(o)+'</div><div class="status">'+(o.terms||TERMS)+'</div><div class="actions"><button class="b-out" data-detail="'+o.id+'">Details</button>'+btn(o.id,"+ Shortlist","✓ In shortlist")+"</div></div></article>";
+  }
+  function filtered(){
+    var q=$("q").value.trim().toLowerCase(),c=$("fcat").value,f=$("ffmt").value,own=$("owner").checked;
+    return OFFERS.filter(function(o){
+      if(c!=="all"&&o.cat!==c)return false;if(f!=="all"&&o.fmt!==f)return false;
+      if(own&&o.price&&o.price>=50000)return false;
+      if(q&&(o.name+" "+o.scope+" "+o.deliv+" "+CATS[o.cat]).toLowerCase().indexOf(q)<0)return false;
+      return true;});
+  }
+  function renderCatalog(){
+    var list=filtered(),h="";
+    $("meta").textContent=list.length+(list.length===1?" mandate":" mandates");
+    $("nomatch").style.display=list.length?"none":"block";
+    Object.keys(CATS).forEach(function(k){
+      var g=list.filter(function(o){return o.cat===k;});if(!g.length)return;
+      h+='<section class="cat"><div class="cat-h"><h2>'+esc(CATS[k])+"</h2><span>"+g.length+(g.length>1?" mandates":" mandate")+'</span></div><div class="grid">'+g.map(cardHTML).join("")+"</div></section>";});
+    $("catalog").innerHTML=h;
+  }
+  function renderBlocks(){
+    $("rfBtn").innerHTML=btn(RF.id,"+ Add Revenue Force to shortlist","✓ In shortlist");
+    $("modGrid").innerHTML=MODS.map(function(m){return '<article class="bp-card"><div><span class="study">Waitlist open · Early access</span><h3>'+esc(m.name)+"</h3><p>"+esc(m.scope)+'</p><p class="note">Onboarding and data import: '+fmt(1500)+" – "+fmt(3000)+'</p></div><div class="bp-f"><strong>From '+fmt(m.price)+" / month</strong>"+btn(m.id,"Join waitlist","✓ On waitlist")+"</div></article>";}).join("");
+    $("pbGrid").innerHTML=PLAY.map(function(b){return '<article class="bp-card"><div><span class="study">Credited in full within 30 days</span><h3>'+esc(b.name)+'</h3><p>'+esc(b.target)+'</p><div class="deliv">'+esc(b.deliv)+'</div><p class="via">Leads to: '+esc(b.gw)+'</p></div><div class="bp-f"><strong>'+fmt(b.price)+"</strong>"+btn(b.id,"+ Shortlist","✓ Added")+"</div></article>";}).join("");
+    document.querySelectorAll("[data-mad]").forEach(function(e){e.textContent=fmt(+e.getAttribute("data-mad"));});
+  }
+  function renderDrawer(){
+    $("count").textContent=sel.length;
+    if(!sel.length){$("items").innerHTML='<div class="empty">Your shortlist is empty. Add mandates to prepare a private discussion with our partners.</div>';$("total").textContent="—";$("ctaLink").href="contact.html";return;}
+    var sum=0;
+    $("items").innerHTML=sel.map(function(id){var o=ALL[id],sub=o.sub||o.monthly,line;
+      if(o.price&&!sub)sum+=o.price;
+      line=o.sub?"From "+fmt(o.price)+" / month":o.monthly?fmt(o.price)+" / month":o.ptxt?o.ptxt:(o.id==="sales-force"?"Setup "+fmt(o.price)+" + weekly supervision":"From "+fmt(o.price));
+      var lab=o.parent?"Extension · "+ALL[o.parent].name:(CATS[o.cat]||o.kind);
+      return '<div class="item"><div><small>'+esc(lab)+"</small><strong>"+esc(o.name)+"</strong><span>"+esc(line)+'</span></div><button class="rm" data-rm="'+id+'">Remove</button></div>';}).join("");
+    $("total").textContent=sum?fmt(sum):"—";
+    $("ctaLink").href="contact.html?shortlist="+encodeURIComponent(sel.join(","));
+  }
+  function openDetail(id){
+    var o=ALL[id],ex=EXT[id]||[],h='<span class="kicker">'+esc(CATS[o.cat])+'</span><h2>'+esc(o.name)+'</h2><p>'+esc(o.scope)+'</p><div class="deliv">'+esc(o.deliv)+'</div><div class="price" style="margin-top:1rem">'+priceLine(o)+'</div><div class="status">'+(o.terms||TERMS)+'</div><div id="dMain">'+btn(id,"+ Add to shortlist","✓ In shortlist")+'</div>';
+    if(ex.length){h+='<div class="ext-h">Configurable · '+ex.length+(ex.length>1?" extensions":" extension")+' available</div>'+ex.map(function(x){return '<div class="ext"><div><strong>'+esc(x.name)+'</strong>'+(x.desc?'<small>'+esc(x.desc)+'</small>':'')+'<small>+ '+fmt(x.price)+(x.monthly?" / month":"")+'</small></div>'+btn(x.id,"+ Add","✓ Added")+'</div>';}).join("");}
+    h+='<button class="link-btn" style="margin-top:1.5rem" data-close="detailBd">Close</button>';
+    $("detail").innerHTML=h;show("detailBd");
+  }
+  function show(id){$(id).classList.add("open");$(id).setAttribute("aria-hidden","false");}
+  function hide(id){$(id).classList.remove("open");$(id).setAttribute("aria-hidden","true");}
+  var openedDetail=null;
+  function renderAll(){renderCatalog();renderBlocks();renderDrawer();if($("detailBd").classList.contains("open")&&openedDetail)openDetail(openedDetail);}
+  function toggle(id){var i=sel.indexOf(id);if(i>-1)sel.splice(i,1);else sel.push(id);save();renderAll();}
+  document.addEventListener("click",function(e){
+    var d=e.target.closest("[data-detail]");if(d){openedDetail=d.getAttribute("data-detail");openDetail(openedDetail);return;}
+    var cl=e.target.closest("[data-close]");if(cl){hide(cl.getAttribute("data-close"));openedDetail=null;return;}
+    var a=e.target.closest("[data-id]");if(a){toggle(a.getAttribute("data-id"));return;}
+    var r=e.target.closest("[data-rm]");if(r)toggle(r.getAttribute("data-rm"));});
+  $("cur").addEventListener("change",function(){cur=this.value;try{localStorage.setItem("nm_currency",cur);}catch(e){}renderAll();});
+  ["q","fcat","ffmt","owner"].forEach(function(id){$(id).addEventListener("input",renderCatalog);$(id).addEventListener("change",renderCatalog);});
+  $("clear").addEventListener("click",function(){$("q").value="";$("fcat").value="all";$("ffmt").value="all";$("owner").checked=false;renderCatalog();});
+  $("openDrawer").addEventListener("click",function(){show("backdrop");});
+  $("closeDrawer").addEventListener("click",function(){hide("backdrop");});
+  ["backdrop","detailBd"].forEach(function(id){$(id).addEventListener("click",function(e){if(e.target===this){hide(id);openedDetail=null;}});});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"){["backdrop","detailBd","welcomeBd"].forEach(hide);}});
+
+  /* First visit */
+  var intent=null;
+  function visited(){try{return !!localStorage.getItem("nm_visited");}catch(e){return false;}}
+  if(!visited()){
+    var reg=((navigator.language||"").split("-")[1]||"").toUpperCase(),map={MA:"MAD",FR:"EUR",DE:"EUR",ES:"EUR",IT:"EUR",BE:"EUR",NL:"EUR",PT:"EUR",US:"USD",GB:"GBP",AE:"AED",SA:"SAR",CA:"CAD",CH:"CHF"};
+    $("wCur").value=map[reg]||cur;show("welcomeBd");
+    $("chips").addEventListener("click",function(e){var b=e.target.closest(".chip");if(!b)return;intent=b.getAttribute("data-i");document.querySelectorAll(".chip").forEach(function(c){c.classList.toggle("on",c===b);});});
+    $("wGo").addEventListener("click",function(){
+      cur=$("wCur").value;$("cur").value=cur;
+      try{localStorage.setItem("nm_visited","1");localStorage.setItem("nm_currency",cur);}catch(e){}
+      hide("welcomeBd");
+      if(intent==="digital"||intent==="brand"||intent==="recruit"){$("fcat").value=intent;}
+      renderAll();
+      var t=intent==="revenue"?$("revenue-force"):(intent?$("meta"):null);
+      if(t)t.scrollIntoView({behavior:"smooth",block:"start"});
     });
-    $('catalogue').innerHTML=html||'<p>No offers match these filters.</p>';
-    $('catalogue').querySelectorAll('[data-toggle]').forEach(function(b){b.addEventListener('click',function(){toggle(b.getAttribute('data-toggle'))})});
-    $('headerCount').textContent=saved.length;
   }
-  function draw(){
-    var saved=list(),target=$('drawerList'),cta=$('drawerCta');
-    if(!saved.length){target.innerHTML='<div class="empty">Your shortlist is empty. Save an offer that feels relevant, and we can consider it together.</div>';cta.textContent='Explore commissions';cta.href='#catalogue';return}
-    target.innerHTML=saved.map(function(id){var o=byId[id];return '<div class="saved"><div><small>'+esc(o.category)+'</small><strong>'+esc(o.title)+'</strong><span>'+esc(o.price)+'</span></div><button type="button" data-remove="'+esc(id)+'">Remove</button></div>'}).join('');
-    target.querySelectorAll('[data-remove]').forEach(function(b){b.addEventListener('click',function(){toggle(b.getAttribute('data-remove'))})});
-    cta.textContent='Request a private discussion ('+saved.length+')';cta.href='service-inquiry.html';
-  }
-  ['query','category','engagement','priced'].forEach(function(id){$(id).addEventListener(id==='query'?'input':'change',render)});
-  $('apply').addEventListener('click',render);
-  $('clear').addEventListener('click',function(){$('query').value='';$('category').value='';$('engagement').value='';$('priced').checked=false;render()});
-  $('openDrawer').addEventListener('click',function(){$('backdrop').classList.add('open');$('backdrop').setAttribute('aria-hidden','false');draw()});
-  $('closeDrawer').addEventListener('click',function(){$('backdrop').classList.remove('open');$('backdrop').setAttribute('aria-hidden','true')});
-  $('backdrop').addEventListener('click',function(e){if(e.target===$('backdrop'))$('closeDrawer').click()});
-  window.addEventListener('storage',function(e){if(e.key===key){render();draw()}});
-  render();draw();
+  renderAll();
 })();
 </script>
 </body>

@@ -18,18 +18,16 @@
 @endphp
 <style>
 .nm-marketplace-card.is-removing { opacity: 0; transform: translateY(5px); }
+.nm-marketplace-card:hover { transform: translateY(-2px); }
 .nm-marketplace-card-link:hover .nm-marketplace-card-image { transform: scale(1.018); }
 .nm-marketplace-card-modal-content > a:hover { text-decoration: underline; text-underline-offset: .2em; }
 
 @media (max-width: 700px) {
   .nm-marketplace-card-image-wrap { aspect-ratio:1.8 !important; }
-  .nm-marketplace-card-content { min-height:125px !important; padding:16px !important; }
+  .nm-marketplace-card-content { padding:16px !important; }
+  .nm-marketplace-card-status { font-size:8px !important; }
+  .nm-marketplace-card-heading h3 { font-size:18px !important; }
   .nm-marketplace-card-footer { padding:0 16px 16px !important; }
-  .nm-marketplace-card-category,
-  .nm-marketplace-card-status,
-  .nm-marketplace-card-cta { font-size:8px !important; }
-  .nm-marketplace-card-heading h2 { font-size:12px !important; }
-  .nm-marketplace-card-price { font-size:14px !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -39,13 +37,13 @@
 </style>
 <x-webkernel-platform::section
     :class="$card_classes"
-    :has-content-el="false"
+    style="min-width:0;overflow:hidden;border-radius:var(--radius-md,.375rem)"
     :data-engagement="$engagement_slug"
     :data-priced="$is_priced"
     :data-search="$search_text"
 >
     <a class="nm-marketplace-card-link" href="{{ $service['href'] }}" style="position:relative;height:100%;display:flex;flex-direction:column;color:var(--nm-ink);text-decoration:none">
-        <div class="nm-marketplace-card-image-wrap" style="aspect-ratio:2.15;overflow:hidden;background:#e7e3db">
+        <div class="nm-marketplace-card-image-wrap" style="position:relative;min-height:125px;aspect-ratio:2.15;overflow:hidden;background:linear-gradient(135deg,#e2e8f0,#f8fafc)">
             <img
                 class="nm-marketplace-card-image"
                 src="{{ $service['image'] }}"
@@ -55,34 +53,25 @@
                 loading="lazy"
                 style="display:block;width:100%;height:100%;object-fit:cover;transition:transform .55s ease"
             >
+            <span style="position:absolute;left:16px;bottom:14px;z-index:1">
+                <x-webkernel-platform::badge color="gray" size="sm">{{ $service['category'] }}</x-webkernel-platform::badge>
+            </span>
         </div>
-        <div class="nm-marketplace-card-content" style="min-height:132px;padding:17px 20px 16px;display:flex;flex:1;flex-direction:column;justify-content:space-between;gap:12px">
-            <div class="nm-marketplace-card-heading">
-                <p class="nm-marketplace-card-category" style="margin:0;font:400 10px/1.35 var(--nm-body);letter-spacing:.14em;text-transform:uppercase">{{ $service['category'] }}</p>
-                <h2 style="margin:7px 0 0;font:400 13px/1.3 var(--nm-title);letter-spacing:.08em;text-transform:uppercase">{{ $service['name'] }}</h2>
-                @if (! empty($service['price_display']))
-                    <p class="nm-marketplace-card-price" style="margin:7px 0 0;font:400 12px/1.35 var(--nm-body)">{{ $service['price_display'] }}</p>
-                @endif
-            </div>
+        <div class="nm-marketplace-card-content" style="padding:20px;display:flex;flex:1;flex-direction:column;gap:12px">
+            <h3 class="nm-marketplace-card-heading" style="margin:0;font:400 var(--nm-text-leading)/1.25 var(--nm-title);letter-spacing:.01em">{{ $service['name'] }}</h3>
+            <p class="nm-marketplace-card-scope" style="flex:1;margin:0 0 8px;color:var(--text-secondary,#475569);font:400 var(--nm-text-size)/1.5 var(--nm-body)">{{ $service['card_description'] }}</p>
+            @if (! empty($service['price_display']))
+                <p class="nm-marketplace-card-price" style="margin:0;padding-top:13px;border-top:1px solid var(--border-subtle,#e2e8f0);font:600 14px/1.4 var(--nm-body)">{{ $service['price_display'] }}</p>
+            @endif
         </div>
     </a>
-    <div class="nm-marketplace-card-footer" style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0 20px 16px">
-        <span class="nm-marketplace-card-status" style="margin:0;color:#74716b;font:400 10px/1.35 var(--nm-body);letter-spacing:.14em;text-transform:uppercase">{{ $service['status'] }}</span>
-        <div class="nm-marketplace-card-actions" style="display:flex;align-items:center;gap:9px">
-            <a class="nm-marketplace-card-cta" href="{{ $service['href'] }}" style="display:inline-flex;align-items:center;gap:5px;white-space:nowrap;font:400 10px/1.35 var(--nm-body);letter-spacing:.14em;text-decoration:none;text-transform:uppercase">View offer <x-webkernel::icon icon="arrow-up-right" set="lucide" width="14" height="14" class="nm-icon-arrow" aria-hidden="true" /></a>
-            <x-webkernel-platform::icon-button
-                :icon="\Webkernel\Platform\Support\Icons\Heroicon::OutlinedInformationCircle"
-                :label="'Details for '.$service['name']"
-                tooltip="View offer details"
-                color="gray"
-                size="sm"
-                style="width:30px;height:30px;min-width:30px"
-                x-on:click="$el.closest('.nm-marketplace-card').querySelector('.fi-modal').dispatchEvent(new CustomEvent('open-modal'))"
-            />
+    <div class="nm-marketplace-card-footer" style="display:grid;gap:12px;padding:0 20px 20px">
+        <p class="nm-marketplace-card-status" style="margin:0;color:#065f46;font:400 13px/1.4 var(--nm-body)">{{ $service['status'] }} · {{ $service['format'] }}</p>
+        <div class="nm-marketplace-card-actions" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <x-webkernel-platform::button tag="a" :href="$service['href']" color="gray" size="sm" style="width:100%;justify-content:center">View offer</x-webkernel-platform::button>
+            <x-webkernel-platform::button type="button" color="primary" size="sm" style="width:100%;justify-content:center" x-on:click="$el.closest('.nm-marketplace-card').querySelector('.fi-modal').dispatchEvent(new CustomEvent('open-modal'))">Details</x-webkernel-platform::button>
         </div>
     </div>
-    <x-studio::shortlist-button :service="$service" />
-
     <x-webkernel-platform::modal :heading="$service['name']" :description="$service['category']" width="lg">
         <div class="nm-marketplace-card-modal-content" style="display:grid;gap:16px">
             <p style="margin:0;font:400 16px/1.5 var(--nm-body)">{{ $service['card_description'] }}</p>
