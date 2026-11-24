@@ -10,6 +10,10 @@ Route::post('/service-inquiry/project/remove', [\App\Studio\Http\ServiceInquiryC
 Route::post('/service-inquiry', [\App\Studio\Http\ServiceInquiryController::class, 'submit']);
 Route::post('/shortlist/toggle', [\App\Studio\Http\ShortlistController::class, 'toggle']);
 Route::post('/services/recommendations', [\App\Studio\Http\MarketFitController::class, 'record']);
+Route::get('/api/v1/offerings', [\App\Studio\Http\PartnerOfferingController::class, 'index']);
+Route::get('/admin/offerings', [\App\Studio\Admin\OfferingAdminController::class, 'index']);
+Route::post('/admin/offerings/draft', [\App\Studio\Admin\OfferingAdminController::class, 'saveDraft']);
+Route::post('/admin/offerings/publish', [\App\Studio\Admin\OfferingAdminController::class, 'publish']);
 $mandateRouteSlugs = array_column(\App\Studio\Catalog\MandateCatalog::data()['mandates'], 'id');
 $mandateRoutePattern = implode('|', array_map(static fn (string $slug): string => preg_quote($slug, '/'), $mandateRouteSlugs));
 Route::get('/services/{slug}', [\App\Studio\Http\ServiceMandateController::class, 'show'])->where('slug', $mandateRoutePattern);

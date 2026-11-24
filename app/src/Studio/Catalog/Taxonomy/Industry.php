@@ -11,6 +11,7 @@ enum Industry: string
     case Aviation = 'aviation';
     case Chemicals = 'chemicals';
     case ConstructionInfrastructure = 'construction-infrastructure';
+    case EducationTraining = 'education-training';
     case ConsumerProducts = 'consumer-products';
     case EnergyNaturalResources = 'energy-natural-resources';
     case FinancialServices = 'financial-services';
@@ -36,6 +37,7 @@ enum Industry: string
             self::Aviation => 'Aviation',
             self::Chemicals => 'Chemicals',
             self::ConstructionInfrastructure => 'Construction & Infrastructure',
+            self::EducationTraining => 'Education & Training',
             self::ConsumerProducts => 'Consumer Products',
             self::EnergyNaturalResources => 'Energy & Natural Resources',
             self::FinancialServices => 'Financial Services',

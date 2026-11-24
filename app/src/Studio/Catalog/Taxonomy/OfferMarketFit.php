@@ -90,11 +90,11 @@ final class OfferMarketFit
             'business_needs' => [BusinessNeed::Operations, BusinessNeed::CostReduction, BusinessNeed::DigitalStrategy],
         ],
         'mod-auto' => [
-            'industries' => [],
+            'industries' => [Industry::EducationTraining, Industry::Automotive],
             'business_needs' => [BusinessNeed::Operations, BusinessNeed::CostReduction, BusinessNeed::DigitalStrategy],
         ],
         'mod-school' => [
-            'industries' => [],
+            'industries' => [Industry::EducationTraining],
             'business_needs' => [BusinessNeed::Operations, BusinessNeed::CostReduction, BusinessNeed::DigitalStrategy],
         ],
         'brand-kit-essential' => [

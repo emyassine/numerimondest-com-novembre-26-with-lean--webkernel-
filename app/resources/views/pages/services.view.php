@@ -184,7 +184,7 @@
             </div>
         </div>
 
-        @include('studio::service-fit-selector', ['industries' => $industryOptions, 'business_needs' => $businessNeedOptions])
+        @include('studio::pages.services.partials.selector', ['industries' => $industryOptions, 'business_needs' => $businessNeedOptions])
 
         <div class="nm-marketplace-layout">
 
@@ -396,6 +396,7 @@
             const fitForm = document.getElementById('nm-service-fit-selector');
             const fitResult = document.getElementById('nm-service-fit-result');
             const fitSummary = document.getElementById('nm-service-fit-summary');
+            const fitRecommendations = document.getElementById('nm-service-fit-recommendations');
             let fitSelection = null;
             const cards = [...document.querySelectorAll('.nm-services-marketplace .nm-marketplace-card')];
             const groups = [...document.querySelectorAll('.nm-services-marketplace .nm-marketplace-category-group')];
@@ -411,8 +412,6 @@
                     const matches = (!category.value || group?.dataset.category === category.value)
                         && (!engagement.value || card.dataset.engagement === engagement.value)
                         && (!owner.checked || !Number(card.dataset.price) || Number(card.dataset.price) < 50000)
-                        && (!fitSelection || (card.dataset.industries || '').split(',').includes(fitSelection.industry))
-                        && (!fitSelection || (card.dataset.businessNeeds || '').split(',').includes(fitSelection.businessNeed))
                         && (!term || card.dataset.search.includes(term));
                     card.hidden = !matches;
                     if (matches) visibleCount++;
@@ -435,19 +434,24 @@
             form.addEventListener('submit', (event) => event.preventDefault());
             fitForm?.addEventListener('submit', async (event) => {
                 event.preventDefault();
-                if (!fitForm.reportValidity()) return;
-
                 const industry = fitForm.querySelector('[name="industry"]:checked');
                 const businessNeed = fitForm.querySelector('[name="business_need"]:checked');
-                if (!industry || !businessNeed) return;
+                if (!industry && !businessNeed) return;
 
                 fitSelection = {
                     industry: industry.value,
-                    businessNeed: businessNeed.value,
+                    businessNeed: businessNeed?.value ?? null,
                 };
-                const industryLabel = industry.closest('label')?.querySelector('span')?.textContent.trim() ?? industry.value;
-                const needLabel = businessNeed.closest('label')?.querySelector('span')?.textContent.trim() ?? businessNeed.value;
-                fitSummary.textContent = `You selected ${industryLabel} as your industry and ${needLabel} as your business need.`;
+                const industryLabel = industry?.closest('label')?.querySelector('span')?.textContent.trim();
+                const needLabel = businessNeed?.closest('label')?.querySelector('span')?.textContent.trim();
+                fitSummary.textContent = [industryLabel && `You selected ${industryLabel} as your industry`, needLabel && `your business need is ${needLabel}`].filter(Boolean).join(' and ')+'.';
+                const ranked = cards.map((card) => {
+                    let score = 0;
+                    if (industry && (card.dataset.industries || '').split(',').includes(industry.value)) score++;
+                    if (businessNeed && (card.dataset.businessNeeds || '').split(',').includes(businessNeed.value)) score++;
+                    return {card, score};
+                }).filter((item) => item.score > 0).sort((a,b) => b.score-a.score).slice(0,5);
+                fitRecommendations.innerHTML = ranked.map(({card}) => `<li><a href="${card.querySelector('a[href]')?.href || '#'}">${card.querySelector('h2,h3')?.textContent.trim() || card.dataset.search}</a></li>`).join('') || '<li>Explore the full catalogue below for a tailored fit.</li>';
                 fitResult.hidden = false;
                 fitForm.querySelector('[data-reset-fit]').hidden = false;
                 update();
