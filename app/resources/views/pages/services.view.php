@@ -252,10 +252,12 @@
                                 <x-webkernel-platform::button
                                     type="reset"
                                     color="gray"
+                                    outlined
                                     size="sm"
                                     icon="heroicon-o-arrow-path"
                                     aria-label="Clear all filters"
-                                    tooltip="Clear all filters"/>
+                                    tooltip="Clear all filters"
+                                ></x-webkernel-platform::button>
                             </x-webkernel-platform::button.group>
                         </div>
 
