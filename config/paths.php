@@ -15,7 +15,6 @@ return [
     'runtime' => 'runtime',
     'cache' => 'runtime/cache',
     'logs' => 'runtime/logs',
-    'sessions' => 'runtime/sessions',
     'views' => 'runtime/views',
     'temporary' => 'runtime/tmp',
     'assets' => 'runtime/assets',

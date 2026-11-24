@@ -46,7 +46,8 @@ final class Session
             throw new InvalidArgumentException('Session configuration must be an array.');
         }
         $name = $configuration['cookie'] ?? 'WEBKERNEL_SESSID';
-        $save_path = $configuration['save_path'] ?? config('paths.sessions');
+        // Leave session storage to PHP-FPM unless the application explicitly overrides it.
+        $save_path = $configuration['save_path'] ?? null;
         $lifetime = $configuration['lifetime'] ?? 120;
         $same_site = $configuration['same_site'] ?? 'Lax';
         $http_only = $configuration['http_only'] ?? true;
@@ -54,9 +55,6 @@ final class Session
 
         if (! is_string($name) || preg_match('/\A[a-zA-Z][a-zA-Z0-9_-]{0,63}\z/', $name) !== 1) {
             throw new InvalidArgumentException('The session cookie name is invalid.');
-        }
-        if (! is_string($save_path) || $save_path === '' || str_contains($save_path, "\0")) {
-            throw new InvalidArgumentException('The session storage path is invalid.');
         }
         if (! is_int($lifetime) || $lifetime < 1 || $lifetime > 525600) {
             throw new InvalidArgumentException('The session lifetime is invalid.');
@@ -68,29 +66,34 @@ final class Session
             throw new InvalidArgumentException('The session SameSite setting is invalid.');
         }
 
-        $save_path = str_starts_with($save_path, '/') ? $save_path : base_path($save_path);
-        if (! is_dir($save_path) && ! mkdir($save_path, 0700, true) && ! is_dir($save_path)) {
-            throw new RuntimeException('The session storage directory could not be created.');
-        }
-        if (! is_writable($save_path)) {
-            throw new RuntimeException('The session storage directory is not writable.');
-        }
-        $runtime_root = realpath(base_path('runtime'));
-        $resolved_path = realpath($save_path);
-        if (
-            ! is_string($runtime_root)
-            || ! is_string($resolved_path)
-            || ! str_starts_with($resolved_path, $runtime_root.DIRECTORY_SEPARATOR)
-        ) {
-            throw new InvalidArgumentException('Session files must remain under the application runtime directory.');
+        if ($save_path !== null) {
+            if (! is_string($save_path) || $save_path === '' || str_contains($save_path, "\0")) {
+                throw new InvalidArgumentException('The session storage path is invalid.');
+            }
+
+            $save_path = str_starts_with($save_path, '/') ? $save_path : base_path($save_path);
+            if (! is_dir($save_path) && ! mkdir($save_path, 0700, true) && ! is_dir($save_path)) {
+                throw new RuntimeException('The session storage directory could not be created.');
+            }
+            if (! is_writable($save_path)) {
+                throw new RuntimeException('The session storage directory is not writable.');
+            }
+            $runtime_root = realpath(base_path('runtime'));
+            $resolved_path = realpath($save_path);
+            if (
+                ! is_string($runtime_root)
+                || ! is_string($resolved_path)
+                || ! str_starts_with($resolved_path, $runtime_root.DIRECTORY_SEPARATOR)
+            ) {
+                throw new InvalidArgumentException('Explicit session paths must remain under the application runtime directory.');
+            }
         }
         if (session_name($name) === '') {
             throw new RuntimeException('The session cookie name could not be configured.');
         }
 
         $is_secure = $secure ?? (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== '' && $_SERVER['HTTPS'] !== 'off');
-        $started = session_start([
-            'save_path' => $save_path,
+        $options = [
             'gc_maxlifetime' => $lifetime * 60,
             'use_strict_mode' => true,
             'use_only_cookies' => true,
@@ -100,7 +103,11 @@ final class Session
             'cookie_samesite' => $same_site,
             'cookie_lifetime' => 0,
             'cookie_path' => '/',
-        ]);
+        ];
+        if (is_string($save_path)) {
+            $options['save_path'] = $save_path;
+        }
+        $started = session_start($options);
         if (! $started) {
             throw new RuntimeException('The session could not be started.');
         }
