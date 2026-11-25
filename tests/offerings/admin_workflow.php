@@ -1,14 +1,18 @@
 <?php declare(strict_types=1);
 
 require dirname(__DIR__, 2).'/internal/dependencies/autoload.php';
+require __DIR__.'/admin_test_support.php';
 
 use App\Studio\Admin\AdminController;
 use App\Studio\Persistence\OfferingStore;
 use App\Studio\Persistence\QuoteStore;
 use Webkernel\Route\Request;
 use Webkernel\Session\Session;
+use Webkernel\Csrf;
 
 $database = sys_get_temp_dir().'/nm-offerings-'.bin2hex(random_bytes(8)).'.sqlite';
+beginAdminCredentialsTest(base_path(), true);
+putenv('NM_OFFERINGS_DATABASE='.$database);
 OfferingStore::initialize($database);
 $path = $database;
 QuoteStore::initialize($path);
@@ -31,18 +35,13 @@ Session::configure(['cookie' => 'NMAdminWorkflowTest', 'save_path' => $sessionPa
 $_SERVER['HTTPS'] = 'off';
 $_SERVER['HTTP_HOST'] = '127.0.0.1:8000';
 $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-$secretPath = base_path('config/offerings-admin.php');
-$hadSecret = is_file($secretPath);
-if (!$hadSecret) file_put_contents($secretPath, "<?php return ".var_export(['username' => 'test-admin', 'password_hash' => password_hash('test-password-for-suite', PASSWORD_DEFAULT)], true).";\n");
 Session::invalidate();
-$loginCsrf = bin2hex(random_bytes(32));
-Session::put('studio.offerings.admin_csrf', $loginCsrf);
-$badLogin = AdminController::login(new Request('POST', '/admin/login', body: ['username' => 'test-admin', 'password' => 'wrong-password', '_csrf' => $loginCsrf]));
-if ($badLogin->getStatusCode() !== 401) throw new RuntimeException('Admin login accepted an invalid password.');
-$login = AdminController::login(new Request('POST', '/admin/login', body: ['username' => 'test-admin', 'password' => 'test-password-for-suite', '_csrf' => $loginCsrf]));
-if ($login->getStatusCode() !== 303 || !is_int(Session::get('studio.offerings.admin_authenticated_at'))) throw new RuntimeException('Admin login failed to establish an authenticated session.');
-$csrf = bin2hex(random_bytes(32));
-Session::put('studio.offerings.admin_csrf', $csrf);
+$loginCsrf = Csrf::token();
+$badLogin = AdminController::login(new Request('POST', '/admin/login', body: ['username' => 'test-admin', 'password' => 'wrong-password', '_token' => $loginCsrf]));
+if ($badLogin->getStatusCode() !== 303 || $badLogin->headers->get('Location') !== '/admin/login?error=1') throw new RuntimeException('Invalid credentials did not return the single sign-in error flow.');
+$login = AdminController::login(new Request('POST', '/admin/login', body: ['username' => 'test-admin', 'password' => 'test-password-for-suite', '_token' => $loginCsrf]));
+if ($login->getStatusCode() !== 303 || !is_int(Session::get('studio.offerings.admin_authenticated_at'))) throw new RuntimeException('Admin login failed to establish an authenticated session: status '.$login->getStatusCode().', value '.var_export(Session::get('studio.offerings.admin_authenticated_at'), true).', session '.var_export($_SESSION, true).'.');
+$csrf = Csrf::token();
 $validCatalogue = ['offerings' => [[
     'id' => 'admin-offer', 'type' => 'service', 'name' => ['en' => 'Admin offer'], 'description' => ['en' => ''],
     'industries' => ['education-training'], 'business_needs' => ['operations'], 'prices' => [], 'relations' => [], 'active' => true,
@@ -66,7 +65,10 @@ $saved = AdminController::saveDraft($request($validCatalogue), $store);
 if ($saved->getStatusCode() !== 204 || ($store->current('draft')['catalogue'] ?? null) !== $validCatalogue) throw new RuntimeException('Admin draft endpoint did not persist the validated catalogue.');
 $publishedResponse = AdminController::publish(new Request('POST', '/admin/offerings/publish', headers: ['x-csrf-token' => $csrf]), $store);
 if ($publishedResponse->getStatusCode() !== 200 || ($store->current('published')['catalogue'] ?? null) !== $validCatalogue) throw new RuntimeException('Admin publish endpoint did not publish the draft.');
-if (!$hadSecret) unlink($secretPath);
-
+$databaseManager = AdminController::databaseManager(new Request('GET', '/admin'));
+if ($databaseManager->getStatusCode() !== 200 || !str_contains((string) $databaseManager->getContent(), 'DBLiteAdmin')) {
+    throw new RuntimeException('The authenticated SQLite database manager failed to render.');
+}
 foreach ([$database, $database.'-wal', $database.'-shm'] as $file) if (is_file($file)) unlink($file);
+putenv('NM_OFFERINGS_DATABASE');
 echo "Admin publication workflow passed.\n";

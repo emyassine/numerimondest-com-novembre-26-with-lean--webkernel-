@@ -9,6 +9,8 @@ use App\Studio\Catalog\Taxonomy\Industry;
 use App\Studio\Catalog\Taxonomy\BusinessNeed;
 use Webkernel\Route\Request;
 use Webkernel\HttpFoundation\Response;
+use Webkernel\HttpFoundation\Exceptions\HttpResponseException;
+use Webkernel\Csrf;
 use Webkernel\Session\Session;
 use Webkernel\HttpErrorPages\ErrorPages;
 use Webkernel\View\View;
@@ -90,33 +92,83 @@ final class AdminController
         return new Response(json_encode(['revision' => $revision], JSON_THROW_ON_ERROR), 200, ['Content-Type' => 'application/json']);
     }
 
-    public static function loginForm(): Response
+    public static function loginForm(Request $request): Response
     {
-        if (!self::secureRequest()) return self::forbidden();
+        if (!self::secureRequest()) self::forbidden();
         self::prepareSession();
         $credentials = self::credentials();
-        if ($credentials === null) return self::unavailable();
+        if ($credentials === null) {
+            if (!self::isLoopbackRequest()) self::forbidden();
+            return self::renderLogin(['setup' => true, 'csrfToken' => htmlspecialchars(self::csrfToken(), ENT_QUOTES, 'UTF-8')]);
+        }
         if (self::authorized()) return self::redirect('/admin');
-        $html = View::make('studio::partials.admin.login', [
+        return self::renderLogin([
             'csrfToken' => htmlspecialchars(self::csrfToken(), ENT_QUOTES, 'UTF-8'),
-        ])->render();
-        return new Response($html, 200, ['Content-Type' => 'text/html; charset=utf-8', 'Cache-Control' => 'no-store']);
+            'error' => $request->query('error') === '1' ? 'Sign-in failed. Check your username and password.' : null,
+        ]);
+    }
+
+    public static function createAdmin(Request $request): Response
+    {
+        if (!self::isLoopbackRequest()) self::forbidden();
+        self::prepareSession();
+        if (self::credentials() !== null) return self::redirect('/admin/login');
+        $values = $request->all();
+        $username = trim((string) ($values['username'] ?? ''));
+        $password = (string) ($values['password'] ?? '');
+        $confirmation = (string) ($values['password_confirmation'] ?? '');
+        $error = null;
+        if (!self::validCsrf($request)) {
+            $error = 'This form expired. Reload the page and try again.';
+        } elseif (!preg_match('/\A[a-zA-Z0-9._@-]{3,80}\z/', $username)) {
+            $error = 'Enter a username between 3 and 80 characters.';
+        } elseif (strlen($password) < 12) {
+            $error = 'Use a password with at least 12 characters.';
+        } elseif (!hash_equals($password, $confirmation)) {
+            $error = 'The passwords do not match. Please try again.';
+        }
+        if ($error !== null) {
+            return self::renderLogin([
+                'setup' => true,
+                'error' => $error,
+                'username' => $username,
+                'csrfToken' => htmlspecialchars(self::csrfToken(), ENT_QUOTES, 'UTF-8'),
+            ]);
+        }
+
+        $path = base_path('config/offerings-admin.php');
+        $config = "<?php declare(strict_types=1);\n\nreturn ".var_export([
+            'username' => $username,
+            'password_hash' => password_hash($password, PASSWORD_DEFAULT),
+        ], true).";\n";
+        $temporary = $path.'.'.bin2hex(random_bytes(8)).'.tmp';
+        if (file_put_contents($temporary, $config, LOCK_EX) === false || !chmod($temporary, 0600) || !link($temporary, $path)) {
+            @unlink($temporary);
+            if (self::credentials() !== null) return self::redirect('/admin/login');
+            self::unavailable('Admin setup failed', 'The admin account could not be saved. Check that the application config directory is writable.');
+        }
+        unlink($temporary);
+
+        Session::regenerate(true);
+        Session::put('studio.offerings.admin_authenticated_at', time());
+        Csrf::rotate();
+        return self::redirect('/admin');
     }
 
     public static function login(Request $request): Response
     {
-        if (!self::secureRequest()) return self::forbidden();
+        if (!self::secureRequest()) self::forbidden();
         self::prepareSession();
         $credentials = self::credentials();
         $values = $request->all();
-        if ($credentials === null) return self::unavailable();
+        if ($credentials === null) return self::redirect('/admin/login');
         if (!self::validCsrf($request) || !is_string($values['username'] ?? null) || !is_string($values['password'] ?? null)
             || !hash_equals($credentials['username'], $values['username']) || !password_verify($values['password'], $credentials['password_hash'])) {
-            return new Response('Sign-in failed. Check your username and password.', 401, ['Cache-Control' => 'no-store']);
+            return self::redirect('/admin/login?error=1');
         }
         Session::regenerate(true);
         Session::put('studio.offerings.admin_authenticated_at', time());
-        Session::forget('studio.offerings.admin_csrf');
+        Csrf::rotate();
         return self::redirect('/admin');
     }
 
@@ -126,7 +178,6 @@ final class AdminController
         if (!self::authorized()) return new Response('Authentication required.', 401);
         if (!self::validCsrf($request)) return new Response('Invalid security token.', 419);
         Session::forget('studio.offerings.admin_authenticated_at');
-        Session::forget('studio.offerings.admin_csrf');
         Session::regenerate(true);
         return self::redirect('/admin/login');
     }
@@ -137,7 +188,7 @@ final class AdminController
         if (!self::authorized()) return self::redirectToLogin();
         $databaseDirectory = dirname(OfferingStore::defaultPath());
         if (!is_dir($databaseDirectory) || !is_readable($databaseDirectory) || !is_writable($databaseDirectory)) {
-            return self::unavailable();
+            self::unavailable('Admin database unavailable', 'The catalogue database directory is not writable. Check its ownership and permissions, then reload this page.');
         }
         if (!defined('DBLITEADMIN_DATABASE_DIR')) define('DBLITEADMIN_DATABASE_DIR', $databaseDirectory);
         $_SESSION['auth'] = true;
@@ -163,6 +214,11 @@ final class AdminController
     private static function secureRequest(): bool
     {
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== '' && $_SERVER['HTTPS'] !== 'off') return true;
+        return self::isLoopbackRequest();
+    }
+
+    private static function isLoopbackRequest(): bool
+    {
         $host = strtolower((string) ($_SERVER['HTTP_HOST'] ?? ''));
         $parsedHost = parse_url('http://'.$host, PHP_URL_HOST);
         $remote = (string) ($_SERVER['REMOTE_ADDR'] ?? '');
@@ -171,22 +227,24 @@ final class AdminController
             && in_array($remote, ['127.0.0.1', '::1'], true);
     }
 
-    private static function forbidden(): Response
+    private static function forbidden(): never
     {
-        return new Response(ErrorPages::render(403), 403, [
+        throw new HttpResponseException(new Response(ErrorPages::render(403), 403, [
             'Content-Type' => 'text/html; charset=utf-8', 'Cache-Control' => 'no-store',
-        ]);
+        ]));
     }
 
-    private static function unavailable(): Response
+    private static function unavailable(string $title, string $description): never
     {
         $html = View::make((string) config('http-error-pages.view', 'studio::errors.show'), [
             'status' => 503,
             'locale' => 'en',
-            'title' => 'Admin setup required',
-            'description' => 'Create the admin credentials by running php scripts/create-offerings-admin.php, then reload this page.',
+            'title' => $title,
+            'description' => $description,
         ])->render();
-        return new Response($html, 503, ['Content-Type' => 'text/html; charset=utf-8', 'Cache-Control' => 'no-store']);
+        throw new HttpResponseException(new Response($html, 503, [
+            'Content-Type' => 'text/html; charset=utf-8', 'Cache-Control' => 'no-store',
+        ]));
     }
 
     private static function redirect(string $location): Response
@@ -194,22 +252,16 @@ final class AdminController
         return new Response('', 303, ['Location' => $location, 'Cache-Control' => 'no-store']);
     }
 
-    private static function prepareSession(): void
+    /** @param array<string,mixed> $data */
+    private static function renderLogin(array $data): Response
     {
-        if (session_status() !== PHP_SESSION_NONE) return;
-        $sessionPath = base_path('runtime/sessions/admin');
-        if (!is_dir($sessionPath) && !mkdir($sessionPath, 0700, true) && !is_dir($sessionPath)) {
-            throw new \RuntimeException('The admin session directory could not be created.');
-        }
-        Session::configure([
-            'cookie' => 'NM_ADMIN_SESSID', 'save_path' => $sessionPath, 'lifetime' => 480,
-            'same_site' => 'Strict', 'http_only' => true, 'secure' => self::isHttps(),
-        ]);
+        $html = View::make('studio::partials.admin.login', $data)->render();
+        return new Response($html, 200, ['Content-Type' => 'text/html; charset=utf-8', 'Cache-Control' => 'no-store']);
     }
 
-    private static function isHttps(): bool
+    private static function prepareSession(): void
     {
-        return isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== '' && $_SERVER['HTTPS'] !== 'off';
+        AdminSession::configure();
     }
 
     /** @return array{username:string,password_hash:string}|null */
@@ -225,19 +277,13 @@ final class AdminController
 
     private static function csrfToken(): string
     {
-        $token = Session::get('studio.offerings.admin_csrf');
-        if (!is_string($token) || strlen($token) !== 64) {
-            $token = bin2hex(random_bytes(32));
-            Session::put('studio.offerings.admin_csrf', $token);
-        }
-        return $token;
+        return Csrf::token();
     }
 
     private static function validCsrf(Request $request): bool
     {
-        $expected = Session::get('studio.offerings.admin_csrf');
-        $received = $request->header('x-csrf-token') ?? ($request->all()['_csrf'] ?? null);
-        return is_string($expected) && is_string($received) && hash_equals($expected, $received);
+        $received = $request->header('x-csrf-token') ?? ($request->all()['_token'] ?? null);
+        return is_string($received) && Csrf::verify($received);
     }
 
     private static function redirectToLogin(): Response

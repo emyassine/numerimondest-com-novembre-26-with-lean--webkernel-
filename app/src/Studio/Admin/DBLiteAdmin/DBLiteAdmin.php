@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace App\Studio\Admin\DBLiteAdmin;
 
+use PDO;
+use RuntimeException;
+use Throwable;
+
 const APP_NAME = 'DBLiteAdmin';
 const APP_VERSION = '1.0.1';
 if (!defined('DBLITEADMIN_DATABASE_DIR')) define('DBLITEADMIN_DATABASE_DIR', base_path('storage/databases'));
@@ -194,13 +198,54 @@ function checkCsrf(): void {
   }
 }
 
+/** Imports a bounded CSV file into an existing table using its header row. */
+function importCsvFile(PDO $pdo, string $table, string $path): int {
+  if (!is_file($path) || !is_readable($path) || (filesize($path) ?: 0) > 10 * 1024 * 1024) {
+    throw new RuntimeException('CSV file is missing, unreadable, or larger than 10 MB.');
+  }
+  $tableCheck = $pdo->prepare("SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = :name");
+  $tableCheck->execute(['name' => $table]);
+  if ($tableCheck->fetchColumn() === false) throw new RuntimeException('Choose an existing table.');
+
+  $schema = $pdo->query('PRAGMA table_info(' . qi($table) . ')')->fetchAll();
+  $knownColumns = array_fill_keys(array_column($schema, 'name'), true);
+  $stream = fopen($path, 'rb');
+  if ($stream === false) throw new RuntimeException('Could not read the CSV file.');
+  try {
+    $header = fgetcsv($stream, null, ',', '"', '');
+    if (!is_array($header) || $header === []) throw new RuntimeException('The CSV file needs a header row.');
+    $header[0] = preg_replace('/^\xEF\xBB\xBF/', '', (string) $header[0]) ?? (string) $header[0];
+    $columns = array_map(static fn ($column): string => trim((string) $column), $header);
+    if (count(array_unique($columns)) !== count($columns)) throw new RuntimeException('CSV column names must be unique.');
+    foreach ($columns as $column) {
+      if ($column === '' || !isset($knownColumns[$column])) throw new RuntimeException('CSV headers must match existing table columns.');
+    }
+    $insert = $pdo->prepare('INSERT INTO ' . qi($table) . ' (' . implode(', ', array_map(qi(...), $columns)) . ') VALUES (' . implode(', ', array_fill(0, count($columns), '?')) . ')');
+    $count = 0;
+    $pdo->beginTransaction();
+    while (($row = fgetcsv($stream, null, ',', '"', '')) !== false) {
+      if ($row === [null] || $row === []) continue;
+      if (count($row) !== count($columns)) throw new RuntimeException('A CSV row has a different number of fields than its header.');
+      if (++$count > 50000) throw new RuntimeException('CSV import is limited to 50,000 rows per file.');
+      $insert->execute($row);
+    }
+    $pdo->commit();
+    return $count;
+  } catch (Throwable $error) {
+    if ($pdo->inTransaction()) $pdo->rollBack();
+    throw $error;
+  } finally {
+    fclose($stream);
+  }
+}
+
 $currentDb = isset($_GET['db']) ? cleanDbName($_GET['db']) : ($dbs[0] ?? '');
 $pdo = getPdo($currentDb);
 $tab = $_GET['tab'] ?? ($currentDb ? 'tables' : 'settings');
 $table = isset($_GET['table']) ? trim($_GET['table']) : '';
 $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
   checkCsrf();
   $act = $_POST['action'] ?? '';
 
@@ -429,6 +474,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       header("Location: ?db=" . urlencode($currentDb) . "&tab=settings&msg=" . urlencode($m));
       exit;
     }
+  }
+  if ($act === 'import_csv' && $pdo) {
+    $target = is_string($_POST['table'] ?? null) ? trim($_POST['table']) : '';
+    $upload = $_FILES['csv_file'] ?? [];
+    try {
+      if (!is_array($upload) || ($upload['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK || !is_string($upload['tmp_name'] ?? null)) {
+        throw new RuntimeException('Select a CSV file to import.');
+      }
+      $imported = importCsvFile($pdo, $target, $upload['tmp_name']);
+      $message = $imported . ' rows imported.';
+    } catch (Throwable $error) {
+      $message = $error->getMessage();
+    }
+    header('Location: ?db=' . urlencode($currentDb) . '&tab=settings&msg=' . urlencode($message));
+    exit;
   }
 }
 

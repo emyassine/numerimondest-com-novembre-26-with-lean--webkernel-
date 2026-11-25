@@ -40,6 +40,7 @@ if (!is_env('prod')) {
     Route::get('/admin', [AdminController::class, 'databaseManager']);
     Route::get('/admin/login', [AdminController::class, 'loginForm']);
     Route::post('/admin/login', [AdminController::class, 'login']);
+    Route::post('/admin/setup', [AdminController::class, 'createAdmin']);
     Route::post('/admin/logout', [AdminController::class, 'logout']);
     Route::get('/admin/offerings', [AdminController::class, 'index']);
     Route::post('/admin/offerings/preview', [AdminController::class, 'preview']);

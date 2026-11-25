@@ -31,7 +31,7 @@ Updated 2026-11-24. “Verified” means exercised by the named test or actual l
 ## Deployment steps
 
 1. Back up the production database. On a fresh database only, run `php scripts/migrate-offerings-database.php` and `php scripts/migrate-canonical-offerings.php` to initialize the initial revision. For an existing catalogue, use `--dry-run` first and apply only an explicitly intended, safe canonical refresh; do not re-import the seed on routine deploys.
-2. Run `php scripts/create-offerings-admin.php` in a terminal to create the local ignored admin credentials file; set any `NM_OFFERINGS_DATABASE` path in PHP-FPM; copy `config/partners.example.php` to ignored local `config/partners.php` only when registering an actual partner.
+2. Open `/admin/login` on localhost and create the initial administrator through the browser; set any `NM_OFFERINGS_DATABASE` path in PHP-FPM; copy `config/partners.example.php` to local `config/partners.php` only when registering an actual partner.
 3. Configure `PERFEX_CONNECT_LEAD_HOOK_URL` and `PERFEX_CONNECT_LEAD_HOOK_TOKEN` in PHP-FPM.
 4. Schedule `php scripts/refresh-currency-rates.php` daily in HestiaCP.
 5. Before enabling a partner, approve its customer-price and internal-settlement rules, credentials, authorized offering IDs and domains; then verify that partner’s production storefront.

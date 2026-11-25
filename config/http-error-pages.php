@@ -7,10 +7,6 @@ return [
             'title' => ['en' => 'Access unavailable'],
             'description' => ['en' => 'This page is not available from this connection.'],
         ],
-        503 => [
-            'title' => ['en' => 'Service unavailable'],
-            'description' => ['en' => 'This service is temporarily unavailable. Please try again shortly.'],
-        ],
         404 => [
             'title' => ['en' => 'Page not found'],
             'description' => ['en' => 'The page you are looking for does not exist or has been moved.'],

@@ -10,6 +10,7 @@ use App\Studio\Admin\AdminController;
 use App\Studio\Persistence\OfferingStore;
 use Webkernel\Route\Request;
 use Webkernel\Session\Session;
+use Webkernel\Csrf;
 
 $seed = require $base_path.'/app/resources/data/studio/offerings.php';
 $offerings = [];
@@ -115,18 +116,13 @@ $_SERVER['HTTP_HOST'] = '127.0.0.1:8000';
 $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 $unauthorized = AdminController::preview(new Request('POST', '/admin/offerings/preview', content: '{}'));
 if ($unauthorized->getStatusCode() !== 401) throw new RuntimeException('Admin preview allowed an unauthenticated request.');
-$secretPath = $base_path.'/config/offerings-admin.php';
-$hadSecret = is_file($secretPath);
-if (!$hadSecret) file_put_contents($secretPath, "<?php return ".var_export(['username' => 'test-admin', 'password_hash' => password_hash('test-password-for-suite', PASSWORD_DEFAULT)], true).";\n");
 Session::put('studio.offerings.admin_authenticated_at', time());
-$csrf = bin2hex(random_bytes(32));
-Session::put('studio.offerings.admin_csrf', $csrf);
+$csrf = Csrf::token();
 $preview = AdminController::preview(new Request(
     'POST', '/admin/offerings/preview',
     headers: ['x-csrf-token' => $csrf],
     content: json_encode(['offerings' => array_values($offerings)], JSON_THROW_ON_ERROR),
 ));
-if (!$hadSecret) unlink($secretPath);
 if ($preview->getStatusCode() !== 200) throw new RuntimeException('The full migrated seed catalogue fails administration validation: '.$preview->getContent());
 foreach ([$database, $database.'-wal', $database.'-shm'] as $file) if (is_file($file)) unlink($file);
 echo "Canonical catalog migration passed: 58 records, 16 mandates, 20 extension links.\n";
