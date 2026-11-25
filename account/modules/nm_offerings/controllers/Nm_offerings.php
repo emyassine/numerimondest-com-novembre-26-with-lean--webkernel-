@@ -27,9 +27,30 @@ class Nm_offerings extends AdminController
         }
         $source = $draft ?: $published;
         $catalogue = $source['catalogue'] ?? ['offerings' => []];
+        $selectedId = (string) $this->input->get('id');
+        $isNew = $this->input->get('new') === '1';
+        $selected = null;
+        foreach (($catalogue['offerings'] ?? []) as $offering) {
+            if (($offering['id'] ?? null) === $selectedId) {
+                $selected = $offering;
+                break;
+            }
+        }
+        if ($isNew) {
+            $selected = [
+                'id' => 'new-offering-' . bin2hex(random_bytes(3)),
+                'type' => 'service', 'name' => ['en' => 'New offering'], 'description' => ['en' => ''],
+                'industries' => [], 'business_needs' => [], 'prices' => [], 'relations' => [],
+                'active' => true, 'visibility' => 'catalog',
+            ];
+            $selectedId = '';
+        }
         $data = [
             'title' => 'Offerings catalogue',
-            'catalogue_json' => json_encode($catalogue, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            'offerings' => $catalogue['offerings'] ?? [],
+            'selected_id' => $selectedId,
+            'offering_json' => $selected === null ? '' : json_encode($selected, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            'is_new' => $isNew,
             'draft_revision' => $draft['revision'] ?? null,
             'published_revision' => $published['revision'] ?? null,
             'offering_count' => count($catalogue['offerings'] ?? []),
@@ -42,16 +63,23 @@ class Nm_offerings extends AdminController
     public function save()
     {
         if (!$this->can('edit')) return $this->deny();
-        $catalogue = $this->postedCatalogue();
-        if ($catalogue === null) return;
+        $json = $this->input->post('offering_json', false);
+        $offering = is_string($json) ? json_decode($json, true) : null;
+        if (!is_array($offering) || !is_string($offering['id'] ?? null)) {
+            set_alert('danger', 'Enter one valid offering JSON object with a stable ID.');
+            redirect(admin_url('nm_offerings'));
+            return;
+        }
+        $originalId = trim((string) $this->input->post('original_id'));
         try {
-            $revision = $this->catalog->saveDraft($catalogue, get_staff_user_id());
+            $revision = $this->catalog->saveOffering($offering, $originalId, get_staff_user_id());
             log_activity('Offerings catalogue draft saved [Revision: ' . $revision . ']');
-            set_alert('success', 'Catalogue draft saved.');
+            set_alert('success', 'Offering saved in catalogue draft.');
+            redirect(admin_url('nm_offerings?id=' . rawurlencode($offering['id'])));
         } catch (Throwable $error) {
             set_alert('danger', html_escape($error->getMessage()));
+            redirect(admin_url('nm_offerings?id=' . rawurlencode($originalId) . ($originalId === '' ? '&new=1' : '')));
         }
-        redirect(admin_url('nm_offerings'));
     }
 
     public function publish()
@@ -65,18 +93,6 @@ class Nm_offerings extends AdminController
             set_alert('danger', html_escape($error->getMessage()));
         }
         redirect(admin_url('nm_offerings'));
-    }
-
-    private function postedCatalogue()
-    {
-        $json = $this->input->post('catalogue_json', false);
-        $catalogue = is_string($json) ? json_decode($json, true) : null;
-        if (!is_array($catalogue)) {
-            set_alert('danger', 'The catalogue must be valid JSON.');
-            redirect(admin_url('nm_offerings'));
-            return null;
-        }
-        return $catalogue;
     }
 
     private function can($capability)

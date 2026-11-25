@@ -33,6 +33,7 @@ final class Engine
     private string $public_dir = '';
     private string $root = '';
     private string $router = '';
+    private string $mounts_json = '[]';
     private bool $profile_lifecycle = false;
     /** true force on, false force off, null inherit php.ini / preference */
     private ?bool $jit = null;
@@ -67,7 +68,7 @@ final class Engine
      *
      * @return ExitCode
      */
-    public function serve(string $host = '127.0.0.1', int $port = 8000, bool $profile_lifecycle = false, ?bool $jit = null): ExitCode
+    public function serve(string $host = '127.0.0.1', int $port = 8000, bool $profile_lifecycle = false, ?bool $jit = null, array $mounts = []): ExitCode
     {
         if (! self::valid_host($host) || $port < 1 || $port > 65535) {
             fwrite(STDERR, "Invalid server host or port.\n");
@@ -78,10 +79,29 @@ final class Engine
         $this->port = $port;
         $this->profile_lifecycle = $profile_lifecycle;
         $this->jit = $jit;
+        $normalized_mounts = [];
+        foreach ($mounts as $mount) {
+            if (!is_string($mount) || !preg_match('#^(/[^=:]*?)[=:](.+)$#', $mount, $parts)) {
+                fwrite(STDERR, "Invalid mount. Use --mount=/prefix:/path/to/app\n");
+                return ExitCode::ERROR;
+            }
+            $prefix = rtrim($parts[1], '/');
+            $directory = realpath($parts[2]);
+            if ($prefix === '' || preg_match('#(?:^|/)\.\.?(/|$)#', $prefix) || !is_string($directory) || !is_dir($directory) || !is_file($directory.'/index.php')) {
+                fwrite(STDERR, "Mounts need a URL prefix and an application directory containing index.php.\n");
+                return ExitCode::ERROR;
+            }
+            if (isset($normalized_mounts[$prefix])) {
+                fwrite(STDERR, "Duplicate mount prefix: {$prefix}\n");
+                return ExitCode::ERROR;
+            }
+            $normalized_mounts[$prefix] = ['prefix' => $prefix, 'root' => $directory];
+        }
         $this->server_started_at = \hrtime(true);
         $this->public_dir = base_path('public');
         $this->root = base_path();
         $this->router = __DIR__.'/router.php';
+        $this->mounts_json = json_encode(array_values($normalized_mounts), JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES);
         $this->register_signals();
         for ($try = 0; $try < self::MAX_PORT_TRIES; $try++) {
             if ($this->interrupted) {
@@ -130,12 +150,12 @@ final class Engine
         $command[] = '-t';
         $command[] = $this->public_dir;
         $command[] = $this->router;
-        $env = null;
+        $env = \getenv();
+        if (! \is_array($env)) {
+            $env = [];
+        }
+        $env['WEBKERNEL_SERVER_MOUNTS'] = $this->mounts_json;
         if ($this->profile_lifecycle) {
-            $env = \getenv();
-            if (! \is_array($env)) {
-                $env = [];
-            }
             $env['WEBKERNEL_PROFILE_LIFECYCLE'] = '1';
         }
         $pipes = [];

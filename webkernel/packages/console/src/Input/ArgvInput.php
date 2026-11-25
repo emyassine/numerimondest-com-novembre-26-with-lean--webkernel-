@@ -18,7 +18,7 @@ final readonly class ArgvInput
     /** @var list<string> */
     private array $arguments;
 
-    /** @var array<string, string|bool> */
+    /** @var array<string, string|bool|list<string|bool>> */
     private array $options;
 
     private ?string $command;
@@ -27,7 +27,7 @@ final readonly class ArgvInput
 
     /**
      * @param list<string>|null $argv
-     * @param array{command: string|null, arguments: list<string>, options: array<string, string|bool>, wants_help: bool}|null $state
+     * @param array{command: string|null, arguments: list<string>, options: array<string, string|bool|list<string|bool>>, wants_help: bool}|null $state
      */
     public function __construct(?array $argv = null, ?array $state = null)
     {
@@ -75,9 +75,16 @@ final readonly class ArgvInput
                 $body = \substr($token, 2);
                 $eq = \strpos($body, '=');
                 if ($eq === false) {
-                    $options[$body] = true;
+                    $value = true;
                 } else {
-                    $options[\substr($body, 0, $eq)] = \substr($body, $eq + 1);
+                    $name = \substr($body, 0, $eq);
+                    $value = \substr($body, $eq + 1);
+                }
+                if ($eq === false) $name = $body;
+                if (isset($options[$name])) {
+                    $options[$name] = [...(\is_array($options[$name]) ? $options[$name] : [$options[$name]]), $value];
+                } else {
+                    $options[$name] = $value;
                 }
                 continue;
             }
@@ -127,7 +134,7 @@ final readonly class ArgvInput
     }
 
     /**
-     * @return array<string, string|bool>
+     * @return array<string, string|bool|list<string|bool>>
      */
     public function options(): array
     {
@@ -137,11 +144,18 @@ final readonly class ArgvInput
     /**
      * @param string $name
      *
-     * @return string|bool|null
+     * @return string|bool|list<string|bool>|null
      */
-    public function option(string $name): string|bool|null
+    public function option(string $name): string|bool|array|null
     {
         return $this->options[$name] ?? null;
+    }
+
+    /** @return list<string|bool> */
+    public function optionValues(string $name): array
+    {
+        $value = $this->options[$name] ?? null;
+        return $value === null ? [] : (\is_array($value) ? $value : [$value]);
     }
 
     /**

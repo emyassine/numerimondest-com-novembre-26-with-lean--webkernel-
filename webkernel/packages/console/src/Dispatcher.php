@@ -313,6 +313,20 @@ final class Dispatcher
                 continue;
             }
 
+            $parameter_type = $param->getType();
+            if ($parameter_type instanceof \ReflectionNamedType && $parameter_type->getName() === 'array') {
+                $kebab = \str_replace('_', '-', $param->getName());
+                if ($input->hasOption($kebab)) {
+                    $used_options[$kebab] = true;
+                    $args[] = $input->optionValues($kebab);
+                } elseif ($param->isDefaultValueAvailable()) {
+                    $args[] = $param->getDefaultValue();
+                } else {
+                    $args[] = [];
+                }
+                continue;
+            }
+
             $type = self::scalarType($param);
             $kebab = \str_replace('_', '-', $param->getName());
             $is_bool = $type === 'bool';
@@ -398,7 +412,7 @@ final class Dispatcher
      * @param string               $kebab
      * @param array<string, true>  $used_options
      *
-     * @return string|bool|null
+     * @return string|bool|list<string|bool>|null
      */
     private function optionValue(\ReflectionParameter $param, ArgvInput $input, string $kebab, array &$used_options): string|bool|null
     {
@@ -579,6 +593,11 @@ final class Dispatcher
             if ($param->isVariadic()) {
                 $parts[] = '['.$param->getName().'...]';
 
+                continue;
+            }
+            $parameter_type = $param->getType();
+            if ($parameter_type instanceof \ReflectionNamedType && $parameter_type->getName() === 'array') {
+                $parts[] = '[--'.\str_replace('_', '-', $param->getName()).'=PREFIX:DIR ...]';
                 continue;
             }
             $kebab = \str_replace('_', '-', $param->getName());

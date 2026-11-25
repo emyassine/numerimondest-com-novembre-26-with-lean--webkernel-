@@ -33,13 +33,14 @@ final readonly class ServerCommand
      */
     #[ConsoleCommand(
         name: 'server',
-        description: 'Sync frontend assets, then serve locally (--host= --port= --profile-lifecycle --with-jit)',
+        description: 'Sync frontend assets, then serve locally (--host= --port= --mount=/prefix:/directory --profile-lifecycle --with-jit)',
     )]
     public function __invoke(
         string $host = '127.0.0.1',
         int $port = 8000,
         bool $profile_lifecycle = false,
         ?bool $with_jit = null,
+        array $mount = [],
     ): ExitCode {
         console()->info('Synchronizing frontend assets before starting the server...');
         $asset_result = $this->assets->sync();
@@ -52,6 +53,6 @@ final readonly class ServerCommand
             $jit = Performance::wants_jit();
         }
 
-        return $this->engine->serve($host, $port, $profile_lifecycle, $jit);
+        return $this->engine->serve($host, $port, $profile_lifecycle, $jit, $mount);
     }
 }

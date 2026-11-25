@@ -17,12 +17,36 @@
                         <div class="col-md-6"><strong>Draft revision:</strong> <?php echo $draft_revision === null ? 'None' : (int) $draft_revision; ?></div>
                     </div>
                     <?php if ($can_edit) { ?>
-                        <?php echo form_open(admin_url('nm_offerings/save')); ?>
-                        <p class="text-muted">Edit the complete offering document. Translations, price components, classifications and relationships are validated together before the draft is saved.</p>
-                        <?php echo render_textarea('catalogue_json', 'Catalogue JSON', $catalogue_json, ['rows' => 30, 'class' => 'form-control', 'spellcheck' => 'false']); ?>
-                        <button type="submit" class="btn btn-primary">Save draft</button>
-                        <?php echo form_close(); ?>
-                    <?php } else { ?>
+                        <div class="tw-mb-4"><a class="btn btn-primary" href="<?php echo admin_url('nm_offerings?new=1'); ?>"><i class="fa fa-plus"></i> New offering</a></div>
+                    <?php } ?>
+                    <div class="panel_s"><div class="panel-body panel-table-full">
+                        <table class="table dt-table">
+                            <thead><tr><th>ID</th><th>Name</th><th>Type</th><th>Visibility</th><th>Status</th><?php if ($can_edit) { ?><th>Action</th><?php } ?></tr></thead>
+                            <tbody>
+                            <?php foreach ($offerings as $offering) { ?>
+                                <tr>
+                                    <td><?php echo html_escape($offering['id'] ?? ''); ?></td>
+                                    <td><?php echo html_escape($offering['name']['en'] ?? $offering['id'] ?? ''); ?></td>
+                                    <td><?php echo html_escape($offering['type'] ?? ''); ?></td>
+                                    <td><?php echo html_escape($offering['visibility'] ?? 'catalog'); ?></td>
+                                    <td><?php echo !empty($offering['active']) ? 'Active' : 'Inactive'; ?></td>
+                                    <?php if ($can_edit) { ?><td><a href="<?php echo admin_url('nm_offerings?id=' . rawurlencode($offering['id'] ?? '')); ?>">Edit</a></td><?php } ?>
+                                </tr>
+                            <?php } ?>
+                            </tbody>
+                        </table>
+                    </div></div>
+                    <?php if ($can_edit && $offering_json !== '') { ?>
+                        <div class="panel_s"><div class="panel-body">
+                            <h4><?php echo $is_new ? 'Create offering' : 'Edit offering'; ?></h4>
+                            <p class="text-muted">Edit this offering record only. Its translations, classifications, price components and relationships are validated against the complete catalogue before saving.</p>
+                            <?php echo form_open(admin_url('nm_offerings/save')); ?>
+                            <?php echo form_hidden('original_id', $selected_id); ?>
+                            <?php echo render_textarea('offering_json', 'Offering record JSON', $offering_json, ['rows' => 28, 'spellcheck' => 'false']); ?>
+                            <button type="submit" class="btn btn-primary">Save offering draft</button>
+                            <?php echo form_close(); ?>
+                        </div></div>
+                    <?php } elseif (!$can_edit) { ?>
                         <p>You have view access only. Ask an administrator to grant catalogue edit permission.</p>
                     <?php } ?>
                     <?php if ($can_publish) { ?>
