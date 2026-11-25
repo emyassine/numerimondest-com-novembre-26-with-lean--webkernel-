@@ -4,8 +4,8 @@ $base_path = dirname(__DIR__, 2);
 require $base_path.'/internal/dependencies/autoload.php';
 
 use Numerimondes\Offerings\Persistence\OfferingStore;
-use App\Studio\Persistence\RefreshCanonicalOfferings;
-use App\Studio\Persistence\RetireReplacedOfferings;
+use App\Studio\Catalog\Migration\RefreshCanonicalOfferings;
+use App\Studio\Catalog\Migration\RetireReplacedOfferings;
 
 $seed = require $base_path.'/app/resources/data/studio/offerings.php';
 $path = sys_get_temp_dir().'/nm-canonical-refresh-'.bin2hex(random_bytes(8)).'.sqlite';

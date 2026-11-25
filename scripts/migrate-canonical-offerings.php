@@ -2,9 +2,9 @@
 
 require dirname(__DIR__).'/internal/dependencies/autoload.php';
 
-use App\Studio\Persistence\OfferingStore;
-use App\Studio\Persistence\QuoteStore;
-use App\Studio\Persistence\RefreshCanonicalOfferings;
+use Numerimondes\Offerings\Persistence\OfferingStore;
+use Numerimondes\Offerings\Persistence\QuoteStore;
+use App\Studio\Catalog\Migration\RefreshCanonicalOfferings;
 
 $arguments = array_values(array_filter(array_slice($argv, 1), static fn(string $value): bool => $value !== '--dry-run'));
 $dryRun = in_array('--dry-run', $argv, true);

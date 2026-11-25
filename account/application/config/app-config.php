@@ -38,7 +38,7 @@ define('APP_ENC_KEY', 'b24852000abe8fac4575d5592a18e7e8');
  * Database Credentials
  * The hostname of your database server
  */
-define('APP_DB_HOSTNAME', 'numerimondes.com');
+define('APP_DB_HOSTNAME', '62.84.182.153');
 
 /**
  * The username used to connect to the database

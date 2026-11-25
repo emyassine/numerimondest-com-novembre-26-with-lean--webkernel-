@@ -3,7 +3,7 @@
 require dirname(__DIR__, 2).'/internal/dependencies/autoload.php';
 
 use Numerimondes\Offerings\Persistence\OfferingStore;
-use App\Studio\Persistence\RetireReplacedOfferings;
+use App\Studio\Catalog\Migration\RetireReplacedOfferings;
 
 $path = sys_get_temp_dir().'/nm-retire-'.bin2hex(random_bytes(6)).'.sqlite';
 try {

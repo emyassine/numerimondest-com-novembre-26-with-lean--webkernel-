@@ -3,7 +3,7 @@
 use Numerimondes\Offerings\Catalog\OfferingCatalog;
 use Numerimondes\Offerings\Persistence\OfferingStore;
 use Numerimondes\Offerings\Persistence\QuoteStore;
-use App\Studio\Persistence\RefreshCanonicalOfferings;
+use App\Studio\Catalog\Migration\RefreshCanonicalOfferings;
 
 $root = dirname(__DIR__, 2);
 $database = sys_get_temp_dir().'/nm-explicit-catalogue-'.bin2hex(random_bytes(6)).'.sqlite';

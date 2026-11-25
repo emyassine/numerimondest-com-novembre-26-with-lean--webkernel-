@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Studio\Persistence;
+namespace App\Studio\Catalog\Migration;
 
 use Numerimondes\Offerings\Persistence\OfferingStore;
 

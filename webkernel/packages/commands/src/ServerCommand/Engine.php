@@ -585,18 +585,6 @@ final class Engine
 
     /**
      * @param string $text
-     *
-     * @return int Visible column count, ANSI sequences stripped
-     */
-    private function visible_len(string $text): int
-    {
-        $plain = \preg_replace('/\033\[[0-9;]*m/', '', $text);
-
-        return \strlen(\is_string($plain) ? $plain : $text);
-    }
-
-    /**
-     * @param string $text
      * @param int    $max
      *
      * @return string

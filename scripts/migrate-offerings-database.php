@@ -2,8 +2,8 @@
 
 require dirname(__DIR__).'/internal/dependencies/autoload.php';
 
-use App\Studio\Persistence\OfferingStore;
-use App\Studio\Persistence\QuoteStore;
+use Numerimondes\Offerings\Persistence\OfferingStore;
+use Numerimondes\Offerings\Persistence\QuoteStore;
 
 $path = $argv[1] ?? OfferingStore::defaultPath();
 OfferingStore::initialize($path);

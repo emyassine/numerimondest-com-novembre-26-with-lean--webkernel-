@@ -1,5 +1,7 @@
 <?php
 
+defined('BASEPATH') or exit('No direct script access allowed');
+
 class App_Log extends CI_Log
 {
     public function write_log($level, $msg)
