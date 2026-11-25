@@ -19,3 +19,5 @@ web-sync.config.json
 
 .yas-deploy-once.json
 /runtime/telemetry/
+portal/application/vendor/
+portal/perfex_v3.4.0.zip
