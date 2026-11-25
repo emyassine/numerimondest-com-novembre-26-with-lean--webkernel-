@@ -13,7 +13,7 @@ require __DIR__.'/Storefront.php';
 $baseUrl = getenv('NM_API_BASE_URL') ?: '';
 $partnerId = getenv('NM_PARTNER_ID') ?: '';
 $token = getenv('NM_PARTNER_TOKEN') ?: '';
-$cacheDirectory = getenv('NM_OFFERINGS_CACHE') ?: dirname(__DIR__, 2).'/var/offerings-cache';
+$cacheDirectory = getenv('NM_OFFERINGS_CACHE') ?: __DIR__.'/var/offerings-cache';
 if ($baseUrl === '' || $partnerId === '' || $token === '') {
     http_response_code(503);
     echo 'Partner API configuration is incomplete.';

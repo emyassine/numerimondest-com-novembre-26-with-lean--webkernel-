@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 return [
-    'path_to_perfex' => dirname(__DIR__).'/account/connect/',
+    'path_to_perfex' => base_path('account/connect'),
     'company' => [
         'name' => 'Numerimondes SARL AU',
         'location' => 'Casablanca, Morocco',
