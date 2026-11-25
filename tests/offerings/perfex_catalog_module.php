@@ -3,7 +3,7 @@
 $root = dirname(__DIR__, 2);
 define('BASEPATH', true);
 define('FCPATH', $root.'/account/');
-require $root.'/internal/dependencies/autoload.php';
+require $root.'/app/src/Studio/Persistence/OfferingStore.php';
 require $root.'/account/modules/nm_offerings/libraries/Nm_offerings_catalog.php';
 
 use App\Studio\Persistence\OfferingStore;

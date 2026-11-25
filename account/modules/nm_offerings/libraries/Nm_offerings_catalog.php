@@ -8,18 +8,27 @@ use App\Studio\Persistence\OfferingStore;
 /** Shared access to the website's canonical SQLite catalogue. */
 class Nm_offerings_catalog
 {
+    private static $autoloadRegistered = false;
     private $databasePath;
 
     public function __construct($databasePath = null, $projectRoot = null)
     {
         $projectRoot = $projectRoot ?: realpath(FCPATH . '..');
-        $autoload = is_string($projectRoot) ? $projectRoot . '/internal/dependencies/autoload.php' : '';
-        if ($autoload === '' || !is_file($autoload)) {
-            throw new RuntimeException('The Numerimondes application autoloader is not available beside the Perfex installation.');
+        if (!is_string($projectRoot) || !is_dir($projectRoot . '/app/src/Studio')) {
+            throw new RuntimeException('The Numerimondes Studio classes are not available beside the Perfex installation.');
         }
-        require_once $autoload;
+        if (!self::$autoloadRegistered) {
+            spl_autoload_register(static function ($class) use ($projectRoot) {
+                $prefix = 'App\\Studio\\';
+                if (strncmp($class, $prefix, strlen($prefix)) !== 0) return;
+                $relative = str_replace('\\', DIRECTORY_SEPARATOR, substr($class, strlen($prefix)));
+                $file = $projectRoot . '/app/src/Studio/' . $relative . '.php';
+                if (is_file($file)) require_once $file;
+            }, true, true);
+            self::$autoloadRegistered = true;
+        }
         $this->databasePath = $databasePath ?: $projectRoot . '/storage/databases/offerings.sqlite';
-        if (!is_file($this->databasePath) || !is_readable($this->databasePath) || !is_writable(dirname($this->databasePath))) {
+        if (!is_file($this->databasePath) || !is_readable($this->databasePath) || !is_writable($this->databasePath) || !is_writable(dirname($this->databasePath))) {
             throw new RuntimeException('The offerings SQLite database is unavailable to the Perfex PHP process.');
         }
     }
