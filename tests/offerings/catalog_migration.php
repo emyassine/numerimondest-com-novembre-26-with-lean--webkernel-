@@ -3,11 +3,11 @@
 $base_path = dirname(__DIR__, 2);
 require $base_path.'/internal/dependencies/autoload.php';
 
-use App\Studio\Catalog\OfferingRelationType;
-use App\Studio\Catalog\OfferingCatalogValidator;
+use Numerimondes\Offerings\Catalog\OfferingRelationType;
+use Numerimondes\Offerings\Catalog\OfferingCatalogValidator;
 use App\Studio\Catalog\ServiceCatalog;
 use App\Studio\Catalog\MandateCatalog;
-use App\Studio\Persistence\OfferingStore;
+use Numerimondes\Offerings\Persistence\OfferingStore;
 
 $seed = require $base_path.'/app/resources/data/studio/offerings.php';
 $offerings = [];

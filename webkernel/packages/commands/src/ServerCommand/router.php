@@ -5,6 +5,7 @@
 //> For the full copyright and license information, please view the LICENSE
 //> file that was distributed with this source code.
 
+use Webkernel\Commands\ServerCommand\MountPaths;
 use Webkernel\Console\IncludeClock;
 
 if (PHP_SAPI !== 'cli-server') {
@@ -13,38 +14,60 @@ if (PHP_SAPI !== 'cli-server') {
 
 $server_request_started_at = \hrtime(true);
 
-$parsed = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
-$uri = urldecode(is_string($parsed) && $parsed !== '' ? $parsed : '/');
-$original_uri = $uri;
+require_once __DIR__.'/MountPaths.php';
+
+$request_target = $_SERVER['REQUEST_URI'] ?? '/';
+$uri = MountPaths::path($request_target);
 $docroot = $_SERVER['DOCUMENT_ROOT'] ?? '';
 if (! is_string($docroot) || $docroot === '') {
     http_response_code(500);
 
     return true;
 }
-$real_docroot = realpath($docroot);
-$front_controller = $docroot.'/index.php';
-$mounted = false;
-$mounts = json_decode((string) (getenv('WEBKERNEL_SERVER_MOUNTS') ?: '[]'), true);
-if (is_array($mounts)) {
-    usort($mounts, static fn (array $a, array $b): int => strlen((string) ($b['prefix'] ?? '')) <=> strlen((string) ($a['prefix'] ?? '')));
-    foreach ($mounts as $mount) {
-        if (!is_array($mount) || !is_string($mount['prefix'] ?? null) || !is_string($mount['root'] ?? null)) continue;
-        $prefix = rtrim($mount['prefix'], '/');
-        if ($uri !== $prefix && !str_starts_with($uri, $prefix.'/')) continue;
-        $mounted_root = realpath($mount['root']);
-        if (!is_string($mounted_root) || !is_dir($mounted_root) || !is_file($mounted_root.'/index.php')) break;
-        $docroot = $mounted_root;
-        $real_docroot = $mounted_root;
-        $front_controller = $mounted_root.'/index.php';
-        $mounted = true;
-        $uri = substr($uri, strlen($prefix));
-        $uri = $uri === '' ? '/' : $uri;
-        $_SERVER['SCRIPT_NAME'] = $prefix.'/index.php';
-        $_SERVER['PHP_SELF'] = $prefix.'/index.php';
-        break;
+
+$root = str_replace('\\', '/', dirname($docroot));
+$mounts = json_decode((string) (getenv('WEBKERNEL_SERVER_MOUNTS') ?: '{}'), true);
+$mounts = is_array($mounts) ? $mounts : [];
+$prefix = MountPaths::match($request_target, $mounts);
+$mounted = $prefix !== null;
+
+$client = ($_SERVER['REMOTE_ADDR'] ?? '127.0.0.1').':'.($_SERVER['REMOTE_PORT'] ?? '0');
+$method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+$log_request = static function () use ($client, $method, $request_target, $server_request_started_at): void {
+    $status = http_response_code();
+    $last_error = error_get_last();
+    if (($status === false || $status < 400)
+        && in_array($last_error['type'] ?? null, [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true)
+    ) {
+        $status = 500;
     }
+    $render = defined('START_REQUEST')
+        ? sprintf(' render=%.2f', (hrtime(true) - START_REQUEST) / 1e6)
+        : '';
+    file_put_contents('php://stderr', sprintf(
+        "%s [%d]: %s %s%s request=%.2f\n",
+        $client,
+        $status ?: 200,
+        $method,
+        $request_target,
+        $render,
+        (hrtime(true) - $server_request_started_at) / 1e6,
+    ));
+};
+
+if ($mounted) {
+    register_shutdown_function($log_request);
+    $docroot = $mounts[$prefix];
+    $uri = substr($uri, strlen($prefix)) ?: '/';
+    $_SERVER['SCRIPT_NAME'] = $prefix.'/index.php';
+    $_SERVER['PHP_SELF'] = $_SERVER['SCRIPT_NAME'];
+    $_SERVER['SCRIPT_FILENAME'] = $docroot.'/index.php';
+    $_SERVER['DOCUMENT_ROOT'] = $docroot;
+    $_SERVER['PATH_INFO'] = $uri;
 }
+
+$front_controller = $docroot.'/index.php';
+$real_docroot = realpath($docroot);
 $file = $docroot.$uri;
 $real_file = realpath($file);
 
@@ -97,10 +120,16 @@ if (
     if (!$mounted) return false;
 }
 
-$root = str_replace('\\', '/', dirname($_SERVER['DOCUMENT_ROOT'] ?? $docroot));
 $profile = ($_SERVER['WEBKERNEL_PROFILE_LIFECYCLE'] ?? getenv('WEBKERNEL_PROFILE_LIFECYCLE')) === '1';
 
 $is_api = str_starts_with($uri, '/api/') || (isset($_SERVER['HTTP_ACCEPT']) && str_contains((string) $_SERVER['HTTP_ACCEPT'], 'application/json'));
+$server_cwd = getcwd();
+if ($mounted) {
+    chdir($docroot);
+    register_shutdown_function(static function () use ($server_cwd): void {
+        if (is_string($server_cwd)) chdir($server_cwd);
+    });
+}
 
 $classes_before = [];
 if ($profile) {
@@ -119,39 +148,15 @@ if ($profile) {
     }
     IncludeClock::start();
     IncludeClock::hook_autoloader();
-    if ($front_controller !== ($_SERVER['DOCUMENT_ROOT'] ?? '').'/index.php') {
-        chdir(dirname($front_controller));
-    }
     IncludeClock::run_file($front_controller);
 } else {
-    if ($front_controller !== ($_SERVER['DOCUMENT_ROOT'] ?? '').'/index.php') {
-        chdir(dirname($front_controller));
-    }
     require $front_controller;
 }
+if ($mounted && is_string($server_cwd)) chdir($server_cwd);
 
-$status = http_response_code();
-if (! is_int($status) || $status < 100) {
-    $status = 200;
+if (! $mounted) {
+    $log_request();
 }
-
-$client = ($_SERVER['REMOTE_ADDR'] ?? '127.0.0.1').':'.($_SERVER['REMOTE_PORT'] ?? '0');
-$method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-$path = $_SERVER['REQUEST_URI'] ?? $original_uri;
-$server_request_ms = (\hrtime(true) - $server_request_started_at) / 1e6;
-$render = defined('START_REQUEST')
-    ? sprintf(' render=%.2f', (hrtime(true) - START_REQUEST) / 1e6)
-    : '';
-
-file_put_contents('php://stderr', sprintf(
-    "%s [%d]: %s %s%s request=%.2f\n",
-    $client,
-    $status,
-    $method,
-    $path,
-    $render,
-    $server_request_ms,
-));
 
 if ($profile) {
     file_put_contents('php://stderr', 'webkernel-type '.($is_api ? 'API' : 'WEB')."\n");

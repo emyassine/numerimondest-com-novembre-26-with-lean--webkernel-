@@ -6,7 +6,10 @@ The Studio pages are served from the domain root. Page templates live directly
 in `app/resources/views/`; reusable components are in `app/resources/components/`.
 Project, capability and service-offer data live separately in
 `app/resources/data/studio/projects/`, `capabilities/` and the canonical
-`app/resources/data/studio/offerings.php` seed.
+`app/resources/data/studio/offerings.php` seed. Shared offering models, validation,
+pricing and SQLite persistence live in `packages/numerimondes-offerings`; the
+Perfex module supplies its admin interface, while `app/src/Studio` contains
+Webkernel-specific controllers and presentation code.
 Capabilities describe the team's areas of expertise under `/capabilities`; the
 service enquiry marketplace under `/services` reads the published revision of a
 single SQLite-backed offerings catalogue. Staff manage offerings in the

@@ -2,7 +2,7 @@
 
 namespace App\Studio\Partners;
 
-use App\Studio\Pricing\PartnerPriceRule;
+use Numerimondes\Offerings\Pricing\PartnerPriceRule;
 
 /** Resolves a partner from a server-side bearer credential. */
 final class PartnerAccess

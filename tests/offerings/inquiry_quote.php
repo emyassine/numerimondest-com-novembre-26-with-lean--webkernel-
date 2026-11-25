@@ -8,9 +8,9 @@ require $base_path.'/internal/dependencies/autoload.php';
 require __DIR__.'/initialize_test_catalogue.php';
 initializeTestCatalogue($base_path);
 
-use App\Studio\Catalog\OfferingCatalog;
+use Numerimondes\Offerings\Catalog\OfferingCatalog;
 use App\Studio\Http\ServiceInquiryController;
-use App\Studio\Persistence\QuoteStore;
+use Numerimondes\Offerings\Persistence\QuoteStore;
 
 $catalogue = OfferingCatalog::all();
 $selected = [$catalogue['sales-desk'], $catalogue['x-desk-mo'], $catalogue['rec-ops'], $catalogue['sys-sprint'], $catalogue['x-sprint-flow']];

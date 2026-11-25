@@ -3,16 +3,16 @@
 namespace App\Studio\Http;
 
 use App\Studio\Catalog\ProjectCatalog;
-use App\Studio\Catalog\OfferingCatalog;
+use Numerimondes\Offerings\Catalog\OfferingCatalog;
 use App\Studio\Analytics\MarketFitAnalytics;
-use App\Studio\Catalog\Offering;
+use Numerimondes\Offerings\Catalog\Offering;
 use App\Studio\Integration\Perfex\PerfexAccountSession;
 use App\Studio\Integration\Perfex\PerfexLeadGateway;
-use App\Studio\Persistence\OfferingStore;
-use App\Studio\Persistence\QuoteStore;
+use Numerimondes\Offerings\Persistence\OfferingStore;
+use Numerimondes\Offerings\Persistence\QuoteStore;
 use App\Studio\Pricing\CurrencyRates;
-use App\Studio\Pricing\OfferingPriceResolver;
-use App\Studio\Pricing\QuoteSnapshot;
+use Numerimondes\Offerings\Pricing\OfferingPriceResolver;
+use Numerimondes\Offerings\Pricing\QuoteSnapshot;
 use App\Studio\Shortlist\ServiceShortlist;
 use Webkernel\HttpFoundation\RedirectResponse;
 use Webkernel\Route\Request;

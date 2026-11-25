@@ -16,7 +16,7 @@ require __DIR__.'/initialize_test_catalogue.php';
 initializeTestCatalogue($root);
 
 use App\Studio\Http\ServiceInquiryController;
-use App\Studio\Persistence\QuoteStore;
+use Numerimondes\Offerings\Persistence\QuoteStore;
 use Webkernel\Route\Request;
 use Webkernel\Session\Session;
 

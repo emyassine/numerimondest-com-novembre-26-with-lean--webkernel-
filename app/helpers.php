@@ -111,9 +111,10 @@ if (! function_exists('offering_price_components')) {
         $cookie = is_string($settings['cookie'] ?? null) ? $settings['cookie'] : 'numerimondes_currency';
         $selected = strtoupper($currency ?? (is_string($_COOKIE[$cookie] ?? null) ? $_COOKIE[$cookie] : (string)($settings['default'] ?? 'MAD')));
         if (!isset($options[$selected])) $selected = 'MAD';
-        return (new \App\Studio\Pricing\OfferingPriceResolver())->resolve(
-            \App\Studio\Catalog\Offering::fromArray($record),
+        return (new \Numerimondes\Offerings\Pricing\OfferingPriceResolver())->resolve(
+            \Numerimondes\Offerings\Catalog\Offering::fromArray($record),
             $selected,
+            ratesPerMad: \App\Studio\Pricing\CurrencyRates::forPricing()['rates'],
         );
     }
 }

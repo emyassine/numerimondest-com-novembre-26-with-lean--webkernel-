@@ -3,8 +3,8 @@
 require dirname(__DIR__, 2).'/internal/dependencies/autoload.php';
 
 use App\Studio\Http\PartnerOfferingController;
-use App\Studio\Persistence\OfferingStore;
-use App\Studio\Persistence\QuoteStore;
+use Numerimondes\Offerings\Persistence\OfferingStore;
+use Numerimondes\Offerings\Persistence\QuoteStore;
 use Webkernel\Route\Request;
 
 function verify(bool $condition, string $message): void

@@ -10,6 +10,8 @@ namespace Webkernel\Commands\ServerCommand;
 use Webkernel\Console\ExitCode;
 use Webkernel\Console\Terminal;
 
+require_once __DIR__.'/MountPaths.php';
+
 /**
  * PHP built-in server process for {@see \Webkernel\Commands\ServerCommand}.
  *
@@ -33,7 +35,8 @@ final class Engine
     private string $public_dir = '';
     private string $root = '';
     private string $router = '';
-    private string $mounts_json = '[]';
+    /** @var array<string, string> URL prefix => document root */
+    private array $mounts = [];
     private bool $profile_lifecycle = false;
     /** true force on, false force off, null inherit php.ini / preference */
     private ?bool $jit = null;
@@ -87,7 +90,7 @@ final class Engine
             }
             $prefix = rtrim($parts[1], '/');
             $directory = realpath($parts[2]);
-            if ($prefix === '' || preg_match('#(?:^|/)\.\.?(/|$)#', $prefix) || !is_string($directory) || !is_dir($directory) || !is_file($directory.'/index.php')) {
+            if (!preg_match('#^/(?:[a-zA-Z0-9._~-]+/)*[a-zA-Z0-9._~-]+$#D', $prefix) || preg_match('#(?:^|/)\.\.?(/|$)#', $prefix) || !is_string($directory) || !is_dir($directory) || !is_file($directory.'/index.php')) {
                 fwrite(STDERR, "Mounts need a URL prefix and an application directory containing index.php.\n");
                 return ExitCode::ERROR;
             }
@@ -95,13 +98,14 @@ final class Engine
                 fwrite(STDERR, "Duplicate mount prefix: {$prefix}\n");
                 return ExitCode::ERROR;
             }
-            $normalized_mounts[$prefix] = ['prefix' => $prefix, 'root' => $directory];
+            $normalized_mounts[$prefix] = $directory;
         }
         $this->server_started_at = \hrtime(true);
         $this->public_dir = base_path('public');
         $this->root = base_path();
         $this->router = __DIR__.'/router.php';
-        $this->mounts_json = json_encode(array_values($normalized_mounts), JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES);
+        uksort($normalized_mounts, static fn (string $a, string $b): int => strlen($b) <=> strlen($a));
+        $this->mounts = $normalized_mounts;
         $this->register_signals();
         for ($try = 0; $try < self::MAX_PORT_TRIES; $try++) {
             if ($this->interrupted) {
@@ -134,7 +138,7 @@ final class Engine
      */
     private function run_process(): ?int
     {
-        $command = [PHP_BINARY];
+        $command = [PHP_BINARY, '-d', 'log_errors=1', '-d', 'error_log='];
         if ($this->jit === true) {
             foreach (Performance::jit_engine_args() as $part) {
                 $command[] = $part;
@@ -154,7 +158,7 @@ final class Engine
         if (! \is_array($env)) {
             $env = [];
         }
-        $env['WEBKERNEL_SERVER_MOUNTS'] = $this->mounts_json;
+        $env['WEBKERNEL_SERVER_MOUNTS'] = json_encode($this->mounts, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES);
         if ($this->profile_lifecycle) {
             $env['WEBKERNEL_PROFILE_LIFECYCLE'] = '1';
         }
@@ -382,6 +386,13 @@ final class Engine
         $jit_status = $jit_active ? Terminal::GREEN.'enabled'.Terminal::RESET : Terminal::GRAY.'disabled'.Terminal::RESET;
         echo "\n";
         console()->info('Server running on '.Terminal::BOLD . $url .Terminal::RESET);
+        if ($this->mounts !== []) {
+            echo "\n  ".Terminal::BOLD.'Applications:'.Terminal::RESET."\n";
+            echo '    '.Terminal::badge('MAIN', '44', '97').' / → '.$this->public_dir."\n";
+            foreach ($this->mounts as $prefix => $directory) {
+                echo '    '.Terminal::badge($prefix, '45', '97').' '.$url.$prefix.' → '.$directory."\n";
+            }
+        }
         echo "\n";
         echo '  '.Terminal::muted('PHP Version: '.PHP_VERSION.' | OPcache: '.$opcache_status.' | JIT: '.$jit_status)."\n\n";
         if ($this->jit === true && ! \extension_loaded('Zend OPcache')) {
@@ -427,26 +438,20 @@ final class Engine
         $width = $this->line_width();
 
         $is_api = $timings['type'] ?? 'WEB';
-        $type_badge = $is_api === 'API' ? Terminal::badge('API', '45', '97') : Terminal::badge('WEB', '42', '97');
+        [$method, $uri] = $this->request_parts($request);
+        $app = MountPaths::match($uri, $this->mounts);
+        $type_badge = $app !== null
+            ? Terminal::badge($app, '45', '97')
+            : ($is_api === 'API' ? Terminal::badge('API', '45', '97') : Terminal::badge('WEB', '42', '97'));
         $reason = $this->status_reason($status_code);
 
         $right_plain = $this->metrics_plain($timings['render_ms'] ?? null, $request_ms);
         $right = Terminal::muted($right_plain);
 
-        [$method, $uri] = $this->request_parts($request);
         $prefix = \sprintf('  %s %s ', $type_badge, Terminal::muted($timestamp));
         $status = Terminal::status_color($status_code).$this->status_label($status_code, $reason, $width).Terminal::RESET;
         $method = Terminal::CYAN.\str_pad($method, 7).Terminal::RESET;
-        $left_base = $prefix.$status.' '.$method;
-        $left_base_len = $this->visible_len($left_base);
-        $right_len = \strlen($right_plain);
-        $uri_width = \max(8, $width - $left_base_len - $right_len - 5);
-        $uri = $this->shorten($uri, $uri_width);
-        $uri_len = \strlen($uri);
-        $dots = \max(3, $uri_width - $uri_len);
-        $left = $left_base.Terminal::CYAN.$uri.Terminal::RESET;
-
-        echo $left.' '.Terminal::muted(\str_repeat('.', $dots)).'  '.$right."\n";
+        echo $prefix.$status.' '.$method.Terminal::CYAN.$uri.Terminal::RESET.'  '.$right."\n";
         if (! $this->profile_lifecycle) {
             return;
         }

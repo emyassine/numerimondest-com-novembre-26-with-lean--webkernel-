@@ -4,8 +4,8 @@ namespace App\Studio\Http;
 
 use App\Studio\Analytics\MarketFitAnalytics;
 use App\Studio\Catalog\MarketFitRecommender;
-use App\Studio\Catalog\Taxonomy\BusinessNeed;
-use App\Studio\Catalog\Taxonomy\Industry;
+use Numerimondes\Offerings\Catalog\Taxonomy\BusinessNeed;
+use Numerimondes\Offerings\Catalog\Taxonomy\Industry;
 use Webkernel\HttpFoundation\JsonResponse;
 use Webkernel\Route\Request;
 

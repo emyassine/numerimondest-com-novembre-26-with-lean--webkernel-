@@ -2,6 +2,8 @@
 
 namespace App\Studio\Persistence;
 
+use Numerimondes\Offerings\Persistence\OfferingStore;
+
 /** Refreshes snapshots created only by application seed or migration actors. */
 final class RefreshCanonicalOfferings
 {

@@ -1,6 +1,6 @@
 {
   "name": "numerimondes/offerings",
-  "description": "Secure client for synchronizing published Numerimondes offering catalogues.",
+  "description": "Shared Numerimondes offerings domain, SQLite catalogue, pricing, and partner API client.",
   "type": "library",
   "license": "proprietary",
   "require": { "php": ">=8.2", "ext-json": "*" },

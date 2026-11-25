@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
-use App\Studio\Persistence\OfferingStore;
-use App\Studio\Persistence\QuoteStore;
+use Numerimondes\Offerings\Persistence\OfferingStore;
+use Numerimondes\Offerings\Persistence\QuoteStore;
 
 $root = dirname(__DIR__, 2);
 ini_set('session.save_path', sys_get_temp_dir());

@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
-use App\Studio\Persistence\OfferingStore;
-use App\Studio\Persistence\QuoteStore;
+use Numerimondes\Offerings\Persistence\OfferingStore;
+use Numerimondes\Offerings\Persistence\QuoteStore;
 
 /** Initializes an isolated test database explicitly, as deployment initialization does. */
 function initializeTestCatalogue(string $projectRoot): void

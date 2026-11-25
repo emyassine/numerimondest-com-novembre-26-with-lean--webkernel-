@@ -2,7 +2,7 @@
 
 namespace App\Studio\Http;
 
-use App\Studio\Catalog\OfferingCatalog;
+use Numerimondes\Offerings\Catalog\OfferingCatalog;
 use App\Studio\Analytics\MarketFitAnalytics;
 use Webkernel\HttpFoundation\Response;
 use Webkernel\View\View;

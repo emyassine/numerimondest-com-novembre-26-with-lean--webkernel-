@@ -2,8 +2,8 @@
 
 require dirname(__DIR__, 2).'/internal/dependencies/autoload.php';
 
-use App\Studio\Persistence\QuoteStore;
-use App\Studio\Pricing\QuoteSnapshot;
+use Numerimondes\Offerings\Persistence\QuoteStore;
+use Numerimondes\Offerings\Pricing\QuoteSnapshot;
 
 $path = sys_get_temp_dir().'/nm-quotes-'.bin2hex(random_bytes(6)).'.sqlite';
 try {

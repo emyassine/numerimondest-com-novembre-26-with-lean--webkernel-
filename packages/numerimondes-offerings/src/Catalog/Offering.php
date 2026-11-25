@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace App\Studio\Catalog;
+namespace Numerimondes\Offerings\Catalog;
 
-use App\Studio\Catalog\Taxonomy\BusinessNeed;
-use App\Studio\Catalog\Taxonomy\Industry;
+use Numerimondes\Offerings\Catalog\Taxonomy\BusinessNeed;
+use Numerimondes\Offerings\Catalog\Taxonomy\Industry;
 
 /** Canonical catalog record. Translation maps stay unresolved until rendering/API serialization. */
 final readonly class Offering

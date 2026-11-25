@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace App\Studio\Catalog;
+namespace Numerimondes\Offerings\Catalog;
 
-use App\Studio\Catalog\Taxonomy\BusinessNeed;
-use App\Studio\Catalog\Taxonomy\Industry;
+use Numerimondes\Offerings\Catalog\Taxonomy\BusinessNeed;
+use Numerimondes\Offerings\Catalog\Taxonomy\Industry;
 
 /** Validates catalogue documents before they are saved or published. */
 final class OfferingCatalogValidator

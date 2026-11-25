@@ -2,7 +2,7 @@
 
 namespace App\Studio\Shortlist;
 
-use App\Studio\Catalog\OfferingCatalog;
+use Numerimondes\Offerings\Catalog\OfferingCatalog;
 
 final class ServiceShortlist
 {

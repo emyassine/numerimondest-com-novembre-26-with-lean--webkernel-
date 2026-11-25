@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Studio\Pricing;
+namespace Numerimondes\Offerings\Pricing;
 
 /** Immutable commercial snapshot; never include partner settlement internals. */
 final readonly class QuoteSnapshot

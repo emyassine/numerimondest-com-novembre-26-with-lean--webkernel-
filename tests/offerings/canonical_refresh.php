@@ -3,7 +3,7 @@
 $base_path = dirname(__DIR__, 2);
 require $base_path.'/internal/dependencies/autoload.php';
 
-use App\Studio\Persistence\OfferingStore;
+use Numerimondes\Offerings\Persistence\OfferingStore;
 use App\Studio\Persistence\RefreshCanonicalOfferings;
 use App\Studio\Persistence\RetireReplacedOfferings;
 

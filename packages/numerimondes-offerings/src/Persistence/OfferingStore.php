@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Studio\Persistence;
+namespace Numerimondes\Offerings\Persistence;
 
 use PDO;
 use RuntimeException;

@@ -2,8 +2,8 @@
 
 namespace App\Studio\Analytics;
 
-use App\Studio\Catalog\Taxonomy\BusinessNeed;
-use App\Studio\Catalog\Taxonomy\Industry;
+use Numerimondes\Offerings\Catalog\Taxonomy\BusinessNeed;
+use Numerimondes\Offerings\Catalog\Taxonomy\Industry;
 
 /** Stores daily aggregate selector counts only; no visitor identifiers are recorded. */
 final class MarketFitAnalytics

@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
-namespace App\Studio\Catalog;
+namespace Numerimondes\Offerings\Catalog;
+use InvalidArgumentException as Invalid;
 
 final readonly class OfferingRelation
 {
@@ -12,10 +13,10 @@ final readonly class OfferingRelation
         public string $visibility = 'detail_only',
     ) {
         if ($parentId === '' || $childId === '' || $parentId === $childId) {
-            throw new \InvalidArgumentException('Offering relations require distinct parent and child identifiers.');
+            throw new Invalid('Offering relations require distinct parent and child identifiers.');
         }
         if (!in_array($visibility, ['catalog', 'detail_only', 'hidden'], true)) {
-            throw new \InvalidArgumentException('Unsupported offering relation visibility.');
+            throw new Invalid('Unsupported offering relation visibility.');
         }
     }
 }

@@ -4,8 +4,35 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7d569a07b338ac61fa49a2eb8a40c712",
+    "content-hash": "89075504b0de432ef5d9fbb4294ea2a0",
     "packages": [
+        {
+            "name": "numerimondes/offerings",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/numerimondes-offerings",
+                "reference": "0eea0ea788dbacd84db1fcd03ed2d06632dbadda"
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Numerimondes\\Offerings\\": "src/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Shared Numerimondes offerings domain, SQLite catalogue, pricing, and partner API client.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
         {
             "name": "psr/clock",
             "version": "1.0.0",

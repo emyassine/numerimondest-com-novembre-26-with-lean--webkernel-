@@ -3,10 +3,10 @@
 $root = dirname(__DIR__, 2);
 define('BASEPATH', true);
 define('FCPATH', $root.'/account/');
-require $root.'/app/src/Studio/Persistence/OfferingStore.php';
+require $root.'/packages/numerimondes-offerings/src/Persistence/OfferingStore.php';
 require $root.'/account/modules/nm_offerings/libraries/Nm_offerings_catalog.php';
 
-use App\Studio\Persistence\OfferingStore;
+use Numerimondes\Offerings\Persistence\OfferingStore;
 
 $path = sys_get_temp_dir().'/nm-perfex-offerings-'.bin2hex(random_bytes(8)).'.sqlite';
 OfferingStore::initialize($path);

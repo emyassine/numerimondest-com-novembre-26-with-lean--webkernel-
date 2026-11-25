@@ -2,9 +2,9 @@
 
 namespace App\Studio\Presentation;
 
-use App\Studio\Catalog\OfferingCatalog;
-use App\Studio\Catalog\Taxonomy\BusinessNeed;
-use App\Studio\Catalog\Taxonomy\Industry;
+use Numerimondes\Offerings\Catalog\OfferingCatalog;
+use Numerimondes\Offerings\Catalog\Taxonomy\BusinessNeed;
+use Numerimondes\Offerings\Catalog\Taxonomy\Industry;
 use App\Studio\Pricing\CurrencyRates;
 use Webkernel\Platform\Support\View\ComponentAttributeBag;
 

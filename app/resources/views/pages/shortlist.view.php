@@ -1,12 +1,12 @@
 @php
     $savedSlugs = \App\Studio\Shortlist\ServiceShortlist::all();
-    $catalog = \App\Studio\Catalog\OfferingCatalog::all();
+    $catalog = \Numerimondes\Offerings\Catalog\OfferingCatalog::all();
     $shortlistedServices = array_values(array_filter(
         array_map(static fn (string $slug): ?array => $catalog[$slug] ?? null, $savedSlugs),
         'is_array',
     ));
     foreach ($shortlistedServices as &$shortlistedService) {
-        $parent = \App\Studio\Catalog\OfferingCatalog::parentOf($shortlistedService['id'], 'extension');
+        $parent = \Numerimondes\Offerings\Catalog\OfferingCatalog::parentOf($shortlistedService['id'], 'extension');
         $parentName = is_array($parent) ? __t($parent['name'] ?? []) : null;
         $shortlistedService['slug'] = $shortlistedService['id'];
         $shortlistedService['name'] = __t($shortlistedService['name'] ?? []);

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace App\Studio\Persistence;
+namespace Numerimondes\Offerings\Persistence;
 
-use App\Studio\Pricing\QuoteSnapshot;
+use Numerimondes\Offerings\Pricing\QuoteSnapshot;
 use PDO;
 
 /** Immutable quote snapshots stored beside the catalogue revision database. */

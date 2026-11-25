@@ -2,11 +2,11 @@
 
 require dirname(__DIR__, 2).'/internal/dependencies/autoload.php';
 
-use App\Studio\Catalog\Offering;
-use App\Studio\Catalog\OfferingType;
-use App\Studio\Catalog\PriceComponent;
-use App\Studio\Pricing\OfferingPriceResolver;
-use App\Studio\Pricing\PartnerPriceRule;
+use Numerimondes\Offerings\Catalog\Offering;
+use Numerimondes\Offerings\Catalog\OfferingType;
+use Numerimondes\Offerings\Catalog\PriceComponent;
+use Numerimondes\Offerings\Pricing\OfferingPriceResolver;
+use Numerimondes\Offerings\Pricing\PartnerPriceRule;
 use App\Studio\Pricing\CurrencyRates;
 
 function assertSameValue(mixed $expected, mixed $actual, string $message): void

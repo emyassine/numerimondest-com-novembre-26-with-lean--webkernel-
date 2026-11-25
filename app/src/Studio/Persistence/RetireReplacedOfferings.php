@@ -2,6 +2,8 @@
 
 namespace App\Studio\Persistence;
 
+use Numerimondes\Offerings\Persistence\OfferingStore;
+
 /** One-time data migration for offers explicitly replaced by the unified mandate catalogue. */
 final class RetireReplacedOfferings
 {

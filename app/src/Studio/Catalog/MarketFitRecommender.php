@@ -2,6 +2,8 @@
 
 namespace App\Studio\Catalog;
 
+use Numerimondes\Offerings\Catalog\OfferingCatalog;
+
 /** Ranks published catalogue offerings for the optional services discovery selector. */
 final class MarketFitRecommender
 {

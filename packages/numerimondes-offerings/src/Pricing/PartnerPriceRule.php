@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Studio\Pricing;
+namespace Numerimondes\Offerings\Pricing;
 
 /** Public-facing partner adjustment; internal commission/revenue data is never serialized. */
 final readonly class PartnerPriceRule

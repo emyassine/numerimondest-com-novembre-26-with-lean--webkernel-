@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-use App\Studio\Catalog\OfferingCatalog;
-use App\Studio\Persistence\OfferingStore;
-use App\Studio\Persistence\QuoteStore;
+use Numerimondes\Offerings\Catalog\OfferingCatalog;
+use Numerimondes\Offerings\Persistence\OfferingStore;
+use Numerimondes\Offerings\Persistence\QuoteStore;
 use App\Studio\Persistence\RefreshCanonicalOfferings;
 
 $root = dirname(__DIR__, 2);

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Studio\Catalog;
+namespace Numerimondes\Offerings\Catalog;
 
 final readonly class PriceComponent
 {

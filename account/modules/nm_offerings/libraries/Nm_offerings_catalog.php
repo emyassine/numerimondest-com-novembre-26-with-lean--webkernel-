@@ -2,8 +2,8 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-use App\Studio\Catalog\OfferingCatalogValidator;
-use App\Studio\Persistence\OfferingStore;
+use Numerimondes\Offerings\Catalog\OfferingCatalogValidator;
+use Numerimondes\Offerings\Persistence\OfferingStore;
 
 /** Shared access to the website's canonical SQLite catalogue. */
 class Nm_offerings_catalog
@@ -14,18 +14,18 @@ class Nm_offerings_catalog
     public function __construct($databasePath = null, $projectRoot = null)
     {
         $projectRoot = $projectRoot ?: realpath(FCPATH . '..');
-        if (!is_string($projectRoot) || !is_dir($projectRoot . '/app/src/Studio')) {
-            throw new RuntimeException('The Numerimondes Studio classes are not available beside the Perfex installation.');
+        if (!is_string($projectRoot) || !is_dir($projectRoot . '/packages/numerimondes-offerings/src')) {
+            throw new RuntimeException('The Numerimondes Offerings package is not available beside the Perfex installation.');
         }
         if (!extension_loaded('pdo_sqlite')) {
             throw new RuntimeException('Enable the PDO SQLite extension for the PHP process serving Perfex.');
         }
         if (!self::$autoloadRegistered) {
             spl_autoload_register(static function ($class) use ($projectRoot) {
-                $prefix = 'App\\Studio\\';
+                $prefix = 'Numerimondes\\Offerings\\';
                 if (strncmp($class, $prefix, strlen($prefix)) !== 0) return;
                 $relative = str_replace('\\', DIRECTORY_SEPARATOR, substr($class, strlen($prefix)));
-                $file = $projectRoot . '/app/src/Studio/' . $relative . '.php';
+                $file = $projectRoot . '/packages/numerimondes-offerings/src/' . $relative . '.php';
                 if (is_file($file)) require_once $file;
             }, true, true);
             self::$autoloadRegistered = true;

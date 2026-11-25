@@ -20,6 +20,16 @@
   "repositories": [
     {
       "type": "path",
+      "url": "packages/numerimondes-offerings",
+      "options": {
+        "symlink": false,
+        "versions": {
+          "numerimondes/offerings": "1.0.0"
+        }
+      }
+    },
+    {
+      "type": "path",
       "url": "webkernel/packages/*",
       "options": {
         "symlink": false
@@ -28,6 +38,7 @@
   ],
   "require": {
     "php": ">=8.5.12",
+    "numerimondes/offerings": "^1.0",
     "webkernel/commands": "^0.12.0",
     "webkernel/console": "^0.12.0",
     "webkernel/platform-notifications": "^5.9.0",

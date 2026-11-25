@@ -1,5 +1,5 @@
 @php
-    $serviceCatalog = \App\Studio\Catalog\OfferingCatalog::all();
+    $serviceCatalog = \Numerimondes\Offerings\Catalog\OfferingCatalog::all();
     $selectedSlugs = \App\Studio\Http\ServiceInquiryController::selectedSlugs();
     $selectedServices = array_values(array_filter(
         array_map(static fn (string $slug): ?array => $serviceCatalog[$slug] ?? null, $selectedSlugs),
@@ -7,7 +7,7 @@
     ));
     $prepareOfferCard = static function (array $offer): array {
         $id = (string) ($offer['id'] ?? '');
-        $parent = \App\Studio\Catalog\OfferingCatalog::parentOf($id, 'extension');
+        $parent = \Numerimondes\Offerings\Catalog\OfferingCatalog::parentOf($id, 'extension');
         $offer['quantity_unit'] = null;
         foreach ($offer['prices'] ?? [] as $priceComponent) {
             if (is_array($priceComponent) && is_string($priceComponent['unit'] ?? null) && $priceComponent['unit'] !== '') {

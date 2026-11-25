@@ -2,9 +2,9 @@
 
 require dirname(__DIR__, 2).'/internal/dependencies/autoload.php';
 
-use App\Studio\Catalog\Taxonomy\BusinessNeed;
-use App\Studio\Catalog\Taxonomy\Industry;
-use App\Studio\Catalog\OfferingType;
+use Numerimondes\Offerings\Catalog\Taxonomy\BusinessNeed;
+use Numerimondes\Offerings\Catalog\Taxonomy\Industry;
+use Numerimondes\Offerings\Catalog\OfferingType;
 
 $offerings = require dirname(__DIR__, 2).'/app/resources/data/studio/offerings.php';
 $byId = [];

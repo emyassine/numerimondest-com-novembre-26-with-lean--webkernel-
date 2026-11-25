@@ -1,4 +1,6 @@
-# Numerimondes Offerings PHP Client
+# Numerimondes Offerings PHP Package
+
+This package is the shared offerings core used by the Webkernel website and the Perfex `nm_offerings` module. It owns offering types, classifications, validation, pricing primitives, SQLite persistence and published catalogue reads. The website-specific routes and page preparation stay in `app/src/Studio`; the Perfex module contains only the CRM UI adapter. Both applications access the same SQLite file. The package also contains the partner HTTP client described below.
 
 This Composer package synchronizes published offers from `GET /api/v1/offerings`; authorized catalog-visible offerings can also be fetched from `GET /api/v1/offerings/{id}`. It requires PHP 8.2+ and has no runtime dependencies beyond `ext-json`.
 

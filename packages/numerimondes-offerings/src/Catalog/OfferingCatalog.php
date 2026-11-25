@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace App\Studio\Catalog;
+namespace Numerimondes\Offerings\Catalog;
 
-use App\Studio\Persistence\OfferingStore;
+use Numerimondes\Offerings\Persistence\OfferingStore;
 
 /** The single runtime read model for public offerings. */
 final class OfferingCatalog

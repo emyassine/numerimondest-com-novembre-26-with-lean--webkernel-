@@ -7,8 +7,8 @@ require dirname(__DIR__, 3).'/src/CatalogueClient.php';
 require dirname(__DIR__).'/Storefront.php';
 
 use App\Studio\Http\PartnerOfferingController;
-use App\Studio\Persistence\OfferingStore;
-use App\Studio\Persistence\QuoteStore;
+use Numerimondes\Offerings\Persistence\OfferingStore;
+use Numerimondes\Offerings\Persistence\QuoteStore;
 use Numerimondes\Offerings\CatalogueClient;
 use Numerimondes\Offerings\SnapshotStore;
 use Webkernel\Route\Request;

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Studio\Catalog\Taxonomy;
+namespace Numerimondes\Offerings\Catalog\Taxonomy;
 
 enum Industry: string
 {

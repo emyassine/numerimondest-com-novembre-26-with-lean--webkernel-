@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace App\Studio\Pricing;
+namespace Numerimondes\Offerings\Pricing;
 
-use App\Studio\Catalog\Offering;
-use App\Studio\Catalog\PriceComponent;
+use Numerimondes\Offerings\Catalog\Offering;
+use Numerimondes\Offerings\Catalog\PriceComponent;
 
 /** Calculates estimates from authoritative MAD catalog components and partner rules. */
 final class OfferingPriceResolver
@@ -45,7 +45,7 @@ final class OfferingPriceResolver
             throw new \InvalidArgumentException('Partner price rule does not match this offering.');
         }
         if ($rule !== null && !$rule->appliesAt($at)) $rule = null;
-        $rates = $ratesPerMad ?? CurrencyRates::forPricing()['rates'];
+        $rates = $ratesPerMad ?? ['MAD' => 1.0];
         $currency = strtoupper($currency);
         if (!isset($rates[$currency]) || $rates[$currency] <= 0) throw new \InvalidArgumentException('Unsupported display currency.');
 
