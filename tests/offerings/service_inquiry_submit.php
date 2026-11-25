@@ -1,5 +1,7 @@
 <?php declare(strict_types=1);
 
+use Webkernel\Config\Config;
+
 $root = dirname(__DIR__, 2);
 $base_path = $root;
 $GLOBALS['BASE_PATH'] = $root;
@@ -9,7 +11,7 @@ ini_set('session.save_path', sys_get_temp_dir());
 $database = sys_get_temp_dir().'/nm-inquiry-submit-'.bin2hex(random_bytes(6)).'.sqlite';
 putenv('NM_OFFERINGS_DATABASE='.$database);
 require $root.'/internal/dependencies/autoload.php';
-Webkernel\Config\Config::boot($root, $root.'/internal/dependencies', $root.'/runtime/cache');
+Config::boot($root, $root.'/internal/dependencies', $root.'/runtime/cache');
 require __DIR__.'/initialize_test_catalogue.php';
 initializeTestCatalogue($root);
 

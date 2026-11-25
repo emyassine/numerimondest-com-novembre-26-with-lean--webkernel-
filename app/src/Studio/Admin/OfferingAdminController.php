@@ -9,6 +9,8 @@ use App\Studio\Catalog\Taxonomy\Industry;
 use App\Studio\Catalog\Taxonomy\BusinessNeed;
 use Webkernel\Route\Request;
 use Webkernel\HttpFoundation\Response;
+use Webkernel\Session\Session;
+use Webkernel\HttpErrorPages\ErrorPages;
 use Webkernel\View\View;
 
 /** Bearer-token protected catalogue editor and publication boundary. */
@@ -16,7 +18,7 @@ final class OfferingAdminController
 {
     public static function index(Request $request, ?OfferingStore $store = null): Response
     {
-        if (!self::authorized($request)) return self::unauthorized();
+        if (!self::authorized()) return self::redirectToLogin();
         $store ??= new OfferingStore();
         $draft = $store->current('draft');
         $published = $store->current('published');
@@ -25,6 +27,7 @@ final class OfferingAdminController
         $value = $json;
         $revision = htmlspecialchars((string) ($source['revision'] ?? 'none'), ENT_QUOTES, 'UTF-8');
         $history = $store->history();
+        $csrf = self::csrfToken();
         $historyHtml = '';
         foreach ($history as $entry) {
             $historyHtml .= '<li>Revision '.(int) $entry['revision'].' · '.htmlspecialchars($entry['created_at'], ENT_QUOTES, 'UTF-8').'</li>';
@@ -33,13 +36,15 @@ final class OfferingAdminController
             'revision' => $revision,
             'catalogueJson' => $value,
             'historyHtml' => $historyHtml,
+            'csrfToken' => htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'),
         ])->render();
         return new Response($html, 200, ['Content-Type' => 'text/html; charset=utf-8', 'Cache-Control' => 'no-store']);
     }
 
     public static function saveDraft(Request $request, ?OfferingStore $store = null): Response
     {
-        if (!self::authorized($request)) return self::unauthorized();
+        if (!self::authorized()) return new Response('Authentication required.', 401);
+        if (!self::validCsrf($request)) return new Response('Invalid security token.', 419);
         $data = json_decode($request->content(), true);
         if (!is_array($data) || !isset($data['offerings']) || !is_array($data['offerings'])) return new Response('Invalid catalogue payload', 422);
         try { self::validate($data['offerings']); }
@@ -51,7 +56,8 @@ final class OfferingAdminController
 
     public static function preview(Request $request): Response
     {
-        if (!self::authorized($request)) return self::unauthorized();
+        if (!self::authorized()) return new Response('Authentication required.', 401);
+        if (!self::validCsrf($request)) return new Response('Invalid security token.', 419);
         $data = json_decode($request->content(), true);
         if (!is_array($data) || !is_array($data['offerings'] ?? null)) return new Response('Invalid catalogue payload.', 422);
         try { self::validate($data['offerings']); }
@@ -73,29 +79,106 @@ final class OfferingAdminController
 
     public static function publish(Request $request, ?OfferingStore $store = null): Response
     {
-        if (!self::authorized($request)) return self::unauthorized();
+        if (!self::authorized()) return new Response('Authentication required.', 401);
+        if (!self::validCsrf($request)) return new Response('Invalid security token.', 419);
         try { $revision = ($store ?? new OfferingStore())->publish('admin'); }
         catch (\Throwable $error) { return new Response($error->getMessage(), 409); }
         return new Response(json_encode(['revision' => $revision], JSON_THROW_ON_ERROR), 200, ['Content-Type' => 'application/json']);
     }
 
-    private static function authorized(Request $request): bool
+    public static function loginForm(): Response
     {
-        if (PHP_SAPI !== 'cli' && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === '' || $_SERVER['HTTPS'] === 'off')) return false;
-        $secret = getenv('NM_OFFERINGS_ADMIN_TOKEN');
-        $authorization = $request->header('authorization');
-        if (!is_string($secret) || strlen($secret) < 32 || !is_string($authorization)) return false;
-        if (str_starts_with($authorization, 'Bearer ')) return hash_equals('Bearer '.$secret, $authorization);
-        if (str_starts_with($authorization, 'Basic ')) {
-            $decoded = base64_decode(substr($authorization, 6), true);
-            return is_string($decoded) && hash_equals('admin:'.$secret, $decoded);
-        }
-        return false;
+        if (!self::secureRequest()) return self::forbidden();
+        $credentials = self::credentials();
+        if ($credentials === null) return new Response('Admin is not configured. Run php scripts/create-offerings-admin.php.', 503);
+        if (self::authorized()) return new Response('', 303, ['Location' => '/admin/offerings', 'Cache-Control' => 'no-store']);
+        $html = View::make('studio::pages.offerings-admin-login', [
+            'csrfToken' => htmlspecialchars(self::csrfToken(), ENT_QUOTES, 'UTF-8'),
+        ])->render();
+        return new Response($html, 200, ['Content-Type' => 'text/html; charset=utf-8', 'Cache-Control' => 'no-store']);
     }
 
-    private static function unauthorized(): Response
+    public static function login(Request $request): Response
     {
-        return new Response('Authentication required.', 401, ['WWW-Authenticate' => 'Basic realm="Numerimondes offerings administration", charset="UTF-8"', 'Cache-Control' => 'no-store']);
+        if (!self::secureRequest()) return self::forbidden();
+        $credentials = self::credentials();
+        $values = $request->all();
+        if ($credentials === null) return new Response('Admin is not configured. Run php scripts/create-offerings-admin.php.', 503);
+        if (!self::validCsrf($request) || !is_string($values['username'] ?? null) || !is_string($values['password'] ?? null)
+            || !hash_equals($credentials['username'], $values['username']) || !password_verify($values['password'], $credentials['password_hash'])) {
+            return new Response('Sign-in failed. Check your username and password.', 401, ['Cache-Control' => 'no-store']);
+        }
+        Session::regenerate(true);
+        Session::put('studio.offerings.admin_authenticated_at', time());
+        Session::forget('studio.offerings.admin_csrf');
+        return new Response('', 303, ['Location' => '/admin/offerings', 'Cache-Control' => 'no-store']);
+    }
+
+    public static function logout(Request $request): Response
+    {
+        if (!self::authorized()) return new Response('Authentication required.', 401);
+        if (!self::validCsrf($request)) return new Response('Invalid security token.', 419);
+        Session::forget('studio.offerings.admin_authenticated_at');
+        Session::forget('studio.offerings.admin_csrf');
+        Session::regenerate(true);
+        return new Response('', 303, ['Location' => '/admin/offerings/login', 'Cache-Control' => 'no-store']);
+    }
+
+    private static function authorized(): bool
+    {
+        $authenticatedAt = Session::get('studio.offerings.admin_authenticated_at');
+        return self::secureRequest() && is_int($authenticatedAt) && $authenticatedAt > time() - 28800;
+    }
+
+    private static function secureRequest(): bool
+    {
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== '' && $_SERVER['HTTPS'] !== 'off') return true;
+        $host = strtolower((string) ($_SERVER['HTTP_HOST'] ?? ''));
+        $parsedHost = parse_url('http://'.$host, PHP_URL_HOST);
+        $remote = (string) ($_SERVER['REMOTE_ADDR'] ?? '');
+        return is_string($parsedHost)
+            && in_array(trim($parsedHost, '[]'), ['localhost', '127.0.0.1', '::1'], true)
+            && in_array($remote, ['127.0.0.1', '::1'], true);
+    }
+
+    private static function forbidden(): Response
+    {
+        return new Response(ErrorPages::render(403), 403, [
+            'Content-Type' => 'text/html; charset=utf-8', 'Cache-Control' => 'no-store',
+        ]);
+    }
+
+    /** @return array{username:string,password_hash:string}|null */
+    private static function credentials(): ?array
+    {
+        $path = base_path('config/offerings-admin.php');
+        if (!is_file($path)) return null;
+        $config = require $path;
+        if (!is_array($config) || !is_string($config['username'] ?? null) || !is_string($config['password_hash'] ?? null)
+            || !str_starts_with($config['password_hash'], '$') || strlen($config['password_hash']) < 50) return null;
+        return ['username' => $config['username'], 'password_hash' => $config['password_hash']];
+    }
+
+    private static function csrfToken(): string
+    {
+        $token = Session::get('studio.offerings.admin_csrf');
+        if (!is_string($token) || strlen($token) !== 64) {
+            $token = bin2hex(random_bytes(32));
+            Session::put('studio.offerings.admin_csrf', $token);
+        }
+        return $token;
+    }
+
+    private static function validCsrf(Request $request): bool
+    {
+        $expected = Session::get('studio.offerings.admin_csrf');
+        $received = $request->header('x-csrf-token') ?? ($request->all()['_csrf'] ?? null);
+        return is_string($expected) && is_string($received) && hash_equals($expected, $received);
+    }
+
+    private static function redirectToLogin(): Response
+    {
+        return new Response('', 303, ['Location' => '/admin/offerings/login', 'Cache-Control' => 'no-store']);
     }
 
     /** @param list<array<string,mixed>> $offerings */

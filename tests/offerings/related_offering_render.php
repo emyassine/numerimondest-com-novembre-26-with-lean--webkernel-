@@ -1,13 +1,16 @@
 <?php declare(strict_types=1);
 
+use App\Studio\Persistence\OfferingStore;
+use App\Studio\Persistence\QuoteStore;
+
 $root = dirname(__DIR__, 2);
 ini_set('session.save_path', sys_get_temp_dir());
 $database = sys_get_temp_dir().'/nm-related-offering-'.bin2hex(random_bytes(6)).'.sqlite';
 putenv('NM_OFFERINGS_DATABASE='.$database);
 require $root.'/internal/dependencies/autoload.php';
-App\Studio\Persistence\OfferingStore::initialize($database);
-App\Studio\Persistence\QuoteStore::initialize($database);
-$store = new App\Studio\Persistence\OfferingStore($database);
+OfferingStore::initialize($database);
+QuoteStore::initialize($database);
+$store = new OfferingStore($database);
 $store->saveDraft(['offerings' => [
     [
         'id' => 'parent-mandate', 'type' => 'mandate', 'name' => ['en' => 'Parent mandate'],

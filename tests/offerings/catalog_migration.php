@@ -4,9 +4,12 @@ $base_path = dirname(__DIR__, 2);
 require $base_path.'/internal/dependencies/autoload.php';
 
 use App\Studio\Catalog\OfferingRelationType;
+use App\Studio\Catalog\ServiceCatalog;
+use App\Studio\Catalog\MandateCatalog;
 use App\Studio\Admin\OfferingAdminController;
 use App\Studio\Persistence\OfferingStore;
 use Webkernel\Route\Request;
+use Webkernel\Session\Session;
 
 $seed = require $base_path.'/app/resources/data/studio/offerings.php';
 $offerings = [];
@@ -101,16 +104,29 @@ foreach ($mandates as $mandate) {
         }
     }
 }
-if (class_exists(App\Studio\Catalog\ServiceCatalog::class) || class_exists(App\Studio\Catalog\MandateCatalog::class)) {
+if (class_exists(ServiceCatalog::class) || class_exists(MandateCatalog::class)) {
     throw new RuntimeException('An obsolete runtime catalog class remains available.');
 }
-putenv('NM_OFFERINGS_ADMIN_TOKEN='.str_repeat('m', 48));
+$sessionPath = $base_path.'/runtime/sessions';
+if (!is_dir($sessionPath)) mkdir($sessionPath, 0700, true);
+Session::configure(['cookie' => 'NMAdminCatalogTest', 'save_path' => $sessionPath, 'lifetime' => 120, 'same_site' => 'Lax', 'http_only' => true, 'secure' => false]);
+$_SERVER['HTTPS'] = 'off';
+$_SERVER['HTTP_HOST'] = '127.0.0.1:8000';
+$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+$unauthorized = OfferingAdminController::preview(new Request('POST', '/admin/offerings/preview', content: '{}'));
+if ($unauthorized->getStatusCode() !== 401) throw new RuntimeException('Admin preview allowed an unauthenticated request.');
+$secretPath = $base_path.'/config/offerings-admin.php';
+$hadSecret = is_file($secretPath);
+if (!$hadSecret) file_put_contents($secretPath, "<?php return ".var_export(['username' => 'test-admin', 'password_hash' => password_hash('test-password-for-suite', PASSWORD_DEFAULT)], true).";\n");
+Session::put('studio.offerings.admin_authenticated_at', time());
+$csrf = bin2hex(random_bytes(32));
+Session::put('studio.offerings.admin_csrf', $csrf);
 $preview = OfferingAdminController::preview(new Request(
     'POST', '/admin/offerings/preview',
-    headers: ['authorization' => 'Bearer '.str_repeat('m', 48)],
+    headers: ['x-csrf-token' => $csrf],
     content: json_encode(['offerings' => array_values($offerings)], JSON_THROW_ON_ERROR),
 ));
-putenv('NM_OFFERINGS_ADMIN_TOKEN');
+if (!$hadSecret) unlink($secretPath);
 if ($preview->getStatusCode() !== 200) throw new RuntimeException('The full migrated seed catalogue fails administration validation: '.$preview->getContent());
 foreach ([$database, $database.'-wal', $database.'-shm'] as $file) if (is_file($file)) unlink($file);
 echo "Canonical catalog migration passed: 58 records, 16 mandates, 20 extension links.\n";

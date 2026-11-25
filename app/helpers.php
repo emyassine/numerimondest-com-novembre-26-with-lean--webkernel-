@@ -2,6 +2,22 @@
 
 $GLOBALS['webkernel_request_started_at'] ??= hrtime(true);
 
+if (! function_exists('is_env')) {
+    /** Check the current application environment; supports pipe-separated names such as "prod|staging". */
+    function is_env(string $environments): bool
+    {
+        $current = strtolower(trim((string) config('app.env', 'production')));
+        $aliases = ['prod' => 'production', 'dev' => 'development'];
+        $current = $aliases[$current] ?? $current;
+        foreach (explode('|', strtolower($environments)) as $environment) {
+            $environment = trim($environment);
+            $environment = $aliases[$environment] ?? $environment;
+            if ($environment !== '' && hash_equals($environment, $current)) return true;
+        }
+        return false;
+    }
+}
+
 if (! function_exists('request_time')) {
     /** Return monotonic milliseconds elapsed since the request started. */
     function request_time(): float

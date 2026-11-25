@@ -2,6 +2,8 @@
 
 namespace App\Studio\Partners;
 
+use App\Studio\Pricing\PartnerPriceRule;
+
 /** Resolves a partner from a server-side bearer credential. */
 final class PartnerAccess
 {
@@ -46,7 +48,7 @@ final class PartnerAccess
                     if (!is_string($offeringId) || !in_array($offeringId, $partner['offering_ids'], true) || !is_array($pricingRule)) {
                         throw new \InvalidArgumentException('Partner pricing rules must target explicitly allowed offerings.');
                     }
-                    \App\Studio\Pricing\PartnerPriceRule::fromArray($partner['id'], $offeringId, $pricingRule);
+                    PartnerPriceRule::fromArray($partner['id'], $offeringId, $pricingRule);
                 }
                 if (isset($partner['settlement_default'])) PartnerSettlementPolicy::validateRule($partner['settlement_default']);
                 foreach ($partner['settlement_rules'] ?? [] as $offeringId => $settlementRule) {

@@ -8,7 +8,9 @@ Set `NM_OFFERINGS_DATABASE` to an absolute persistent path when the default `sto
 
 ## Administration
 
-Set `NM_OFFERINGS_ADMIN_TOKEN` to a random secret of at least 32 characters in the PHP-FPM environment. Open `/admin/offerings` over HTTPS. The browser requests HTTP Basic authentication; use `admin` as the username and the environment token as the password. The editor starts from the draft when one exists, otherwise from the published snapshot.
+Create the administrator once with `php scripts/create-offerings-admin.php` in an interactive terminal. The command prompts for a username and password, stores only a password hash in `config/offerings-admin.php`, and restricts that file to mode `0600`. The credentials config is source controlled in this private repository; treat the hash as sensitive and rotate it with `--replace` if repository access changes. Open `/admin/offerings` locally; it redirects to the Webkernel sign-in form. Plain HTTP is allowed only when both the host and remote address are loopback (`localhost`, `127.0.0.1`, or `::1`). Outside loopback, HTTPS is required and the application's configured 403 page is rendered. The login session expires after eight hours, rotates its session ID after login, and uses CSRF tokens for state-changing requests. The editor starts from the draft when one exists, otherwise from the published snapshot.
+
+Set `APP_ENV=prod` (or `APP_ENV=production`) for production. The admin routes are not registered there. The default environment is inferred as production for the canonical public domain and local otherwise. `is_env('prod|local')` can test aliases and multiple environments in application code.
 
 The editor validates and saves a draft through the same server-side schema validation used for publication. Review the offering translations, prices, classifications and relationships before publication. The published revision history is append-only and is shown below the editor. Every API consumer reads the current published snapshot; drafts are never distributed.
 
@@ -19,6 +21,8 @@ Copy `config/partners.example.php` to the ignored local file `config/partners.ph
 The reference integration under `packages/numerimondes-offerings/examples/partner-storefront` demonstrates server-rendered catalogue sync, nested parent-only extensions and authoritative quote requests. Its README documents the environment variables and offline failure behaviour.
 
 ## Backups
+
+The canonical `storage/databases/offerings.sqlite` is source controlled so a private-repository deployment can use the published catalogue snapshot. Do not commit SQLite WAL/SHM files or dated database backups. The catalogue seed remains the editable canonical source; runtime admin publications are committed through the database file.
 
 Back up the SQLite database using SQLite's online backup command so the WAL is checkpointed consistently:
 

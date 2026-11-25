@@ -1,40 +1,52 @@
 <?php declare(strict_types=1);
 
-$api_version = (int) 1;
-
+use App\Studio\Admin\OfferingAdminController;
+use App\Studio\Http\MarketFitController;
+use App\Studio\Http\PartnerOfferingController;
+use App\Studio\Http\PwaController;
+use App\Studio\Http\ServiceInquiryController;
+use App\Studio\Http\ServiceMandateController;
+use App\Studio\Http\ShortlistController;
 use Webkernel\Route\Route;
+
+$api_version = (int) 1;
 
 /*------------------------------------------*
 // PWA
 /*------------------------------------------*/
-Route::get('/manifest.webmanifest', [\App\Studio\Http\PwaController::class, 'manifest']);
-Route::get('/service-worker.js', [\App\Studio\Http\PwaController::class, 'serviceWorker']);
+Route::get('/manifest.webmanifest', [PwaController::class, 'manifest']);
+Route::get('/service-worker.js', [PwaController::class, 'serviceWorker']);
 
 /*------------------------------------------*
 // Service Inquiry, Shortlist & Recommendations
 /*------------------------------------------*/
-Route::post('/service-inquiry/select', [\App\Studio\Http\ServiceInquiryController::class, 'select']);
-Route::post('/service-inquiry/project/remove', [\App\Studio\Http\ServiceInquiryController::class, 'removeProject']);
-Route::post('/service-inquiry', [\App\Studio\Http\ServiceInquiryController::class, 'submit']);
-Route::post('/shortlist/toggle', [\App\Studio\Http\ShortlistController::class, 'toggle']);
-Route::post('/services/recommendations', [\App\Studio\Http\MarketFitController::class, 'record']);
+Route::post('/service-inquiry/select', [ServiceInquiryController::class, 'select']);
+Route::post('/service-inquiry/project/remove', [ServiceInquiryController::class, 'removeProject']);
+Route::post('/service-inquiry', [ServiceInquiryController::class, 'submit']);
+Route::post('/shortlist/toggle', [ShortlistController::class, 'toggle']);
+Route::post('/services/recommendations', [MarketFitController::class, 'record']);
 
 /*------------------------------------------*
 // Partner Offerings API
 /*------------------------------------------*/
-Route::get("/api/v{$api_version}/offerings", [\App\Studio\Http\PartnerOfferingController::class, 'index']);
-Route::get("/api/v{$api_version}/offerings/{id}", [\App\Studio\Http\PartnerOfferingController::class, 'show']);
-Route::post("/api/v{$api_version}/quotes", [\App\Studio\Http\PartnerOfferingController::class, 'quote']);
+Route::get("/api/v{$api_version}/offerings", [PartnerOfferingController::class, 'index']);
+Route::get("/api/v{$api_version}/offerings/{id}", [PartnerOfferingController::class, 'show']);
+Route::post("/api/v{$api_version}/quotes", [PartnerOfferingController::class, 'quote']);
 
 /*------------------------------------------*
 // Admin Offerings
 /*------------------------------------------*/
-Route::get('/admin/offerings', [\App\Studio\Admin\OfferingAdminController::class, 'index']);
-Route::post('/admin/offerings/preview', [\App\Studio\Admin\OfferingAdminController::class, 'preview']);
-Route::post('/admin/offerings/draft', [\App\Studio\Admin\OfferingAdminController::class, 'saveDraft']);
-Route::post('/admin/offerings/publish', [\App\Studio\Admin\OfferingAdminController::class, 'publish']);
+if (!is_env('prod')) {
+    Route::get('/admin/offerings', [OfferingAdminController::class, 'index']);
+    Route::get('/admin/offerings/login', [OfferingAdminController::class, 'loginForm']);
+    Route::post('/admin/offerings/login', [OfferingAdminController::class, 'login']);
+    Route::post('/admin/offerings/logout', [OfferingAdminController::class, 'logout']);
+    Route::post('/admin/offerings/preview', [OfferingAdminController::class, 'preview']);
+    Route::post('/admin/offerings/draft', [OfferingAdminController::class, 'saveDraft']);
+    Route::post('/admin/offerings/publish', [OfferingAdminController::class, 'publish']);
+}
 
 /*------------------------------------------*
 // Service Mandates
 /*------------------------------------------*/
-Route::get('/services/{slug}', [\App\Studio\Http\ServiceMandateController::class, 'show']);
+Route::get('/services/{slug}', [ServiceMandateController::class, 'show']);

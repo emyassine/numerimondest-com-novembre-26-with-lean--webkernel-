@@ -6,6 +6,8 @@ platform-cache.lock
 /modules/webkernel/system-installer
 /storage/private/*
 /storage/databases/*
+!/storage/databases/offerings.sqlite
+/storage/databases/*.sqlite-*
 /storage/backups/*
 /config/partners.php
 

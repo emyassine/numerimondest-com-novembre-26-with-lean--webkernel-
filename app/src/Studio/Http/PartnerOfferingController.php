@@ -3,10 +3,14 @@
 namespace App\Studio\Http;
 
 use App\Studio\Partners\PartnerAccess;
+use App\Studio\Partners\PartnerSettlementPolicy;
 use App\Studio\Persistence\OfferingStore;
+use App\Studio\Persistence\QuoteStore;
 use App\Studio\Catalog\Offering;
+use App\Studio\Pricing\CurrencyRates;
 use App\Studio\Pricing\OfferingPriceResolver;
 use App\Studio\Pricing\PartnerPriceRule;
+use App\Studio\Pricing\QuoteSnapshot;
 use Webkernel\HttpFoundation\JsonResponse;
 use Webkernel\HttpFoundation\Response;
 use Webkernel\Route\Request;
@@ -138,7 +142,7 @@ final class PartnerOfferingController
     }
 
     /** Creates an authoritative partner quote; only customer-facing totals are returned. */
-    public static function quote(Request $request, ?OfferingStore $store = null, ?\App\Studio\Persistence\QuoteStore $quotes = null): Response|JsonResponse
+    public static function quote(Request $request, ?OfferingStore $store = null, ?QuoteStore $quotes = null): Response|JsonResponse
     {
         $partner = PartnerAccess::authenticate($request->header('authorization'), $request->header('origin'));
         if ($partner === null) return new JsonResponse(['error' => 'unauthorized'], 401, ['WWW-Authenticate' => 'Bearer']);
@@ -171,7 +175,7 @@ final class PartnerOfferingController
         foreach ($published['catalogue']['offerings'] ?? [] as $row) if (is_array($row) && is_string($row['id'] ?? null)) $rows[$row['id']] = $row;
         $allowed = array_fill_keys($partner['offering_ids'] ?? [], true);
         $now = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
-        $rateData = \App\Studio\Pricing\CurrencyRates::forPricing();
+        $rateData = CurrencyRates::forPricing();
         $basisValues = is_array($input['basis_values'] ?? null) ? $input['basis_values'] : [];
         $basisCurrencies = [];
         if (isset($basisValues['monthly_salary'])) {
@@ -230,7 +234,7 @@ final class PartnerOfferingController
             $settlementLines = [];
             foreach ($madPrices as $price) {
                 if (!is_numeric($price['amount'] ?? null)) continue;
-                $split = \App\Studio\Partners\PartnerSettlementPolicy::resolve($partner, $id, (float) $price['amount']);
+                $split = PartnerSettlementPolicy::resolve($partner, $id, (float) $price['amount']);
                 $settlementLines[] = ['price_component_id' => $price['id'], 'billing' => $price['billing'], 'quantity' => $price['quantity'] ?? 1, 'unit' => $price['unit'] ?? null, ...$split];
             }
             if ($settlementLines !== []) $settlements[$id] = $settlementLines;
@@ -240,8 +244,8 @@ final class PartnerOfferingController
             'rates' => $rateData['rates'], 'dates' => $rateData['dates'], 'sources' => $rateData['sources'], 'checked_at' => $rateData['checked_at'],
         ], JSON_UNESCAPED_SLASHES|JSON_THROW_ON_ERROR));
         $created = $now;
-        $quote = new \App\Studio\Pricing\QuoteSnapshot(bin2hex(random_bytes(16)), $partner['id'], (string) $published['revision'], $pricingRevision, $currency, $lines, $created, $created->modify('+30 days'));
-        try { ($quotes ?? new \App\Studio\Persistence\QuoteStore())->save($quote, $settlements); }
+        $quote = new QuoteSnapshot(bin2hex(random_bytes(16)), $partner['id'], (string) $published['revision'], $pricingRevision, $currency, $lines, $created, $created->modify('+30 days'));
+        try { ($quotes ?? new QuoteStore())->save($quote, $settlements); }
         catch (\Throwable) { return new JsonResponse(['error' => 'quote_unavailable'], 503); }
         return new JsonResponse($quote->toArray(), 201, ['Cache-Control' => 'no-store', 'Vary' => 'Authorization, Origin']);
     }

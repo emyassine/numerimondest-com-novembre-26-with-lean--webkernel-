@@ -1,5 +1,6 @@
-<main class="mx-auto max-w-6xl px-4 py-10">
+<main class="mx-auto max-w-6xl px-4 py-10" data-csrf-token="{{ $csrfToken }}">
     <x-webkernel-platform::section heading="Offerings catalogue" icon="heroicon-o-rectangle-stack">
+        <form method="post" action="/admin/offerings/logout" class="mb-4 text-right"><input type="hidden" name="_csrf" value="{{ $csrfToken }}"><button type="submit" class="text-sm underline">Sign out</button></form>
         <p class="mb-4">Editing revision {{ $revision }}. Saving creates a validated draft; publishing makes that revision available to catalogue consumers.</p>
         <label for="catalogue" class="mb-2 block font-medium">Catalogue JSON</label>
         <textarea id="catalogue" spellcheck="false" class="min-h-[60vh] w-full rounded-md border border-gray-300 p-4 font-mono text-sm">{{ $catalogueJson }}</textarea>
@@ -59,7 +60,7 @@
     async function post(url, data) {
         const response = await fetch(url, {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: {'Content-Type': 'application/json', 'X-CSRF-Token': document.querySelector('main[data-csrf-token]').dataset.csrfToken},
             body: data === null ? '' : JSON.stringify(data),
         });
         if (!response.ok) throw new Error((await response.text()) || `HTTP ${response.status}`);

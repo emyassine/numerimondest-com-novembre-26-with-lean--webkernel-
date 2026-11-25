@@ -1,16 +1,22 @@
 <?php declare(strict_types=1);
 
+use Webkernel\Session\Session;
+
 $root = dirname(__DIR__, 2);
 $database = sys_get_temp_dir().'/nm-admin-render-'.bin2hex(random_bytes(6)).'.sqlite';
-$token = str_repeat('a', 48);
 putenv('NM_OFFERINGS_DATABASE='.$database);
-putenv('NM_OFFERINGS_ADMIN_TOKEN='.$token);
 require __DIR__.'/initialize_test_catalogue.php';
 initializeTestCatalogue($root);
-$_SERVER['REQUEST_URI'] = '/admin/offerings';
+require $root.'/internal/dependencies/autoload.php';
+$sessionPath = $root.'/runtime/sessions';
+if (!is_dir($sessionPath)) mkdir($sessionPath, 0700, true);
+Session::configure(['cookie' => 'NMAdminRouteTest', 'save_path' => $sessionPath, 'lifetime' => 120, 'same_site' => 'Lax', 'http_only' => true, 'secure' => false]);
+$secretPath = $root.'/config/offerings-admin.php';
+$hadSecret = is_file($secretPath);
+if (!$hadSecret) file_put_contents($secretPath, "<?php return ".var_export(['username' => 'test-admin', 'password_hash' => password_hash('test-password-for-suite', PASSWORD_DEFAULT)], true).";\n");
+$_SERVER['REQUEST_URI'] = '/admin/offerings/login';
 $_SERVER['REQUEST_METHOD'] = 'GET';
-$_SERVER['HTTP_HOST'] = 'localhost';
-$_SERVER['HTTP_AUTHORIZATION'] = 'Basic '.base64_encode('admin:'.$token);
+$_SERVER['HTTP_HOST'] = '127.0.0.1:8000';
 $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
 $_SERVER['SERVER_NAME'] = 'localhost';
 $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
@@ -20,10 +26,10 @@ try { require $root.'/public/index.php'; }
 finally {
     $html = (string) ob_get_clean();
     putenv('NM_OFFERINGS_DATABASE');
-    putenv('NM_OFFERINGS_ADMIN_TOKEN');
+    if (!$hadSecret) unlink($secretPath);
     foreach ([$database, $database.'-wal', $database.'-shm'] as $file) if (is_file($file)) @unlink($file);
 }
-if (http_response_code() !== 200 || !str_contains($html, 'Offerings catalogue') || !str_contains($html, 'Validate preview') || !str_contains($html, 'Publish draft')) {
-    throw new RuntimeException('Authenticated Webkernel administration route did not render its editor workflow.');
+if (http_response_code() !== 200 || !str_contains($html, 'Sign in to Offerings') || !str_contains($html, 'autocomplete="current-password"') || !str_contains($html, 'name="_csrf"')) {
+    throw new RuntimeException('Webkernel offerings administration login route did not render its password form.');
 }
-echo "Admin route render passed.\n";
+echo "Admin login route render passed.\n";

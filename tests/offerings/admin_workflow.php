@@ -4,12 +4,14 @@ require dirname(__DIR__, 2).'/internal/dependencies/autoload.php';
 
 use App\Studio\Admin\OfferingAdminController;
 use App\Studio\Persistence\OfferingStore;
+use App\Studio\Persistence\QuoteStore;
 use Webkernel\Route\Request;
+use Webkernel\Session\Session;
 
 $database = sys_get_temp_dir().'/nm-offerings-'.bin2hex(random_bytes(8)).'.sqlite';
 OfferingStore::initialize($database);
 $path = $database;
-App\Studio\Persistence\QuoteStore::initialize($path);
+QuoteStore::initialize($path);
 $store = new OfferingStore($database);
 $catalogue = ['offerings' => [['id' => 'workflow-check', 'name' => ['en' => 'Workflow check']]]];
 $store->saveDraft($catalogue, 'test');
@@ -23,12 +25,29 @@ if ($second <= $first || ($store->current('published')['catalogue'] ?? null) !==
 $history = $store->history();
 if (count($history) !== 2 || (int) $history[0]['revision'] !== $second || (int) $history[1]['revision'] !== $first) throw new RuntimeException('Published revision history was not retained in descending order.');
 
-putenv('NM_OFFERINGS_ADMIN_TOKEN='.str_repeat('a', 48));
+$sessionPath = base_path('runtime/sessions');
+if (!is_dir($sessionPath)) mkdir($sessionPath, 0700, true);
+Session::configure(['cookie' => 'NMAdminWorkflowTest', 'save_path' => $sessionPath, 'lifetime' => 120, 'same_site' => 'Lax', 'http_only' => true, 'secure' => false]);
+$_SERVER['HTTPS'] = 'off';
+$_SERVER['HTTP_HOST'] = '127.0.0.1:8000';
+$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+$secretPath = base_path('config/offerings-admin.php');
+$hadSecret = is_file($secretPath);
+if (!$hadSecret) file_put_contents($secretPath, "<?php return ".var_export(['username' => 'test-admin', 'password_hash' => password_hash('test-password-for-suite', PASSWORD_DEFAULT)], true).";\n");
+Session::invalidate();
+$loginCsrf = bin2hex(random_bytes(32));
+Session::put('studio.offerings.admin_csrf', $loginCsrf);
+$badLogin = OfferingAdminController::login(new Request('POST', '/admin/offerings/login', body: ['username' => 'test-admin', 'password' => 'wrong-password', '_csrf' => $loginCsrf]));
+if ($badLogin->getStatusCode() !== 401) throw new RuntimeException('Admin login accepted an invalid password.');
+$login = OfferingAdminController::login(new Request('POST', '/admin/offerings/login', body: ['username' => 'test-admin', 'password' => 'test-password-for-suite', '_csrf' => $loginCsrf]));
+if ($login->getStatusCode() !== 303 || !is_int(Session::get('studio.offerings.admin_authenticated_at'))) throw new RuntimeException('Admin login failed to establish an authenticated session.');
+$csrf = bin2hex(random_bytes(32));
+Session::put('studio.offerings.admin_csrf', $csrf);
 $validCatalogue = ['offerings' => [[
     'id' => 'admin-offer', 'type' => 'service', 'name' => ['en' => 'Admin offer'], 'description' => ['en' => ''],
     'industries' => ['education-training'], 'business_needs' => ['operations'], 'prices' => [], 'relations' => [], 'active' => true,
 ]]];
-$request = static fn (array $data): Request => new Request('POST', '/admin/offerings/preview', headers: ['authorization' => 'Bearer '.str_repeat('a', 48)], content: json_encode($data, JSON_THROW_ON_ERROR));
+$request = static fn (array $data): Request => new Request('POST', '/admin/offerings/preview', headers: ['x-csrf-token' => $csrf], content: json_encode($data, JSON_THROW_ON_ERROR));
 $preview = OfferingAdminController::preview($request($validCatalogue));
 if ($preview->getStatusCode() !== 200) throw new RuntimeException('Admin preview rejected a valid catalogue.');
 $previewData = json_decode($preview->getContent(), true, 512, JSON_THROW_ON_ERROR);
@@ -45,9 +64,9 @@ $invalid['offerings'][0]['business_needs'] = ['invented-need'];
 if (OfferingAdminController::preview($request($invalid))->getStatusCode() !== 422) throw new RuntimeException('Admin preview accepted an invalid taxonomy value.');
 $saved = OfferingAdminController::saveDraft($request($validCatalogue), $store);
 if ($saved->getStatusCode() !== 204 || ($store->current('draft')['catalogue'] ?? null) !== $validCatalogue) throw new RuntimeException('Admin draft endpoint did not persist the validated catalogue.');
-$publishedResponse = OfferingAdminController::publish(new Request('POST', '/admin/offerings/publish', headers: ['authorization' => 'Bearer '.str_repeat('a', 48)]), $store);
+$publishedResponse = OfferingAdminController::publish(new Request('POST', '/admin/offerings/publish', headers: ['x-csrf-token' => $csrf]), $store);
 if ($publishedResponse->getStatusCode() !== 200 || ($store->current('published')['catalogue'] ?? null) !== $validCatalogue) throw new RuntimeException('Admin publish endpoint did not publish the draft.');
-putenv('NM_OFFERINGS_ADMIN_TOKEN');
+if (!$hadSecret) unlink($secretPath);
 
 foreach ([$database, $database.'-wal', $database.'-shm'] as $file) if (is_file($file)) unlink($file);
 echo "Admin publication workflow passed.\n";

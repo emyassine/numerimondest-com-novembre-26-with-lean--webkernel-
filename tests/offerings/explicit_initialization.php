@@ -2,6 +2,7 @@
 
 use App\Studio\Catalog\OfferingCatalog;
 use App\Studio\Persistence\OfferingStore;
+use App\Studio\Persistence\QuoteStore;
 use App\Studio\Persistence\RefreshCanonicalOfferings;
 
 $root = dirname(__DIR__, 2);
@@ -18,7 +19,7 @@ try {
     }
     if (is_file($database)) throw new RuntimeException('A catalogue read created a database file.');
     OfferingStore::initialize();
-    App\Studio\Persistence\QuoteStore::initialize();
+    QuoteStore::initialize();
     $store = new OfferingStore();
     if ($store->current('published') !== null) throw new RuntimeException('A fresh database unexpectedly contained a publication.');
     try {
