@@ -6,7 +6,9 @@
             <div class="col-md-12">
                 <div class="tw-flex tw-justify-between tw-items-center tw-mb-4">
                     <div>
-                        <h4 class="tw-mt-0 tw-font-semibold tw-text-lg"><?php echo html_escape($title); ?></h4>
+                        <h4 class="tw-mt-0 tw-font-semibold tw-text-lg">
+                        	<?php echo html_escape($title); ?>
+                        </h4>
                         <p class="text-muted">One shared catalogue for the website, recommendations, quotes and partner API.</p>
                     </div>
                     <span class="label label-info"><?php echo (int) $offering_count; ?> offerings</span>
