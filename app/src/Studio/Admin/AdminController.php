@@ -13,11 +13,12 @@ use Webkernel\Session\Session;
 use Webkernel\HttpErrorPages\ErrorPages;
 use Webkernel\View\View;
 
-/** Bearer-token protected catalogue editor and publication boundary. */
-final class OfferingAdminController
+/** Local administration for the unified catalogue and its SQLite database. */
+final class AdminController
 {
     public static function index(Request $request, ?OfferingStore $store = null): Response
     {
+        self::prepareSession();
         if (!self::authorized()) return self::redirectToLogin();
         $store ??= new OfferingStore();
         $draft = $store->current('draft');
@@ -32,7 +33,7 @@ final class OfferingAdminController
         foreach ($history as $entry) {
             $historyHtml .= '<li>Revision '.(int) $entry['revision'].' · '.htmlspecialchars($entry['created_at'], ENT_QUOTES, 'UTF-8').'</li>';
         }
-        $html = View::make('studio::pages.offerings-admin', [
+        $html = View::make('studio::partials.admin.offerings.editor', [
             'revision' => $revision,
             'catalogueJson' => $value,
             'historyHtml' => $historyHtml,
@@ -43,6 +44,7 @@ final class OfferingAdminController
 
     public static function saveDraft(Request $request, ?OfferingStore $store = null): Response
     {
+        self::prepareSession();
         if (!self::authorized()) return new Response('Authentication required.', 401);
         if (!self::validCsrf($request)) return new Response('Invalid security token.', 419);
         $data = json_decode($request->content(), true);
@@ -56,6 +58,7 @@ final class OfferingAdminController
 
     public static function preview(Request $request): Response
     {
+        self::prepareSession();
         if (!self::authorized()) return new Response('Authentication required.', 401);
         if (!self::validCsrf($request)) return new Response('Invalid security token.', 419);
         $data = json_decode($request->content(), true);
@@ -79,6 +82,7 @@ final class OfferingAdminController
 
     public static function publish(Request $request, ?OfferingStore $store = null): Response
     {
+        self::prepareSession();
         if (!self::authorized()) return new Response('Authentication required.', 401);
         if (!self::validCsrf($request)) return new Response('Invalid security token.', 419);
         try { $revision = ($store ?? new OfferingStore())->publish('admin'); }
@@ -89,10 +93,11 @@ final class OfferingAdminController
     public static function loginForm(): Response
     {
         if (!self::secureRequest()) return self::forbidden();
+        self::prepareSession();
         $credentials = self::credentials();
-        if ($credentials === null) return new Response('Admin is not configured. Run php scripts/create-offerings-admin.php.', 503);
-        if (self::authorized()) return new Response('', 303, ['Location' => '/admin/offerings', 'Cache-Control' => 'no-store']);
-        $html = View::make('studio::pages.offerings-admin-login', [
+        if ($credentials === null) return self::unavailable();
+        if (self::authorized()) return self::redirect('/admin');
+        $html = View::make('studio::partials.admin.login', [
             'csrfToken' => htmlspecialchars(self::csrfToken(), ENT_QUOTES, 'UTF-8'),
         ])->render();
         return new Response($html, 200, ['Content-Type' => 'text/html; charset=utf-8', 'Cache-Control' => 'no-store']);
@@ -101,9 +106,10 @@ final class OfferingAdminController
     public static function login(Request $request): Response
     {
         if (!self::secureRequest()) return self::forbidden();
+        self::prepareSession();
         $credentials = self::credentials();
         $values = $request->all();
-        if ($credentials === null) return new Response('Admin is not configured. Run php scripts/create-offerings-admin.php.', 503);
+        if ($credentials === null) return self::unavailable();
         if (!self::validCsrf($request) || !is_string($values['username'] ?? null) || !is_string($values['password'] ?? null)
             || !hash_equals($credentials['username'], $values['username']) || !password_verify($values['password'], $credentials['password_hash'])) {
             return new Response('Sign-in failed. Check your username and password.', 401, ['Cache-Control' => 'no-store']);
@@ -111,21 +117,45 @@ final class OfferingAdminController
         Session::regenerate(true);
         Session::put('studio.offerings.admin_authenticated_at', time());
         Session::forget('studio.offerings.admin_csrf');
-        return new Response('', 303, ['Location' => '/admin/offerings', 'Cache-Control' => 'no-store']);
+        return self::redirect('/admin');
     }
 
     public static function logout(Request $request): Response
     {
+        self::prepareSession();
         if (!self::authorized()) return new Response('Authentication required.', 401);
         if (!self::validCsrf($request)) return new Response('Invalid security token.', 419);
         Session::forget('studio.offerings.admin_authenticated_at');
         Session::forget('studio.offerings.admin_csrf');
         Session::regenerate(true);
-        return new Response('', 303, ['Location' => '/admin/offerings/login', 'Cache-Control' => 'no-store']);
+        return self::redirect('/admin/login');
+    }
+
+    public static function databaseManager(Request $request): Response
+    {
+        self::prepareSession();
+        if (!self::authorized()) return self::redirectToLogin();
+        $databaseDirectory = dirname(OfferingStore::defaultPath());
+        if (!is_dir($databaseDirectory) || !is_readable($databaseDirectory) || !is_writable($databaseDirectory)) {
+            return self::unavailable();
+        }
+        if (!defined('DBLITEADMIN_DATABASE_DIR')) define('DBLITEADMIN_DATABASE_DIR', $databaseDirectory);
+        $_SESSION['auth'] = true;
+        $initialBufferLevel = ob_get_level();
+        ob_start();
+        try {
+            require_once __DIR__.'/DBLiteAdmin/DBLiteAdmin.php';
+            $html = (string) ob_get_clean();
+        } catch (\Throwable $error) {
+            while (ob_get_level() > $initialBufferLevel) ob_end_clean();
+            throw $error;
+        }
+        return new Response($html, 200, ['Content-Type' => 'text/html; charset=utf-8', 'Cache-Control' => 'no-store']);
     }
 
     private static function authorized(): bool
     {
+        self::prepareSession();
         $authenticatedAt = Session::get('studio.offerings.admin_authenticated_at');
         return self::secureRequest() && is_int($authenticatedAt) && $authenticatedAt > time() - 28800;
     }
@@ -146,6 +176,34 @@ final class OfferingAdminController
         return new Response(ErrorPages::render(403), 403, [
             'Content-Type' => 'text/html; charset=utf-8', 'Cache-Control' => 'no-store',
         ]);
+    }
+
+    private static function unavailable(): Response
+    {
+        return new Response(ErrorPages::render(503), 503, ['Content-Type' => 'text/html; charset=utf-8', 'Cache-Control' => 'no-store']);
+    }
+
+    private static function redirect(string $location): Response
+    {
+        return new Response('', 303, ['Location' => $location, 'Cache-Control' => 'no-store']);
+    }
+
+    private static function prepareSession(): void
+    {
+        if (session_status() !== PHP_SESSION_NONE) return;
+        $sessionPath = base_path('runtime/sessions/admin');
+        if (!is_dir($sessionPath) && !mkdir($sessionPath, 0700, true) && !is_dir($sessionPath)) {
+            throw new \RuntimeException('The admin session directory could not be created.');
+        }
+        Session::configure([
+            'cookie' => 'NM_ADMIN_SESSID', 'save_path' => $sessionPath, 'lifetime' => 480,
+            'same_site' => 'Strict', 'http_only' => true, 'secure' => self::isHttps(),
+        ]);
+    }
+
+    private static function isHttps(): bool
+    {
+        return isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== '' && $_SERVER['HTTPS'] !== 'off';
     }
 
     /** @return array{username:string,password_hash:string}|null */
@@ -178,7 +236,7 @@ final class OfferingAdminController
 
     private static function redirectToLogin(): Response
     {
-        return new Response('', 303, ['Location' => '/admin/offerings/login', 'Cache-Control' => 'no-store']);
+        return self::redirect('/admin/login');
     }
 
     /** @param list<array<string,mixed>> $offerings */

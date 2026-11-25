@@ -1,4 +1,6 @@
+<x-studio::page title="Catalogue administration · Numerimondes" description="Private catalogue administration." robots="noindex,nofollow" :page-width="['desktop' => '1200px']">
 <main class="mx-auto max-w-6xl px-4 py-10" data-csrf-token="{{ $csrfToken }}">
+    <nav class="mb-6 flex justify-between"><a href="/admin">Database administration</a><form method="post" action="/admin/logout"><input type="hidden" name="_csrf" value="{{ $csrfToken }}"><button type="submit" class="underline">Sign out</button></form></nav>
     <x-webkernel-platform::section heading="Offerings catalogue" icon="heroicon-o-rectangle-stack">
         <form method="post" action="/admin/offerings/logout" class="mb-4 text-right"><input type="hidden" name="_csrf" value="{{ $csrfToken }}"><button type="submit" class="text-sm underline">Sign out</button></form>
         <p class="mb-4">Editing revision {{ $revision }}. Saving creates a validated draft; publishing makes that revision available to catalogue consumers.</p>
@@ -78,3 +80,4 @@
     });
 })();
 </script>
+</x-studio::page>
