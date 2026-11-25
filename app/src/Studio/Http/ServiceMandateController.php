@@ -88,7 +88,7 @@ final class ServiceMandateController
             'image_alt' => $image['image_alt'] ?? $name, 'href' => simple_site('studio', 'services/'.$slug),
             'industries' => $offering['industries'] ?? [], 'business_needs' => $offering['business_needs'] ?? [],
         ];
-        $html = View::make('studio::pages.service-mandate', ['service' => $service, 'relatedServices' => $related])->render();
+        $html = View::make('studio::partials.offerings.mandate-detail', ['service' => $service, 'relatedServices' => $related])->render();
         return new Response($html, 200, ['Content-Type' => 'text/html; charset=UTF-8']);
     }
 

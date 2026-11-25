@@ -14,7 +14,7 @@ Session::configure(['cookie' => 'NMAdminRouteTest', 'save_path' => $sessionPath,
 $secretPath = $root.'/config/offerings-admin.php';
 $hadSecret = is_file($secretPath);
 if (!$hadSecret) file_put_contents($secretPath, "<?php return ".var_export(['username' => 'test-admin', 'password_hash' => password_hash('test-password-for-suite', PASSWORD_DEFAULT)], true).";\n");
-$_SERVER['REQUEST_URI'] = '/admin/offerings/login';
+$_SERVER['REQUEST_URI'] = '/admin/login';
 $_SERVER['REQUEST_METHOD'] = 'GET';
 $_SERVER['HTTP_HOST'] = '127.0.0.1:8000';
 $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
@@ -29,7 +29,8 @@ finally {
     if (!$hadSecret) unlink($secretPath);
     foreach ([$database, $database.'-wal', $database.'-shm'] as $file) if (is_file($file)) @unlink($file);
 }
-if (http_response_code() !== 200 || !str_contains($html, 'Sign in to Offerings') || !str_contains($html, 'autocomplete="current-password"') || !str_contains($html, 'name="_csrf"')) {
-    throw new RuntimeException('Webkernel offerings administration login route did not render its password form.');
+if (http_response_code() !== 200 || !str_contains($html, 'Sign in') || !str_contains($html, 'autocomplete="current-password"') || !str_contains($html, 'name="_csrf"')
+    || !str_contains($html, 'dependable-ui.themes.css') || !str_contains($html, 'fi-section')) {
+    throw new RuntimeException('Admin login route did not render its styled Webkernel Filament login form.');
 }
-echo "Admin login route render passed.\n";
+echo "Admin login route and Filament styling render passed.\n";

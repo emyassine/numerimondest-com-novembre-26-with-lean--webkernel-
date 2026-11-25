@@ -1,9 +1,11 @@
 <?php
 declare(strict_types=1);
 
-define('APP_NAME', 'DBLiteAdmin');
-define('APP_VERSION', '1.0.1');
-define('AUTH_PASSWORD', '');
+namespace App\Studio\Admin\DBLiteAdmin;
+
+const APP_NAME = 'DBLiteAdmin';
+const APP_VERSION = '1.0.1';
+if (!defined('DBLITEADMIN_DATABASE_DIR')) define('DBLITEADMIN_DATABASE_DIR', base_path('storage/databases'));
 
 if (!extension_loaded('pdo_sqlite')) {
   $msg = "Error: 'pdo_sqlite' extension required.";
@@ -58,7 +60,7 @@ function qi(string $ident): string {
 }
 
 function getDbList(): array {
-  $files = glob(__DIR__ . '/*.{db,sqlite,sqlite3}', GLOB_BRACE) ?: [];
+  $files = glob(DBLITEADMIN_DATABASE_DIR . '/*.{db,sqlite,sqlite3}', GLOB_BRACE) ?: [];
   $list = array_values(array_unique(array_map('basename', $files)));
   sort($list, SORT_NATURAL | SORT_FLAG_CASE);
   return $list;
@@ -87,7 +89,7 @@ function getPdo(?string $db): ?PDO {
   if (!$db) return null;
   $c = cleanDbName($db);
   if (!$c && $db !== ':memory:') return null;
-  $path = ($db === ':memory:') ? ':memory:' : __DIR__ . DIRECTORY_SEPARATOR . $c;
+  $path = ($db === ':memory:') ? ':memory:' : DBLITEADMIN_DATABASE_DIR . DIRECTORY_SEPARATOR . $c;
   try {
     $pdo = new PDO('sqlite:' . $path, null, null, [
       PDO::ATTR_TIMEOUT => 5,
@@ -178,99 +180,11 @@ function streamSqlDump(PDO $pdo): void {
 }
 
 $dbs = getDbList();
-
-if (php_sapi_name() === 'cli-server') {
-  $urlPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
-  $filePath = __DIR__ . $urlPath;
-  if ($urlPath !== '/' && file_exists($filePath) && !is_dir($filePath) && realpath($filePath) !== __FILE__) {
-    return false;
-  }
-}
-
-if (php_sapi_name() === 'cli') {
-  global $argv;
-  if (isset($argv[1]) && in_array($argv[1], ['serve', 'server', '-S'], true)) {
-    $bind = $argv[2] ?? '127.0.0.1:8000';
-    if (!str_contains($bind, ':')) {
-      $bind = '127.0.0.1:' . $bind;
-    }
-    fwrite(STDOUT, APP_NAME . " server running at http://{$bind}\nPress Ctrl+C to terminate.\n\n");
-    passthru(escapeshellcmd(PHP_BINARY) . " -S " . escapeshellarg($bind) . " " . escapeshellarg(__FILE__));
-    exit(0);
-  }
-
-  $currentDb = $argv[1] ?? ($dbs[0] ?? '');
-  if (!$currentDb) {
-    echo "\n" . APP_NAME . " CLI " . APP_VERSION . "\n";
-    echo "No SQLite database found in this folder.\n";
-    echo "Enter database name to open/create (e.g., app.db): ";
-    $input = trim((string)fgets(STDIN));
-    if (!$input) exit("Error: Database not specified.\n");
-    $currentDb = cleanDbName($input);
-  }
-  $pdo = getPdo($currentDb);
-  if (!$pdo) exit("Error: Could not open database.\n");
-  echo "\n" . APP_NAME . " Shell " . APP_VERSION . " [SQLite: " . $pdo->query("SELECT sqlite_version()")->fetchColumn() . " | DB: {$currentDb}]\n\n";
-  $buf = '';
-  while (true) {
-    $line = readline($buf === '' ? "sql> " : "   -> ");
-    if ($line === false) break;
-    $t = trim((string)$line);
-    if ($buf === '' && in_array(strtolower($t), ['exit', 'quit', '\q', 'exit;', 'quit;'], true)) break;
-    if ($t === '\c') { $buf = ''; continue; }
-    $buf .= ($buf === '' ? '' : ' ') . $t;
-    if (str_ends_with($t, ';') || str_ends_with($t, '\g')) {
-      $res = runEmulatedQuery($pdo, $buf, $currentDb);
-      if (!empty($res['reconnect'])) $pdo = getPdo($currentDb);
-      if ($res['type'] === 'select') {
-        if (empty($res['rows'])) {
-          echo "Empty set (" . sprintf('%.3f', $res['time']) . " sec)\n\n";
-        } else {
-          $keys = array_keys($res['rows'][0]);
-          $w = array_combine($keys, array_map('strlen', $keys));
-          foreach ($res['rows'] as $r) {
-            foreach ($keys as $k) $w[$k] = max($w[$k], strlen((string)($r[$k] ?? 'NULL')));
-          }
-          $b = "+-" . implode("-+-", array_map(fn($k) => str_repeat("-", $w[$k]), $keys)) . "-+";
-          echo "{$b}\n| " . implode(" | ", array_map(fn($k) => str_pad((string)$k, $w[$k]), $keys)) . " |\n{$b}\n";
-          foreach ($res['rows'] as $r) {
-            echo "| " . implode(" | ", array_map(fn($k) => str_pad((string)($r[$k] ?? 'NULL'), $w[$k]), $keys)) . " |\n";
-          }
-          echo "{$b}\n" . sprintf("%d row%s (%.3f sec)\n\n", $res['count'], $res['count'] === 1 ? '' : 's', $res['time']);
-        }
-      } elseif ($res['type'] === 'dml') {
-        printf("Query OK, %d rows affected (%.3f sec)\n\n", $res['affected'], $res['time']);
-      } elseif ($res['type'] === 'info') {
-        printf("%s (%.3f sec)\n\n", $res['message'], $res['time']);
-      } elseif ($res['type'] === 'error') {
-        printf("ERROR: %s\n\n", $res['error']);
-      }
-      $buf = '';
-    }
-  }
-  exit(0);
-}
-
-session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) session_start();
 if (empty($_SESSION['csrf'])) {
   $_SESSION['csrf'] = bin2hex(random_bytes(16));
 }
 $csrf = $_SESSION['csrf'];
-$activePassword = AUTH_PASSWORD !== '' ? AUTH_PASSWORD : ($_SESSION['custom_password'] ?? '');
-
-if ($activePassword !== '') {
-  if (isset($_POST['p']) && hash_equals($activePassword, (string)$_POST['p'])) {
-    $_SESSION['auth'] = true;
-  }
-  if (isset($_GET['logout'])) {
-    unset($_SESSION['auth']);
-    header('Location: ' . $_SERVER['PHP_SELF']);
-    exit;
-  }
-  if (empty($_SESSION['auth'])) {
-    die('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>' . APP_NAME . ' - Sign In</title><style>:root{--s:#111318;--o:#e2e2e9;--c:#1d2024;--p:#a8c7fa;--op:#04305f}body{background:var(--s);color:var(--o);font-family:system-ui,-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;height:100dvh;margin:0}form{background:var(--c);padding:2.5rem;border-radius:28px;width:320px;border:1px solid rgba(255,255,255,.06);box-shadow:0 10px 30px rgba(0,0,0,.5)}input,button{width:100%;padding:.9rem;border-radius:99px;border:none;margin-top:.8rem;box-sizing:border-box;font-size:.9rem}input{background:#282a2f;color:#fff;border:1px solid #44474f}button{background:var(--p);color:var(--op);font-weight:700;cursor:pointer}</style></head><body><form method="post"><h2 style="margin:0 0 1rem;font-weight:600">' . APP_NAME . '</h2><input type="password" name="p" placeholder="Master Password" required autofocus><button>Sign In</button></form></body></html>');
-  }
-}
 
 function checkCsrf(): void {
   $token = $_POST['csrf'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
@@ -316,8 +230,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
   if ($act === 'rename_db' && $currentDb && !empty($_POST['new_name'])) {
     $new = cleanDbName($_POST['new_name']);
-    $oldPath = __DIR__ . DIRECTORY_SEPARATOR . $currentDb;
-    $newPath = __DIR__ . DIRECTORY_SEPARATOR . $new;
+    $oldPath = DBLITEADMIN_DATABASE_DIR . DIRECTORY_SEPARATOR . $currentDb;
+    $newPath = DBLITEADMIN_DATABASE_DIR . DIRECTORY_SEPARATOR . $new;
     if ($new && file_exists($oldPath) && !file_exists($newPath)) {
       rename($oldPath, $newPath);
       header("Location: ?db=" . urlencode($new) . "&tab=settings&msg=Database+renamed");
@@ -328,8 +242,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ext = pathinfo($currentDb, PATHINFO_EXTENSION);
     $base = pathinfo($currentDb, PATHINFO_FILENAME);
     $new = cleanDbName($base . '_clone_' . date('Ymd_His') . '.' . $ext);
-    $oldPath = __DIR__ . DIRECTORY_SEPARATOR . $currentDb;
-    $newPath = __DIR__ . DIRECTORY_SEPARATOR . $new;
+    $oldPath = DBLITEADMIN_DATABASE_DIR . DIRECTORY_SEPARATOR . $currentDb;
+    $newPath = DBLITEADMIN_DATABASE_DIR . DIRECTORY_SEPARATOR . $new;
     if ($new && file_exists($oldPath)) {
       copy($oldPath, $newPath);
       header("Location: ?db=" . urlencode($new) . "&tab=tables&msg=Database+cloned");
@@ -337,8 +251,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   }
   if ($act === 'backup_db' && $currentDb) {
-    $dest = __DIR__ . DIRECTORY_SEPARATOR . $currentDb . '.' . date('Ymd_His') . '.bak.sqlite';
-    $src = __DIR__ . DIRECTORY_SEPARATOR . $currentDb;
+    $dest = DBLITEADMIN_DATABASE_DIR . DIRECTORY_SEPARATOR . $currentDb . '.' . date('Ymd_His') . '.bak.sqlite';
+    $src = DBLITEADMIN_DATABASE_DIR . DIRECTORY_SEPARATOR . $currentDb;
     if (file_exists($src)) {
       copy($src, $dest);
       header("Location: ?db=" . urlencode($currentDb) . "&tab=settings&msg=Backup+created");
@@ -346,7 +260,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   }
   if ($act === 'delete_db' && $currentDb) {
-    $src = __DIR__ . DIRECTORY_SEPARATOR . $currentDb;
+    $src = DBLITEADMIN_DATABASE_DIR . DIRECTORY_SEPARATOR . $currentDb;
     if (file_exists($src)) {
       unlink($src);
       $remain = getDbList();
@@ -358,7 +272,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if ($act === 'upload_db' && !empty($_FILES['db_file']['tmp_name'])) {
     $fname = cleanDbName($_FILES['db_file']['name']);
     if ($fname) {
-      $dest = __DIR__ . DIRECTORY_SEPARATOR . $fname;
+      $dest = DBLITEADMIN_DATABASE_DIR . DIRECTORY_SEPARATOR . $fname;
       move_uploaded_file($_FILES['db_file']['tmp_name'], $dest);
       header("Location: ?db=" . urlencode($fname) . "&tab=tables");
       exit;
@@ -500,14 +414,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: ?db=" . urlencode($currentDb) . "&tab=settings&msg=Preferences+saved");
     exit;
   }
-  if ($act === 'set_auth' && AUTH_PASSWORD === '') {
-    $p = trim((string)$_POST['auth_pass']);
-    $_SESSION['custom_password'] = $p;
-    if ($p !== '') $_SESSION['auth'] = true;
-    header("Location: ?db=" . urlencode($currentDb) . "&tab=settings&msg=Security+updated");
-    exit;
-  }
-  if ($act === 'import_sql' && $pdo) {
+    if ($act === 'import_sql' && $pdo) {
     $s = !empty($_FILES['file']['tmp_name']) ? file_get_contents($_FILES['file']['tmp_name']) : ($_POST['sql'] ?? '');
     if ($s) {
       $pdo->beginTransaction();
@@ -589,7 +496,7 @@ if ($tab === 'dump' && $pdo) {
   exit;
 }
 if ($tab === 'download' && $currentDb) {
-  $f = __DIR__ . DIRECTORY_SEPARATOR . $currentDb;
+  $f = DBLITEADMIN_DATABASE_DIR . DIRECTORY_SEPARATOR . $currentDb;
   if (file_exists($f)) {
     header('Content-Type: application/x-sqlite3');
     header('Content-Disposition: attachment; filename="' . $currentDb . '"');
@@ -601,7 +508,7 @@ if ($tab === 'download' && $currentDb) {
 
 $tables = $pdo ? $pdo->query("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name")->fetchAll(PDO::FETCH_COLUMN) : [];
 if (!$table && $tables) $table = $tables[0];
-$dbSize = ($currentDb && file_exists(__DIR__ . '/' . $currentDb)) ? round(filesize(__DIR__ . '/' . $currentDb) / 1024, 1) . ' KB' : '0 KB';
+$dbSize = ($currentDb && file_exists(DBLITEADMIN_DATABASE_DIR . '/' . $currentDb)) ? round(filesize(DBLITEADMIN_DATABASE_DIR . '/' . $currentDb) / 1024, 1) . ' KB' : '0 KB';
 $sqliteVer = $pdo ? $pdo->query("SELECT sqlite_version()")->fetchColumn() : 'N/A';
 
 $pageTitle = APP_NAME;
@@ -1074,21 +981,7 @@ function renderView($tab, $table, $pdo, $currentDb, $tables, string $sqliteVer, 
         </form>
       </div>
 
-      <div class="card">
-        <h3 style="margin:0 0 .8rem">Security & Authentication</h3>
-        <?php if (AUTH_PASSWORD !== ''): ?>
-          <p class="muted">Hardcoded AUTH_PASSWORD constant is currently active.</p>
-          <a href="?logout=1" class="btn btn-tonal">Sign Out</a>
-        <?php else: ?>
-          <p class="muted" style="margin-bottom:.8rem">Set or clear session password. Leave empty for unlocked mode.</p>
-          <form method="post" class="row gap-sm" style="max-width:400px">
-            <input type="hidden" name="csrf" value="<?= $csrf ?>">
-            <input type="hidden" name="action" value="set_auth">
-            <input type="password" name="auth_pass" placeholder="New Master Password" value="<?= htmlspecialchars($_SESSION['custom_password'] ?? '') ?>" class="input">
-            <button class="btn btn-prim">Save</button>
-          </form>
-        <?php endif; ?>
-      </div>
+      <div class="card"><h3 style="margin:0 0 .8rem">Administration</h3><p class="muted">Sign-in and session security are managed by the application.</p><a href="/admin/logout" class="btn btn-tonal">Sign Out</a></div>
 
       <?php if ($pdo): ?>
         <div class="card">

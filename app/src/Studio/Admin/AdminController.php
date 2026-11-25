@@ -180,7 +180,13 @@ final class AdminController
 
     private static function unavailable(): Response
     {
-        return new Response(ErrorPages::render(503), 503, ['Content-Type' => 'text/html; charset=utf-8', 'Cache-Control' => 'no-store']);
+        $html = View::make((string) config('http-error-pages.view', 'studio::errors.show'), [
+            'status' => 503,
+            'locale' => 'en',
+            'title' => 'Admin setup required',
+            'description' => 'Create the admin credentials by running php scripts/create-offerings-admin.php, then reload this page.',
+        ])->render();
+        return new Response($html, 503, ['Content-Type' => 'text/html; charset=utf-8', 'Cache-Control' => 'no-store']);
     }
 
     private static function redirect(string $location): Response

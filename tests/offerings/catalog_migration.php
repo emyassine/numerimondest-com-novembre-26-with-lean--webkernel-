@@ -6,7 +6,7 @@ require $base_path.'/internal/dependencies/autoload.php';
 use App\Studio\Catalog\OfferingRelationType;
 use App\Studio\Catalog\ServiceCatalog;
 use App\Studio\Catalog\MandateCatalog;
-use App\Studio\Admin\OfferingAdminController;
+use App\Studio\Admin\AdminController;
 use App\Studio\Persistence\OfferingStore;
 use Webkernel\Route\Request;
 use Webkernel\Session\Session;
@@ -113,7 +113,7 @@ Session::configure(['cookie' => 'NMAdminCatalogTest', 'save_path' => $sessionPat
 $_SERVER['HTTPS'] = 'off';
 $_SERVER['HTTP_HOST'] = '127.0.0.1:8000';
 $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-$unauthorized = OfferingAdminController::preview(new Request('POST', '/admin/offerings/preview', content: '{}'));
+$unauthorized = AdminController::preview(new Request('POST', '/admin/offerings/preview', content: '{}'));
 if ($unauthorized->getStatusCode() !== 401) throw new RuntimeException('Admin preview allowed an unauthenticated request.');
 $secretPath = $base_path.'/config/offerings-admin.php';
 $hadSecret = is_file($secretPath);
@@ -121,7 +121,7 @@ if (!$hadSecret) file_put_contents($secretPath, "<?php return ".var_export(['use
 Session::put('studio.offerings.admin_authenticated_at', time());
 $csrf = bin2hex(random_bytes(32));
 Session::put('studio.offerings.admin_csrf', $csrf);
-$preview = OfferingAdminController::preview(new Request(
+$preview = AdminController::preview(new Request(
     'POST', '/admin/offerings/preview',
     headers: ['x-csrf-token' => $csrf],
     content: json_encode(['offerings' => array_values($offerings)], JSON_THROW_ON_ERROR),

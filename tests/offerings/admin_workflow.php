@@ -2,7 +2,7 @@
 
 require dirname(__DIR__, 2).'/internal/dependencies/autoload.php';
 
-use App\Studio\Admin\OfferingAdminController;
+use App\Studio\Admin\AdminController;
 use App\Studio\Persistence\OfferingStore;
 use App\Studio\Persistence\QuoteStore;
 use Webkernel\Route\Request;
@@ -37,9 +37,9 @@ if (!$hadSecret) file_put_contents($secretPath, "<?php return ".var_export(['use
 Session::invalidate();
 $loginCsrf = bin2hex(random_bytes(32));
 Session::put('studio.offerings.admin_csrf', $loginCsrf);
-$badLogin = OfferingAdminController::login(new Request('POST', '/admin/offerings/login', body: ['username' => 'test-admin', 'password' => 'wrong-password', '_csrf' => $loginCsrf]));
+$badLogin = AdminController::login(new Request('POST', '/admin/login', body: ['username' => 'test-admin', 'password' => 'wrong-password', '_csrf' => $loginCsrf]));
 if ($badLogin->getStatusCode() !== 401) throw new RuntimeException('Admin login accepted an invalid password.');
-$login = OfferingAdminController::login(new Request('POST', '/admin/offerings/login', body: ['username' => 'test-admin', 'password' => 'test-password-for-suite', '_csrf' => $loginCsrf]));
+$login = AdminController::login(new Request('POST', '/admin/login', body: ['username' => 'test-admin', 'password' => 'test-password-for-suite', '_csrf' => $loginCsrf]));
 if ($login->getStatusCode() !== 303 || !is_int(Session::get('studio.offerings.admin_authenticated_at'))) throw new RuntimeException('Admin login failed to establish an authenticated session.');
 $csrf = bin2hex(random_bytes(32));
 Session::put('studio.offerings.admin_csrf', $csrf);
@@ -48,23 +48,23 @@ $validCatalogue = ['offerings' => [[
     'industries' => ['education-training'], 'business_needs' => ['operations'], 'prices' => [], 'relations' => [], 'active' => true,
 ]]];
 $request = static fn (array $data): Request => new Request('POST', '/admin/offerings/preview', headers: ['x-csrf-token' => $csrf], content: json_encode($data, JSON_THROW_ON_ERROR));
-$preview = OfferingAdminController::preview($request($validCatalogue));
+$preview = AdminController::preview($request($validCatalogue));
 if ($preview->getStatusCode() !== 200) throw new RuntimeException('Admin preview rejected a valid catalogue.');
 $previewData = json_decode($preview->getContent(), true, 512, JSON_THROW_ON_ERROR);
 if (($previewData['offering_count'] ?? null) !== 1 || ($previewData['offerings'][0]['name'] ?? null) !== 'Admin offer') throw new RuntimeException('Admin preview omitted a reviewable offering summary.');
 $unitCatalogue = $validCatalogue;
 $unitCatalogue['offerings'][0]['prices'] = [['id' => 'flow-fee', 'amount_mad' => 9000, 'billing' => 'one_time', 'unit' => 'workflow']];
-if (OfferingAdminController::preview($request($unitCatalogue))->getStatusCode() !== 200) throw new RuntimeException('Admin preview rejected valid per-unit pricing metadata.');
+if (AdminController::preview($request($unitCatalogue))->getStatusCode() !== 200) throw new RuntimeException('Admin preview rejected valid per-unit pricing metadata.');
 $invalidUnit = $unitCatalogue;
 $invalidUnit['offerings'][0]['prices'][0]['amount_mad'] = null;
 $invalidUnit['offerings'][0]['prices'][0]['minimum_mad'] = 8000;
-if (OfferingAdminController::preview($request($invalidUnit))->getStatusCode() !== 422) throw new RuntimeException('Admin preview accepted a unit price without a fixed amount.');
+if (AdminController::preview($request($invalidUnit))->getStatusCode() !== 422) throw new RuntimeException('Admin preview accepted a unit price without a fixed amount.');
 $invalid = $validCatalogue;
 $invalid['offerings'][0]['business_needs'] = ['invented-need'];
-if (OfferingAdminController::preview($request($invalid))->getStatusCode() !== 422) throw new RuntimeException('Admin preview accepted an invalid taxonomy value.');
-$saved = OfferingAdminController::saveDraft($request($validCatalogue), $store);
+if (AdminController::preview($request($invalid))->getStatusCode() !== 422) throw new RuntimeException('Admin preview accepted an invalid taxonomy value.');
+$saved = AdminController::saveDraft($request($validCatalogue), $store);
 if ($saved->getStatusCode() !== 204 || ($store->current('draft')['catalogue'] ?? null) !== $validCatalogue) throw new RuntimeException('Admin draft endpoint did not persist the validated catalogue.');
-$publishedResponse = OfferingAdminController::publish(new Request('POST', '/admin/offerings/publish', headers: ['x-csrf-token' => $csrf]), $store);
+$publishedResponse = AdminController::publish(new Request('POST', '/admin/offerings/publish', headers: ['x-csrf-token' => $csrf]), $store);
 if ($publishedResponse->getStatusCode() !== 200 || ($store->current('published')['catalogue'] ?? null) !== $validCatalogue) throw new RuntimeException('Admin publish endpoint did not publish the draft.');
 if (!$hadSecret) unlink($secretPath);
 

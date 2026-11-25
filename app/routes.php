@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use App\Studio\Admin\OfferingAdminController;
+use App\Studio\Admin\AdminController;
 use App\Studio\Http\MarketFitController;
 use App\Studio\Http\PartnerOfferingController;
 use App\Studio\Http\PwaController;
@@ -34,16 +34,17 @@ Route::get("/api/v{$api_version}/offerings/{id}", [PartnerOfferingController::cl
 Route::post("/api/v{$api_version}/quotes", [PartnerOfferingController::class, 'quote']);
 
 /*------------------------------------------*
-// Admin Offerings
+// Private Administration (local and development environments only)
 /*------------------------------------------*/
 if (!is_env('prod')) {
-    Route::get('/admin/offerings', [OfferingAdminController::class, 'index']);
-    Route::get('/admin/offerings/login', [OfferingAdminController::class, 'loginForm']);
-    Route::post('/admin/offerings/login', [OfferingAdminController::class, 'login']);
-    Route::post('/admin/offerings/logout', [OfferingAdminController::class, 'logout']);
-    Route::post('/admin/offerings/preview', [OfferingAdminController::class, 'preview']);
-    Route::post('/admin/offerings/draft', [OfferingAdminController::class, 'saveDraft']);
-    Route::post('/admin/offerings/publish', [OfferingAdminController::class, 'publish']);
+    Route::get('/admin', [AdminController::class, 'databaseManager']);
+    Route::get('/admin/login', [AdminController::class, 'loginForm']);
+    Route::post('/admin/login', [AdminController::class, 'login']);
+    Route::post('/admin/logout', [AdminController::class, 'logout']);
+    Route::get('/admin/offerings', [AdminController::class, 'index']);
+    Route::post('/admin/offerings/preview', [AdminController::class, 'preview']);
+    Route::post('/admin/offerings/draft', [AdminController::class, 'saveDraft']);
+    Route::post('/admin/offerings/publish', [AdminController::class, 'publish']);
 }
 
 /*------------------------------------------*
