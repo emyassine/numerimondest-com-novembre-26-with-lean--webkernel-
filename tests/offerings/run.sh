@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+set -eu
+
+test_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+php "$test_dir/catalog_migration.php"
+php "$test_dir/explicit_initialization.php"
+php "$test_dir/retirement_migration.php"
+php "$test_dir/canonical_refresh.php"
+php "$test_dir/services_render.php"
+php "$test_dir/api_render.php"
+php "$test_dir/api_detail_render.php"
+php "$test_dir/admin_render.php"
+php "$test_dir/mandate_detail.php"
+php "$test_dir/related_offering_render.php"
+php "$test_dir/shortlist.php"
+php "$test_dir/shortlist_render.php"
+php "$test_dir/service_inquiry_render.php"
+php "$test_dir/service_inquiry_submit.php"
+php "$test_dir/inquiry_quote.php"
+php "$test_dir/admin_workflow.php"
+php "$test_dir/pricing.php"
+php "$test_dir/partner_api.php"
+php "$test_dir/market_fit.php"
+php "$test_dir/quote_store.php"
+php "$test_dir/../../packages/numerimondes-offerings/tests/run.php"
+php "$test_dir/../../packages/numerimondes-offerings/examples/partner-storefront/tests/integration.php"

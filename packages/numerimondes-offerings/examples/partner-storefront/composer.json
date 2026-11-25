@@ -1,0 +1,16 @@
+{
+  "name": "example/partner-storefront",
+  "description": "Server-side reference storefront for Numerimondes partner offers",
+  "type": "project",
+  "license": "proprietary",
+  "require": {
+    "php": ">=8.2",
+    "numerimondes/offerings": "dev-main"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "repositories": [
+    { "packagist.org": false },
+    { "type": "path", "url": "../../", "options": { "symlink": false } }
+  ]
+}

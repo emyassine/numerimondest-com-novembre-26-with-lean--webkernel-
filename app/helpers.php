@@ -60,6 +60,87 @@ if (! function_exists('__')) {
     }
 }
 
+if (! function_exists('__t')) {
+    /** Resolve a localized content map at the presentation boundary. */
+    function __t(array|string|null $value, ?string $locale = null): string
+    {
+        if (is_string($value)) {
+            return $value;
+        }
+        if ($value === null || $value === []) {
+            return '';
+        }
+        $locale ??= \Webkernel\I18n\I18nContext::get_locale();
+        if ($locale !== '' && is_string($value[$locale] ?? null)) {
+            return $value[$locale];
+        }
+        if (is_string($value['en'] ?? null)) {
+            return $value['en'];
+        }
+        foreach ($value as $translation) {
+            if (is_string($translation)) {
+                return $translation;
+            }
+        }
+        return '';
+    }
+}
+
+if (! function_exists('offering_price_components')) {
+    /** @return list<array<string,mixed>> */
+    function offering_price_components(array $record, ?string $currency = null): array
+    {
+        $settings = config('nm-studio.currencies', []);
+        $options = is_array($settings['options'] ?? null) ? $settings['options'] : [];
+        $cookie = is_string($settings['cookie'] ?? null) ? $settings['cookie'] : 'numerimondes_currency';
+        $selected = strtoupper($currency ?? (is_string($_COOKIE[$cookie] ?? null) ? $_COOKIE[$cookie] : (string)($settings['default'] ?? 'MAD')));
+        if (!isset($options[$selected])) $selected = 'MAD';
+        return (new \App\Studio\Pricing\OfferingPriceResolver())->resolve(
+            \App\Studio\Catalog\Offering::fromArray($record),
+            $selected,
+        );
+    }
+}
+
+if (! function_exists('offering_price_display')) {
+    function offering_price_display(array $record, ?string $currency = null): string
+    {
+        $components = offering_price_components($record, $currency);
+        $parts = [];
+        foreach ($components as $component) {
+            $label = __t($component['label'] ?? []);
+            $percentage = is_numeric($component['percentage'] ?? null) ? (float)$component['percentage'] : null;
+            $amount = is_numeric($component['amount'] ?? null) ? (float)$component['amount'] : null;
+            $minimum = is_numeric($component['minimum'] ?? null) ? (float)$component['minimum'] : null;
+            $maximum = is_numeric($component['maximum'] ?? null) ? (float)$component['maximum'] : null;
+            $unit = strtoupper((string)($component['currency'] ?? $currency ?? 'MAD'));
+            if ($percentage !== null) {
+                $basisKind = (string)($component['basis']['kind'] ?? '');
+                $basisKey = (string)($component['basis']['value_key'] ?? '');
+                $basisLabel = $basisKind === 'monthly_salary' || $basisKey === 'monthly_salary' ? 'monthly salary' : 'the stated basis';
+                $percentageText = number_format($percentage, 0).'% of '.$basisLabel;
+                $part = $label !== '' && stripos($label, $percentageText) !== false
+                    ? $label
+                    : $percentageText.($label !== '' ? ' · '.$label : '');
+                if ($amount !== null) $part .= ' · '.price($amount, $unit, $unit);
+            } elseif ($minimum !== null && $maximum !== null) {
+                $range = price($minimum, $unit, $unit).'–'.price($maximum, $unit, $unit);
+                $part = $label !== '' ? $label.' · '.$range : 'From '.$range;
+            } elseif ($amount !== null) {
+                $value = price($amount, $unit, $unit);
+                $part = $label !== '' ? $label.' · '.$value : 'From '.$value;
+            } else {
+                $part = $label;
+            }
+            $part .= match ($component['billing'] ?? '') {
+                'monthly' => ' / month', 'quarterly' => ' / quarter', 'annual' => ' / year', default => '',
+            };
+            if ($part !== '') $parts[] = $part;
+        }
+        return implode(' + ', $parts);
+    }
+}
+
 if (! function_exists('tmp_path')) {
     /** Resolve a temporary path inside the configured application runtime directory. */
     function tmp_path(string $path = ''): string

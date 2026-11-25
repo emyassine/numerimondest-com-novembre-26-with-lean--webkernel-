@@ -5,15 +5,15 @@
         $service['class'] ?? '',
         $card_class,
     ]));
-    $engagement_slug = \Webkernel\Utilities\Str::slug($service['engagement_type'] ?? 'Project');
+    $engagement_slug = \Webkernel\Utilities\Str::slug($service['engagement'] ?? 'Project');
+    $description = __t($service['summary'] ?? $service['description'] ?? []);
     $is_priced = ! empty($service['price_display']) ? 'true' : 'false';
     $search_text = mb_strtolower(implode(' ', array_filter([
-        $service['name'],
+        __t($service['name'] ?? []),
         $service['category'],
-        $service['card_description'],
+        $description,
         $service['format'],
         $service['price_display'] ?? '',
-        $service['brand'] ?? '',
     ])));
     $industries = implode(',', $service['industries'] ?? []);
     $business_needs = implode(',', $service['business_needs'] ?? []);
@@ -52,7 +52,7 @@
             <img
                 class="nm-marketplace-card-image"
                 src="{{ $service['image'] }}"
-                alt="{{ $service['image_alt'] ?? $service['name'] }}"
+                alt="{{ $service['image_alt'] ?? __t($service['name'] ?? []) }}"
                 width="{{ $service['image_width'] ?? 1200 }}"
                 height="{{ $service['image_height'] ?? 800 }}"
                 loading="lazy"
@@ -63,8 +63,8 @@
             </span>
         </div>
         <div class="nm-marketplace-card-content" style="padding:20px;display:flex;flex:1;flex-direction:column;gap:12px">
-            <h3 class="nm-marketplace-card-heading" style="margin:0;font:400 var(--nm-text-leading)/1.25 var(--nm-title);letter-spacing:.01em">{{ $service['name'] }}</h3>
-            <p class="nm-marketplace-card-scope" style="flex:1;margin:0 0 8px;color:var(--text-secondary,#475569);font:400 var(--nm-text-size)/1.5 var(--nm-body)">{{ $service['card_description'] }}</p>
+            <h3 class="nm-marketplace-card-heading" style="margin:0;font:400 var(--nm-text-leading)/1.25 var(--nm-title);letter-spacing:.01em">{{ __t($service['name'] ?? []) }}</h3>
+            <p class="nm-marketplace-card-scope" style="flex:1;margin:0 0 8px;color:var(--text-secondary,#475569);font:400 var(--nm-text-size)/1.5 var(--nm-body)">{{ $description }}</p>
             @if (! empty($service['extensions']))
                 <x-webkernel-platform::badge color="gray" size="sm">Configurable · {{ count($service['extensions']) }} {{ count($service['extensions']) === 1 ? 'extension' : 'extensions' }} available</x-webkernel-platform::badge>
             @endif
@@ -80,9 +80,9 @@
             <x-webkernel-platform::button type="button" color="primary" size="sm" style="width:100%;justify-content:center" x-on:click="$el.closest('.nm-marketplace-card').querySelector('.fi-modal').dispatchEvent(new CustomEvent('open-modal'))">Details</x-webkernel-platform::button>
         </div>
     </div>
-    <x-webkernel-platform::modal :heading="$service['name']" :description="$service['category']" width="lg">
+    <x-webkernel-platform::modal :heading="__t($service['name'] ?? [])" :description="$service['category']" width="lg">
         <div class="nm-marketplace-card-modal-content" style="display:grid;gap:16px">
-            <p style="margin:0;font:400 16px/1.5 var(--nm-body)">{{ $service['card_description'] }}</p>
+            <p style="margin:0;font:400 16px/1.5 var(--nm-body)">{{ $description }}</p>
             <p class="nm-marketplace-card-modal-format" style="margin:0;color:var(--text-secondary,#77746e);font:400 11px/1.5 var(--nm-body);letter-spacing:.08em;text-transform:uppercase">{{ $service['format'] }}</p>
             @if (! empty($service['price_display']))
                 <p class="nm-marketplace-card-modal-price" style="margin:0;font:400 14px/1.4 var(--nm-body)">{{ $service['price_display'] }}</p>
@@ -90,23 +90,20 @@
             @if (! empty($service['catalog_mandate']))
                 <x-studio::shortlist-button :service="$service" :compact="true" />
             @endif
-            @if (! empty($service['brand']))
-                <p class="nm-marketplace-card-modal-brand" style="margin:0;color:var(--text-secondary,#77746e);font:400 11px/1.5 var(--nm-body);letter-spacing:.08em;text-transform:uppercase">{{ $service['brand'] }}</p>
-            @endif
             @if (! empty($service['extensions']))
                 <h3>Configurable · {{ count($service['extensions']) }} {{ count($service['extensions']) === 1 ? 'extension' : 'extensions' }} available</h3>
                 @foreach ($service['extensions'] as $extension)
                     <x-webkernel-platform::card compact>
                         <div>
                             <div>
-                                <strong>{{ $extension['name'] }}</strong>
+                                <strong>{{ __t($extension['name'] ?? []) }}</strong>
                                 @if (! empty($extension['description']))
                                     <p>{{ $extension['description'] }}</p>
                                 @endif
                                 @if (! empty($extension['monthly']))
-                                    <p>+ {{ price((float) $extension['price_mad'], 'MAD') }} / month</p>
+                                    <p>+ {{ $extension['price_display'] }}</p>
                                 @else
-                                    <p>+ {{ price((float) $extension['price_mad'], 'MAD') }}</p>
+                                    <p>+ {{ $extension['price_display'] }}</p>
                                 @endif
                             </div>
                             <x-studio::shortlist-button :service="$extension" :compact="true" />

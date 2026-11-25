@@ -190,7 +190,7 @@ final class CurrencyRates
     /** @return array<string, mixed> */
     private static function config(): array
     {
-        $path = dirname(__DIR__, 3).'/config/nm-studio.php';
+        $path = base_path('/config/nm-studio.php');
         $config = is_file($path) ? require $path : [];
 
         return is_array($config) ? $config : [];
@@ -199,7 +199,7 @@ final class CurrencyRates
     /** @return array<string, mixed> */
     private static function readSnapshot(): array
     {
-        $path = dirname(__DIR__, 3).'/storage/private/pricing/currency-rates.json';
+        $path = base_path('/storage/private/pricing/currency-rates.json');
         if (! is_file($path)) {
             return [];
         }
@@ -215,7 +215,7 @@ final class CurrencyRates
     /** @param array<string, mixed> $payload */
     private static function writeSnapshot(array $payload): void
     {
-        $directory = dirname(__DIR__, 3).'/storage/private/pricing';
+        $directory = base_path('/storage/private/pricing');
         if (! is_dir($directory) && ! @mkdir($directory, 0770, true) && ! is_dir($directory)) {
             throw new RuntimeException('Unable to create the private FX cache directory.');
         }

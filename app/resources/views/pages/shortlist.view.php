@@ -1,10 +1,39 @@
 @php
     $savedSlugs = \App\Studio\Shortlist\ServiceShortlist::all();
-    $catalog = \App\Studio\Catalog\ServiceCatalog::all();
+    $catalog = \App\Studio\Catalog\OfferingCatalog::all();
     $shortlistedServices = array_values(array_filter(
         array_map(static fn (string $slug): ?array => $catalog[$slug] ?? null, $savedSlugs),
         'is_array',
     ));
+    foreach ($shortlistedServices as &$shortlistedService) {
+        $parent = \App\Studio\Catalog\OfferingCatalog::parentOf($shortlistedService['id'], 'extension');
+        $parentName = is_array($parent) ? __t($parent['name'] ?? []) : null;
+        $shortlistedService['slug'] = $shortlistedService['id'];
+        $shortlistedService['name'] = __t($shortlistedService['name'] ?? []);
+        $shortlistedService['summary'] = __t($shortlistedService['summary'] ?? $shortlistedService['description'] ?? []);
+        $shortlistedService['category'] = $parentName !== null ? 'Extension · '.$parentName : ($shortlistedService['category'] ?? 'Offering');
+        $shortlistedService['format'] = (string)($shortlistedService['format'] ?? 'Offering');
+        $shortlistedService['status'] = (string)($shortlistedService['status'] ?? 'Taking enquiries');
+        $shortlistedService['href'] = simple_site('studio', 'services/'.($parent['id'] ?? $shortlistedService['id']));
+        $shortlistedService['price_display'] = offering_price_display($shortlistedService);
+    }
+    unset($shortlistedService);
+    $currencyConfig = config('nm-studio.currencies', []);
+    $currencyCookie = is_string($currencyConfig['cookie'] ?? null) ? $currencyConfig['cookie'] : 'numerimondes_currency';
+    $shortlistCurrency = strtoupper((string) ($_COOKIE[$currencyCookie] ?? $currencyConfig['default'] ?? 'MAD'));
+    if (!isset($currencyConfig['options'][$shortlistCurrency])) $shortlistCurrency = 'MAD';
+    $oneTimeTotal = 0.0;
+    $pricedOneTimeCount = 0;
+    foreach ($shortlistedServices as $shortlistedService) {
+        $components = offering_price_components($shortlistedService, $shortlistCurrency);
+        foreach ($components as $component) {
+            if (($component['billing'] ?? null) === 'one_time' && !is_numeric($component['percentage'] ?? null) && is_numeric($component['amount'] ?? null)) {
+                $oneTimeTotal += (float) $component['amount'];
+                $pricedOneTimeCount++;
+            }
+        }
+    }
+    $oneTimeTotal = round($oneTimeTotal, 2);
 @endphp
 
 <x-studio::page
@@ -49,6 +78,16 @@
                 <x-studio::inquiry-offer-card :service="$shortlistedService" />
             @endforeach
         </div>
+        @if ($shortlistedServices !== [])
+            <x-webkernel-platform::section heading="Indicative total (one-time starting fees)" class="mt-6">
+                @if ($pricedOneTimeCount > 0)
+                    <p>{{ price($oneTimeTotal, $shortlistCurrency, $shortlistCurrency) }}</p>
+                @else
+                    <p>No fixed one-time starting fees are selected.</p>
+                @endif
+                <p>Monthly, quarterly, and percentage-based fees are listed with their offers and excluded from this total.</p>
+            </x-webkernel-platform::section>
+        @endif
         <div data-shortlist-cta @if ($shortlistedServices === []) hidden @endif>
             <x-studio::service-inquiry-launch :services="$shortlistedServices" class="nm-shortlist-action nm-shortlist-cta">
                 Request a private discussion

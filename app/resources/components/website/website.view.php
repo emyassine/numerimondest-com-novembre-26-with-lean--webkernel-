@@ -64,7 +64,7 @@
         }
     } elseif (str_starts_with($studioPage, 'services/')) {
         $serviceSlug = substr($studioPage, strlen('services/'));
-        $preloadImages[] = \App\Studio\Catalog\ServiceCatalog::find($serviceSlug)['image_source'];
+        $preloadImages[] = \App\Studio\Catalog\OfferingCatalog::find($serviceSlug)['image_source'] ?? '';
     }
     $preloadImages = array_values(array_unique($preloadImages));
 @endphp

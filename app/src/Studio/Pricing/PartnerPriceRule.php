@@ -27,6 +27,33 @@ final readonly class PartnerPriceRule
         }
     }
 
+    /** @param array<string,mixed> $rule */
+    public static function fromArray(string $partnerId, string $offeringId, array $rule): self
+    {
+        $allowed = ['mode', 'fixed_mad', 'adjustment_percent', 'minimum_mad', 'maximum_mad', 'starts_at', 'ends_at'];
+        if (array_diff(array_keys($rule), $allowed) !== []) throw new \InvalidArgumentException('Partner pricing rule contains unsupported fields.');
+        foreach (['fixed_mad', 'minimum_mad', 'maximum_mad'] as $field) {
+            if (isset($rule[$field]) && (!is_int($rule[$field]) || $rule[$field] < 0)) throw new \InvalidArgumentException('Partner price bounds must be non-negative MAD integers.');
+        }
+        if (isset($rule['adjustment_percent']) && (!is_numeric($rule['adjustment_percent']) || !is_finite((float) $rule['adjustment_percent']) || (float) $rule['adjustment_percent'] < -100 || (float) $rule['adjustment_percent'] > 1000)) {
+            throw new \InvalidArgumentException('Partner percentage adjustment must be between -100 and 1000.');
+        }
+        foreach (['starts_at', 'ends_at'] as $field) {
+            if (isset($rule[$field]) && (!is_string($rule[$field]) || trim($rule[$field]) === '')) throw new \InvalidArgumentException('Partner pricing dates must be non-empty ISO date strings.');
+        }
+        return new self(
+            $partnerId,
+            $offeringId,
+            (string) ($rule['mode'] ?? 'inherit'),
+            isset($rule['fixed_mad']) ? (int) $rule['fixed_mad'] : null,
+            (float) ($rule['adjustment_percent'] ?? 0),
+            isset($rule['minimum_mad']) ? (int) $rule['minimum_mad'] : null,
+            isset($rule['maximum_mad']) ? (int) $rule['maximum_mad'] : null,
+            $rule['starts_at'] ?? null,
+            $rule['ends_at'] ?? null,
+        );
+    }
+
     public function appliesAt(\DateTimeImmutable $at): bool
     {
         return ($this->startsAt === null || $at >= new \DateTimeImmutable($this->startsAt))

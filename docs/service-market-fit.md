@@ -1,31 +1,44 @@
 # Service market fit
 
-The Services catalogue keeps the current offer arrays for now. Each service and mandate receives two normalized fields from `App\Studio\Catalog\Taxonomy\OfferMarketFit`:
+The unified offering records in the published catalogue carry `industries` and
+`business_needs` directly. `Industry` and `BusinessNeed` enums define the valid
+values; the administrator validates assignments before a draft can be saved or
+published. Education & Training is included for driving-school and private-school
+software modules.
 
-- `industries`: `Industry` enum values.
-- `business_needs`: `BusinessNeed` enum values.
+The selector recommends from the same published catalogue used by the services
+page, detail routes, shortlist, inquiry quote snapshots and partner API.
+Offerings with broad sector applicability explicitly list their supported
+industries; an empty industry list is not interpreted as universal applicability.
+Extensions inherit their context from their parent relationship and do not appear
+as standalone catalogue recommendations.
 
-The mapping is deliberately separate from the offer copy so the existing catalogue format can be revised later without duplicating taxonomy definitions. Extensions inherit their parent mandate’s mapping. Playbooks inherit the mapping of their gateway mandate. The selector uses these same fields to filter existing mandate cards.
-
-Industry and business need counts for gap analysis can be produced with:
+Example:
 
 ```php
-$offers = App\Studio\Catalog\MandateCatalog::data()['mandates'];
-$coverage = App\Studio\Catalog\Taxonomy\OfferMarketFit::coverage($offers);
+$offerings = App\Studio\Catalog\OfferingCatalog::all();
+$recommendations = App\Studio\Catalog\MarketFitRecommender::recommend(
+    'healthcare-life-sciences',
+    'operations',
+    ['team_size' => '11-50'],
+);
 ```
-
-Mappings are an initial editorial classification to review against delivery experience. The supplied industry taxonomy has no Education category, so the driving-school and private-school modules intentionally have no industry assignment; Bookshops & Trade maps to Retail. This gap remains visible in the coverage report instead of being hidden behind an invented category.
 
 ## Anonymous selector counts
 
-Submitting the two-question selector writes only a daily aggregate count for the industry and business-need pair to `runtime/telemetry/service-market-fit.json`. It stores no name, email, IP address, user agent, shortlist, or individual selection history. Counts older than 400 days are removed when a new selection is recorded. If telemetry storage is unavailable, recommendations still work and the page continues normally.
+Selector submissions write daily aggregate counts only to
+`runtime/telemetry/service-market-fit.json`. No name, email, IP address, user
+agent, shortlist, or individual selection history is stored. Counts older than
+400 days are removed on the next write. Recommendations continue to work if
+telemetry storage is unavailable.
 
 ## Studio PHP layout
 
-- `Catalog/`: service, mandate and project data.
-- `Catalog/Taxonomy/`: industry and business-need enums and offer mappings.
-- `Http/`: route controllers.
-- `Integration/Perfex/`: Perfex connection boundary.
-- `Pricing/`: display currency rates.
-- `Shortlist/`: shortlist persistence.
+- `Catalog/`: offering model, relationships, recommender and taxonomies.
+- `Admin/`: catalogue draft, preview and publication endpoints.
+- `Persistence/`: revisioned offerings and immutable quote snapshots.
+- `Pricing/`: canonical MAD pricing, partner rules and display currency rates.
+- `Partners/` and `Http/`: distribution authorization and API controllers.
+- `Presentation/`: services page data preparation.
 - `Analytics/`: aggregate, non-identifying selector counts.
+- `Shortlist/`: session-persisted offering IDs.

@@ -1,31 +1,23 @@
 @props([
     'service' => [],
+    'relatedServices' => [],
 ])
 
 @php
     $imagePath = base_path('app/resources/views/pages/'.($service['image_source'] ?? ''));
     $imageDimensions = is_file($imagePath) ? @getimagesize($imagePath) : false;
     $imageDimensions = $imageDimensions ?: [1200, 800];
-    $relatedServices = [];
-    foreach (($service['related_slugs'] ?? []) as $relatedSlug) {
-        if (is_string($relatedSlug) && $relatedSlug !== ($service['slug'] ?? '')) {
-            $related = \App\Studio\Catalog\ServiceCatalog::all()[$relatedSlug] ?? null;
-            if (is_array($related)) {
-                $relatedServices[] = $related;
-            }
-        }
-    }
 @endphp
 
 <x-studio::page
     class="bleed-page"
-    :title="$service['name'].' — Numerimondes'"
-    :description="$service['card_description']"
+    :title="__t($service['name'] ?? '').' — Numerimondes'"
+    :description="$service['summary'] ?? $service['description'] ?? $service['introduction'] ?? ''"
 >
     <main class="nm-page nm-service-detail">
         <header class="nm-service-detail-intro">
             <p class="nm-service-detail-category">{{ $service['category'] }} <span aria-hidden="true">·</span> {{ $service['status'] }}</p>
-            <h1>{{ $service['name'] }}</h1>
+            <h1>{{ __t($service['name'] ?? '') }}</h1>
             <p class="nm-service-detail-lead">{{ $service['introduction'] }}</p>
             @if (! empty($service['price_display']))
                 <p class="nm-service-detail-price">{{ $service['price_display'] }} <span>· final scope confirmed in writing</span></p>
@@ -41,7 +33,7 @@
         <figure class="nm-service-detail-image">
             <img
                 src="{{ $service['image'] }}"
-                alt="{{ $service['image_alt'] ?? $service['name'] }}"
+                alt="{{ $service['image_alt'] ?? __t($service['name'] ?? '') }}"
                 width="{{ $imageDimensions[0] }}"
                 height="{{ $imageDimensions[1] }}"
                 fetchpriority="high"
@@ -73,11 +65,11 @@
                 <div style="display:grid;gap:1rem">
                     @foreach ($service['extensions'] as $extension)
                         <x-webkernel-platform::card compact>
-                            <h3>{{ $extension['name'] }}</h3>
+                            <h3>{{ __t($extension['name'] ?? []) }}</h3>
                             @if (! empty($extension['description']))
                                 <p>{{ $extension['description'] }}</p>
                             @endif
-                            <p>+ {{ price((float) $extension['price_mad'], 'MAD') }}{{ ! empty($extension['monthly']) ? ' / month' : '' }}</p>
+                            <p>+ {{ $extension['price_display'] }}</p>
                             <x-studio::shortlist-button :service="$extension" :compact="true" />
                         </x-webkernel-platform::card>
                     @endforeach
@@ -91,7 +83,7 @@
                 <x-studio::marketplace-list
                     :services="$relatedServices"
                     :id="'related-'.$service['slug']"
-                    :label="'Related services for '.$service['name']"
+                    :label="'Related services for '.__t($service['name'] ?? '')"
                 />
             </section>
         @endif

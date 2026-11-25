@@ -5,10 +5,13 @@ Standalone Numerimondes Studio site built with Webkernel and Simple Site.
 The Studio pages are served from the domain root. Page templates live directly
 in `app/resources/views/`; reusable components are in `app/resources/components/`.
 Project, capability and service-offer data live separately in
-`app/resources/data/studio/projects/`, `capabilities/` and `services/`.
+`app/resources/data/studio/projects/`, `capabilities/` and the canonical
+`app/resources/data/studio/offerings.php` seed.
 Capabilities describe the team's areas of expertise under `/capabilities`; the
-single-vendor service enquiry marketplace lives under `/services` and discovers
-one PHP data file per offer. Fonts are in `app/resources/assets/fonts/`.
+service enquiry marketplace under `/services` reads the published revision of a
+single SQLite-backed offerings catalogue. Offerings are edited at `/admin/offerings`;
+deployment and partner setup are documented in `docs/offerings-operations.md`.
+Fonts are in `app/resources/assets/fonts/`.
 Studio stylesheets live in `app/resources/css/studio/`; the website component
 loads every CSS file in that directory from the wildcard configured in
 `config/dependable-ui.php`.

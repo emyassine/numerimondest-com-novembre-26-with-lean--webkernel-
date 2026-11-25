@@ -1,10 +1,32 @@
 @php
-    $serviceCatalog = \App\Studio\Catalog\ServiceCatalog::all();
+    $serviceCatalog = \App\Studio\Catalog\OfferingCatalog::all();
     $selectedSlugs = \App\Studio\Http\ServiceInquiryController::selectedSlugs();
     $selectedServices = array_values(array_filter(
         array_map(static fn (string $slug): ?array => $serviceCatalog[$slug] ?? null, $selectedSlugs),
         'is_array',
     ));
+    $prepareOfferCard = static function (array $offer): array {
+        $id = (string) ($offer['id'] ?? '');
+        $parent = \App\Studio\Catalog\OfferingCatalog::parentOf($id, 'extension');
+        $offer['quantity_unit'] = null;
+        foreach ($offer['prices'] ?? [] as $priceComponent) {
+            if (is_array($priceComponent) && is_string($priceComponent['unit'] ?? null) && $priceComponent['unit'] !== '') {
+                $offer['quantity_unit'] = $priceComponent['unit'];
+                break;
+            }
+        }
+        $offer['slug'] = $id;
+        $offer['category'] = (string) ($offer['category'] ?? ucfirst((string) ($offer['type'] ?? 'Offering')));
+        $offer['format'] = (string) ($offer['format'] ?? 'Offering');
+        $offer['status'] = (string) ($offer['status'] ?? 'Taking enquiries');
+        $offer['href'] = simple_site('studio', 'services/'.($parent['id'] ?? $id));
+        if ($parent !== null) {
+            $offer['parent'] = $parent['id'];
+            $offer['parent_name'] = $parent['name'];
+        }
+        return $offer;
+    };
+    $selectedServices = array_map($prepareOfferCard, $selectedServices);
     $projectCatalog = \App\Studio\Catalog\ProjectCatalog::all();
     $selectedProjectSlugs = \App\Studio\Http\ServiceInquiryController::selectedProjects();
     $selectedProjects = array_values(array_filter(
@@ -13,47 +35,39 @@
     ));
     $allServices = array_values(array_filter(
         $serviceCatalog,
-        static fn (array $service): bool => ($service['type'] ?? null) !== 'extension',
+        static fn (array $service): bool => ($service['visibility'] ?? 'catalog') === 'catalog',
     ));
     $recommendedSlugs = [];
     foreach ($selectedServices as $selectedService) {
-        foreach (($selectedService['related_slugs'] ?? []) as $relatedSlug) {
-            if (is_string($relatedSlug) && isset($serviceCatalog[$relatedSlug]) && ! in_array($relatedSlug, $selectedSlugs, true)) {
-                $recommendedSlugs[] = $relatedSlug;
-            }
-        }
-    }
-    foreach ($allServices as $candidate) {
-        if (in_array($candidate['project_slug'] ?? null, $selectedProjectSlugs, true)
-            && ! in_array($candidate['slug'], $selectedSlugs, true)) {
-            $recommendedSlugs[] = $candidate['slug'];
-        }
-    }
-    if ($recommendedSlugs === []) {
-        foreach ($allServices as $candidate) {
-            if (! empty($candidate['featured'])) {
-                $recommendedSlugs[] = $candidate['slug'];
+        foreach (($selectedService['relations'] ?? []) as $relation) {
+            $relatedId = is_array($relation) ? ($relation['offering_id'] ?? null) : null;
+            if (is_string($relatedId) && ($relation['type'] ?? '') !== 'extension'
+                && ($relation['visibility'] ?? 'detail_only') === 'catalog'
+                && isset($serviceCatalog[$relatedId]) && ! in_array($relatedId, $selectedSlugs, true)) {
+                $recommendedSlugs[] = $relatedId;
             }
         }
     }
     if ($recommendedSlugs === []) {
-        $recommendedSlugs = array_column(array_slice($allServices, 0, 4), 'slug');
+        $recommendedSlugs = array_column(array_slice($allServices, 0, 4), 'id');
     }
     $recommendedServices = array_values(array_filter(
         array_map(static fn (string $slug): ?array => $serviceCatalog[$slug] ?? null, array_unique($recommendedSlugs)),
-        static fn (?array $offer): bool => is_array($offer) && ! in_array($offer['slug'], $selectedSlugs, true),
+        static fn (?array $offer): bool => is_array($offer) && ! in_array($offer['id'] ?? null, $selectedSlugs, true)
+            && ($offer['active'] ?? false) === true && ($offer['visibility'] ?? 'catalog') === 'catalog',
     ));
     if ($recommendedServices === []) {
         $recommendedServices = array_values(array_filter(
             $allServices,
-            static fn (array $offer): bool => ! in_array($offer['slug'], $selectedSlugs, true),
+            static fn (array $offer): bool => ! in_array($offer['id'], $selectedSlugs, true),
         ));
     }
     $recommendedServices = array_slice($recommendedServices, 0, 3);
+    $recommendedServices = array_map($prepareOfferCard, $recommendedServices);
     $service = $selectedServices[0] ?? null;
     $contextNames = array_map(
         static fn (string $name): string => preg_replace('/\s*·\s*/u', ' ', $name) ?? $name,
-        [...array_column($selectedServices, 'name'), ...array_column($selectedProjects, 'name')],
+        [...array_map(static fn (array $offer): string => __t($offer['name'] ?? []), $selectedServices), ...array_column($selectedProjects, 'name')],
     );
     $contextLabel = match (count($contextNames)) {
         0 => '',
@@ -62,6 +76,18 @@
         default => implode(', ', array_slice($contextNames, 0, -1)).', and '.end($contextNames),
     };
     $studioConfig = config('nm-studio', []);
+    $currencySettings = is_array($studioConfig['currencies'] ?? null) ? $studioConfig['currencies'] : [];
+    $currencyCookie = is_string($currencySettings['cookie'] ?? null) ? $currencySettings['cookie'] : 'numerimondes_currency';
+    $displayCurrency = strtoupper((string) ($_COOKIE[$currencyCookie] ?? $currencySettings['default'] ?? 'MAD'));
+    if (!isset($currencySettings['options'][$displayCurrency])) $displayCurrency = 'MAD';
+    $inquiryError = \Webkernel\Session\Session::get('numerimondes.service_inquiry.error');
+    $inquiryErrorMessage = match ($inquiryError) {
+        'invalid' => 'Review the required fields and consent, then submit again.',
+        'pricing' => 'The current quote could not be prepared. Please try again in a moment.',
+        'delivery' => 'Your request could not be delivered. Please try again or use WhatsApp.',
+        default => '',
+    };
+    $recruitmentSelected = count(array_filter($selectedServices, static fn (array $offer): bool => is_numeric($offer['prices'][0]['percentage'] ?? null))) > 0;
     $crmConfig = is_array($studioConfig['crm'] ?? null) ? $studioConfig['crm'] : [];
     $accountStatus = \App\Studio\Integration\Perfex\PerfexAccountSession::current();
     $isClientConnected = $accountStatus['client_id'] > 0;
@@ -104,6 +130,13 @@
         .nm-service-inquiry-contact-actions a { color:var(--nm-ink); font:400 10px/1.4 var(--nm-title); letter-spacing:.13em; text-decoration:none; text-transform:uppercase; }
         .nm-service-inquiry-contact-actions a:first-child { padding:12px 16px; border:1px solid var(--nm-ink); }
         .nm-service-inquiry-contact-actions a:hover { opacity:.62; }
+        .nm-service-request-form { display:grid; gap:18px; margin-top:36px; }
+        .nm-service-request-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr)); gap:16px; }
+        .nm-service-request-field { display:grid; gap:6px; }
+        .nm-service-request-field input,.nm-service-request-field select,.nm-service-request-field textarea { width:100%; min-height:44px; padding:10px 12px; border:1px solid var(--border-default,#cbd5e1); border-radius:var(--radius-md,.375rem); background:var(--surface-panel,#fff); color:var(--text-primary,var(--nm-ink)); font:400 14px/1.4 var(--nm-body); }
+        .nm-service-request-field textarea { min-height:120px; resize:vertical; }
+        .nm-service-request-error { padding:12px 14px; border:1px solid #b91c1c; color:#991b1b; background:#fef2f2; }
+        .nm-service-request-trap { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
         @media (max-width:700px) {
             .nm-service-inquiry { padding:130px 0 75px; }
             .nm-service-inquiry { padding-top:120px; padding-bottom:75px; }
@@ -204,6 +237,51 @@
                 @endif
                 <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer">Continue on WhatsApp <x-webkernel::icon icon="arrow-up-right" set="lucide" width="14" height="14" class="nm-icon-arrow" aria-hidden="true" /></a>
             </div>
+
+            <x-webkernel-platform::section heading="Request a private discussion" class="mt-8">
+                <p>Your selected offers and their current prices will be attached to the request. This profile selector stays anonymous; contact details are requested only when you choose to send an enquiry.</p>
+                @if ($inquiryErrorMessage !== '')
+                    <p class="nm-service-request-error" role="alert">{{ $inquiryErrorMessage }}</p>
+                @endif
+                <form class="nm-service-request-form" action="{{ simple_site('studio', 'service-inquiry') }}" method="post">
+                    @csrf
+                    <label class="nm-service-request-trap" aria-hidden="true">Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+                    @if (array_filter($selectedServices, static fn (array $offer): bool => is_string($offer['quantity_unit'] ?? null)))
+                        <fieldset class="nm-service-request-grid" style="margin:0;padding:0;border:0">
+                            <legend>Quantities for per-unit offers</legend>
+                            @foreach ($selectedServices as $selectedOffer)
+                                @if (is_string($selectedOffer['quantity_unit'] ?? null))
+                                    <label class="nm-service-request-field" for="service-request-quantity-{{ $selectedOffer['id'] }}">{{ __t($selectedOffer['name'] ?? []) }} · quantity ({{ $selectedOffer['quantity_unit'] }})
+                                        <input id="service-request-quantity-{{ $selectedOffer['id'] }}" type="number" name="quantities[{{ $selectedOffer['id'] }}]" min="1" max="1000" step="1" value="1" required>
+                                    </label>
+                                @endif
+                            @endforeach
+                        </fieldset>
+                    @endif
+                    <div class="nm-service-request-grid">
+                        <label class="nm-service-request-field" for="service-request-name">Name <span aria-hidden="true">*</span><input id="service-request-name" name="name" autocomplete="name" maxlength="120" required></label>
+                        <label class="nm-service-request-field" for="service-request-email">Email <span aria-hidden="true">*</span><input id="service-request-email" name="email" type="email" autocomplete="email" maxlength="254" required></label>
+                        <label class="nm-service-request-field" for="service-request-company">Company<input id="service-request-company" name="company" autocomplete="organization" maxlength="160"></label>
+                        <label class="nm-service-request-field" for="service-request-phone">Phone<input id="service-request-phone" name="phone" type="tel" autocomplete="tel" maxlength="80"></label>
+                        <label class="nm-service-request-field" for="service-request-currency">Quote currency
+                            <select id="service-request-currency" name="quote_currency">
+                                @foreach (($currencySettings['options'] ?? []) as $currencyCode => $currencyOption)
+                                    <option value="{{ $currencyCode }}" @selected($currencyCode === $displayCurrency)>{{ $currencyCode }} · {{ $currencyOption['label'] ?? $currencyCode }}</option>
+                                @endforeach
+                            </select>
+                        </label>
+                        @if ($recruitmentSelected)
+                            <label class="nm-service-request-field" for="service-request-role">Role to recruit <span aria-hidden="true">*</span><input id="service-request-role" name="recruitment_role" maxlength="160" required></label>
+                            <label class="nm-service-request-field" for="service-request-location">Work location <span aria-hidden="true">*</span><input id="service-request-location" name="recruitment_location" maxlength="160" required></label>
+                            <label class="nm-service-request-field" for="service-request-salary">Monthly salary basis (optional)<input id="service-request-salary" name="monthly_salary" type="number" min="1" max="1000000000" step="0.01" inputmode="decimal"></label>
+                            <input type="hidden" name="salary_currency" value="{{ $displayCurrency }}">
+                        @endif
+                    </div>
+                    <label class="nm-service-request-field" for="service-request-message">What would you like to achieve? <span aria-hidden="true">*</span><textarea id="service-request-message" name="message" minlength="12" maxlength="5000" required></textarea></label>
+                    <label style="display:flex;align-items:flex-start;gap:10px"><input type="checkbox" name="privacy_consent" value="1" required><span>I agree that Numerimondes may use these details to respond to this enquiry. Read the <a href="{{ simple_site('studio', 'privacy') }}">privacy notice</a>.</span></label>
+                    <x-webkernel-platform::button type="submit" color="primary">Send enquiry</x-webkernel-platform::button>
+                </form>
+            </x-webkernel-platform::section>
         </section>
     </main>
 </x-studio::page>

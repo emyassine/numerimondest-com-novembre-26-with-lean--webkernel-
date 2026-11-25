@@ -1,0 +1,8 @@
+{
+  "name": "numerimondes/offerings",
+  "description": "Secure client for synchronizing published Numerimondes offering catalogues.",
+  "type": "library",
+  "license": "proprietary",
+  "require": { "php": ">=8.2", "ext-json": "*" },
+  "autoload": { "psr-4": { "Numerimondes\\Offerings\\": "src/" } }
+}

@@ -8,22 +8,21 @@ use App\Studio\Persistence\OfferingStore;
 final class OfferingCatalog
 {
     /** @return array<string,array<string,mixed>> */
-    public static function all(?string $status = 'published'): array
+    public static function all(string $status = 'published'): array
     {
+        static $cache = [];
+        if (isset($cache[$status])) return $cache[$status];
         $store = new OfferingStore();
         $revision = $store->current($status);
         if ($revision === null && $status === 'published') {
-            $seed = self::seedFromExistingData();
-            $store->saveDraft(['offerings' => array_values($seed)], 'catalog-seed');
-            $store->publish('catalog-seed');
-            $revision = $store->current('published');
+            throw new \RuntimeException('No published offerings catalogue exists; initialize it with php scripts/migrate-canonical-offerings.php.');
         }
-        if ($revision === null) return [];
+        if ($revision === null) return $cache[$status] = [];
         $items = [];
         foreach (($revision['catalogue']['offerings'] ?? []) as $item) {
             if (is_array($item) && is_string($item['id'] ?? null)) $items[$item['id']] = $item;
         }
-        return $items;
+        return $cache[$status] = $items;
     }
 
     /** @return array<string,mixed> */
@@ -34,34 +33,17 @@ final class OfferingCatalog
         return $offering;
     }
 
-    /** One-time importer used only to initialize the new authoritative store. */
-    private static function seedFromExistingData(): array
+    /** @return array<string,mixed>|null */
+    public static function parentOf(string $id, ?string $relationType = null): ?array
     {
-        $legacy = ServiceCatalog::all();
-        $items = [];
-        foreach ($legacy as $id => $row) {
-            $billing = match ($row['billing'] ?? $row['price_interval'] ?? '') {
-                'monthly', '/ month' => 'monthly', default => 'one_time'
-            };
-            $amount = $row['price_amount'] ?? $row['price_mad'] ?? null;
-            $items[$id] = [
-                'id' => $id,
-                'type' => match ($row['type'] ?? '') { 'mandate'=>'mandate','playbook'=>'playbook','subscription'=>'software', default=>'service' },
-                'name' => ['en' => (string) ($row['name'] ?? $id)],
-                'description' => ['en' => (string) ($row['scope'] ?? $row['description'] ?? '')],
-                'industries' => $row['industries'] ?? [],
-                'business_needs' => $row['business_needs'] ?? [],
-                'prices' => ($amount !== null || isset($row['fee_percentage'])) ? [[
-                    'id' => $id.'-base', 'amount_mad' => is_numeric($amount) ? (int) round((float) $amount) : null,
-                    'billing' => $billing, 'percentage' => isset($row['fee_percentage']) ? (float) $row['fee_percentage'] : null,
-                    'label' => ['en' => (string) ($row['price_text'] ?? '')],
-                    'internal' => ['commission'=>null, 'numerimondes_revenue'=>null],
-                ]] : [],
-                'attributes' => $row,
-                'active' => true,
-                'visibility' => ($row['visibility'] ?? '') === 'detail-only' ? 'detail-only' : 'catalog',
-            ];
+        foreach (self::all() as $offering) {
+            foreach (($offering['relations'] ?? []) as $relation) {
+                if (($relation['offering_id'] ?? null) !== $id || ($relationType !== null && ($relation['type'] ?? null) !== $relationType)) continue;
+                if (($relation['visibility'] ?? 'detail_only') === 'hidden') continue;
+                return $offering;
+            }
         }
-        return $items;
+        return null;
     }
+
 }

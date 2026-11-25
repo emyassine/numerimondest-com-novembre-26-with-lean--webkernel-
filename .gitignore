@@ -7,6 +7,7 @@ platform-cache.lock
 /storage/private/*
 /storage/databases/*
 /storage/backups/*
+/config/partners.php
 
 web-sync.config.json
 
@@ -15,3 +16,4 @@ web-sync.config.json
 /public/rss.xml
 
 .yas-deploy-once.json
+/runtime/telemetry/

@@ -2,7 +2,8 @@
 
 namespace App\Studio\Http;
 
-use App\Studio\Catalog\ServiceCatalog;
+use App\Studio\Catalog\OfferingCatalog;
+use App\Studio\Analytics\MarketFitAnalytics;
 use App\Studio\Shortlist\ServiceShortlist;
 
 use Webkernel\HttpFoundation\RedirectResponse;
@@ -15,14 +16,20 @@ final class ShortlistController
         $values = $request->all();
         $slug = is_string($values['service'] ?? null) ? $values['service'] : '';
         $action = ($values['action'] ?? null) === 'remove' ? 'remove' : 'add';
-        $catalog = ServiceCatalog::all();
+        $catalog = OfferingCatalog::all();
         $slugs = ServiceShortlist::all();
 
-        if (isset($catalog[$slug])) {
+        if (isset($catalog[$slug]) && ($catalog[$slug]['active'] ?? false) === true) {
+            $wasSaved = in_array($slug, $slugs, true);
             if ($action === 'remove') {
                 $slugs = array_values(array_filter($slugs, static fn (string $item): bool => $item !== $slug));
             } elseif (! in_array($slug, $slugs, true)) {
                 $slugs[] = $slug;
+            }
+            $isSaved = in_array($slug, $slugs, true);
+            if ($wasSaved !== $isSaved) {
+                MarketFitAnalytics::recordEvent($isSaved ? 'shortlist_add' : 'shortlist_remove');
+                if ($isSaved && str_starts_with($slug, 'x-')) MarketFitAnalytics::recordEvent('extension_add');
             }
         }
 
@@ -38,7 +45,7 @@ final class ShortlistController
                 'count' => count($slugs),
                 'services' => $slugs,
                 'service' => $slug,
-                'name' => $catalog[$slug]['name'] ?? '',
+                'name' => __t($catalog[$slug]['name'] ?? []),
             ]);
         }
 

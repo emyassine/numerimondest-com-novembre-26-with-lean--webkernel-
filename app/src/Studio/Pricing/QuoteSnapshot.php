@@ -18,6 +18,23 @@ final readonly class QuoteSnapshot
         if ($quoteId === '' || $partnerId === '' || $catalogRevision === '' || $pricingRevision === '') {
             throw new \InvalidArgumentException('Quote snapshot identifiers and revisions are required.');
         }
+        if (!preg_match('/^[A-Z]{3}$/', $currency) || $expiresAt <= $createdAt) {
+            throw new \InvalidArgumentException('Quote currency and expiry are invalid.');
+        }
+        foreach ($lines as $line) {
+            if (!is_array($line) || !is_string($line['offering_id'] ?? null) || $line['offering_id'] === '') {
+                throw new \InvalidArgumentException('Each quote line needs an offering identifier.');
+            }
+            if (array_key_exists('quantity', $line) && (!is_int($line['quantity']) || $line['quantity'] < 1 || $line['quantity'] > 1000)) {
+                throw new \InvalidArgumentException('Quote line quantity must be an integer between 1 and 1000.');
+            }
+            if (isset($line['unit']) && (!is_string($line['unit']) || !preg_match('/^[a-z][a-z0-9_-]{0,39}$/', $line['unit']))) {
+                throw new \InvalidArgumentException('Quote line unit is invalid.');
+            }
+            if (($line['quantity'] ?? 1) > 1 && !isset($line['unit'])) {
+                throw new \InvalidArgumentException('A quote line with multiple units must name its unit.');
+            }
+        }
     }
 
     public function toArray(): array

@@ -2,7 +2,7 @@
 
 namespace App\Studio\Shortlist;
 
-use App\Studio\Catalog\ServiceCatalog;
+use App\Studio\Catalog\OfferingCatalog;
 
 final class ServiceShortlist
 {
@@ -20,10 +20,10 @@ final class ServiceShortlist
             return [];
         }
 
-        $catalog = ServiceCatalog::all();
+        $catalog = OfferingCatalog::all();
         $slugs = array_values(array_unique(array_filter(
             $stored,
-            static fn (mixed $slug): bool => is_string($slug) && isset($catalog[$slug]),
+            static fn (mixed $slug): bool => is_string($slug) && isset($catalog[$slug]) && ($catalog[$slug]['active'] ?? false) === true,
         )));
 
         return array_slice($slugs, 0, self::MAX_OFFERS);
@@ -32,10 +32,10 @@ final class ServiceShortlist
     /** @param list<string> $slugs */
     public static function save(array $slugs): void
     {
-        $catalog = ServiceCatalog::all();
+        $catalog = OfferingCatalog::all();
         $slugs = array_values(array_slice(array_unique(array_filter(
             $slugs,
-            static fn (mixed $slug): bool => is_string($slug) && isset($catalog[$slug]),
+            static fn (mixed $slug): bool => is_string($slug) && isset($catalog[$slug]) && ($catalog[$slug]['active'] ?? false) === true,
         )), 0, self::MAX_OFFERS));
         $cookieName = self::cookieName();
         if ($slugs === []) {

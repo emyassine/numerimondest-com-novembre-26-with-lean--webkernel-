@@ -72,8 +72,7 @@
     :canonical="$canonical"
     :locale="$locale"
     :site-ui="$siteUi"
-    :site-prefix="$sitePrefix"
->
+    :site-prefix="$sitePrefix">
     <x-slot name="subheader">
         {{ $subheader }}
     </x-slot>

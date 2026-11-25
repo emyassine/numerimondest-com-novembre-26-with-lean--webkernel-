@@ -8,7 +8,7 @@ The website is operated by **[[company_name]]**, an independent Moroccan company
 
 ## When you contact us
 
-The service inquiry page keeps your selected offers in the website session while you decide what to do next. Creating a CRM client account or submitting a request there sends the details you enter to Numerimondes’ CRM so the founder and account manager can review and respond. Your website selection is not currently transferred automatically to the CRM request form; include the relevant offers in your request. Do not include sensitive personal information about candidates in a public request.
+The service inquiry page keeps your selected offers in the website session while you decide what to do next. When you submit the request form, the details you provide and the selected offerings are sent to Numerimondes’ CRM so the founder and account manager can review and respond. Do not include sensitive personal information about candidates in a public request.
 
 The contact page opens WhatsApp with a prepared message. The website does not submit that message itself. Review and send it in WhatsApp; WhatsApp and its operator then process it under their own terms and privacy information.
 
@@ -16,7 +16,7 @@ If you follow links to LinkedIn, Instagram, X or another external service, that 
 
 ## Browser storage and site search
 
-The website may use browser storage needed for features you choose, such as appearance preferences and a private shortlist of selected services. The shortlist is kept in a necessary, first-party cookie for up to 30 days; selected offers remain on the website unless you include them in a CRM request or a WhatsApp message. Site search, when available, runs in your browser using a local index. Numerimondes does not configure advertising or behavioral analytics trackers on this site.
+The website uses first-party storage for the private shortlist and, on the first visit, remembers that you dismissed or completed the welcome dialog. The shortlist is kept in a necessary, first-party cookie for up to 30 days; selected offers remain on the website unless you submit them with a CRM request or include them in a WhatsApp message. Site search, when available, runs in your browser using a local index. The service selector and selected interface actions may be recorded as daily aggregate counts without visitor, offer, or contact identifiers. Numerimondes does not configure advertising or cross-site behavioral tracking on this site.
 
 ## Hosting and technical logs
 
