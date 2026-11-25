@@ -30,8 +30,4 @@ if ($route === '/healthz' || $route === '/ready') {
 
 require $base_path.'/internal/fast-boot.php';
 
-if (!is_env('prod') && ($route === '/admin' || str_starts_with($route, '/admin/'))) {
-    \App\Studio\Admin\AdminSession::configure();
-}
-
 Http::run();

@@ -4,13 +4,10 @@ $base_path = dirname(__DIR__, 2);
 require $base_path.'/internal/dependencies/autoload.php';
 
 use App\Studio\Catalog\OfferingRelationType;
+use App\Studio\Catalog\OfferingCatalogValidator;
 use App\Studio\Catalog\ServiceCatalog;
 use App\Studio\Catalog\MandateCatalog;
-use App\Studio\Admin\AdminController;
 use App\Studio\Persistence\OfferingStore;
-use Webkernel\Route\Request;
-use Webkernel\Session\Session;
-use Webkernel\Csrf;
 
 $seed = require $base_path.'/app/resources/data/studio/offerings.php';
 $offerings = [];
@@ -108,21 +105,6 @@ foreach ($mandates as $mandate) {
 if (class_exists(ServiceCatalog::class) || class_exists(MandateCatalog::class)) {
     throw new RuntimeException('An obsolete runtime catalog class remains available.');
 }
-$sessionPath = $base_path.'/runtime/sessions';
-if (!is_dir($sessionPath)) mkdir($sessionPath, 0700, true);
-Session::configure(['cookie' => 'NMAdminCatalogTest', 'save_path' => $sessionPath, 'lifetime' => 120, 'same_site' => 'Lax', 'http_only' => true, 'secure' => false]);
-$_SERVER['HTTPS'] = 'off';
-$_SERVER['HTTP_HOST'] = '127.0.0.1:8000';
-$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-$unauthorized = AdminController::preview(new Request('POST', '/admin/offerings/preview', content: '{}'));
-if ($unauthorized->getStatusCode() !== 401) throw new RuntimeException('Admin preview allowed an unauthenticated request.');
-Session::put('studio.offerings.admin_authenticated_at', time());
-$csrf = Csrf::token();
-$preview = AdminController::preview(new Request(
-    'POST', '/admin/offerings/preview',
-    headers: ['x-csrf-token' => $csrf],
-    content: json_encode(['offerings' => array_values($offerings)], JSON_THROW_ON_ERROR),
-));
-if ($preview->getStatusCode() !== 200) throw new RuntimeException('The full migrated seed catalogue fails administration validation: '.$preview->getContent());
+OfferingCatalogValidator::validate(array_values($offerings));
 foreach ([$database, $database.'-wal', $database.'-shm'] as $file) if (is_file($file)) unlink($file);
 echo "Canonical catalog migration passed: 58 records, 16 mandates, 20 extension links.\n";

@@ -1,0 +1,39 @@
+<?php declare(strict_types=1);
+
+$root = dirname(__DIR__, 2);
+define('BASEPATH', true);
+define('FCPATH', $root.'/account/');
+require $root.'/internal/dependencies/autoload.php';
+require $root.'/account/modules/nm_offerings/libraries/Nm_offerings_catalog.php';
+
+use App\Studio\Persistence\OfferingStore;
+
+$path = sys_get_temp_dir().'/nm-perfex-offerings-'.bin2hex(random_bytes(8)).'.sqlite';
+OfferingStore::initialize($path);
+$catalogue = [
+    'offerings' => [
+        ['id' => 'public-offer', 'type' => 'service', 'name' => ['en' => 'Public'], 'description' => ['en' => ''], 'industries' => ['education-training'], 'business_needs' => ['operations'], 'prices' => [], 'relations' => [], 'active' => true, 'visibility' => 'catalog'],
+        ['id' => 'detail-offer', 'type' => 'service', 'name' => ['en' => 'Detail'], 'description' => ['en' => ''], 'industries' => ['education-training'], 'business_needs' => ['operations'], 'prices' => [], 'relations' => [], 'active' => true, 'visibility' => 'detail_only'],
+        ['id' => 'hidden-offer', 'type' => 'service', 'name' => ['en' => 'Hidden'], 'description' => ['en' => ''], 'industries' => [], 'business_needs' => [], 'prices' => [], 'relations' => [], 'active' => false, 'visibility' => 'hidden'],
+    ],
+];
+$catalog = new Nm_offerings_catalog($path, $root);
+$draft = $catalog->saveDraft($catalogue, 7);
+if ($draft < 1) throw new RuntimeException('Perfex module did not save the catalogue draft.');
+$published = $catalog->publish(7);
+if ($published <= $draft) throw new RuntimeException('Perfex module did not publish a new revision.');
+if (count($catalog->all()) !== 1 || ($catalog->all()[0]['id'] ?? null) !== 'public-offer') {
+    throw new RuntimeException('Perfex helper-facing catalog listing exposed detail-only or hidden offerings.');
+}
+if (count($catalog->all(true)) !== 2 || $catalog->find('detail-offer') === null || $catalog->find('hidden-offer') !== null) {
+    throw new RuntimeException('Perfex detail lookup visibility rules are incorrect.');
+}
+$invalid = $catalogue;
+$invalid['offerings'][0]['business_needs'] = ['not-a-real-need'];
+try {
+    $catalog->saveDraft($invalid, 7);
+    throw new RuntimeException('Perfex module accepted an invalid business-need classification.');
+} catch (InvalidArgumentException $expected) {
+}
+foreach ([$path, $path.'-wal', $path.'-shm'] as $file) if (is_file($file)) unlink($file);
+echo "Perfex module catalogue access, draft, publication and visibility checks passed.\n";

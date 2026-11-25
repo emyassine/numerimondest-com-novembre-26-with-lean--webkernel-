@@ -9,8 +9,9 @@ Project, capability and service-offer data live separately in
 `app/resources/data/studio/offerings.php` seed.
 Capabilities describe the team's areas of expertise under `/capabilities`; the
 service enquiry marketplace under `/services` reads the published revision of a
-single SQLite-backed offerings catalogue. Offerings are edited at `/admin/offerings`;
-deployment and partner setup are documented in `docs/offerings-operations.md`.
+single SQLite-backed offerings catalogue. Staff manage offerings in the
+Numerimondes Offerings module inside Perfex; deployment and partner setup are
+documented in `docs/offerings-operations.md`.
 Fonts are in `app/resources/assets/fonts/`.
 Studio stylesheets live in `app/resources/css/studio/`; the website component
 loads every CSS file in that directory from the wildcard configured in

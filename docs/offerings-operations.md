@@ -8,11 +8,11 @@ Set `NM_OFFERINGS_DATABASE` to an absolute persistent path when the default `sto
 
 ## Administration
 
-On a fresh local checkout, open `/admin/login` and create the first account in the browser. The form saves the username and password hash to `config/offerings-admin.php`, restricts the file to mode `0600`, and signs you in automatically. This generated config is tracked in this private repository; treat the hash as sensitive. Plain HTTP is allowed only when both the host and remote address are loopback (`localhost`, `127.0.0.1`, or `::1`). Outside loopback, HTTPS is required and the application's configured 403 page is rendered. The login session expires after eight hours, rotates its session ID after login, and uses Webkernel CSRF tokens for state-changing requests. The editor starts from the draft when one exists, otherwise from the published snapshot.
+The Perfex module at `account/modules/nm_offerings` is the staff interface. Activate **Numerimondes Offerings** from Perfex's Setup → Modules, then grant staff the `view`, `edit`, and `publish` capabilities as appropriate. It uses Perfex staff authentication and CSRF-protected forms; there is no separate Numerimondes admin password or login route.
 
-Set `APP_ENV=prod` (or `APP_ENV=production`) for production. The admin routes are not registered there. The default environment is inferred as production for the canonical public domain and local otherwise. `is_env('prod|local')` can test aliases and multiple environments in application code.
+The module opens the same `storage/databases/offerings.sqlite` file used by the website. It loads the shared application autoloader and catalogue validator, saves drafts and publishes revisions through `OfferingStore`, and logs the staff ID for each change. It does not store catalogue data in Perfex's CRM database. The PHP process serving Perfex must have read access to the SQLite file and write access to its directory for SQLite WAL/SHM files. Keep this database outside the document root and back up the SQLite file using SQLite's online backup mechanism below.
 
-The editor validates and saves a draft through the same server-side schema validation used for publication. Review the offering translations, prices, classifications and relationships before publication. The published revision history is append-only and is shown below the editor. Every API consumer reads the current published snapshot; drafts are never distributed.
+The module editor currently edits the complete catalogue JSON document. It validates IDs, translations, taxonomies, pricing, and relationships before saving; publishing revalidates the saved draft. The current published snapshot and append-only publication history continue to serve the website and partner API; drafts are not distributed. Other Perfex modules can retrieve published records with `nm_offerings_all()` or a specific record with `nm_offerings_find('offering-id')` after loading `nm_offerings/nm_offerings` helper.
 
 ## Partner registry
 
@@ -22,7 +22,7 @@ The reference integration under `packages/numerimondes-offerings/examples/partne
 
 ## Backups
 
-The canonical `storage/databases/offerings.sqlite` is source controlled so a private-repository deployment can use the published catalogue snapshot. Do not commit SQLite WAL/SHM files or dated database backups. The catalogue seed remains the editable canonical source; runtime admin publications are committed through the database file.
+The canonical `storage/databases/offerings.sqlite` is source controlled so a private-repository deployment can use the published catalogue snapshot. Do not commit SQLite WAL/SHM files or dated database backups. The canonical seed is the initial catalogue source; Perfex publications are written to this same database file.
 
 Back up the SQLite database using SQLite's online backup command so the WAL is checkpointed consistently:
 
