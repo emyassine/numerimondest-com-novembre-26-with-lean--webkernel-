@@ -17,7 +17,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
 * environments.
 *
 */
-define('APP_BASE_URL', 'https://numerimondes.com/account/connect/');
+$baseUrl = 'https://numerimondes.com/account/';
+$requestHost = (string) ($_SERVER['HTTP_HOST'] ?? '');
+$isLocalHost = preg_match('/\A(?:localhost|127\.0\.0\.1|\[::1\])(?::[0-9]{1,5})?\z/i', $requestHost) === 1;
+
+if (PHP_SAPI !== 'cli' && $isLocalHost) {
+    $isHttps = isset($_SERVER['HTTPS'])
+        && $_SERVER['HTTPS'] !== ''
+        && strtolower((string) $_SERVER['HTTPS']) !== 'off';
+
+    $baseUrl = ($isHttps ? 'https://' : 'http://').$requestHost.'/account/';
+}
+
+define('APP_BASE_URL', $baseUrl);
 
 /*
 * --------------------------------------------------------------------------
