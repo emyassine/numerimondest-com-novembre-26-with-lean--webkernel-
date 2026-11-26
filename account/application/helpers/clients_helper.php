@@ -180,8 +180,9 @@ function app_init_customer_profile_tabs()
 
     $remindersText = _l('client_reminders_tab');
 
-    if ($client = get_client()) {
-        $client_id = $client->userid;
+    $client = get_client();
+    if (is_object($client) && isset($client->userid)) {
+        $client_id = (int) $client->userid;
 
         $total_reminders = total_rows(
             db_prefix() . 'reminders',

@@ -32,7 +32,7 @@ function nm_offerings_register_menu()
     if (has_permission(NM_OFFERINGS_MODULE_NAME, '', 'view')) {
         get_instance()->app_menu->add_sidebar_menu_item(NM_OFFERINGS_MODULE_NAME, [
             'name' => _l('nm_offerings'),
-            'href' => admin_url('nm_offerings'),
+            'href' => admin_url('nm-offerings'),
             'position' => 36,
             'icon' => 'fa fa-cubes',
         ]);

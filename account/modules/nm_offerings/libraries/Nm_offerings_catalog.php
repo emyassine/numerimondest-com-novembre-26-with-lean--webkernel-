@@ -30,7 +30,10 @@ class Nm_offerings_catalog
             }, true, true);
             self::$autoloadRegistered = true;
         }
-        $this->databasePath = $databasePath ?: $projectRoot . '/storage/databases/offerings.sqlite';
+        $configuredPath = getenv('NM_OFFERINGS_DATABASE');
+        $this->databasePath = $databasePath ?: (is_string($configuredPath) && trim($configuredPath) !== ''
+            ? $configuredPath
+            : $projectRoot . '/storage/databases/offerings.sqlite');
         if (!is_file($this->databasePath) || !is_readable($this->databasePath) || !is_writable($this->databasePath) || !is_writable(dirname($this->databasePath))) {
             throw new RuntimeException('The offerings SQLite database is unavailable to the Perfex PHP process.');
         }

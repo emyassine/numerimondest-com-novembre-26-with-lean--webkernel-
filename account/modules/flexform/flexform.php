@@ -150,7 +150,7 @@ function flexform_permissions()
         'delete' => _l('permission_delete'),
     ];
 
-    register_staff_capabilities(FLEXFORM_MODULE_NAME, $capabilities, _l(FLEXFORM_MODULE_NAME));
+    register_staff_capabilities(FLEXFORM_MODULE_NAME, $capabilities, _flexform_lang('flexform'));
 
     //let us try to kit menu for customer
     $CI = &get_instance();
